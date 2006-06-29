@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FX_Floor_Board version="0.1a">
+  <About>This is the settings file for the FX Floor Board application.</About>
+  <General>
+    <Language code="en" />
+    <Files dir="G:\My GT-8 Patches" />
+    <Donate url="" />
+    <Homepage url="" />
+    <Help url="" />
+  </General>
+  <Window>
+    <Position x="0" y="0" />
+    <Collapsed bool="0" />
+  </Window>
+  <Midi>
+    <MidiIn device="" />
+    <MidiOut device="" />
+  </Midi>
+</FX_Floor_Board>
