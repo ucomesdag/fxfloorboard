@@ -34,12 +34,12 @@ class midiTableParser
 public:
 	midiTableParser();
 	~midiTableParser();
-	QVector<QVector<QVector<QString>>> getSettings(QVector<QString> fileSource);
+	QVector<QVector <QVector <QString> > > getSettings(QVector<QString> fileSource);
 
 	
 private:
 	QDomElement root;
-	QVector<QVector<QVector<QString>>> settings;
+	QVector<QVector <QVector <QString> > > settings;
 		
 };
 
