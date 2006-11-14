@@ -60,8 +60,8 @@ void mainWindow::createMenu()
     menuBar->addMenu(toolsMenu);
 
 	QMenu *helpMenu = new QMenu("&Help", this);
-	QAction *helpAction = helpMenu->addAction("GT-8 FX FloorBoard &Help");
-	QAction *homepageAction = helpMenu->addAction("GT-8 FX FloorBoard &Webpage");
+	QAction *helpAction = helpMenu->addAction("GT-8FxFloorBoard &Help");
+	QAction *homepageAction = helpMenu->addAction("GT-8FxFloorBoard &Webpage");
 	helpMenu->addSeparator();
 	QAction *donationAction = helpMenu->addAction("Make a &Donation");
 	QAction *licenseAction = helpMenu->addAction("&License");
@@ -119,7 +119,7 @@ void mainWindow::about()
     QFile file(":about"); 
 	if(file.open(QIODevice::ReadOnly))
 	{	
-		QMessageBox::about(this, "About GT-8 FX FloorBoard", file.readAll());
+		QMessageBox::about(this, "About GT-8FxFloorBoard", file.readAll());
 	};
 };
 

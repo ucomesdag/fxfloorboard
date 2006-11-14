@@ -72,7 +72,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	QString str;
 	str.append("<html><body>");
 	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td colspan='2' align='left'>");
-	str.append("GT-8 FX FloorBoard");
+	str.append("GT-8FxFloorBoard");
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
 	str.append("version");
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
