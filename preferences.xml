@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This is the settings file for the GT-8: FX Floor Board application. -->
-<FX_Floor_Board version="0.1a">
+<!-- This is the settings file for the GT-8: FX FloorBoard application. -->
+<GT-8FxFloorBoard version="0.1a">
   <General>
     <Language code="en" />
     <Files dir="G:\My GT-8 Patches" />
@@ -18,7 +18,7 @@
     <MidiOut device="" />
   </Midi>
   <About>
-    GT-8: FX Floor Board, version 0.1a ( To be generated automaticly)
+    GT-8: GT-8 FX FloorBoard, version 0.1a ( To be generated automaticly)
     Editor for the BOSS GT-8
 
     ©2006 Uco Mesdag &lt;ucomesdag@gmail.com&gt;
@@ -38,4 +38,4 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     </About>
-</FX_Floor_Board>
+</GT-8FxFloorBoard>

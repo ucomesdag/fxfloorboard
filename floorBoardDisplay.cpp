@@ -2,7 +2,7 @@
 **
 ** Copyright (C) 2005-2006 Uco Mesdag. All rights reserved.
 **
-** This file is part of "GT-8: FX Floor Board".
+** This file is part of "GT-8: FX FloorBoard".
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	QString str;
 	str.append("<html><body>");
 	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td colspan='2' align='left'>");
-	str.append("FX FLOOR BOARD");
+	str.append("GT-8 FX FloorBoard");
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
 	str.append("version");
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
