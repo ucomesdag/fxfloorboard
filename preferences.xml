@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This is the settings file for the GT-8: FX FloorBoard application. -->
+<!-- This is the settings file for the GT-8 FX FloorBoard application. -->
 <GT-8FxFloorBoard version="0.1a">
   <General>
     <Language code="en" />
@@ -18,7 +18,7 @@
     <MidiOut device="" />
   </Midi>
   <About>
-    GT-8: FX FloorBoard, version 0.1a ( To be generated automaticly)
+    GT-8 FX FloorBoard, version 0.1a ( To be generated automaticly)
     Editor for the BOSS GT-8
 
     ©2006 Uco Mesdag &lt;ucomesdag@gmail.com&gt;

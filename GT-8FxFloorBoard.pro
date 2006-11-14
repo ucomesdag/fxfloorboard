@@ -4,7 +4,7 @@
 
 # This is a reminder that you are using a generated .pro file.
 # Remove it when you are finished editing this file.
-message("Building GT-8: FX FloorBoard...")
+message("Building GT-8 FX FloorBoard...")
 
 
 TEMPLATE = app
