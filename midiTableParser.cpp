@@ -56,7 +56,7 @@ QVector<QVector <QVector <QString> > > midiTableParser::getSettings(QVector<QStr
 	{
 		QString str(*dev);
 
-		QVector<QVector<QString>> block;
+		QVector<QVector <QString> > block;
 		unsigned int offset=0;
 		unsigned int dataSize = 0;
 		bool ok;
