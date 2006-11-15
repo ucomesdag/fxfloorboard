@@ -32,10 +32,12 @@ midiTableParser::midiTableParser()
 	QDomElement root = doc.documentElement();   // Points to <SysX>
 	this->root = root;
 };
+
 midiTableParser::~midiTableParser()
 {
 
 };
+
 QString rangeValue(QString data, QString dataMin, QString dataMax, QString rangeMin, QString rangeMax)
 {	
 	bool ok;
@@ -44,11 +46,12 @@ QString rangeValue(QString data, QString dataMin, QString dataMax, QString range
 	double result = (rangeMin.toDouble(&ok) - dataMin.toInt(&ok, 16)) + (data.toInt(&ok, 16) / (dataRange / range));
 	if(rangeMin.contains(".") || rangeMax.contains(".")) return QString::number(result,'f', 1);
 	else return QString::number(result,'f', 0);
-}
-QVector<QVector<QVector<QString>>> midiTableParser::getSettings(QVector<QString> fileSource)
+};
+
+QVector<QVector <QVector <QString> > > midiTableParser::getSettings(QVector<QString> fileSource)
 {
 	
-	QVector<QVector<QVector<QString>>> settings;
+	QVector<QVector <QVector <QString> > > settings;
 	for (QVector<QString>::iterator dev = fileSource.begin(); dev != fileSource.end(); ++dev)
 	{
 		QString str(*dev);
