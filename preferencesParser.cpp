@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "preferencesParser.h"	
+#include <QVector>
 #include <QFile>
 
 preferencesParser::preferencesParser() 
@@ -31,6 +32,7 @@ preferencesParser::preferencesParser()
 	file.close();
 	QDomElement root = doc.documentElement();   // Points to <SysX>
 	this->root = root;
+	loadPreferences();
 };
 
 preferencesParser::~preferencesParser()
@@ -38,12 +40,21 @@ preferencesParser::~preferencesParser()
 	//Write back to file/create
 };
 
-QString getSetting(QString prefGroup, QString prefType)
+QString preferencesParser::getSetting(QString prefGroup, QString prefType)
 {
 	return "void";
 };
 
-void setSetting(QString prefGroup, QString prefType, QVector<QString> prefItem, QVector<QString> prefValue)
+void preferencesParser::setSetting(QString prefGroup, QString prefType, QVector<QString> prefItem, QVector<QString> prefValue)
 {
+	
+};
 
+void preferencesParser::loadPreferences()
+{
+	this->prefGroup;
+	this->prefType;
+	this->prefItem;
+	this->prefValue;
+	this->prefIndex;
 };

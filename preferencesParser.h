@@ -34,17 +34,46 @@ class preferencesParser
 public:
 	preferencesParser();
 	~preferencesParser();
+
 	QString getSetting(QString prefGroup, QString prefType);
 	void setSetting(QString prefGroup, QString prefType, QVector<QString> prefItem, QVector<QString> prefValue);
+	void loadPreferences();
 
-
-	
 private:
 	QDomElement root;
 
-
-
-		
+	QVector<QString> prefGroup;
+	QVector<QString> prefType;
+	QVector<QString> prefItem;
+	QVector<QString> prefValue;
+	QVector< QVector <QVector <unsigned int> > > prefIndex;
 };
 
 #endif // PREFERENCESPARSER_H
+
+ 
+/*
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the preferences of the GT-8 FX FloorBoard application. -->
+<Preferences>
+  <General>
+    <Application version="0.1a" />
+    <Language code="en" />
+    <Files dir="G:\My GT-8 Patches" />
+    <Help url="http://sourceforge.net/forum/forum.php?forum_id=585786" />
+    <Webpage url="http://fxfloorboard.sourceforge.net/" />
+    <Donate url="http://sourceforge.net/donate/index.php?group_id=171049" />  
+  </General>
+  <Window>
+    <Position x="0" y="0" />
+    <Collapsed bool="0" />
+    <Size width="" />
+  </Window>
+  <Midi> 
+    <MidiIn device="" />
+    <MidiOut device="" />
+  </Midi>
+</Preferences>
+
+*/
