@@ -11,8 +11,9 @@
   </General>
   <Window>
     <Position x="200" y="200" />
+    <Restore bool="true" />
     <Collapsed bool="true" />
-    <Size width="945" />
+    <Size width="945" default_width="945" />
   </Window>
   <Midi>
     <MidiIn device="" />

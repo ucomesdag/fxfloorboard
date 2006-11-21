@@ -32,6 +32,47 @@ Preferences::Preferences()
 Preferences::~Preferences()
 {
 	//Write back to file/create
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the preferences of the GT-8 FX FloorBoard application. -->
+<Preferences>
+  <General>
+    <Application version="0.1a" />
+    <Language code="en" />
+    <Files dir="G:\My GT-8 Patches" />
+    <Help url="http://sourceforge.net/forum/forum.php?forum_id=585786" />
+    <Webpage url="http://fxfloorboard.sourceforge.net/" />
+    <Donate url="http://sourceforge.net/donate/index.php?group_id=171049" />  
+  </General>
+  <Window>
+    <Position x="200" y="200" />
+    <Collapsed bool="true" />
+    <Size width="945" />
+  </Window>
+  <Midi>
+    <MidiIn device="" />
+    <MidiOut device="" />
+  </Midi>
+</Preferences>
+*/
 	Destroy();
 };
 
@@ -62,7 +103,7 @@ QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName,
 
 void Preferences::setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData)
 {
-	
+
 };
 
 void Preferences::loadPreferences()
