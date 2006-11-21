@@ -23,7 +23,7 @@
 #include <QLayout>
 #include "mainWindow.h"
 #include "floorBoard.h"
-#include "preferences.h"	
+#include "Preferences.h"	
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)

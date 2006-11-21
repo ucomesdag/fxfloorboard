@@ -22,7 +22,7 @@
 
 #include <QtGui/QApplication>
 #include "mainWindow.h"
-#include "preferences.h"
+#include "Preferences.h"
 
 int main(int argc, char *argv[])
 {
