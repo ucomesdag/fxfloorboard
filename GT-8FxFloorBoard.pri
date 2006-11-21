@@ -15,6 +15,8 @@ HEADERS += ./bankTreeList.h \
     ./floorPanelBarButton.h \
     ./mainWindow.h \
     ./midiTableParser.h \
+    ./namedArray.h \
+    ./Preferences.h \
     ./stompBox.h \
     ./XMLWriter.h
 
@@ -31,6 +33,8 @@ SOURCES += ./bankTreeList.cpp \
     ./main.cpp \
     ./mainWindow.cpp \
     ./midiTableParser.cpp \
+    ./namedArray.cpp \
+    ./Preferences.cpp \
     ./stompBox.cpp \
     ./XMLWriter.cpp
 

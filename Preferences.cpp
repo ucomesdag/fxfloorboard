@@ -38,15 +38,18 @@ Preferences::~Preferences()
 Preferences* Preferences::_instance = 0;// initialize pointer
 Preferences* Preferences::Instance() 
   {
-    /*if (_instance == 0)  // is it the first call?
+    /* Multi-threading safe */
+	if (_instance == 0)  // is it the first call?
     {  
       _instance = new Preferences; // create sole instance
     }
     return _instance; // address of sole instance
-	*/
 
+	/* Single-threading */
+	/*
 	static Preferences inst;
     return &inst;
+	*/
   }
 
 QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName)
