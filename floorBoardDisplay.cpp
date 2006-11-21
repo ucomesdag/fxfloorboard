@@ -21,7 +21,7 @@
 ****************************************************************************/
 
 #include "floorBoardDisplay.h"
-#include "preferences.h"	
+#include "Preferences.h"	
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
     : QWidget(parent)
