@@ -26,8 +26,6 @@
 #include <QString>
 #include <QVector>
 #include <qdom.h>
-#include <QFile>
-
 //using namespace std;
 
 class Preferences
@@ -53,80 +51,6 @@ private:
 	QVector<QString> groupNames;
 	QVector<QString> typeNames;
 	QVector<QString> itemNames;
-};
-
-Preferences::Preferences() 
-{
-	loadPreferences();
-};
-
-Preferences::~Preferences()
-{
-	//Write back to file/create
-};
-
-Preferences* Preferences::_instance = 0;// initialize pointer
-Preferences* Preferences::Instance() 
-  {
-    if (_instance == 0)  // is it the first call?
-    {  
-      _instance = new Preferences; // create sole instance
-    }
-    return _instance; // address of sole instance
-  }
-
-QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName)
-{
-	/* Look op and return of the value coresponding to the group->type->item */
-	QString setting = this->prefValues
-		.at( this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName)) );
-	return setting;
-};
-
-void Preferences::setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData)
-{
-	
-};
-
-void Preferences::loadPreferences()
-{	
-	/* Loads the xml document and creates the QDomElement root */
-	QDomDocument doc( "Application Preferences" );
-	QFile file( "preferences.xml" );
-	doc.setContent( &file );                    // file is a QFile
-	file.close();
-	QDomElement root = doc.documentElement();   // Points to <Preferences>
-	this->root = root;
-
-	/* Iterate trough xml tree and load in to the assigned vector */
-	QDomNode node = root.firstChild(); // Points to prefBuffer group
-	while ( !node.isNull() ) 
-	{
-		QString _groupName = node.nodeName();
-		
-		QDomNode childNode = node.firstChild(); // Points to prefBuffer type
-		while ( !childNode.isNull() ) 
-		{
-			QString _typeName = childNode.nodeName();
-
-			for (unsigned int itemNum=0;itemNum<childNode.attributes().count();itemNum++ ) 
-			{   // Iterates trough all the atributes
-				QString _itemName = childNode.attributes().item(itemNum).nodeName();
-				QString _value = childNode.attributes().namedItem(_itemName).nodeValue();
-				
-				this->metaSearch.append(_groupName + ":" + _typeName + ":" + _itemName);
-				this->prefValues.append(_value);
-				this->groupNames.append(_groupName);
-				this->typeNames.append(_typeName);
-				this->itemNames.append(_itemName);
-			};
-
-			childNode = childNode.nextSibling();
-		};
-		
-		node = node.nextSibling();
-	};
-	
 };
 
 #endif // PREFERENCES_H
