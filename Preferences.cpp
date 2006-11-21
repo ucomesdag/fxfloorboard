@@ -32,16 +32,21 @@ Preferences::Preferences()
 Preferences::~Preferences()
 {
 	//Write back to file/create
+	Destroy();
 };
 
 Preferences* Preferences::_instance = 0;// initialize pointer
 Preferences* Preferences::Instance() 
   {
-    if (_instance == 0)  // is it the first call?
+    /*if (_instance == 0)  // is it the first call?
     {  
       _instance = new Preferences; // create sole instance
     }
     return _instance; // address of sole instance
+	*/
+
+	static Preferences inst;
+    return &inst;
   }
 
 QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName)
@@ -97,3 +102,9 @@ void Preferences::loadPreferences()
 	};
 	
 };
+
+void Preferences::Destroy() 
+{
+ delete _instance;
+ _instance=0;
+}
