@@ -23,6 +23,7 @@
 #include <QLayout>
 #include "mainWindow.h"
 #include "floorBoard.h"
+#include "preferences.h"	
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -86,19 +87,22 @@ void mainWindow::updateSize(QSize floorSize)
 /* HELP MENU */
 void mainWindow::help()
 {
-	QUrl helpUrl("http://sourceforge.net/forum/forum.php?forum_id=585786");
+	Preferences *preferences = Preferences::Instance();
+	QUrl helpUrl( preferences->getPreferences("General", "Help", "url") );
 	QDesktopServices::openUrl(helpUrl);
 };
 
 void mainWindow::homepage()
 {
-	QUrl homepageUrl("http://fxfloorboard.sourceforge.net/");
+	Preferences *preferences = Preferences::Instance();
+	QUrl homepageUrl( preferences->getPreferences("General", "Webpage", "url") );
 	QDesktopServices::openUrl(homepageUrl);
 };
 
 void mainWindow::donate()
 {
-	QUrl donateUrl("http://sourceforge.net/donate/index.php?group_id=171049");
+	Preferences *preferences = Preferences::Instance();
+	QUrl donateUrl( preferences->getPreferences("General", "Donate", "url") );
 	QDesktopServices::openUrl(donateUrl);
 };
 
@@ -116,10 +120,13 @@ void mainWindow::license()
 
 void mainWindow::about()
 {
-    QFile file(":about"); 
+    Preferences *preferences = Preferences::Instance();
+	QString version = preferences->getPreferences("General", "Application", "version");
+	
+	QFile file(":about"); 
 	if(file.open(QIODevice::ReadOnly))
 	{	
-		QMessageBox::about(this, "About GT-8 Fx FloorBoard", file.readAll());
+		QMessageBox::about(this, "About GT-8 Fx FloorBoard", "GT-8 FX FloorBoard, version " + version + "\n" + file.readAll());
 	};
 };
 

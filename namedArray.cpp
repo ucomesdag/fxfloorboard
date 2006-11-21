@@ -20,41 +20,34 @@
 **
 ****************************************************************************/
 
-#include "preferencesParser.h"	
+#include "namedArray.h"
 #include <QVector>
-#include <QFile>
+#include <QString>
 
-preferencesParser::preferencesParser() 
+namedArray::namedArray() 
 {
-	QDomDocument doc( "Application Prefferences" );
-	QFile file( "preferences.xml" );
-	doc.setContent( &file );                    // file is a QFile
-	file.close();
-	QDomElement root = doc.documentElement();   // Points to <SysX>
-	this->root = root;
-	loadPreferences();
+	this->_index_cur++;
 };
 
-preferencesParser::~preferencesParser()
+namedArray::~namedArray()
 {
-	//Write back to file/create
+
 };
 
-QString preferencesParser::getSetting(QString prefGroup, QString prefType)
-{
-	return "void";
+unsigned int namedArray::_index_cur = 0; //counter
+
+void namedArray::append(QString index, QString var)
+{	
+	this->_index.append(index); 
+	this->_var.append(var);
 };
 
-void preferencesParser::setSetting(QString prefGroup, QString prefType, QVector<QString> prefItem, QVector<QString> prefValue)
+QString namedArray::at(QString index)
 {
-	
+	return this->_var.at(this->_index.indexOf(index));
 };
 
-void preferencesParser::loadPreferences()
+QString	namedArray::indexOf(QString var)
 {
-	this->prefGroup;
-	this->prefType;
-	this->prefItem;
-	this->prefValue;
-	this->prefIndex;
+	return this->_index.at(this->_var.indexOf(var));
 };

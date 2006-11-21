@@ -20,26 +20,38 @@
 **
 ****************************************************************************/
 
-#include <QtGui/QApplication>
-#include "mainWindow.h"
-#include "preferences.h"
+#ifndef PREFERENCES_H
+#define PREFERENCES_H
 
-int main(int argc, char *argv[])
+#include <QString>
+#include <QVector>
+#include <qdom.h>
+//using namespace std;
+
+class Preferences
 {
-    QApplication app(argc, argv);
+
+public:
+	static Preferences* Instance(); //Singleton patern design
 	
-	Preferences *preferences = Preferences::Instance(); // Load preferences
 
-	mainWindow mainWindow;
-	mainWindow.setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
-	mainWindow.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
+	QString getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName);
+	void setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData);
+	void loadPreferences();
 
-	bool ok;
-	QString x_str = preferences->getPreferences("Window", "Position", "x");
-	QString y_str = preferences->getPreferences("Window", "Position", "y");
-	mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
+protected :
+	Preferences();
+	~Preferences();
 
-	mainWindow.show();
+private:
+	static Preferences* _instance;
 
-    return app.exec();
+	QDomElement root;
+	QVector<QString> metaSearch;
+	QVector<QString> prefValues;
+	QVector<QString> groupNames;
+	QVector<QString> typeNames;
+	QVector<QString> itemNames;
 };
+
+#endif // PREFERENCES_H

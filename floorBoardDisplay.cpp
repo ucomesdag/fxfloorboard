@@ -21,10 +21,14 @@
 ****************************************************************************/
 
 #include "floorBoardDisplay.h"
+#include "preferences.h"	
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
     : QWidget(parent)
 {
+	Preferences *preferences = Preferences::Instance();
+	QString version = preferences->getPreferences("General", "Application", "version");
+	
 	this->pos = pos;
 
 	QPalette pal;
@@ -76,7 +80,8 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
 	str.append("version");
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
-	str.append("0.1a");
+
+	str.append(version);
 	str.append("</font></td></tr></table>");
 	str.append("</body></html>");
 	patchDisplay->setHtml(str);

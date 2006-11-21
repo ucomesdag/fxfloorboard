@@ -20,26 +20,28 @@
 **
 ****************************************************************************/
 
-#include <QtGui/QApplication>
-#include "mainWindow.h"
-#include "preferences.h"
+#ifndef NAMEDARRAY_H
+#define NAMEDARRAY_H
 
-int main(int argc, char *argv[])
+#include <QVector>
+#include <QString>
+//using namespace std;
+
+class namedArray
 {
-    QApplication app(argc, argv);
-	
-	Preferences *preferences = Preferences::Instance(); // Load preferences
 
-	mainWindow mainWindow;
-	mainWindow.setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
-	mainWindow.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
+public:
+	namedArray();
+	~namedArray();
 
-	bool ok;
-	QString x_str = preferences->getPreferences("Window", "Position", "x");
-	QString y_str = preferences->getPreferences("Window", "Position", "y");
-	mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
+	static unsigned int _index_cur;
 
-	mainWindow.show();
+	void append( QString index, QString var );
+	QString at(QString index);
+	QString	indexOf(QString var);
 
-    return app.exec();
+private:
+	QVector<QString> _index, _var;
 };
+
+#endif // NAMEDARRAY_H

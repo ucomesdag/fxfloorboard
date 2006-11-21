@@ -31,6 +31,7 @@
 #include "floorBoardDisplay.h"
 #include "floorPanelBar.h"
 #include "floorBoard.h"
+#include "Preferences.h"	
 
 floorBoard::floorBoard(QWidget *parent, 
 						QString imagePathFloor, 
@@ -118,6 +119,24 @@ floorBoard::floorBoard(QWidget *parent,
 
 	QObject::connect(panelBar, SIGNAL( hideDragBar() ),
                 this, SIGNAL( hideDragBar() ) );
+
+	bool ok;
+	Preferences *preferences = Preferences::Instance();
+	QString collapseState = preferences->getPreferences("Window", "Collapsed", "bool");
+	QString width = preferences->getPreferences("Window", "Size", "width");
+
+	this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
+	
+	if(collapseState=="true")
+	{ 
+		this->setSize(minSize);
+		emit setCollapseState(true);
+	}
+	else
+	{ 
+		emit setCollapseState(false);
+	};
+
 };
 
 void floorBoard::paintEvent(QPaintEvent *)

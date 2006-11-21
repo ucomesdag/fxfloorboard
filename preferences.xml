@@ -10,9 +10,9 @@
     <Donate url="http://sourceforge.net/donate/index.php?group_id=171049" />  
   </General>
   <Window>
-    <Position x="0" y="0" />
-    <Collapsed bool="0" />
-    <Size width="" />
+    <Position x="200" y="200" />
+    <Collapsed bool="true" />
+    <Size width="945" />
   </Window>
   <Midi>
     <MidiIn device="" />
