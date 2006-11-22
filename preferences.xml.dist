@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Preferences of the GT-8 FX FloorBoard application. -->
+<Preferences>
+	<General>
+		<Application version="0.0a"/>
+		<Donate url="http://sourceforge.net/donate/index.php?group_id=171049"/>
+		<Files dir="G:\My GT-8 Patches"/>
+		<Help url="http://sourceforge.net/forum/forum.php?forum_id=585786"/>
+		<Language code="en"/>
+		<Webpage url="http://fxfloorboard.sourceforge.net/"/>
+	</General>
+	<Midi>
+		<MidiIn device=""/>
+		<MidiOut device=""/>
+	</Midi>
+	<Window>
+		<Collapsed bool="true"/>
+		<Position x="306" y="223"/>
+		<Restore window="false" side_panel="false" />
+		<Size default_width="945" width="945"/>
+		<Splash bool="true"/>
+	</Window>
+</Preferences>
