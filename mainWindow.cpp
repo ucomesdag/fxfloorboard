@@ -55,8 +55,16 @@ mainWindow::mainWindow(QWidget *parent)
 mainWindow::~mainWindow()
 {
 	Preferences *preferences = Preferences::Instance();
-	preferences->setPreferences("Window", "Position", "x", QString::number(this->x(), 10));
-	preferences->setPreferences("Window", "Position", "y", QString::number(this->y(), 10));
+	if(preferences->getPreferences("Window", "Restore", "window")=="true")
+	{
+		preferences->setPreferences("Window", "Position", "x", QString::number(this->x(), 10));
+		preferences->setPreferences("Window", "Position", "y", QString::number(this->y(), 10));
+	}
+	else
+	{
+		preferences->setPreferences("Window", "Position", "x", "");
+		preferences->setPreferences("Window", "Position", "y", "");
+	};
 };
 
 void mainWindow::createMenu()

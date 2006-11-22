@@ -46,14 +46,9 @@ int main(int argc, char *argv[])
 	QString x_str = preferences->getPreferences("Window", "Position", "x");
 	QString y_str = preferences->getPreferences("Window", "Position", "y");
 
-	if(preferences->getPreferences("Window", "Restore", "bool")=="true" && !x_str.isEmpty())
+	if(preferences->getPreferences("Window", "Restore", "window")=="true" && !x_str.isEmpty())
 	{
 		mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
-	}
-	else
-	{
-		preferences->setPreferences("Window", "Position", "x", "");
-		preferences->setPreferences("Window", "Position", "y", "");
 	};
 
 	mainWindow.show();

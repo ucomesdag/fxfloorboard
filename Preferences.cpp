@@ -27,7 +27,22 @@
 
 Preferences::Preferences() 
 {
-	loadPreferences();
+	loadPreferences(":preferences.xml.dist");
+
+	QString buildVersion = this->getPreferences("General", "Application", "version");
+
+	if(!QFile("preferences.xml").exists())
+	{
+		loadPreferences(":preferences.xml.dist");
+	}
+	else
+	{
+		loadPreferences("preferences.xml");
+		if(this->getPreferences("General", "Application", "version")!=buildVersion)
+		{
+			loadPreferences(":preferences.xml.dist");
+		};
+	};
 };
 
 Preferences* Preferences::_instance = 0;// initialize pointer
@@ -62,21 +77,25 @@ void Preferences::setPreferences(QString prefGroupName, QString prefTypeName, QS
 {
 	/* Look op and set the value coresponding to the group->type->item */
 	unsigned int indexOfValue = this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName));
-	this->prefValues.replace(indexOfValue, prefValueData); 
-};
-
-void Preferences::loadPreferences()
-{	
-	QFile file;
-	if(!QFile("preferences.xml").exists ())
+	if(indexOfValue!=-1)
 	{
-		file.setFileName( ":preferences.xml.dist" );
+		this->prefValues.replace(indexOfValue, prefValueData); 
 	}
 	else
 	{
-		file.setFileName( "preferences.xml" );
+		/* If the group->type->item does not exist/found it will be created/added */
+		this->metaSearch.append(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName));
+		this->groupNames.append(prefGroupName);
+		this->typeNames.append(prefTypeName);
+		this->itemNames.append(prefItemName);		
+		this->prefValues.append(prefValueData);
 	};
-	
+};
+
+void Preferences::loadPreferences(QString fileName)
+{	
+	QFile file;
+	file.setFileName(fileName);
 	/* Loads the xml document and creates the QDomElement root */
 	QDomDocument doc( "Application Preferences" );
 	doc.setContent( &file );                    // file is a QFile
@@ -111,8 +130,7 @@ void Preferences::loadPreferences()
 		};
 		
 		node = node.nextSibling();
-	};
-	
+	};	
 };
 
 struct indexList // Create a structure of metaSearchData and indexnumbers to sort and match them afterwords

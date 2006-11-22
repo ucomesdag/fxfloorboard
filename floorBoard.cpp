@@ -126,7 +126,7 @@ floorBoard::floorBoard(QWidget *parent,
 	QString width = preferences->getPreferences("Window", "Size", "width");
 	QString default_width = preferences->getPreferences("Window", "Size", "default_width");
 	
-	if(preferences->getPreferences("Window", "Restore", "bool")=="true")
+	if(preferences->getPreferences("Window", "Restore", "side_panel")=="true")
 	{
 		this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
 		

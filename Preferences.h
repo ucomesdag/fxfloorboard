@@ -37,7 +37,7 @@ public:
 	
 	QString getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName);
 	void setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData);
-	void loadPreferences();
+	void loadPreferences(QString fileName);
 	void savePreferences();
 
 protected :
