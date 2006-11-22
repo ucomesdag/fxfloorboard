@@ -69,7 +69,7 @@ public:
     void SetPreferences(Preferences* s);
 
 private:
-    Preferences* _Preferences;
+    Preferences* _preferences;
 };
 
 #endif // PREFERENCES_H

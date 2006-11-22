@@ -215,16 +215,16 @@ void Preferences::savePreferences()
 
 PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
 {
-	_Preferences = s;
+	_preferences = s;
 };
 
 PreferencesDestroyer::~PreferencesDestroyer ()
 {
-	_Preferences->savePreferences();
-	delete _Preferences;
+	_preferences->savePreferences();
+	delete _preferences;
 };
 
 void PreferencesDestroyer::SetPreferences(Preferences* s)
 {
-	_Preferences = s;
+	_preferences = s;
 };
