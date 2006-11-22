@@ -30,7 +30,7 @@ class PreferencesDestroyer
 {
 
 public:
-    PreferencesDestroyer(Preferences* = 0);
+    PreferencesDestroyer(Preferences* s = 0);
     ~PreferencesDestroyer();
 
     void SetPreferences(Preferences* s);
