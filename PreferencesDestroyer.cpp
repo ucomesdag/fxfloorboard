@@ -22,6 +22,7 @@
 
 #include "PreferencesDestroyer.h"	
 
+PreferencesDestroyer Preferences::_destroyer;
 PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
 {
 	_preferences = s;
