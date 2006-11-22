@@ -29,6 +29,13 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 	
 	mainWindow mainWindow;
+
+	if(!QFile("license.txt").exists())
+	{
+		QFile file(":license.txt" );
+		file.copy("license.txt");
+		file.close();
+	};
 	
 	Preferences *preferences = Preferences::Instance(); // Load preferences
 	
