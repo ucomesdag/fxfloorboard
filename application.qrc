@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/" >
         <file>about</file>
+        <file>images/GT-8FxFloorBoard.png</file>
         <file>images/amp.png</file>
         <file>images/button.png</file>
         <file>images/cc.png</file>
@@ -22,6 +23,7 @@
         <file>images/panelbarbutton.png</file>
         <file>images/pedal.png</file>
         <file>images/rev.png</file>
+        <file>images/splash.png</file>
         <file>images/stompbg.png</file>
         <file>images/vol.png</file>
         <file>images/wah.png</file>

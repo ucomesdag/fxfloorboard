@@ -23,75 +23,32 @@
 #include "Preferences.h"	
 #include <QVector>
 #include <QFile>
+#include "XMLWriter.h"
 
 Preferences::Preferences() 
 {
 	loadPreferences();
 };
 
-Preferences::~Preferences()
-{
-	//Write back to file/create
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-/*
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- This is the preferences of the GT-8 FX FloorBoard application. -->
-<Preferences>
-  <General>
-    <Application version="0.1a" />
-    <Language code="en" />
-    <Files dir="G:\My GT-8 Patches" />
-    <Help url="http://sourceforge.net/forum/forum.php?forum_id=585786" />
-    <Webpage url="http://fxfloorboard.sourceforge.net/" />
-    <Donate url="http://sourceforge.net/donate/index.php?group_id=171049" />  
-  </General>
-  <Window>
-    <Position x="200" y="200" />
-    <Collapsed bool="true" />
-    <Size width="945" />
-  </Window>
-  <Midi>
-    <MidiIn device="" />
-    <MidiOut device="" />
-  </Midi>
-</Preferences>
-*/
-	Destroy();
-};
-
 Preferences* Preferences::_instance = 0;// initialize pointer
+PreferencesDestroyer Preferences::_destroyer;
+
 Preferences* Preferences::Instance() 
-  {
-    /* Multi-threading safe */
-	if (_instance == 0)  // is it the first call?
-    {  
-      _instance = new Preferences; // create sole instance
-    }
-    return _instance; // address of sole instance
+{
+	/* Multi-threading safe */
+	if (!_instance /*_instance == 0*/)  // is it the first call?
+	{  
+		_instance = new Preferences; // create sole instance
+		_destroyer.SetPreferences(_instance);
+	};
+	return _instance; // address of sole instance
 
 	/* Single-threading */
 	/*
 	static Preferences inst;
-    return &inst;
+	return &inst;
 	*/
-  }
+};
 
 QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName)
 {
@@ -147,8 +104,99 @@ void Preferences::loadPreferences()
 	
 };
 
-void Preferences::Destroy() 
+struct indexList
 {
- delete _instance;
- _instance=0;
-}
+	QString metaSearchData, indexNumber;
+
+	bool operator<(const indexList& rhs) const;
+	//indexList(QString metaSearchData_, QString indexNumber_) : metaSearchData(metaSearchData_), indexNumber(indexNumber_) {}
+};
+
+bool indexList::operator<(const indexList& rhs) const
+{
+	return (metaSearchData < rhs.metaSearchData) ? true : (metaSearchData == rhs.metaSearchData) ? rhs.indexNumber > indexNumber : false;
+};
+
+void Preferences::savePreferences()
+{
+	//Write back to file/create
+    QFile file("preferences.xml");
+	file.open( QIODevice::WriteOnly );
+	XMLWriter xout( &file );
+
+	QMap<QString, QString> attrs;
+
+	xout.writeComment("Preferences of the GT-8 FX FloorBoard application.");
+	xout.writeOpenTag("Preferences");
+
+	unsigned int aSize = this->metaSearch.size();
+	QVector<indexList> sortIndexList;
+	indexList tmp;
+	for(unsigned int n=0;n<aSize;n++)
+	{
+		//sortIndexList.append( indexList(this->metaSearch.at(n), QString::number(n, 10)) );
+		tmp.metaSearchData = this->metaSearch.at(n);
+		tmp.indexNumber = QString::number(n, 10);
+		sortIndexList.append( tmp );
+	};
+
+	qSort(sortIndexList.begin(), sortIndexList.end());
+
+	bool ok;
+	int i, a;
+	QString currentGroupName;
+	for(unsigned int n=0; n<aSize;n++)
+	{
+		i = sortIndexList.at(n).indexNumber.toInt(&ok, 10);
+		
+		if( this->groupNames.at(i) != currentGroupName )
+		{
+			xout.writeOpenTag(this->groupNames.at(i));
+		};
+		currentGroupName = this->groupNames.at(i);
+
+		attrs.insert(this->itemNames.at(i), this->prefValues.at(i));
+		if(n<aSize-1)
+		{
+			a = sortIndexList.at(n + 1).indexNumber.toInt(&ok, 10);
+			if(this->typeNames.at(i) != this->typeNames.at(a))
+			{
+				xout.writeAtomTag(this->typeNames.at(i), &attrs);
+				attrs.clear();
+			};
+		}
+		else
+		{
+			xout.writeAtomTag(this->typeNames.at(i), &attrs);
+			attrs.clear();
+		};
+
+		if(n==aSize-1)
+		{
+			xout.writeCloseTag(currentGroupName);
+		}
+		else if( currentGroupName != this->groupNames.at(a) )
+		{
+			xout.writeCloseTag(currentGroupName);
+		};
+	};
+
+	xout.writeCloseTag("Preferences");
+	file.close();
+};
+
+PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
+{
+	_Preferences = s;
+};
+
+PreferencesDestroyer::~PreferencesDestroyer ()
+{
+	_Preferences->savePreferences();
+	delete _Preferences;
+};
+
+void PreferencesDestroyer::SetPreferences(Preferences* s)
+{
+	_Preferences = s;
+};

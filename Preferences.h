@@ -37,14 +37,16 @@ public:
 	QString getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName);
 	void setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData);
 	void loadPreferences();
-	void Destroy();
+	void savePreferences();
 
 protected :
 	Preferences();
-	~Preferences();
+	friend class PreferencesDestroyer;
+	virtual ~Preferences() { };
 
 private:
 	static Preferences* _instance;
+	static PreferencesDestroyer _destroyer;
 
 	QDomElement root;
 	QVector<QString> metaSearch;
@@ -52,6 +54,19 @@ private:
 	QVector<QString> groupNames;
 	QVector<QString> typeNames;
 	QVector<QString> itemNames;
+};
+
+class PreferencesDestroyer 
+{
+
+public:
+    PreferencesDestroyer(Preferences* = 0);
+    ~PreferencesDestroyer();
+
+    void SetPreferences(Preferences* s);
+
+private:
+    Preferences* _Preferences;
 };
 
 #endif // PREFERENCES_H

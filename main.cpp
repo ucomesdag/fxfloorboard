@@ -40,6 +40,6 @@ int main(int argc, char *argv[])
 	mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
 
 	mainWindow.show();
-
-    return app.exec();
+    
+	return app.exec();
 };

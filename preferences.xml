@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This is the preferences of the GT-8 FX FloorBoard application. -->
+<!-- Preferences of the GT-8 FX FloorBoard application. -->
 <Preferences>
-  <General>
-    <Application version="0.1a" />
-    <Language code="en" />
-    <Files dir="G:\My GT-8 Patches" />
-    <Help url="http://sourceforge.net/forum/forum.php?forum_id=585786" />
-    <Webpage url="http://fxfloorboard.sourceforge.net/" />
-    <Donate url="http://sourceforge.net/donate/index.php?group_id=171049" />  
-  </General>
-  <Window>
-    <Position x="200" y="200" />
-    <Restore bool="true" />
-    <Collapsed bool="true" />
-    <Size width="945" default_width="945" />
-  </Window>
-  <Midi>
-    <MidiIn device="" />
-    <MidiOut device="" />
-  </Midi>
+	<General>
+		<Application version="0.1a"/>
+		<Donate url="http://sourceforge.net/donate/index.php?group_id=171049"/>
+		<Files dir="G:\My GT-8 Patches"/>
+		<Help url="http://sourceforge.net/forum/forum.php?forum_id=585786"/>
+		<Language code="en"/>
+		<Webpage url="http://fxfloorboard.sourceforge.net/"/>
+	</General>
+	<Midi>
+		<MidiIn device=""/>
+		<MidiOut device=""/>
+	</Midi>
+	<Window>
+		<Collapsed bool="true"/>
+		<Position x="200" y="200"/>
+		<Restore bool="true"/>
+		<Size default_width="945" width="945"/>
+		<Splash bool="true"/>
+	</Window>
 </Preferences>

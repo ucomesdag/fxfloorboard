@@ -43,9 +43,13 @@ mainWindow::mainWindow(QWidget *parent)
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 	setLayout(mainLayout);
 	
+	/*
 	Preferences *preferences = Preferences::Instance();
 	QString version = preferences->getPreferences("General", "Application", "version");
 	setWindowTitle("GT-8 FX FloorBoard - v" + version);
+	*/
+
+	setWindowTitle("GT-8 FX FloorBoard - NON FUNCTIONAL!!! (Interface Preview)");
 };
 
 void mainWindow::createMenu()
