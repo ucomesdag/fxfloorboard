@@ -28,6 +28,8 @@
 #include <qdom.h>
 //using namespace std;
 
+class PreferencesDestroyer;
+
 class Preferences
 {
 
@@ -40,7 +42,7 @@ public:
 	void savePreferences();
 
 protected :
-	Preferences() {};
+	Preferences();
 	friend class PreferencesDestroyer;
 	virtual ~Preferences() { };
 

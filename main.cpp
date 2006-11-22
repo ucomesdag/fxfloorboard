@@ -21,6 +21,8 @@
 ****************************************************************************/
 
 #include <QtGui/QApplication>
+#include <QtGui>
+#include <QSplashScreen>
 #include <QFile>
 #include "mainWindow.h"
 #include "Preferences.h"
@@ -28,31 +30,46 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-	
-	mainWindow mainWindow;
 
-	/*if(!QFile("license.txt").exists())
+	QPixmap splashImage(":images/splash.png");
+
+	QSplashScreen *splash = new QSplashScreen(splashImage);
+	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
+	splash->setWindowOpacity(0.95);
+	splash->setMask(splashImage.mask());
+	splash->show();
+	app.processEvents();
+
+	mainWindow *window = new mainWindow;
+	
+	splash->showMessage("Loading preferences...");
+	Preferences *preferences = Preferences::Instance(); // Load preferences
+	splash->showMessage("Loaded preferences");
+
+	splash->showMessage("Loading license...");
+	if(!QFile("license.txt").exists())
 	{
 		QFile file(":license.txt" );
 		file.copy("license.txt");
 		file.close();
-	};*/
-	
-	Preferences *preferences = Preferences::Instance(); // Load preferences
-	
-	mainWindow.setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
-	mainWindow.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
+	};
+	splash->showMessage("Loaded license");
 
+	splash->showMessage("Initializing main window...");
+	window->setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
+	window->setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
 	bool ok;
 	QString x_str = preferences->getPreferences("Window", "Position", "x");
 	QString y_str = preferences->getPreferences("Window", "Position", "y");
-
 	if(preferences->getPreferences("Window", "Restore", "window")=="true" && !x_str.isEmpty())
 	{
-		mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
+		splash->showMessage("Restoring window position...");
+		window->setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), window->width(), window->height());
+		splash->showMessage("Restored window position");
 	};
+	splash->showMessage("Finished Initializing");
 
-	mainWindow.show();
-    
+	window->show();
+	splash->finish(window);
 	return app.exec();
 };
