@@ -26,8 +26,9 @@
 #include <QFile>
 #include "XMLWriter.h"
 
-Preferences::Preferences() 
+/*Preferences::Preferences() 
 {
+	
 	loadPreferences(":preferences.xml.dist");
 
 	QString buildVersion = this->getPreferences("General", "Application", "version");
@@ -44,7 +45,7 @@ Preferences::Preferences()
 			loadPreferences(":preferences.xml.dist");
 		};
 	};
-};
+};*/
 
 Preferences* Preferences::_instance = 0;// initialize pointer
 PreferencesDestroyer Preferences::_destroyer;

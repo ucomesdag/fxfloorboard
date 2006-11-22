@@ -40,7 +40,7 @@ public:
 	void savePreferences();
 
 protected :
-	Preferences();
+	Preferences() {};
 	friend class PreferencesDestroyer;
 	virtual ~Preferences() { };
 
