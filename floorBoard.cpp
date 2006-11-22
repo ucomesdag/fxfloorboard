@@ -32,6 +32,7 @@
 #include "floorPanelBar.h"
 #include "floorBoard.h"
 #include "Preferences.h"	
+#include "PreferencesDestroyer.h"
 
 floorBoard::floorBoard(QWidget *parent, 
 						QString imagePathFloor, 
