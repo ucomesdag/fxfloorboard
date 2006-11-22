@@ -124,20 +124,39 @@ floorBoard::floorBoard(QWidget *parent,
 	Preferences *preferences = Preferences::Instance();
 	QString collapseState = preferences->getPreferences("Window", "Collapsed", "bool");
 	QString width = preferences->getPreferences("Window", "Size", "width");
-
-	this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
+	QString default_width = preferences->getPreferences("Window", "Size", "default_width");
 	
-	if(collapseState=="true")
-	{ 
-		this->setSize(minSize);
-		emit setCollapseState(true);
+	if(preferences->getPreferences("Window", "Restore", "bool")=="true")
+	{
+		this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
+		
+		if(collapseState=="true")
+		{ 
+			this->setSize(minSize);
+			this->colapseState = true;
+			emit setCollapseState(true);
+		}
+		else
+		{ 
+			this->colapseState = false;
+			emit setCollapseState(false);
+		};
 	}
 	else
-	{ 
-		emit setCollapseState(false);
+	{
+		this->l_floorSize = QSize::QSize(default_width.toInt(&ok, 10), floorSize.height());
+		this->setSize(minSize);
+		this->colapseState = true;
+		emit setCollapseState(true);
 	};
-
 };
+
+floorBoard::~floorBoard()
+{
+	Preferences *preferences = Preferences::Instance();
+	preferences->setPreferences("Window", "Size", "width", QString::number(this->l_floorSize.width(), 10));
+	preferences->setPreferences("Window", "Collapsed", "bool", QString(this->colapseState?"true":"false"));
+};					
 
 void floorBoard::paintEvent(QPaintEvent *)
 {
@@ -346,12 +365,14 @@ void floorBoard::setCollapse()
 	{ 
 		this->l_floorSize = floorSize;
 		this->setSize(minSize);
+		this->colapseState = true;
 		emit setCollapseState(true);
 	}
 	else
 	{ 
 		this->setSize(l_floorSize);
 		emit setCollapseState(false);
+		this->colapseState = false;
 	};
 
 };
@@ -406,18 +427,21 @@ void floorBoard::setWidth(int dist)
 	if(floorSize.width() + dist < minSize.width())
 	{
 		newSize = minSize;
+		this->colapseState = true;
 		emit setCollapseState(true);
 	}
 	else if(floorSize.width() + dist > maxSize.width())
 	{
 		newSize = maxSize;
 		this->l_floorSize = newSize;
+		this->colapseState = false;
 		emit setCollapseState(false);
 	}
 	else
 	{
 		newSize = QSize::QSize(floorSize.width() + dist, floorSize.height());
 		this->l_floorSize = newSize;
+		this->colapseState = false;
 		emit setCollapseState(false);
 	};
 	setSize(newSize);

@@ -42,6 +42,7 @@ public:
 		unsigned int panelBarOffset = 10,
 		unsigned int borderWidth = 3,
 		QPoint pos = QPoint::QPoint(0, 0));
+	~floorBoard();
 	QPoint getStompPos(unsigned int id);
 	QSize getSize();
 	void initSize(QSize floorSize);
@@ -100,6 +101,7 @@ private:
 
 	QVector<QPoint> fxPos;
 	QVector<signed int> fx;
+	bool colapseState;
 };
 
 #endif // FLOORBOARD_H

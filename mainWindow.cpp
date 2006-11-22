@@ -52,6 +52,13 @@ mainWindow::mainWindow(QWidget *parent)
 	setWindowTitle("GT-8 FX FloorBoard - NON FUNCTIONAL!!! (Interface Preview)");
 };
 
+mainWindow::~mainWindow()
+{
+	Preferences *preferences = Preferences::Instance();
+	preferences->setPreferences("Window", "Position", "x", QString::number(this->x(), 10));
+	preferences->setPreferences("Window", "Position", "y", QString::number(this->y(), 10));
+};
+
 void mainWindow::createMenu()
 {
     menuBar = new QMenuBar;

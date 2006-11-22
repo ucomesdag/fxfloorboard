@@ -26,6 +26,7 @@
 #include <QString>
 #include <QVector>
 #include <qdom.h>
+#include "mainWindow.h"
 //using namespace std;
 
 class Preferences
@@ -54,6 +55,8 @@ private:
 	QVector<QString> groupNames;
 	QVector<QString> typeNames;
 	QVector<QString> itemNames;
+
+	const QRect *window;
 };
 
 class PreferencesDestroyer 

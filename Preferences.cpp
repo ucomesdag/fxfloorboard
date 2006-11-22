@@ -60,14 +60,25 @@ QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName,
 
 void Preferences::setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData)
 {
-
+	/* Look op and set the value coresponding to the group->type->item */
+	unsigned int indexOfValue = this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName));
+	this->prefValues.replace(indexOfValue, prefValueData); 
 };
 
 void Preferences::loadPreferences()
 {	
+	QFile file;
+	if(!QFile("preferences.xml").exists ())
+	{
+		file.setFileName( ":preferences.xml.dist" );
+	}
+	else
+	{
+		file.setFileName( "preferences.xml" );
+	};
+	
 	/* Loads the xml document and creates the QDomElement root */
 	QDomDocument doc( "Application Preferences" );
-	QFile file( "preferences.xml" );
 	doc.setContent( &file );                    // file is a QFile
 	file.close();
 	QDomElement root = doc.documentElement();   // Points to <Preferences>
@@ -104,7 +115,7 @@ void Preferences::loadPreferences()
 	
 };
 
-struct indexList
+struct indexList // Create a structure of metaSearchData and indexnumbers to sort and match them afterwords
 {
 	QString metaSearchData, indexNumber;
 
@@ -148,7 +159,6 @@ void Preferences::savePreferences()
 	for(unsigned int n=0; n<aSize;n++)
 	{
 		i = sortIndexList.at(n).indexNumber.toInt(&ok, 10);
-		
 		if( this->groupNames.at(i) != currentGroupName )
 		{
 			xout.writeOpenTag(this->groupNames.at(i));

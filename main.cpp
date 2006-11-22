@@ -28,16 +28,26 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 	
-	Preferences *preferences = Preferences::Instance(); // Load preferences
-
 	mainWindow mainWindow;
+	
+	Preferences *preferences = Preferences::Instance(); // Load preferences
+	
 	mainWindow.setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
 	mainWindow.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
 
 	bool ok;
 	QString x_str = preferences->getPreferences("Window", "Position", "x");
 	QString y_str = preferences->getPreferences("Window", "Position", "y");
-	mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
+
+	if(preferences->getPreferences("Window", "Restore", "bool")=="true" && !x_str.isEmpty())
+	{
+		mainWindow.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), mainWindow.width(), mainWindow.height());
+	}
+	else
+	{
+		preferences->setPreferences("Window", "Position", "x", "");
+		preferences->setPreferences("Window", "Position", "y", "");
+	};
 
 	mainWindow.show();
     

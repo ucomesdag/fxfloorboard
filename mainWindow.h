@@ -36,6 +36,7 @@ class mainWindow : public QWidget
 
 public:
     mainWindow(QWidget *parent = 0);
+	~mainWindow();
 	void createMenu();
 
 public slots:

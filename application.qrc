@@ -30,6 +30,6 @@
         <file>images/windowicon.png</file>
         <file>license.txt</file>
         <file>midi.xml</file>
-        <file>preferences.xml</file>
+        <file>preferences.xml.dist</file>
     </qresource>
 </RCC>
