@@ -31,12 +31,12 @@ int main(int argc, char *argv[])
 	
 	mainWindow mainWindow;
 
-	if(!QFile("license.txt").exists())
+	/*if(!QFile("license.txt").exists())
 	{
 		QFile file(":license.txt" );
 		file.copy("license.txt");
 		file.close();
-	};
+	};*/
 	
 	Preferences *preferences = Preferences::Instance(); // Load preferences
 	
