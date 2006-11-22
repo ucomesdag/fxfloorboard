@@ -20,7 +20,8 @@
 **
 ****************************************************************************/
 
-#include "Preferences.h"	
+#include "Preferences.h"
+#include "PreferencesDestroyer.h"
 #include <QVector>
 #include <QFile>
 #include "XMLWriter.h"
@@ -211,20 +212,4 @@ void Preferences::savePreferences()
 
 	xout.writeCloseTag("Preferences");
 	file.close();
-};
-
-PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
-{
-	_preferences = s;
-};
-
-PreferencesDestroyer::~PreferencesDestroyer ()
-{
-	_preferences->savePreferences();
-	delete _preferences;
-};
-
-void PreferencesDestroyer::SetPreferences(Preferences* s)
-{
-	_preferences = s;
 };

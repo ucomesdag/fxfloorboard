@@ -20,40 +20,23 @@
 **
 ****************************************************************************/
 
-#ifndef PREFERENCES_H
-#define PREFERENCES_H
+#ifndef PREFERENCESDESTROYER_H
+#define PREFERENCESDESTROYER_H
 
-#include <QString>
-#include <QVector>
-#include <qdom.h>
+#include "Preferences.h"
 //using namespace std;
 
-class Preferences
+class PreferencesDestroyer 
 {
 
 public:
-	static Preferences* Instance(); //Singleton patern design
-	
-	QString getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName);
-	void setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData);
-	void loadPreferences(QString fileName);
-	void savePreferences();
+    PreferencesDestroyer(Preferences* = 0);
+    ~PreferencesDestroyer();
 
-protected :
-	Preferences();
-	friend class PreferencesDestroyer;
-	virtual ~Preferences() { };
+    void SetPreferences(Preferences* s);
 
 private:
-	static Preferences* _instance;
-	static PreferencesDestroyer _destroyer;
-
-	QDomElement root;
-	QVector<QString> metaSearch;
-	QVector<QString> prefValues;
-	QVector<QString> groupNames;
-	QVector<QString> typeNames;
-	QVector<QString> itemNames;
+    Preferences* _preferences;
 };
 
-#endif // PREFERENCES_H
+#endif // PREFERENCESDESTROYER_H
