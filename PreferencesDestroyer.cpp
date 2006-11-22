@@ -20,9 +20,8 @@
 **
 ****************************************************************************/
 
-#include "PreferencesDestroyer.h"	
+#include "Preferences.h"	
 
-PreferencesDestroyer Preferences::_destroyer;
 PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
 {
 	_preferences = s;
