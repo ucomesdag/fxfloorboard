@@ -25,9 +25,6 @@
 
 #include <QWidget>
 #include <QMenuBar>
-#include <QDir>
-#include <QUrl>
-#include <QDesktopServices>
 #include <QMessageBox>
 
 class mainWindow : public QWidget

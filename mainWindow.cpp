@@ -21,6 +21,9 @@
 ****************************************************************************/
 
 #include <QLayout>
+#include <QUrl>
+#include <QFile>
+#include <QDesktopServices>
 #include "mainWindow.h"
 #include "floorBoard.h"
 #include "Preferences.h"	

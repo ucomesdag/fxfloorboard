@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include <QtGui/QApplication>
+#include <QFile>
 #include "mainWindow.h"
 #include "Preferences.h"
 
