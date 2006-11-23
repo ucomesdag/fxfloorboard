@@ -23,6 +23,7 @@
 #include <QtGui/QApplication>
 #include <QtGui>
 #include <QSplashScreen>
+#include <QDesktopWidget>
 #include <QFile>
 #include "mainWindow.h"
 #include "Preferences.h"
@@ -34,9 +35,10 @@ int main(int argc, char *argv[])
 	QPixmap splashImage(":images/splash.png");
 
 	QSplashScreen *splash = new QSplashScreen(splashImage);
-	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
-	splash->setWindowOpacity(1.0);
+	
 	splash->setMask(splashImage.mask());
+	splash->setWindowOpacity(1.0);
+	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
 	splash->show();
 	app.processEvents();
 
@@ -44,7 +46,6 @@ int main(int argc, char *argv[])
 	
 	splash->showMessage("Loading preferences...");
 	Preferences *preferences = Preferences::Instance(); // Load preferences
-	splash->showMessage("Loaded preferences");
 
 	splash->showMessage("Loading license...");
 	if(!QFile("license.txt").exists())
@@ -53,11 +54,12 @@ int main(int argc, char *argv[])
 		file.copy("license.txt");
 		file.close();
 	};
-	splash->showMessage("Loaded license");
 
 	splash->showMessage("Initializing main window...");
+
 	window->setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
 	window->setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
+
 	bool ok;
 	QString x_str = preferences->getPreferences("Window", "Position", "x");
 	QString y_str = preferences->getPreferences("Window", "Position", "y");
@@ -65,7 +67,20 @@ int main(int argc, char *argv[])
 	{
 		splash->showMessage("Restoring window position...");
 		window->setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), window->width(), window->height());
-		splash->showMessage("Restored window position");
+	}
+	else
+	{
+		splash->showMessage("Centering main window...");
+		QDesktopWidget *desktop = new QDesktopWidget;
+		QRect screen = desktop->screenGeometry(desktop->primaryScreen());
+		int screenWidth = screen.width();                    // returns screen width
+		int screenHeight = screen.height();                  // returns screen height
+		int windowWidth = window->getWindowSize().width();                  
+		int windowHeight = window->getWindowSize().height();
+
+		int x = (screenWidth - windowWidth) / 2;
+		int y = (screenHeight - windowHeight) / 2;
+		window->setGeometry(x, y, window->width(), window->height());
 	};
 	splash->showMessage("Finished Initializing");
 

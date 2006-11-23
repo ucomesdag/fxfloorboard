@@ -32,7 +32,6 @@
 #include "floorPanelBar.h"
 #include "floorBoard.h"
 #include "Preferences.h"	
-#include "PreferencesDestroyer.h"
 
 floorBoard::floorBoard(QWidget *parent, 
 						QString imagePathFloor, 
@@ -382,6 +381,7 @@ void floorBoard::setSize(QSize newSize)
 {
 	unsigned int oldOffset = offset;
 	this->offset = newSize.width() - infoBarWidth;
+	QSize oldFloorSize = this->floorSize;
 	this->floorSize = newSize;
 
 	for(int i=0;i<fxPos.size();i++)
@@ -419,7 +419,7 @@ void floorBoard::setSize(QSize newSize)
 	QRect newBankListRect = QRect::QRect(borderWidth, borderWidth, offset - panelBarOffset - (borderWidth*2), floorHeight - (borderWidth*2));
 	emit resizeSignal(newBankListRect);
 	
-	emit sizeChanged(floorSize);
+	emit sizeChanged(floorSize, oldFloorSize);
 };
 
 void floorBoard::setWidth(int dist)

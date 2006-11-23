@@ -25,9 +25,6 @@
 
 #include <QWidget>
 #include <QMenuBar>
-#include <QDesktopServices>
-
-class QDesktopServices;
 
 class mainWindow : public QWidget
 {
@@ -37,9 +34,10 @@ public:
     mainWindow(QWidget *parent = 0);
 	~mainWindow();
 	void createMenu();
+	QSize getWindowSize();
 
 public slots:
-	void updateSize(QSize floorSize);
+	void updateSize(QSize floorSize, QSize oldFloorSize);
 	void help();
 	void homepage();
 	void donate();
@@ -53,6 +51,7 @@ private:
 	QAction *saveAction;
 	QAction *saveAsAction;
 	QAction *exitAction;
+	QSize wSize;
 };
 
 #endif // MAINWINDOW_H

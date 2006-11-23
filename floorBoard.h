@@ -44,9 +44,9 @@ public:
 		QPoint pos = QPoint::QPoint(0, 0));
 	~floorBoard();
 	QPoint getStompPos(unsigned int id);
-	QSize getSize();
 	void initSize(QSize floorSize);
 	void setSize(QSize newSize);
+	QSize getSize();
 	void setFloorBoard();
 	void initStomps();
 
@@ -59,7 +59,7 @@ signals:
 	void setDisplayPos(QPoint newpos);
 	void setFloorPanelBarPos(QPoint newpos);
 	void updateStompOffset(signed int offsetDif);
-	void sizeChanged(QSize newsize);
+	void sizeChanged(QSize newsize, QSize oldSize);
 	void setCollapseState(bool state);
 	void resizeSignal(QRect newrect);
 

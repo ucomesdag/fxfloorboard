@@ -24,6 +24,7 @@
 #include <QUrl>
 #include <QFile>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include "mainWindow.h"
 #include "floorBoard.h"
 #include "Preferences.h"
@@ -35,8 +36,8 @@ mainWindow::mainWindow(QWidget *parent)
 
 	floorBoard *fxsBoard = new floorBoard(this);
 
-	QObject::connect(fxsBoard, SIGNAL( sizeChanged(QSize) ),
-                this, SLOT( updateSize(QSize) ) );
+	QObject::connect(fxsBoard, SIGNAL( sizeChanged(QSize, QSize) ),
+                this, SLOT( updateSize(QSize, QSize) ) );
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->setMenuBar(menuBar);
@@ -45,13 +46,9 @@ mainWindow::mainWindow(QWidget *parent)
 	mainLayout->setSpacing(0);
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 	setLayout(mainLayout);
-	
-	/*
-	Preferences *preferences = Preferences::Instance();
-	QString version = preferences->getPreferences("General", "Application", "version");
-	setWindowTitle("GT-8 FX FloorBoard - v" + version);
-	*/
 
+	this->wSize = fxsBoard->getSize();
+	
 	setWindowTitle("GT-8 FX FloorBoard - NON FUNCTIONAL!!! (Interface Preview)");
 };
 
@@ -105,9 +102,12 @@ void mainWindow::createMenu()
 
 };
 
-void mainWindow::updateSize(QSize floorSize)
+void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 {
+	int x = this->geometry().x() - ((floorSize.width() - oldFloorSize.width()) / 2);
+	int y = this->geometry().y();
 	this->setFixedWidth(floorSize.width());
+	this->setGeometry(x, y, floorSize.width(), this->height());
 };
 
 /* HELP MENU */
@@ -154,5 +154,10 @@ void mainWindow::about()
 	{	
 		QMessageBox::about(this, "About GT-8 Fx FloorBoard", "GT-8 FX FloorBoard, version " + version + "\n" + file.readAll());
 	};
+};
+
+QSize mainWindow::getWindowSize()
+{
+	return this->wSize;
 };
 
