@@ -115,21 +115,24 @@ void mainWindow::help()
 {
 	Preferences *preferences = Preferences::Instance();
 	QUrl helpUrl( preferences->getPreferences("General", "Help", "url") );
-	QDesktopServices::openUrl(helpUrl);
+	QDesktopServices *dserv = new QDesktopServices;
+	dserv->openUrl(helpUrl);
 };
 
 void mainWindow::homepage()
 {
 	Preferences *preferences = Preferences::Instance();
 	QUrl homepageUrl( preferences->getPreferences("General", "Webpage", "url") );
-	QDesktopServices::openUrl(homepageUrl);
+	QDesktopServices *dserv = new QDesktopServices;
+	dserv->openUrl(homepageUrl);
 };
 
 void mainWindow::donate()
 {
 	Preferences *preferences = Preferences::Instance();
 	QUrl donateUrl( preferences->getPreferences("General", "Donate", "url") );
-	QDesktopServices::openUrl(donateUrl);
+	QDesktopServices *dserv = new QDesktopServices;
+	dserv->openUrl(donateUrl);
 };
 
 void mainWindow::license()
@@ -141,7 +144,8 @@ void mainWindow::license()
 	QDesktopServices::openUrl(licenseUrl);
 	*/
 	QUrl licenseUrl(":license.txt");
-	QDesktopServices::openUrl(licenseUrl);
+	QDesktopServices *dserv = new QDesktopServices;
+	dserv->openUrl(licenseUrl);
 };
 
 void mainWindow::about()
