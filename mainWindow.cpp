@@ -113,7 +113,8 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 /* HELP MENU */
 void openExternalUrl(QUrl url)
 {
-	QDesktopServices::openUrl(url);
+	QDesktopServices *dserv = new QDesktopServices;
+	dserv->openUrl(url);
 };
 
 void mainWindow::help()
