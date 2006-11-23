@@ -110,11 +110,11 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 	this->setGeometry(x, y, floorSize.width(), this->height());
 };
 
+
 /* HELP MENU */
 void openExternalUrl(QUrl url)
 {
-	QDesktopServices *dserv = new QDesktopServices;
-	dserv->openUrl(url);
+	QDesktopServices::openUrl(url);
 };
 
 void mainWindow::help()
