@@ -23,10 +23,10 @@
 #include <QLayout>
 #include <QUrl>
 #include <QFile>
-#include <QDesktopServices>
+#include <QMessageBox>
 #include "mainWindow.h"
 #include "floorBoard.h"
-#include "Preferences.h"	
+#include "Preferences.h"
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
