@@ -26,6 +26,8 @@
 #include <QWidget>
 #include <QMenuBar>
 
+class QDesktopServices;
+
 class mainWindow : public QWidget
 {
     Q_OBJECT
