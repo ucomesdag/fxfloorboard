@@ -25,6 +25,7 @@
 
 #include <QWidget>
 #include <QMenuBar>
+#include <QDesktopServices>
 
 class QDesktopServices;
 

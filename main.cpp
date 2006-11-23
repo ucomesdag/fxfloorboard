@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
 	QSplashScreen *splash = new QSplashScreen(splashImage);
 	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
-	splash->setWindowOpacity(0.95);
+	splash->setWindowOpacity(1.0);
 	splash->setMask(splashImage.mask());
 	splash->show();
 	app.processEvents();
