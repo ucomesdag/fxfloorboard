@@ -29,8 +29,6 @@
 #include "floorBoard.h"
 #include "Preferences.h"
 
-QDesktopServices;
-
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
 {
