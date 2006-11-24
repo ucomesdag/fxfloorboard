@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include <QLayout>
+#include <QDesktopServices>
 #include <QUrl>
 #include <QFile>
 #include <QMessageBox>
