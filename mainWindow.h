@@ -25,6 +25,7 @@
 
 #include <QWidget>
 #include <QMenuBar>
+#include <QDesktopServices>
 
 class mainWindow : public QWidget
 {
@@ -35,7 +36,6 @@ public:
 	~mainWindow();
 	void createMenu();
 	QSize getWindowSize();
-	void urlOpener(QUrl url);
 
 public slots:
 	void updateSize(QSize floorSize, QSize oldFloorSize);

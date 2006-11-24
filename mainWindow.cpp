@@ -24,7 +24,6 @@
 #include <QUrl>
 #include <QFile>
 #include <QMessageBox>
-#include <QDesktopServices>
 #include "mainWindow.h"
 #include "floorBoard.h"
 #include "Preferences.h"
@@ -111,27 +110,22 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 };
 
 /* HELP MENU */
-void mainWindow::urlOpener(QUrl url)
-{
-	QDesktopServices::openUrl(url);
-};
-
 void mainWindow::help()
 {
 	Preferences *preferences = Preferences::Instance();
-	urlOpener(QUrl( preferences->getPreferences("General", "Help", "url") ));
+	QDesktopServices::openUrl(QUrl( preferences->getPreferences("General", "Help", "url") ));
 };
 
 void mainWindow::homepage()
 {
 	Preferences *preferences = Preferences::Instance();
-	urlOpener(QUrl( preferences->getPreferences("General", "Webpage", "url") ));
+	QDesktopServices::openUrl(QUrl( preferences->getPreferences("General", "Webpage", "url") ));
 };
 
 void mainWindow::donate()
 {
 	Preferences *preferences = Preferences::Instance();
-	urlOpener(QUrl( preferences->getPreferences("General", "Donate", "url") ));
+	QDesktopServices::openUrl(QUrl( preferences->getPreferences("General", "Donate", "url") ));
 };
 
 void mainWindow::license()
@@ -142,7 +136,7 @@ void mainWindow::license()
 	QUrl licenseUrl = QUrl::fromLocalFile(licensePath);
 	QDesktopServices::openUrl(licenseUrl);
 	*/
-	urlOpener(QUrl(":license.txt"));
+	QDesktopServices::openUrl(QUrl(":license.txt"));
 };
 
 void mainWindow::about()
