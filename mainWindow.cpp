@@ -30,6 +30,8 @@
 #include "Preferences.h"
 
 class QDesktopServices;
+QDesktopServices *urlOpener = new QDesktopServices;
+
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -116,7 +118,7 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 /* HELP MENU */
 void openExternalUrl(QUrl url)
 {
-	QDesktopServices::openUrl(url);
+	urlOpener->openUrl(url);
 };
 
 void mainWindow::help()
