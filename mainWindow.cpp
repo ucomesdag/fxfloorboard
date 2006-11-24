@@ -29,9 +29,7 @@
 #include "floorBoard.h"
 #include "Preferences.h"
 
-class QDesktopServices;
 QDesktopServices *urlOpener = new QDesktopServices;
-
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
