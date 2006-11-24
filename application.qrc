@@ -13,10 +13,12 @@
         <file>images/floor.png</file>
         <file>images/fx1.png</file>
         <file>images/fx2.png</file>
+        <file>images/general.png</file>
         <file>images/infobar.png</file>
         <file>images/knob.png</file>
         <file>images/led.png</file>
         <file>images/lp.png</file>
+        <file>images/midi.png</file>
         <file>images/ns.png</file>
         <file>images/od.png</file>
         <file>images/panelbar.png</file>
@@ -27,6 +29,7 @@
         <file>images/stompbg.png</file>
         <file>images/vol.png</file>
         <file>images/wah.png</file>
+        <file>images/window.png</file>
         <file>images/windowicon.png</file>
         <file>license.txt</file>
         <file>midi.xml</file>

@@ -32,50 +32,65 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-
+	QApplication app(argc, argv);
+	
+	/* Loading translation */
+	QTranslator translator;
+	translator.load("translation");
+	app.installTranslator(&translator);
+	
+	/* Splash Screen setup uses subclassed QSplashScreen for message position controle. */
 	QPixmap splashImage(":images/splash.png");
 
 	customSplashScreen *splash = new customSplashScreen(splashImage);
-	splash->setMessageRect(QRect::QRect(170, 400, 245, 14));
+	splash->setMessageRect(QRect::QRect(170, 400, 245, 14)); // Setting the message position.
 	splash->setMask(splashImage.mask());
-	splash->setWindowOpacity(1.0);
+	splash->setWindowOpacity(0.95);
 	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
-	splash->show();
-	app.processEvents();
-
-	splash->showStatusMessage("Starting...");
-
-	mainWindow *window = new mainWindow;
 	
-	splash->showStatusMessage("Loading preferences...");
-	Preferences *preferences = Preferences::Instance(); // Load preferences
+	Preferences *preferences = Preferences::Instance(); // Load the preferences.
+	if(preferences->getPreferences("Window", "Splash", "bool")=="true")
+	{
+		splash->show();
+	};
+	/* To intercept mousclick to hide spalsh screen. Since the 
+	splash screen is typically displayed before the event loop 
+	has started running, it is necessary to periodically call. */
+	app.processEvents(); 
 
-	splash->showStatusMessage("Checking license file...");
+	splash->showStatusMessage(QObject::tr("Starting..."));
+	mainWindow *window = new mainWindow;
+
+	app.processEvents(); 
+
+	splash->showStatusMessage(QObject::tr("Checking license file..."));
 	if(!QFile("license.txt").exists())
 	{
-		splash->showStatusMessage("Loading license file...");
+		splash->showStatusMessage(QObject::tr("Loading license file..."));
 		QFile file(":license.txt" );
 		file.copy("license.txt");
 		file.close();
 	};
 
-	splash->showStatusMessage("Initializing main window...");
+	app.processEvents(); 
 
+	splash->showStatusMessage(QObject::tr("Initializing main window..."));
 	window->setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
 	window->setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
+
+	app.processEvents(); 
 
 	bool ok;
 	QString x_str = preferences->getPreferences("Window", "Position", "x");
 	QString y_str = preferences->getPreferences("Window", "Position", "y");
 	if(preferences->getPreferences("Window", "Restore", "window")=="true" && !x_str.isEmpty())
 	{
-		splash->showStatusMessage("Restoring window position...");
+		splash->showStatusMessage(QObject::tr("Restoring window position..."));
 		window->setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), window->width(), window->height());
 	}
 	else
 	{
-		splash->showStatusMessage("Centering main window...");
+		splash->showStatusMessage(QObject::tr("Centering main window..."));
 		QDesktopWidget *desktop = new QDesktopWidget;
 		//QRect screen = desktop->screenGeometry(desktop->primaryScreen());
 		QRect screen = desktop->availableGeometry(desktop->primaryScreen()); 
@@ -88,7 +103,10 @@ int main(int argc, char *argv[])
 		int y = (screenHeight - windowHeight) / 2;
 		window->setGeometry(x, y, window->width(), window->height());
 	};
-	splash->showStatusMessage("Finished Initializing...");
+
+	app.processEvents(); 
+
+	splash->showStatusMessage(QObject::tr("Finished Initializing..."));
 
 	window->show();
 	splash->finish(window);

@@ -78,7 +78,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td colspan='2' align='left'>");
 	str.append("GT-8 FX FloorBoard");
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
-	str.append("version");
+	str.append(tr("version"));
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
 
 	str.append(version);
@@ -123,7 +123,7 @@ void floorBoardDisplay::setValueDisplay(int num)
 	str.append("{ValueName}");
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
 	str.append(QString::number(num, 10));
-	str.append("dB");
+	str.append(tr("dB"));
 	str.append("</font></td></tr></table>");
 	str.append("</body></html>");
 	valueDisplay->setHtml(str);

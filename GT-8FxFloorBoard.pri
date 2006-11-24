@@ -25,6 +25,7 @@ HEADERS += ./bankTreeList.h \
     ./customButton.h \
     ./customDial.h \
     ./customLed.h \
+    ./customSplashScreen.h \
     ./dragBar.h \
     ./floorBoard.h \
     ./floorBoardDisplay.h \
@@ -37,13 +38,15 @@ HEADERS += ./bankTreeList.h \
     ./PreferencesDestroyer.h \
     ./stompBox.h \
     ./XMLWriter.h \
-    ./customSplashScreen.h
+    ./preferencesDialog.h \
+    ./preferencesPages.h
 
 #Source files
 SOURCES += ./bankTreeList.cpp \
     ./customButton.cpp \
     ./customDial.cpp \
     ./customLed.cpp \
+    ./customSplashScreen.cpp \
     ./dragBar.cpp \
     ./floorBoard.cpp \
     ./floorBoardDisplay.cpp \
@@ -57,7 +60,8 @@ SOURCES += ./bankTreeList.cpp \
     ./PreferencesDestroyer.cpp \
     ./stompBox.cpp \
     ./XMLWriter.cpp \
-    ./customSplashScreen.cpp
+    ./preferencesDialog.cpp \
+    ./preferencesPages.cpp
 
 #Resource file(s)
 RESOURCES += .\application.qrc

@@ -20,39 +20,28 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef PREFERENCESPAGES_H
+#define PREFERENCESPAGES_H
 
 #include <QWidget>
-#include <QMenuBar>
 
-class mainWindow : public QWidget
+class GeneralPage : public QWidget
 {
-    Q_OBJECT
-
 public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void createMenu();
-	QSize getWindowSize();
-
-public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
-
-private:
-	QMenuBar *menuBar;
-	QMenu *fileMenu;
-	QAction *openAction;
-	QAction *saveAction;
-	QAction *saveAsAction;
-	QAction *exitAction;
-	QSize wSize;
+	GeneralPage(QWidget *parent = 0);
 };
 
-#endif // MAINWINDOW_H
+class MidiPage : public QWidget
+{
+public:
+	MidiPage(QWidget *parent = 0);
+};
+
+class WindowPage : public QWidget
+{
+public:
+	WindowPage(QWidget *parent = 0);
+};
+
+
+#endif // PREFERENCESPAGES_H

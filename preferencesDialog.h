@@ -20,39 +20,30 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef PREFERENCESDIALOG_H
+#define PREFERENCESDIALOG_H
 
-#include <QWidget>
-#include <QMenuBar>
+#include <QDialog>
 
-class mainWindow : public QWidget
+class QListWidget;
+class QListWidgetItem;
+class QStackedWidget;
+
+class preferencesDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void createMenu();
-	QSize getWindowSize();
+	preferencesDialog();
 
 public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
+	void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
-	QMenuBar *menuBar;
-	QMenu *fileMenu;
-	QAction *openAction;
-	QAction *saveAction;
-	QAction *saveAsAction;
-	QAction *exitAction;
-	QSize wSize;
+	void createIcons();
+
+	QListWidget *contentsWidget;
+	QStackedWidget *pagesWidget;
 };
 
-#endif // MAINWINDOW_H
+#endif // PREFERENCESDIALOG_H

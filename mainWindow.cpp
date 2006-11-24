@@ -28,6 +28,7 @@
 #include "mainWindow.h"
 #include "floorBoard.h"
 #include "Preferences.h"
+#include "preferencesDialog.h"
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -71,29 +72,31 @@ void mainWindow::createMenu()
 {
     menuBar = new QMenuBar;
 
-    QMenu *fileMenu = new QMenu("&File", this);
-	QAction *openAction = fileMenu->addAction("&Open File...");
-	QAction *saveAction = fileMenu->addAction("&Save");
-	QAction *saveAsAction = fileMenu->addAction("Save &As...");
+    QMenu *fileMenu = new QMenu(tr("&File"), this);
+	QAction *openAction = fileMenu->addAction(tr("&Open File..."));
+	QAction *saveAction = fileMenu->addAction(tr("&Save"));
+	QAction *saveAsAction = fileMenu->addAction(tr("Save &As..."));
 	fileMenu->addSeparator();
-    QAction *exitAction = fileMenu->addAction("E&xit");
+    QAction *exitAction = fileMenu->addAction(tr("E&xit"));
     menuBar->addMenu(fileMenu);
 
-	QMenu *toolsMenu = new QMenu("&Tools", this);
-	QAction *settingsAction = toolsMenu->addAction("&Preferences");
+	QMenu *toolsMenu = new QMenu(tr("&Tools"), this);
+	QAction *settingsAction = toolsMenu->addAction(tr("&Preferences"));
     menuBar->addMenu(toolsMenu);
 
-	QMenu *helpMenu = new QMenu("&Help", this);
-	QAction *helpAction = helpMenu->addAction("GT-8 FX FloorBoard &Help");
-	QAction *homepageAction = helpMenu->addAction("GT-8 FX FloorBoard &Webpage");
+	QMenu *helpMenu = new QMenu(tr("&Help"), this);
+	QAction *helpAction = helpMenu->addAction(tr("GT-8 FX FloorBoard &Help"));
+	QAction *homepageAction = helpMenu->addAction(tr("GT-8 FX FloorBoard &Webpage"));
 	helpMenu->addSeparator();
-	QAction *donationAction = helpMenu->addAction("Make a &Donation");
-	QAction *licenseAction = helpMenu->addAction("&License");
-	helpMenu->addSeparator(); QAction *aboutAction = helpMenu->addAction("&About");
+	QAction *donationAction = helpMenu->addAction(tr("Make a &Donation"));
+	QAction *licenseAction = helpMenu->addAction(tr("&License"));
+	helpMenu->addSeparator(); QAction *aboutAction = helpMenu->addAction(tr("&About"));
     menuBar->addMenu(helpMenu);
 
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 	
+	connect(settingsAction, SIGNAL(triggered()), this, SLOT(settings()));
+
 	connect(helpAction, SIGNAL(triggered()), this, SLOT(help()));
 	connect(homepageAction, SIGNAL(triggered()), this, SLOT(homepage()));
 	connect(donationAction, SIGNAL(triggered()), this, SLOT(donate()));
@@ -108,6 +111,13 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 	int y = this->geometry().y();
 	this->setFixedWidth(floorSize.width());
 	this->setGeometry(x, y, floorSize.width(), this->height());
+};
+
+/* TOOLS MENU */
+void mainWindow::settings()
+{
+	preferencesDialog *panel = new preferencesDialog();
+	panel->show();
 };
 
 /* HELP MENU */
@@ -148,7 +158,7 @@ void mainWindow::about()
 	QFile file(":about"); 
 	if(file.open(QIODevice::ReadOnly))
 	{	
-		QMessageBox::about(this, "About GT-8 Fx FloorBoard", "GT-8 FX FloorBoard, version " + version + "\n" + file.readAll());
+		QMessageBox::about(this, tr("GT-8 Fx FloorBoard - About"), "GT-8 FX FloorBoard, " + tr("version") + " " + version + "\n" + file.readAll());
 	};
 };
 
