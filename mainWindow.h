@@ -35,6 +35,7 @@ public:
 	~mainWindow();
 	void createMenu();
 	QSize getWindowSize();
+	void urlOpener(QUrl url);
 
 public slots:
 	void updateSize(QSize floorSize, QSize oldFloorSize);

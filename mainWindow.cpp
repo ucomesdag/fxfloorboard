@@ -110,30 +110,28 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 	this->setGeometry(x, y, floorSize.width(), this->height());
 };
 
-
 /* HELP MENU */
-void openExternalUrl(QUrl url)
+void mainWindow::urlOpener(QUrl url)
 {
-	QDesktopServices *urlOpener = new QDesktopServices;
-	urlOpener->openUrl(url);
+	QDesktopServices::openUrl(url);
 };
 
 void mainWindow::help()
 {
 	Preferences *preferences = Preferences::Instance();
-	openExternalUrl(QUrl( preferences->getPreferences("General", "Help", "url") ));
+	urlOpener(QUrl( preferences->getPreferences("General", "Help", "url") ));
 };
 
 void mainWindow::homepage()
 {
 	Preferences *preferences = Preferences::Instance();
-	openExternalUrl(QUrl( preferences->getPreferences("General", "Webpage", "url") ));
+	urlOpener(QUrl( preferences->getPreferences("General", "Webpage", "url") ));
 };
 
 void mainWindow::donate()
 {
 	Preferences *preferences = Preferences::Instance();
-	openExternalUrl(QUrl( preferences->getPreferences("General", "Donate", "url") ));
+	urlOpener(QUrl( preferences->getPreferences("General", "Donate", "url") ));
 };
 
 void mainWindow::license()
@@ -144,7 +142,7 @@ void mainWindow::license()
 	QUrl licenseUrl = QUrl::fromLocalFile(licensePath);
 	QDesktopServices::openUrl(licenseUrl);
 	*/
-	openExternalUrl(QUrl(":license.txt"));
+	urlOpener(QUrl(":license.txt"));
 };
 
 void mainWindow::about()
