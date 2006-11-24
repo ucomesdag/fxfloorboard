@@ -77,7 +77,7 @@ QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName,
 void Preferences::setPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName, QString prefValueData)
 {
 	/* Look op and set the value coresponding to the group->type->item */
-	unsigned int indexOfValue = this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName));
+	int indexOfValue = this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName));
 	if(indexOfValue!=-1)
 	{
 		this->prefValues.replace(indexOfValue, prefValueData); 
@@ -115,7 +115,7 @@ void Preferences::loadPreferences(QString fileName)
 		{
 			QString _typeName = childNode.nodeName();
 
-			for (unsigned int itemNum=0;itemNum<childNode.attributes().count();itemNum++ ) 
+			for (int itemNum=0;itemNum<childNode.attributes().count();itemNum++ ) 
 			{   // Iterates trough all the atributes
 				QString _itemName = childNode.attributes().item(itemNum).nodeName();
 				QString _value = childNode.attributes().namedItem(_itemName).nodeValue();
@@ -173,7 +173,7 @@ void Preferences::savePreferences()
 	qSort(sortIndexList.begin(), sortIndexList.end());
 
 	bool ok;
-	int i, a;
+	int i =0, a = 0;
 	QString currentGroupName;
 	for(unsigned int n=0; n<aSize;n++)
 	{
