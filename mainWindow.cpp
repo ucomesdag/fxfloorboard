@@ -24,6 +24,7 @@
 #include <QUrl>
 #include <QFile>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include "mainWindow.h"
 #include "floorBoard.h"
 #include "Preferences.h"
@@ -48,7 +49,7 @@ mainWindow::mainWindow(QWidget *parent)
 
 	this->wSize = fxsBoard->getSize();
 	
-	setWindowTitle("GT-8 FX FloorBoard - NON FUNCTIONAL!!! (Interface Preview)");
+	setWindowTitle("GT-8 FX FloorBoard");
 };
 
 mainWindow::~mainWindow()
@@ -113,7 +114,7 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 /* HELP MENU */
 void openExternalUrl(QUrl url)
 {
-	//QDesktopServices::openUrl(url);
+	QDesktopServices::openUrl(url);
 };
 
 void mainWindow::help()
