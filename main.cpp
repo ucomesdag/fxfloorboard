@@ -22,11 +22,13 @@
 
 #include <QtGui/QApplication>
 #include <QtGui>
-#include <QSplashScreen>
 #include <QDesktopWidget>
 #include <QFile>
 #include "mainWindow.h"
 #include "Preferences.h"
+#include "customSplashScreen.h"
+
+
 
 int main(int argc, char *argv[])
 {
@@ -34,28 +36,31 @@ int main(int argc, char *argv[])
 
 	QPixmap splashImage(":images/splash.png");
 
-	QSplashScreen *splash = new QSplashScreen(splashImage);
-	
+	customSplashScreen *splash = new customSplashScreen(splashImage);
+	splash->setMessageRect(QRect::QRect(170, 400, 245, 14));
 	splash->setMask(splashImage.mask());
 	splash->setWindowOpacity(1.0);
 	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
 	splash->show();
 	app.processEvents();
 
+	splash->showStatusMessage("Starting...");
+
 	mainWindow *window = new mainWindow;
 	
-	splash->showMessage("Loading preferences...");
+	splash->showStatusMessage("Loading preferences...");
 	Preferences *preferences = Preferences::Instance(); // Load preferences
 
-	splash->showMessage("Loading license...");
+	splash->showStatusMessage("Checking license file...");
 	if(!QFile("license.txt").exists())
 	{
+		splash->showStatusMessage("Loading license file...");
 		QFile file(":license.txt" );
 		file.copy("license.txt");
 		file.close();
 	};
 
-	splash->showMessage("Initializing main window...");
+	splash->showStatusMessage("Initializing main window...");
 
 	window->setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
 	window->setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
@@ -65,12 +70,12 @@ int main(int argc, char *argv[])
 	QString y_str = preferences->getPreferences("Window", "Position", "y");
 	if(preferences->getPreferences("Window", "Restore", "window")=="true" && !x_str.isEmpty())
 	{
-		splash->showMessage("Restoring window position...");
+		splash->showStatusMessage("Restoring window position...");
 		window->setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), window->width(), window->height());
 	}
 	else
 	{
-		splash->showMessage("Centering main window...");
+		splash->showStatusMessage("Centering main window...");
 		QDesktopWidget *desktop = new QDesktopWidget;
 		QRect screen = desktop->screenGeometry(desktop->primaryScreen());
 		int screenWidth = screen.width();                    // returns screen width
@@ -82,7 +87,7 @@ int main(int argc, char *argv[])
 		int y = (screenHeight - windowHeight) / 2;
 		window->setGeometry(x, y, window->width(), window->height());
 	};
-	splash->showMessage("Finished Initializing");
+	splash->showStatusMessage("Finished Initializing...");
 
 	window->show();
 	splash->finish(window);
