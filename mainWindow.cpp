@@ -29,8 +29,6 @@
 #include "floorBoard.h"
 #include "Preferences.h"
 
-QDesktopServices *urlOpener = new QDesktopServices;
-
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
 {
@@ -116,6 +114,7 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 /* HELP MENU */
 void openExternalUrl(QUrl url)
 {
+	QDesktopServices *urlOpener = new QDesktopServices;
 	urlOpener->openUrl(url);
 };
 
