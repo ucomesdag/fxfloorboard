@@ -77,7 +77,8 @@ int main(int argc, char *argv[])
 	{
 		splash->showStatusMessage("Centering main window...");
 		QDesktopWidget *desktop = new QDesktopWidget;
-		QRect screen = desktop->screenGeometry(desktop->primaryScreen());
+		//QRect screen = desktop->screenGeometry(desktop->primaryScreen());
+		QRect screen = desktop->availableGeometry(desktop->primaryScreen()); 
 		int screenWidth = screen.width();                    // returns screen width
 		int screenHeight = screen.height();                  // returns screen height
 		int windowWidth = window->getWindowSize().width();                  
