@@ -34,9 +34,10 @@ HEADERS += ./bankTreeList.h \
     ./midiTableParser.h \
     ./namedArray.h \
     ./Preferences.h \
+    ./PreferencesDestroyer.h \
     ./stompBox.h \
     ./XMLWriter.h \
-    ./PreferencesDestroyer.h
+    ./customSplashScreen.h
 
 #Source files
 SOURCES += ./bankTreeList.cpp \
@@ -53,9 +54,10 @@ SOURCES += ./bankTreeList.cpp \
     ./midiTableParser.cpp \
     ./namedArray.cpp \
     ./Preferences.cpp \
+    ./PreferencesDestroyer.cpp \
     ./stompBox.cpp \
     ./XMLWriter.cpp \
-    ./PreferencesDestroyer.cpp
+    ./customSplashScreen.cpp
 
 #Resource file(s)
 RESOURCES += .\application.qrc
