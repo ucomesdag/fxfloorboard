@@ -38,8 +38,8 @@ UI_DIR += ./GeneratedFiles
 win32 {
 	LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
 	#LIBS +=  ./WinMM.Lib
-	HEADERS += ./windows/midiIO.h
-	SOURCES += ./windows/midiIO.cpp
+	HEADERS += ./midiIO.h
+	SOURCES += ./midiIO.cpp
 	message(Including Windows specifique headers and sources...)
 }
 unix {
