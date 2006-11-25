@@ -50,14 +50,6 @@ macx {
 	SOURCES += ./macosx/midiIO.cpp
 	message(Including Mac OS X specifique headers and sources...)
 }
-linux-g++ {
-	message(Including LINUX G++ X specifique headers and sources...)
-}
-unix {
-	HEADERS += ./macosx/midiIO.h
-	SOURCES += ./macosx/midiIO.cpp
-	message(Including UNIX specifique headers and sources...)
-}
 
 #Header files
 HEADERS += ./bankTreeList.h \
