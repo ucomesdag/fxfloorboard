@@ -40,7 +40,7 @@ win32 {
 	SOURCES += ./windows/midiIO.cpp
 	message(Including Windows specifique headers and sources...)
 }
-linux {
+unix {
 	HEADERS += ./linux/midiIO.h
 	SOURCES += ./linux/midiIO.cpp
 	message(Including Linux specifique headers and sources...)
