@@ -38,7 +38,7 @@ UI_DIR += ./GeneratedFiles
 win32 {
 	HEADERS += ./windows/midiIO.h
 	SOURCES += ./windows/midiIO.cpp
-	LIBS += C:/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Lib/WinMM.Lib
+	LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
 	message(Including Windows specifique headers and sources...)
 }
 unix {
