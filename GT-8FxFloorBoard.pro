@@ -39,6 +39,7 @@ win32 {
 	HEADERS += ./windows/midiIO.h
 	SOURCES += ./windows/midiIO.cpp
 	LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
+	LIBS +=  ./WinMM.Lib
 	message(Including Windows specifique headers and sources...)
 }
 unix {
