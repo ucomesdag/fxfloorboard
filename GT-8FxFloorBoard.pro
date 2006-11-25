@@ -33,71 +33,10 @@ MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 
+LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
+
 #Include file(s)
-
-win32 {
-	LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
-	#LIBS +=  ./WinMM.Lib
-	HEADERS += ./midiIO.h
-	SOURCES += ./midiIO.cpp
-	message(Including Windows specifique headers and sources...)
-}
-unix {
-	HEADERS += ./linux/midiIO.h
-	SOURCES += ./linux/midiIO.cpp
-	message(Including Linux specifique headers and sources...)
-}
-macx {
-	HEADERS += ./macosx/midiIO.h
-	SOURCES += ./macosx/midiIO.cpp
-	message(Including Mac OS X specifique headers and sources...)
-}
-
-#Header files
-HEADERS += ./bankTreeList.h \
-    ./customButton.h \
-    ./customDial.h \
-    ./customLed.h \
-    ./customSplashScreen.h \
-    ./dragBar.h \
-    ./floorBoard.h \
-    ./floorBoardDisplay.h \
-    ./floorPanelBar.h \
-    ./floorPanelBarButton.h \
-    ./mainWindow.h \
-    ./midiTableParser.h \
-    ./namedArray.h \
-    ./Preferences.h \
-    ./PreferencesDestroyer.h \
-    ./preferencesDialog.h \
-    ./preferencesPages.h \
-    ./stompBox.h \
-    ./XMLWriter.h
-
-#Source files
-SOURCES += ./bankTreeList.cpp \
-    ./customButton.cpp \
-    ./customDial.cpp \
-    ./customLed.cpp \
-    ./customSplashScreen.cpp \
-    ./dragBar.cpp \
-    ./floorBoard.cpp \
-    ./floorBoardDisplay.cpp \
-    ./floorPanelBar.cpp \
-    ./floorPanelBarButton.cpp \
-    ./main.cpp \
-    ./mainWindow.cpp \
-    ./midiTableParser.cpp \
-    ./namedArray.cpp \
-    ./Preferences.cpp \
-    ./PreferencesDestroyer.cpp \
-    ./preferencesDialog.cpp \
-    ./preferencesPages.cpp \
-    ./stompBox.cpp \
-    ./XMLWriter.cpp
-
-#Resource file(s)
-RESOURCES += .\application.qrc
+include(GT-8 FX FloorBoard.pri)
 
 #Windows resource file
 win32:RC_FILE = GT-8FxFloorBoard.rc
