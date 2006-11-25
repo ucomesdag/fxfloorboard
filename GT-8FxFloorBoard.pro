@@ -36,7 +36,7 @@ UI_DIR += ./GeneratedFiles
 LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
 
 #Include file(s)
-include(GT-8 FX FloorBoard.pri)
+include(GT-8FxFloorBoard.pri)
 
 #Windows resource file
 win32:RC_FILE = GT-8FxFloorBoard.rc

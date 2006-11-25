@@ -25,9 +25,6 @@
 
 #include <QString>
 #include <QVector>
-
-#include <QString>
-#include <QVector>
 using namespace std;
 
 class midiIO

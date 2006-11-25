@@ -36,7 +36,6 @@ midiIO::midiIO()
  *************************************************************************/
 void midiIO::queryMidiInDevices()
 {
-	#define BUFFER_SIZE	100
 	MIDIINCAPS mic;
 
 	int iNumDevs = midiInGetNumDevs();
@@ -45,11 +44,7 @@ void midiIO::queryMidiInDevices()
 		if (!midiInGetDevCaps(i, &mic, sizeof(MIDIINCAPS)))
 		{
 			/* Convert WCHAR to QString */
-			size_t converted;
-			char *pMBBuffer = new char[BUFFER_SIZE];
-			wcstombs_s(&converted, pMBBuffer, BUFFER_SIZE, mic.szPname, BUFFER_SIZE);
-			this->MidiInDevices.push_back(QString::fromStdString(string(pMBBuffer)));
-			delete[] pMBBuffer;
+			this->MidiInDevices.push_back(QString::fromWCharArray(mic.szPname));
 		};
 	};
 };
@@ -60,7 +55,6 @@ void midiIO::queryMidiInDevices()
  *************************************************************************/
 void midiIO::queryMidiOutDevices()
 {
-	#define BUFFER_SIZE	100
 	MIDIOUTCAPS moc;
 
 	int iNumDevs = midiOutGetNumDevs();
@@ -68,12 +62,7 @@ void midiIO::queryMidiOutDevices()
 	{
 		if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS)))
 		{
-			/* Convert WCHAR to QString */
-			size_t converted;
-			char *pMBBuffer = new char[BUFFER_SIZE];
-			wcstombs_s(&converted, pMBBuffer, BUFFER_SIZE, moc.szPname, BUFFER_SIZE);
-			this->MidiOutDevices.push_back(QString::fromStdString(string(pMBBuffer)));
-			delete[] pMBBuffer;
+			this->MidiOutDevices.push_back(QString::fromWCharArray(moc.szPname));
 		};
 	};
 };
