@@ -81,19 +81,21 @@ SOURCES += ./bankTreeList.cpp \
 win32 {
 	HEADERS += ./windows/midiIO.h
 	SOURCES += ./windows/midiIO.cpp
+	message(Including Windows specifique headers and sources...)
 }
 linux {
 	HEADERS += ./linux/midiIO.h
 	SOURCES += ./linux/midiIO.cpp
+	message(Including Linux specifique headers and sources...)
 }
 macx  {
 	HEADERS += ./macosx/midiIO.h
 	SOURCES += ./macosx/midiIO.cpp
+	message(Including Mac OS X specifique headers and sources...)
 }
+
 #Resource file(s)
 RESOURCES += .\application.qrc
 
 #Windows resource file
 win32:RC_FILE = GT-8FxFloorBoard.rc
-
-RESOURCES = application.qrc
