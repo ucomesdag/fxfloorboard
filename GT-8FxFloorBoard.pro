@@ -34,7 +34,64 @@ OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 
 #Include file(s)
-include(GT-8FxFloorBoard.pri)
+
+#Header files
+HEADERS += ./bankTreeList.h \
+    ./customButton.h \
+    ./customDial.h \
+    ./customLed.h \
+    ./customSplashScreen.h \
+    ./dragBar.h \
+    ./floorBoard.h \
+    ./floorBoardDisplay.h \
+    ./floorPanelBar.h \
+    ./floorPanelBarButton.h \
+    ./mainWindow.h \
+    ./midiTableParser.h \
+    ./namedArray.h \
+    ./Preferences.h \
+    ./PreferencesDestroyer.h \
+    ./preferencesDialog.h \
+    ./preferencesPages.h \
+    ./stompBox.h \
+    ./XMLWriter.h
+
+#Source files
+SOURCES += ./bankTreeList.cpp \
+    ./customButton.cpp \
+    ./customDial.cpp \
+    ./customLed.cpp \
+    ./customSplashScreen.cpp \
+    ./dragBar.cpp \
+    ./floorBoard.cpp \
+    ./floorBoardDisplay.cpp \
+    ./floorPanelBar.cpp \
+    ./floorPanelBarButton.cpp \
+    ./main.cpp \
+    ./mainWindow.cpp \
+    ./midiTableParser.cpp \
+    ./namedArray.cpp \
+    ./Preferences.cpp \
+    ./PreferencesDestroyer.cpp \
+    ./preferencesDialog.cpp \
+    ./preferencesPages.cpp \
+    ./stompBox.cpp \
+    ./XMLWriter.cpp
+
+win32 {
+	HEADERS += ./windows/midiIO.h
+	SOURCES += ./windows/midiIO.cpp
+}
+linux {
+	HEADERS += ./linux/midiIO.h
+	SOURCES += ./linux/midiIO.cpp
+}
+macx  {
+	HEADERS += ./macosx/midiIO.h
+	SOURCES += ./macosx/midiIO.cpp
+}
+#Resource file(s)
+RESOURCES += .\application.qrc
 
 #Windows resource file
 win32:RC_FILE = GT-8FxFloorBoard.rc
