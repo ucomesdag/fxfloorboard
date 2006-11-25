@@ -31,20 +31,22 @@ preferencesDialog::preferencesDialog()
 	contentsWidget->setViewMode(QListView::IconMode);
 	contentsWidget->setIconSize(QSize(55, 50));
 	contentsWidget->setMovement(QListView::Static);
-	contentsWidget->setMaximumWidth(73);
-	contentsWidget->setSpacing(5);
+	contentsWidget->setSpacing(4);
+	contentsWidget->setFixedWidth(70);
 
 	pagesWidget = new QStackedWidget;
 	pagesWidget->addWidget(new GeneralPage);
-	pagesWidget->addWidget(new WindowPage);
 	pagesWidget->addWidget(new MidiPage);
-
-	QPushButton *closeButton = new QPushButton(tr("Close"));
+	pagesWidget->addWidget(new WindowPage);
+	
+	QPushButton *okButton = new QPushButton(tr("Ok"));
+	QPushButton *cancelButton = new QPushButton(tr("Cancel"));
 
 	createIcons();
 	contentsWidget->setCurrentRow(0);
 
-	connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+	connect(okButton, SIGNAL(clicked()), this, SLOT(apply()));
+	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 
 	QHBoxLayout *horizontalLayout = new QHBoxLayout;
 	horizontalLayout->addWidget(contentsWidget);
@@ -52,7 +54,8 @@ preferencesDialog::preferencesDialog()
 
 	QHBoxLayout *buttonsLayout = new QHBoxLayout;
 	buttonsLayout->addStretch(1);
-	buttonsLayout->addWidget(closeButton);
+	buttonsLayout->addWidget(okButton);
+	buttonsLayout->addWidget(cancelButton);
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(horizontalLayout);

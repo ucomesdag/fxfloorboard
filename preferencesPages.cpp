@@ -26,65 +26,29 @@
 GeneralPage::GeneralPage(QWidget *parent)
 	: QWidget(parent)
 {
-	QGroupBox *configGroup = new QGroupBox(tr("Server configuration"));
+	QGroupBox *patchGroup = new QGroupBox(tr("Patch folder"));
 
-	QLabel *serverLabel = new QLabel(tr("Server:"));
-	QComboBox *serverCombo = new QComboBox;
-	serverCombo->addItem(tr("Trolltech (Australia)"));
-	serverCombo->addItem(tr("Trolltech (Germany)"));
-	serverCombo->addItem(tr("Trolltech (Norway)"));
-	serverCombo->addItem(tr("Trolltech (People's Republic of China)"));
-	serverCombo->addItem(tr("Trolltech (USA)"));
+	QLabel *descriptionLabel = new QLabel(tr("Select the default folder for storing patches."));
+	QLabel *filesLabel = new QLabel(tr("Default patch folder:"));
+	QLineEdit *fileEdit = new QLineEdit("My Documents\\My Patches");
+	QPushButton *browseButton = new QPushButton(tr("Browse"));
 
-	QHBoxLayout *serverLayout = new QHBoxLayout;
-	serverLayout->addWidget(serverLabel);
-	serverLayout->addWidget(serverCombo);
+	QHBoxLayout *fileEditLayout = new QHBoxLayout;
+	fileEditLayout->addWidget(fileEdit);
+	fileEditLayout->addWidget(browseButton);
 
-	QVBoxLayout *configLayout = new QVBoxLayout;
-	configLayout->addLayout(serverLayout);
-	configGroup->setLayout(configLayout);
+	QVBoxLayout *filesLayout = new QVBoxLayout;
+	filesLayout->addWidget(descriptionLabel);
+	filesLayout->addSpacing(12);
+	filesLayout->addWidget(filesLabel);
+	filesLayout->addLayout(fileEditLayout);
 
-	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addWidget(configGroup);
-	mainLayout->addStretch(1);
-	setLayout(mainLayout);
-};
-
-WindowPage::WindowPage(QWidget *parent)
-	: QWidget(parent)
-{
-	QGroupBox *updateGroup = new QGroupBox(tr("Package selection"));
-	QCheckBox *systemCheckBox = new QCheckBox(tr("Update system"));
-	QCheckBox *appsCheckBox = new QCheckBox(tr("Update applications"));
-	QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
-
-	QGroupBox *packageGroup = new QGroupBox(tr("Existing packages"));
-
-	QListWidget *packageList = new QListWidget;
-	QListWidgetItem *qtItem = new QListWidgetItem(packageList);
-	qtItem->setText(tr("Qt"));
-	QListWidgetItem *qsaItem = new QListWidgetItem(packageList);
-	qsaItem->setText(tr("QSA"));
-	QListWidgetItem *teamBuilderItem = new QListWidgetItem(packageList);
-	teamBuilderItem->setText(tr("Teambuilder"));
-
-	QPushButton *startUpdateButton = new QPushButton(tr("Start update"));
-
-	QVBoxLayout *updateLayout = new QVBoxLayout;
-	updateLayout->addWidget(systemCheckBox);
-	updateLayout->addWidget(appsCheckBox);
-	updateLayout->addWidget(docsCheckBox);
-	updateGroup->setLayout(updateLayout);
-
-	QVBoxLayout *packageLayout = new QVBoxLayout;
-	packageLayout->addWidget(packageList);
-	packageGroup->setLayout(packageLayout);
+	QVBoxLayout *patchLayout = new QVBoxLayout;
+	patchLayout->addLayout(filesLayout);
+	patchGroup->setLayout(patchLayout);
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addWidget(updateGroup);
-	mainLayout->addWidget(packageGroup);
-	mainLayout->addSpacing(12);
-	mainLayout->addWidget(startUpdateButton);
+	mainLayout->addWidget(patchGroup);
 	mainLayout->addStretch(1);
 	setLayout(mainLayout);
 };
@@ -92,41 +56,85 @@ WindowPage::WindowPage(QWidget *parent)
 MidiPage::MidiPage(QWidget *parent)
 	: QWidget(parent)
 {
-	QGroupBox *packagesGroup = new QGroupBox(tr("Look for packages"));
+	QGroupBox *midiGroup = new QGroupBox(tr("Midi settings"));
 
-	QLabel *nameLabel = new QLabel(tr("Name:"));
-	QLineEdit *nameEdit = new QLineEdit;
+	QLabel *descriptionLabel = new QLabel(tr("Select your midi in and out device."));
+	QLabel *midiInLabel = new QLabel(tr("Midi in:"));
+	QLabel *midiOutLabel = new QLabel(tr("Midi out:"));
+	QComboBox *midiInCombo = new QComboBox;
+	midiInCombo->addItem(tr("Select midi-in device"));
+	midiInCombo->addItem(tr("device 1"));
+	midiInCombo->addItem(tr("device 2"));
+	midiInCombo->addItem(tr("device 3"));
+	midiInCombo->addItem(tr("device 4"));
+	QComboBox *midiOutCombo = new QComboBox;
+	midiOutCombo->addItem(tr("Select midi-out device"));
+	midiOutCombo->addItem(tr("device 1"));
+	midiOutCombo->addItem(tr("device 2"));
 
-	QLabel *dateLabel = new QLabel(tr("Released after:"));
-	QDateTimeEdit *dateEdit = new QDateTimeEdit(QDate::currentDate());
+	QVBoxLayout *midiLabelLayout = new QVBoxLayout;
+	midiLabelLayout->addWidget(midiInLabel);
+	midiLabelLayout->addWidget(midiOutLabel);
 
-	QCheckBox *releasesCheckBox = new QCheckBox(tr("Releases"));
-	QCheckBox *upgradesCheckBox = new QCheckBox(tr("Upgrades"));
+	QVBoxLayout *midiComboLayout = new QVBoxLayout;
+	midiComboLayout->addWidget(midiInCombo);
+	midiComboLayout->addWidget(midiOutCombo);
 
-	QSpinBox *hitsSpinBox = new QSpinBox;
-	hitsSpinBox->setPrefix(tr("Return up to "));
-	hitsSpinBox->setSuffix(tr(" results"));
-	hitsSpinBox->setSpecialValueText(tr("Return only the first result"));
-	hitsSpinBox->setMinimum(1);
-	hitsSpinBox->setMaximum(100);
-	hitsSpinBox->setSingleStep(10);
+	QHBoxLayout *midiSelectLayout = new QHBoxLayout;
+	midiSelectLayout->addLayout(midiLabelLayout);
+	midiSelectLayout->addLayout(midiComboLayout);
+	
+	QVBoxLayout *midiDevLayout = new QVBoxLayout;
+	midiDevLayout->addWidget(descriptionLabel);
+	midiDevLayout->addSpacing(12);
+	midiDevLayout->addLayout(midiSelectLayout);
 
-	QPushButton *startQueryButton = new QPushButton(tr("Start query"));
-
-	QGridLayout *packagesLayout = new QGridLayout;
-	packagesLayout->addWidget(nameLabel, 0, 0);
-	packagesLayout->addWidget(nameEdit, 0, 1);
-	packagesLayout->addWidget(dateLabel, 1, 0);
-	packagesLayout->addWidget(dateEdit, 1, 1);
-	packagesLayout->addWidget(releasesCheckBox, 2, 0);
-	packagesLayout->addWidget(upgradesCheckBox, 3, 0);
-	packagesLayout->addWidget(hitsSpinBox, 4, 0, 1, 2);
-	packagesGroup->setLayout(packagesLayout);
+	QVBoxLayout *midiLayout = new QVBoxLayout;
+	midiLayout->addLayout(midiDevLayout);
+	midiGroup->setLayout(midiLayout);
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addWidget(packagesGroup);
-	mainLayout->addSpacing(12);
-	mainLayout->addWidget(startQueryButton);
+	mainLayout->addWidget(midiGroup);
+	mainLayout->addStretch(1);
+	setLayout(mainLayout);
+};
+
+WindowPage::WindowPage(QWidget *parent)
+	: QWidget(parent)
+{
+	QGroupBox *windowGroup = new QGroupBox(tr("Window settings"));
+
+	QLabel *restoreDescriptionLabel = new QLabel(tr("Select if you want the window position to be saved on exit."));
+	QCheckBox *windowCheckBox = new QCheckBox(tr("Restore window"));
+	QCheckBox *sidebarCheckBox = new QCheckBox(tr("Restore sidebar"));
+
+	QVBoxLayout *restoreLayout = new QVBoxLayout;
+	restoreLayout->addWidget(restoreDescriptionLabel);
+	restoreLayout->addSpacing(12);
+	restoreLayout->addWidget(windowCheckBox);
+	restoreLayout->addWidget(sidebarCheckBox);
+	
+	QVBoxLayout *windowLayout = new QVBoxLayout;
+	windowLayout->addLayout(restoreLayout);
+	windowGroup->setLayout(windowLayout);
+
+	QGroupBox *splashScreenGroup = new QGroupBox(tr("Show splash screen"));
+
+	QLabel *splashDescriptionLabel = new QLabel(tr("Disable or enable the splash screen."));
+	QCheckBox *splashCheckBox = new QCheckBox(tr("Splash Screen"));
+
+	QVBoxLayout *splashLayout = new QVBoxLayout;
+	splashLayout->addWidget(splashDescriptionLabel);
+	splashLayout->addSpacing(12);
+	splashLayout->addWidget(splashCheckBox);
+
+	QVBoxLayout *splashScreenLayout = new QVBoxLayout;
+	splashScreenLayout->addLayout(splashLayout);
+	splashScreenGroup->setLayout(splashScreenLayout);
+
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(windowGroup);
+	mainLayout->addWidget(splashScreenGroup);
 	mainLayout->addStretch(1);
 	setLayout(mainLayout);
 };
