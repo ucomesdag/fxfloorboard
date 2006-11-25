@@ -24,23 +24,30 @@
 #define PREFERENCESPAGES_H
 
 #include <QWidget>
+#include <QtGui>
 
 class GeneralPage : public QWidget
 {
 public:
 	GeneralPage(QWidget *parent = 0);
+	QLineEdit* fileEdit;
 };
 
 class MidiPage : public QWidget
 {
 public:
 	MidiPage(QWidget *parent = 0);
+	QComboBox* midiInCombo;
+	QComboBox* midiOutCombo;
 };
 
 class WindowPage : public QWidget
 {
 public:
 	WindowPage(QWidget *parent = 0);
+	QCheckBox* windowCheckBox;
+	QCheckBox* sidepanelCheckBox;
+	QCheckBox* splashCheckBox;
 };
 
 

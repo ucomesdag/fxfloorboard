@@ -34,10 +34,21 @@ preferencesDialog::preferencesDialog()
 	contentsWidget->setSpacing(4);
 	contentsWidget->setFixedWidth(70);
 
+	GeneralPage *generalSettings = new GeneralPage;
+	MidiPage *midiSettings = new MidiPage;
+	WindowPage *windowSettings = new WindowPage;
+
+	this->generalSettings = generalSettings;
+	this->midiSettings = midiSettings;
+	this->windowSettings = windowSettings;
+
 	pagesWidget = new QStackedWidget;
-	pagesWidget->addWidget(new GeneralPage);
+	pagesWidget->addWidget(generalSettings);
+	pagesWidget->addWidget(midiSettings);
+	pagesWidget->addWidget(windowSettings);
+	/*pagesWidget->addWidget(new GeneralPage);
 	pagesWidget->addWidget(new MidiPage);
-	pagesWidget->addWidget(new WindowPage);
+	pagesWidget->addWidget(new WindowPage);*/
 	
 	QPushButton *okButton = new QPushButton(tr("Ok"));
 	QPushButton *cancelButton = new QPushButton(tr("Cancel"));
@@ -45,7 +56,7 @@ preferencesDialog::preferencesDialog()
 	createIcons();
 	contentsWidget->setCurrentRow(0);
 
-	connect(okButton, SIGNAL(clicked()), this, SLOT(apply()));
+	connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 
 	QHBoxLayout *horizontalLayout = new QHBoxLayout;

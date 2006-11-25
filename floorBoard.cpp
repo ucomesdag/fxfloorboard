@@ -126,18 +126,19 @@ floorBoard::floorBoard(QWidget *parent,
 	QString width = preferences->getPreferences("Window", "Size", "width");
 	QString default_width = preferences->getPreferences("Window", "Size", "default_width");
 	
-	if(preferences->getPreferences("Window", "Restore", "side_panel")=="true")
+	if(preferences->getPreferences("Window", "Restore", "sidepanel")=="true")
 	{
 		this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
 		
 		if(collapseState=="true")
 		{ 
-			this->setSize(minSize);
+			this->setSize(l_floorSize);
 			this->colapseState = true;
 			emit setCollapseState(true);
 		}
 		else
 		{ 
+			this->setSize(minSize);
 			this->colapseState = false;
 			emit setCollapseState(false);
 		};
@@ -146,8 +147,8 @@ floorBoard::floorBoard(QWidget *parent,
 	{
 		this->l_floorSize = QSize::QSize(default_width.toInt(&ok, 10), floorSize.height());
 		this->setSize(minSize);
-		this->colapseState = true;
-		emit setCollapseState(true);
+		this->colapseState = false;
+		emit setCollapseState(false);
 	};
 };
 
@@ -365,14 +366,14 @@ void floorBoard::setCollapse()
 	{ 
 		this->l_floorSize = floorSize;
 		this->setSize(minSize);
-		this->colapseState = true;
-		emit setCollapseState(true);
+		this->colapseState = false;
+		emit setCollapseState(false);
 	}
 	else
 	{ 
 		this->setSize(l_floorSize);
-		emit setCollapseState(false);
-		this->colapseState = false;
+		emit setCollapseState(true);
+		this->colapseState = true;
 	};
 
 };
@@ -428,22 +429,22 @@ void floorBoard::setWidth(int dist)
 	if(floorSize.width() + dist < minSize.width())
 	{
 		newSize = minSize;
-		this->colapseState = true;
-		emit setCollapseState(true);
+		this->colapseState = false;
+		emit setCollapseState(false);
 	}
 	else if(floorSize.width() + dist > maxSize.width())
 	{
 		newSize = maxSize;
 		this->l_floorSize = newSize;
-		this->colapseState = false;
-		emit setCollapseState(false);
+		this->colapseState = true;
+		emit setCollapseState(true);
 	}
 	else
 	{
 		newSize = QSize::QSize(floorSize.width() + dist, floorSize.height());
 		this->l_floorSize = newSize;
-		this->colapseState = false;
-		emit setCollapseState(false);
+		this->colapseState = true;
+		emit setCollapseState(true);
 	};
 	setSize(newSize);
 };

@@ -88,7 +88,7 @@ void dragBar::setDragBarMaxOffset(signed int maxOffset)
 
 void dragBar::setCollapseState(bool state)
 {
-	if(state == true)
+	if(state == false)
 	{
 		this->offsetMin = c_offsetMin;
 	}

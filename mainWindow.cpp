@@ -116,8 +116,25 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 /* TOOLS MENU */
 void mainWindow::settings()
 {
-	preferencesDialog *panel = new preferencesDialog();
-	panel->show();
+	preferencesDialog *dialog = new preferencesDialog();
+	if (dialog->exec())
+	{
+		Preferences *preferences = Preferences::Instance();
+
+		QString dir = dialog->generalSettings->fileEdit->text();
+		QString sidepanel = (dialog->windowSettings->sidepanelCheckBox->checkState())?QString("true"):QString("false");
+		QString window = (dialog->windowSettings->windowCheckBox->checkState())?QString("true"):QString("false");
+		QString splash = (dialog->windowSettings->splashCheckBox->checkState())?QString("true"):QString("false");
+		QString midiIn = QString::number(dialog->midiSettings->midiInCombo->currentIndex() - 1, 10); // -1 because there is a default entry at index 0
+		QString midiOut = QString::number(dialog->midiSettings->midiOutCombo->currentIndex() - 1, 10);
+
+		preferences->setPreferences("General", "Files", "dir", dir);
+		preferences->setPreferences("Midi", "MidiIn", "device", midiIn);
+		preferences->setPreferences("Midi", "MidiOut", "device", midiOut);
+		preferences->setPreferences("Window", "Restore", "sidepanel", sidepanel);
+		preferences->setPreferences("Window", "Restore", "window", window);
+		preferences->setPreferences("Window", "Splash", "bool", splash);
+	};
 };
 
 /* HELP MENU */

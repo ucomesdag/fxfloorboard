@@ -83,7 +83,7 @@ void floorPanelBarButton::mouseMoveEvent(QMouseEvent *event)
 
 void floorPanelBarButton::setCollapseState(bool collapsed)
 {
-	if(collapsed == true)
+	if(collapsed == false)
 	{
 		setOffset(1);
 	}

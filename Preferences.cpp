@@ -69,8 +69,16 @@ Preferences* Preferences::Instance()
 QString Preferences::getPreferences(QString prefGroupName, QString prefTypeName, QString prefItemName)
 {
 	/* Look op and return of the value coresponding to the group->type->item */
-	QString setting = this->prefValues
-		.at( this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName)) );
+	QString setting;
+	int indexOfValue = this->metaSearch.indexOf(QString(prefGroupName + ":" + prefTypeName + ":" + prefItemName));
+	if(indexOfValue!=-1)
+	{
+		setting = this->prefValues.at(indexOfValue);
+	}
+	else
+	{
+		setting = "";
+	};
 	return setting;
 };
 
@@ -95,6 +103,12 @@ void Preferences::setPreferences(QString prefGroupName, QString prefTypeName, QS
 
 void Preferences::loadPreferences(QString fileName)
 {	
+	this->metaSearch.clear();
+	this->groupNames.clear();
+	this->typeNames.clear();
+	this->itemNames.clear();
+	this->prefValues.clear();
+	
 	QFile file;
 	file.setFileName(fileName);
 	/* Loads the xml document and creates the QDomElement root */

@@ -20,35 +20,50 @@
 **
 ****************************************************************************/
 
-#ifndef PREFERENCESDIALOG_H
-#define PREFERENCESDIALOG_H
+#ifndef midiIO_H
+#define midiIO_H
 
-#include <QDialog>
-#include "preferencesPages.h"
+#include <QString>
+#include <QVector>
 
-class QListWidget;
-class QListWidgetItem;
-class QStackedWidget;
+#include <QString>
+#include <QVector>
+using namespace std;
 
-class preferencesDialog : public QDialog
+class midiIO
 {
-	Q_OBJECT
+	public:
+		midiIO();
+		~midiIO();
 
-public:
-	preferencesDialog();
+		void queryMidiInDevices();
+		void queryMidiOutDevices();
+		QVector<QString> getMidiInDevices();
+		QVector<QString> getMidiOutDevices();
+		
+		/*void setMidiOutDevices();
+		QVector<QString> getMidiOutDevices();
+		void setMidiOut(unsigned int MidiOut);
+		unsigned int getMidiOut();
 
-	GeneralPage* generalSettings;
-	MidiPage* midiSettings;
-	WindowPage* windowSettings;
+		void setMidiInDevices();
+		QVector<QString> getMidiInDevices();
+		void setMidiIn(unsigned int MidiIn);
+		unsigned int getMidiIn();
 
-public slots:
-	void changePage(QListWidgetItem *current, QListWidgetItem *previous);
+		void sendsysxOut(QString sysxOut);
+		QString getsysxOut();
+		QString getsysxIn();
+		int getMsgLengthOut();
+		int getMsgLengthIn();*/
 
-private:
-	void createIcons();
-
-	QListWidget *contentsWidget;
-	QStackedWidget *pagesWidget;
+	private:
+		QVector<QString> MidiOutDevices;
+		QVector<QString> MidiInDevices;
+		/*QString sysxOut;
+		int msgLengthOut;
+		QString sysxIn;
+		int msgLengthIn;*/
 };
 
-#endif // PREFERENCESDIALOG_H
+#endif // midiIO_H

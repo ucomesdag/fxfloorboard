@@ -28,8 +28,6 @@
 #include "Preferences.h"
 #include "customSplashScreen.h"
 
-
-
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
@@ -59,7 +57,7 @@ int main(int argc, char *argv[])
 	app.processEvents(); 
 
 	splash->showStatusMessage(QObject::tr("Starting..."));
-	mainWindow *window = new mainWindow;
+	mainWindow window;// = new mainWindow;
 
 	app.processEvents(); 
 
@@ -75,8 +73,8 @@ int main(int argc, char *argv[])
 	app.processEvents(); 
 
 	splash->showStatusMessage(QObject::tr("Initializing main window..."));
-	window->setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
-	window->setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
+	window.setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
+	window.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
 
 	app.processEvents(); 
 
@@ -86,7 +84,7 @@ int main(int argc, char *argv[])
 	if(preferences->getPreferences("Window", "Restore", "window")=="true" && !x_str.isEmpty())
 	{
 		splash->showStatusMessage(QObject::tr("Restoring window position..."));
-		window->setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), window->width(), window->height());
+		window.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), window.width(), window.height());
 	}
 	else
 	{
@@ -96,19 +94,19 @@ int main(int argc, char *argv[])
 		QRect screen = desktop->availableGeometry(desktop->primaryScreen()); 
 		int screenWidth = screen.width();                    // returns screen width
 		int screenHeight = screen.height();                  // returns screen height
-		int windowWidth = window->getWindowSize().width();                  
-		int windowHeight = window->getWindowSize().height();
+		int windowWidth = window.getWindowSize().width();                  
+		int windowHeight = window.getWindowSize().height();
 
 		int x = (screenWidth - windowWidth) / 2;
 		int y = (screenHeight - windowHeight) / 2;
-		window->setGeometry(x, y, window->width(), window->height());
+		window.setGeometry(x, y, window.width(), window.height());
 	};
 
 	app.processEvents(); 
 
 	splash->showStatusMessage(QObject::tr("Finished Initializing..."));
 
-	window->show();
-	splash->finish(window);
+	window.show();
+	splash->finish(&window);
 	return app.exec();
 };
