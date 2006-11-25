@@ -35,6 +35,30 @@ UI_DIR += ./GeneratedFiles
 
 #Include file(s)
 
+win32 {
+	HEADERS += ./windows/midiIO.h
+	SOURCES += ./windows/midiIO.cpp
+	message(Including Windows specifique headers and sources...)
+}
+linux {
+	HEADERS += ./linux/midiIO.h
+	SOURCES += ./linux/midiIO.cpp
+	message(Including Linux specifique headers and sources...)
+}
+macx {
+	HEADERS += ./macosx/midiIO.h
+	SOURCES += ./macosx/midiIO.cpp
+	message(Including Mac OS X specifique headers and sources...)
+}
+linux-g++ {
+	message(Including LINUX G++ X specifique headers and sources...)
+}
+unix {
+	HEADERS += ./macosx/midiIO.h
+	SOURCES += ./macosx/midiIO.cpp
+	message(Including UNIX specifique headers and sources...)
+}
+
 #Header files
 HEADERS += ./bankTreeList.h \
     ./customButton.h \
@@ -77,22 +101,6 @@ SOURCES += ./bankTreeList.cpp \
     ./preferencesPages.cpp \
     ./stompBox.cpp \
     ./XMLWriter.cpp
-
-win32 {
-	HEADERS += ./windows/midiIO.h
-	SOURCES += ./windows/midiIO.cpp
-	message(Including Windows specifique headers and sources...)
-}
-linux {
-	HEADERS += ./linux/midiIO.h
-	SOURCES += ./linux/midiIO.cpp
-	message(Including Linux specifique headers and sources...)
-}
-macx  {
-	HEADERS += ./macosx/midiIO.h
-	SOURCES += ./macosx/midiIO.cpp
-	message(Including Mac OS X specifique headers and sources...)
-}
 
 #Resource file(s)
 RESOURCES += .\application.qrc
