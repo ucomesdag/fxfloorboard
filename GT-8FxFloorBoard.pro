@@ -38,17 +38,17 @@ UI_DIR += ./GeneratedFiles
 win32 {
 	HEADERS += ./windows/midiIO.h
 	SOURCES += ./windows/midiIO.cpp
-	message(Including Windows specifique headers and sources...)
+	message(\n\n-- Including Windows specifique headers and sources...\n\n)
 }
 unix {
 	HEADERS += ./linux/midiIO.h
 	SOURCES += ./linux/midiIO.cpp
-	message(Including Linux specifique headers and sources...)
+	message(-- Including Linux specifique headers and sources...\n\n)
 }
 macx {
 	HEADERS += ./macosx/midiIO.h
 	SOURCES += ./macosx/midiIO.cpp
-	message(Including Mac OS X specifique headers and sources...)
+	message(\n\n-- Including Mac OS X specifique headers and sources...\n\n)
 }
 
 #Header files
