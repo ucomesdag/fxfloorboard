@@ -28,9 +28,14 @@
 
 class GeneralPage : public QWidget
 {
+	Q_OBJECT
+
 public:
 	GeneralPage(QWidget *parent = 0);
-	QLineEdit* fileEdit;
+	QLineEdit* dirEdit;
+
+public slots:
+	void browseDir();
 };
 
 class MidiPage : public QWidget

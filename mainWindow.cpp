@@ -121,12 +121,21 @@ void mainWindow::settings()
 	{
 		Preferences *preferences = Preferences::Instance();
 
-		QString dir = dialog->generalSettings->fileEdit->text();
+		QString dir = dialog->generalSettings->dirEdit->text();
 		QString sidepanel = (dialog->windowSettings->sidepanelCheckBox->checkState())?QString("true"):QString("false");
 		QString window = (dialog->windowSettings->windowCheckBox->checkState())?QString("true"):QString("false");
 		QString splash = (dialog->windowSettings->splashCheckBox->checkState())?QString("true"):QString("false");
 		QString midiIn = QString::number(dialog->midiSettings->midiInCombo->currentIndex() - 1, 10); // -1 because there is a default entry at index 0
 		QString midiOut = QString::number(dialog->midiSettings->midiOutCombo->currentIndex() - 1, 10);
+
+		if(midiIn=="-1")
+		{
+			midiIn = "";
+		};
+		if(midiOut=="-1")
+		{
+			midiOut = "";
+		};
 
 		preferences->setPreferences("General", "Files", "dir", dir);
 		preferences->setPreferences("Midi", "MidiIn", "device", midiIn);

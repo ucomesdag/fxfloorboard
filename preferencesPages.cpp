@@ -34,24 +34,26 @@ GeneralPage::GeneralPage(QWidget *parent)
 	QGroupBox *patchGroup = new QGroupBox(tr("Patch folder"));
 
 	QLabel *descriptionLabel = new QLabel(tr("Select the default folder for storing patches."));
-	QLabel *filesLabel = new QLabel(tr("Default patch folder:"));
-	QLineEdit *fileEdit = new QLineEdit(dir);
+	QLabel *dirLabel = new QLabel(tr("Default patch folder:"));
+	QLineEdit *dirEdit = new QLineEdit(dir);
 	QPushButton *browseButton = new QPushButton(tr("Browse"));
 
-	this->fileEdit = fileEdit;
+	connect(browseButton, SIGNAL(clicked()), this, SLOT(browseDir()));
 
-	QHBoxLayout *fileEditLayout = new QHBoxLayout;
-	fileEditLayout->addWidget(fileEdit);
-	fileEditLayout->addWidget(browseButton);
+	this->dirEdit = dirEdit;
 
-	QVBoxLayout *filesLayout = new QVBoxLayout;
-	filesLayout->addWidget(descriptionLabel);
-	filesLayout->addSpacing(12);
-	filesLayout->addWidget(filesLabel);
-	filesLayout->addLayout(fileEditLayout);
+	QHBoxLayout *dirEditLayout = new QHBoxLayout;
+	dirEditLayout->addWidget(dirEdit);
+	dirEditLayout->addWidget(browseButton);
+
+	QVBoxLayout *dirLayout = new QVBoxLayout;
+	dirLayout->addWidget(descriptionLabel);
+	dirLayout->addSpacing(12);
+	dirLayout->addWidget(dirLabel);
+	dirLayout->addLayout(dirEditLayout);
 
 	QVBoxLayout *patchLayout = new QVBoxLayout;
-	patchLayout->addLayout(filesLayout);
+	patchLayout->addLayout(dirLayout);
 	patchGroup->setLayout(patchLayout);
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -66,8 +68,10 @@ MidiPage::MidiPage(QWidget *parent)
 	bool ok; int id;
 	midiIO *midi = new midiIO();
 	Preferences *preferences = Preferences::Instance();
-	int midiInDeviceID = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10) + 1; // +1 because there is a default entry at 0
-	int midiOutDeviceID = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10) + 1;
+	QString midiInDevice = preferences->getPreferences("Midi", "MidiIn", "device");
+	QString midiOutDevice = preferences->getPreferences("Midi", "MidiOut", "device");
+	int midiInDeviceID = midiInDevice.toInt(&ok, 10);
+	int midiOutDeviceID = midiOutDevice.toInt(&ok, 10);
 	QVector<QString> midiInDevices = midi->getMidiInDevices();
 	QVector<QString> midiOutDevices = midi->getMidiOutDevices();
 	
@@ -87,7 +91,10 @@ MidiPage::MidiPage(QWidget *parent)
 		midiInCombo->addItem(str.toAscii().data());
 		id++;
     };
-	midiInCombo->setCurrentIndex(midiInDeviceID);
+	if(!midiInDevice.isEmpty())
+	{
+		midiInCombo->setCurrentIndex(midiInDeviceID + 1); // +1 because there is a default entry at 0
+	};
 	
 	QComboBox *midiOutCombo = new QComboBox;
 	this->midiOutCombo = midiOutCombo;
@@ -99,7 +106,10 @@ MidiPage::MidiPage(QWidget *parent)
 		midiOutCombo->addItem(str.toAscii().data());
 		id++;
     };
-	midiOutCombo->setCurrentIndex(midiOutDeviceID);
+	if(!midiOutDevice.isEmpty())
+	{
+		midiOutCombo->setCurrentIndex(midiOutDeviceID + 1); // +1 because there is a default entry at 0
+	};
 
 	QVBoxLayout *midiLabelLayout = new QVBoxLayout;
 	midiLabelLayout->addWidget(midiInLabel);
@@ -188,4 +198,15 @@ WindowPage::WindowPage(QWidget *parent)
 	mainLayout->addWidget(splashScreenGroup);
 	mainLayout->addStretch(1);
 	setLayout(mainLayout);
+};
+
+void GeneralPage::browseDir()
+{
+	QString dirName = QFileDialog::getExistingDirectory(this, tr("Select the default folder for storing patches."),
+		this->dirEdit->text(),
+        QFileDialog::ShowDirsOnly);
+	if(!dirName.isEmpty())
+	{
+		this->dirEdit->setText(dirName);
+	};
 };
