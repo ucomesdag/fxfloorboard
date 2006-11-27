@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "PreferencesDestroyer.h"
+#include "Preferences.h"
 
 PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
 {
@@ -30,7 +31,7 @@ PreferencesDestroyer::PreferencesDestroyer(Preferences* s)
 PreferencesDestroyer::~PreferencesDestroyer ()
 {
 	_preferences->savePreferences();
-	//delete _preferences;
+	delete _preferences;
 };
 
 void PreferencesDestroyer::SetPreferences(Preferences* s)
