@@ -32,7 +32,6 @@ HEADERS += ./bankTreeList.h \
     ./floorPanelBar.h \
     ./floorPanelBarButton.h \
     ./mainWindow.h \
-    ./midiIO.h \
     ./midiTableParser.h \
     ./namedArray.h \
     ./Preferences.h \
@@ -55,7 +54,6 @@ SOURCES += ./bankTreeList.cpp \
     ./floorPanelBarButton.cpp \
     ./main.cpp \
     ./mainWindow.cpp \
-    ./midiIO.cpp \
     ./midiTableParser.cpp \
     ./namedArray.cpp \
     ./Preferences.cpp \

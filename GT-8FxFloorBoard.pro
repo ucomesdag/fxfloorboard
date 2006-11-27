@@ -34,9 +34,33 @@ MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 
+#Platform dependent file(s)
 win32 {
-	LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
-	#LIBS +=  ./WinMM.Lib
+	exists("c:/Progra~1/Micros~2/Lib/WinMM.Lib") {		# <-- Change the path to WinMM.Lib here!
+		LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib		# <-- Change the path here also!
+	} else {
+		LIBS +=  WinMM.Lib
+		message("WINMM.LIB IS REQUIRED. IF NOT INSTALLED")
+		message("PLEASE DOWNLOAD AND INSTALL PLATFORM SDK FROM:")
+		message("http://www.microsoft.com/downloads/details.aspx?familyid=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=en")
+		message("AFTER INSTALLATION CHANGE THE CORRECT (DOS) PATH IN THE "GT-8FxFloorBoard.pro" FILE")
+	}
+	HEADERS += ./windows/midiIO.h
+	SOURCES += ./windows/midiIO.cpp
+	INCLUDEPATH += ./windows
+	message(Including Windows specifique headers and sources...)
+}
+unix {
+	HEADERS += ./linux/midiIO.h
+	SOURCES += ./linux/midiIO.cpp
+	INCLUDEPATH += ./unix
+	message(Including Linux specifique headers and sources...)
+}
+macx {
+	HEADERS += ./macosx/midiIO.h
+	SOURCES += ./macosx/midiIO.cpp
+	INCLUDEPATH += ./macosx
+	message(Including Mac OS X specifique headers and sources...)
 }
 
 #Include file(s)
