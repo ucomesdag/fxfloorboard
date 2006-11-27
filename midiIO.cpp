@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-#include <windows.h> // Needed to acces midi and linking to winmm.lib also needed!!!
 #include "midiIO.h"
 
 midiIO::midiIO()
@@ -35,17 +34,7 @@ midiIO::midiIO()
  *************************************************************************/
 void midiIO::queryMidiInDevices()
 {
-	MIDIINCAPS mic;
-
-	int iNumDevs = midiInGetNumDevs();
-	for (int i = 0; i < iNumDevs; i++)
-	{
-		if (!midiInGetDevCaps(i, &mic, sizeof(MIDIINCAPS)))
-		{
-			/* Convert WCHAR to QString */
-			this->MidiInDevices.push_back(QString::fromWCharArray(mic.szPname));
-		};
-	};
+	this->MidiInDevices.push_back(QString("Midi not implemented!"));
 };
 
 /*********************** queryMidiOutDevices() ****************************
@@ -54,17 +43,7 @@ void midiIO::queryMidiInDevices()
  *************************************************************************/
 void midiIO::queryMidiOutDevices()
 {
-	MIDIOUTCAPS moc;
-
-	int iNumDevs = midiOutGetNumDevs();
-	for (int i = 0; i < iNumDevs; i++)
-	{
-		if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS)))
-		{
-			/* Convert WCHAR to QString */
-			this->MidiOutDevices.push_back(QString::fromWCharArray(moc.szPname));
-		};
-	};
+	this->MidiOutDevices.push_back(QString("Midi not implemented!"));
 };
 
 QVector<QString> midiIO::getMidiInDevices()
