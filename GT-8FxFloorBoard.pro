@@ -34,7 +34,10 @@ MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 
-LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
+win32 {
+	LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib
+	#LIBS +=  ./WinMM.Lib
+}
 
 #Include file(s)
 include(GT-8FxFloorBoard.pri)
