@@ -166,9 +166,9 @@ bool indexList::operator<(const indexList& rhs) const
 void Preferences::savePreferences()
 {
 	//Write back to file/create
-    QFile *file = new QFile("preferences.xml");
-	file->open( QIODevice::WriteOnly );
-	XMLWriter xout(file);
+    QFile file("preferences.xml");
+	file.open(QIODevice::WriteOnly);
+	XMLWriter xout(&file);
 
 	QMap<QString, QString> attrs;
 
@@ -227,5 +227,5 @@ void Preferences::savePreferences()
 	};
 
 	xout.writeCloseTag("Preferences");
-	file->close();
+	file.close();
 };
