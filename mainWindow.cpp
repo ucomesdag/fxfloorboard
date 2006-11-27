@@ -184,7 +184,8 @@ void mainWindow::about()
 	QFile file(":about"); 
 	if(file.open(QIODevice::ReadOnly))
 	{	
-		QMessageBox::about(this, tr("GT-8 Fx FloorBoard - About"), "GT-8 FX FloorBoard, " + tr("version") + " " + version + "\n" + file.readAll());
+		QMessageBox::about(this, tr("GT-8 Fx FloorBoard - About"), 
+			"GT-8 FX FloorBoard, " + tr("version") + " " + version + "\n" + file.readAll());
 	};
 };
 

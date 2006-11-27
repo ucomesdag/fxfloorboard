@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-#include <string>
 #include <windows.h> // Needed to acces midi and linking to winmm.lib also needed!!!
 #include "midiIO.h"
 
@@ -62,6 +61,7 @@ void midiIO::queryMidiOutDevices()
 	{
 		if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS)))
 		{
+			/* Convert WCHAR to QString */
 			this->MidiOutDevices.push_back(QString::fromWCharArray(moc.szPname));
 		};
 	};

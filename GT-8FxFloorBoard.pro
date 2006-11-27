@@ -25,6 +25,7 @@ TARGET = GT-8FxFloorBoard
 DESTDIR = ./Release
 QT += xml
 CONFIG += release
+CONFIG += static
 INCLUDEPATH += ./GeneratedFiles \
     ./GeneratedFiles/Release \
     .

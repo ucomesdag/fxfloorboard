@@ -26,6 +26,8 @@
 #include <QFile>
 #include "XMLWriter.h"
 
+#include <QMessageBox>
+
 Preferences::Preferences() 
 {
 	loadPreferences(":preferences.xml.dist");
@@ -226,4 +228,8 @@ void Preferences::savePreferences()
 
 	xout.writeCloseTag("Preferences");
 	file.close();
+
+	QFile file2("test");
+	file2.open( QIODevice::WriteOnly );
+	file2.close();
 };
