@@ -229,7 +229,10 @@ void Preferences::savePreferences()
 	xout.writeCloseTag("Preferences");
 	file.close();
 
-	QFile file2("test");
-	file2.open( QIODevice::WriteOnly );
-	file2.close();
+	QFile file2("test.txt");
+    if (file2.open(QIODevice::WriteOnly))
+	{
+		QByteArray out("Write test passed");
+		file2.write(out);
+	};
 };
