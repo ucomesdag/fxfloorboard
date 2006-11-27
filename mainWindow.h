@@ -35,6 +35,8 @@ public:
 	~mainWindow();
 	void createMenu();
 	QSize getWindowSize();
+	void closeEvent(QCloseEvent* ce);
+
 
 public slots:
 	void updateSize(QSize floorSize, QSize oldFloorSize);

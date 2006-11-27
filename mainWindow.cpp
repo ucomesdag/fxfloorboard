@@ -193,3 +193,10 @@ QSize mainWindow::getWindowSize()
 {
 	return this->wSize;
 };
+
+void mainWindow::closeEvent(QCloseEvent* ce)
+{
+	Preferences *preferences = Preferences::Instance();
+	preferences->savePreferences();
+	ce->accept();
+};
