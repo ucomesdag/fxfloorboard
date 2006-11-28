@@ -25,7 +25,6 @@
 #include "customDial.h"
 #include "customButton.h"
 #include "customLed.h"
-#include "stompBox.h"
 #include "dragBar.h"
 #include "bankTreeList.h"
 #include "floorBoardDisplay.h"
@@ -251,73 +250,48 @@ void floorBoard::dropEvent(QDropEvent *event)
         QByteArray itemData = event->mimeData()->data("application/x-stompbox");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
-        unsigned int stompId;
+        int stompId;
         QPoint stompPos;
 		QSize stompSize;
 		QPoint topLeftOffset;
         dataStream >> stompId >> stompPos >> stompSize >> topLeftOffset;
-
 		QPoint dragPoint = (event->pos() - topLeftOffset) + QPoint::QPoint(stompSize.width()/2, stompSize.height()/2);
+		int stompSpacing = fxPos.at(1).x() - (fxPos.at(0).x() + stompSize.width());
 		
-		signed int stompSpacing = fxPos.at(1).x() - (fxPos.at(0).x() + stompSize.width());                                                                                             
-
-		unsigned int fxOrgPos = fx.at(stompId);;
-		unsigned int fxDestPos;
-		for(int x=0;x<fxPos.size();x++)
+		int destIndex;
+		int orgIndex = fx.indexOf(stompId);
+		for(int x=0;x<fx.size();x++)
 		{
 			QRect dropRect = QRect::QRect(fxPos.at(x).x() - stompSpacing - (stompSize.width()/2), fxPos.at(x).y(), stompSize.width() + stompSpacing, stompSize.height());
 			QRect lastDropRect = QRect::QRect(fxPos.at(x).x() + (stompSize.width()/2), fxPos.at(x).y(), stompSize.width() + stompSpacing, stompSize.height());
-			
-			fxDestPos = x;
 			if( dropRect.contains(dragPoint) )
 			{
-				if(fxDestPos < fxOrgPos)
-				{
-					for(unsigned int i=fxOrgPos;i>fxDestPos;i--)
-					{
-						this->childAt(fxPos.at(i-1))->move(fxPos.at(i));
-						this->fx.replace(fx.indexOf(i-1), i);
-					};
-				}
-				else if(fxDestPos > fxOrgPos)
-				{
-					fxDestPos = fxDestPos - 1;
-					for(unsigned int i=fxOrgPos;i<fxDestPos;i++)
-					{
-						this->childAt(fxPos.at(i+1))->move(fxPos.at(i));
-						this->fx.replace(fx.indexOf(i+1), i);
-					};
-				};
-				this->fx.replace(stompId, fxDestPos);
-				event->source()->move(fxPos.at(fx.at(stompId)));
-
-				break;
-			} 
-			else if( (fxDestPos == (unsigned int)fxPos.size()-1 || ( fxDestPos == (unsigned int)(fxPos.size()/2)-1 && fx.at(stompId) != fxPos.size()/2 ) ) 
+				destIndex = fx.indexOf(fx.at(x));
+			}
+			else if( (x == (int)fx.size()-1 || 
+			( x == (int)(fx.size()/2)-1 && fx.at(stompId) != fx.size()/2 ) ) 
 						&& lastDropRect.contains(dragPoint))
 			{
-				if(fxDestPos < fxOrgPos)
-				{
-					fxDestPos = fxDestPos + 1;
-					for(unsigned int i=fxOrgPos;i>fxDestPos;i--)
-					{
-						this->childAt(fxPos.at(i-1))->move(fxPos.at(i));
-						this->fx.replace(fx.indexOf(i-1), i);
-					};
-				}
-				else if(fxDestPos > fxOrgPos)
-				{
-					for(unsigned int i=fxOrgPos;i<fxDestPos;i++)
-					{
-						this->childAt(fxPos.at(i+1))->move(fxPos.at(i));
-						this->fx.replace(fx.indexOf(i+1), i);
-					}
-				};
-				this->fx.replace(stompId, fxDestPos);
-				event->source()->move(fxPos.at(fx.at(stompId)));
-
-				break;
+				destIndex = fx.indexOf(fx.at(x)) + 1;
 			};
+		};
+
+		if( orgIndex < destIndex )
+		{
+			destIndex = destIndex - 1;
+			for(int i=orgIndex;i<destIndex ;i++)
+			{
+				setStompPos(fx.at(i + 1), i);
+			};
+			setStompPos(stompId, destIndex );
+		}
+		else if( orgIndex > destIndex )
+		{
+			for(int i=orgIndex;i>destIndex;i--)
+			{
+				setStompPos(fx.at(i - 1), i);
+			};
+			setStompPos(stompId, destIndex);
 		};
 	} 
 	else 
@@ -350,9 +324,9 @@ void floorBoard::initSize(QSize floorSize)
 	this->setFixedSize(floorSize);
 };
 
-QPoint floorBoard::getStompPos(unsigned int id) 
+QPoint floorBoard::getStompPos(int id) 
 {
-	return fxPos.at(fx.at(id));
+	return fxPos.at(id);
 };
 
 QSize floorBoard::getSize()
@@ -375,7 +349,6 @@ void floorBoard::setCollapse()
 		emit setCollapseState(true);
 		this->colapseState = true;
 	};
-
 };
 
 void floorBoard::setSize(QSize newSize)
@@ -474,7 +447,10 @@ void floorBoard::initStomps()
 	font.setPixelSize(10);
 	font.setStretch(120);
 
+	/* FX1 */
 	stompBox *fx1 = new stompBox(this);
+	this->stompBoxes.append(fx1);
+	this->stompNames.append("fx1");
 	fx1->setId(0);
 	fx1->setImage(":/images/fx1.png");
 	fx1->setPos(this->getStompPos(0)); 
@@ -497,6 +473,9 @@ void floorBoard::initStomps()
 
 	/* COMP */
 	stompBox *comp = new stompBox(this);
+	this->stompBoxes.append(comp);
+	this->stompNames.append("comp");
+
 	comp->setId(1);
 	comp->setImage(":/images/comp.png");
 	comp->setPos(this->getStompPos(1));
@@ -520,6 +499,8 @@ void floorBoard::initStomps()
                          comp_led, SLOT(setValue(bool)));	
 	/* WAH */
 	stompBox *wah = new stompBox(this);
+	this->stompBoxes.append(wah);
+	this->stompNames.append("wah");
 	wah->setId(2);
 	wah->setImage(":/images/wah.png");
 	wah->setPos(this->getStompPos(2)); 
@@ -541,6 +522,8 @@ void floorBoard::initStomps()
                          wah_led, SLOT(setValue(bool)));
 	/* LOOP */
 	stompBox *lp = new stompBox(this);
+	this->stompBoxes.append(lp);
+	this->stompNames.append("lp");
 	lp->setId(3);
 	lp->setImage(":/images/lp.png");
 	lp->setPos(this->getStompPos(3)); 
@@ -564,6 +547,8 @@ void floorBoard::initStomps()
                          lp_led, SLOT(setValue(bool)));	
 	/* OD/DS */
 	stompBox *od = new stompBox(this);
+	this->stompBoxes.append(od);
+	this->stompNames.append("od");
 	od->setId(4);
 	od->setImage(":/images/od.png");
 	od->setPos(this->getStompPos(4)); 
@@ -587,12 +572,16 @@ void floorBoard::initStomps()
                          od_led, SLOT(setValue(bool)));
 	/* AMP */
 	stompBox *amp = new stompBox(this);
+	this->stompBoxes.append(amp);
+	this->stompNames.append("amp");
 	amp->setId(5);
 	amp->setImage(":/images/amp.png");
 	amp->setPos(this->getStompPos(5)); 
 
 	/* EQ */
 	stompBox *eq = new stompBox(this);
+	this->stompBoxes.append(eq);
+	this->stompNames.append("eq");
 	eq->setId(6);
 	eq->setImage(":/images/eq.png");
 	eq->setPos(this->getStompPos(6)); 
@@ -603,6 +592,8 @@ void floorBoard::initStomps()
                          eq_led, SLOT(setValue(bool)));	
 	/* FX 2 */
 	stompBox *fx2 = new stompBox(this);
+	this->stompBoxes.append(fx2);
+	this->stompNames.append("fx2");
 	fx2->setId(7);
 	fx2->setImage(":/images/fx2.png");
 	fx2->setPos(this->getStompPos(7)); 
@@ -624,6 +615,8 @@ void floorBoard::initStomps()
                          fx2_led, SLOT(setValue(bool)));	
 	/* Delay */
 	stompBox *dd = new stompBox(this);
+	this->stompBoxes.append(dd);
+	this->stompNames.append("dd");
 	dd->setId(8);
 	dd->setImage(":/images/dd.png");
 	dd->setPos(this->getStompPos(8));
@@ -647,6 +640,8 @@ void floorBoard::initStomps()
                          dd_led, SLOT(setValue(bool)));	
 	/* Chorus */
 	stompBox *cc = new stompBox(this);
+	this->stompBoxes.append(cc);
+	this->stompNames.append("cc");
 	cc->setId(9);
 	cc->setImage(":/images/cc.png");
 	cc->setPos(this->getStompPos(9));
@@ -670,6 +665,8 @@ void floorBoard::initStomps()
                          cc_led, SLOT(setValue(bool)));	
 	/* REVERB */
 	stompBox *rev = new stompBox(this);
+	this->stompBoxes.append(rev);
+	this->stompNames.append("rev");
 	rev->setId(10);
 	rev->setImage(":/images/rev.png");
 	rev->setPos(this->getStompPos(10)); 
@@ -693,6 +690,8 @@ void floorBoard::initStomps()
                          rev_led, SLOT(setValue(bool)));	
 	/* VOLUME */
 	stompBox *vol = new stompBox(this);
+	this->stompBoxes.append(vol);
+	this->stompNames.append("vol");
 	vol->setId(11);
 	vol->setImage(":/images/vol.png");
 	vol->setPos(this->getStompPos(11)); 
@@ -714,6 +713,8 @@ void floorBoard::initStomps()
                          vol_led, SLOT(setValue(bool)));
 	/* NS */
 	stompBox *ns = new stompBox(this);
+	this->stompBoxes.append(ns);
+	this->stompNames.append("ns");
 	ns->setId(12);
 	ns->setImage(":/images/ns.png");
 	ns->setPos(this->getStompPos(12));
@@ -726,7 +727,32 @@ void floorBoard::initStomps()
                          ns_led, SLOT(setValue(bool)));	
 	/* D-OUT */
 	stompBox *dout = new stompBox(this);
+	this->stompBoxes.append(dout);
+	this->stompNames.append("dout");
 	dout->setId(13);
 	dout->setImage(":/images/dout.png");
 	dout->setPos(this->getStompPos(13));
+};
+
+void floorBoard::setStomps(QVector<QString> stompOrder)
+{
+	for(int i=0;i<stompOrder.size();i++)
+	{
+		QString name = stompOrder.at(i);
+		setStompPos(name, i);
+		this->fx.replace(i, stompNames.indexOf(name));
+	};
+	
+};
+
+void floorBoard::setStompPos(QString name, int order)
+{
+	this->stompBoxes.at(stompNames.indexOf(name))->setPos(this->getStompPos(order));
+	this->fx.replace(order, stompNames.indexOf(name));
+};
+
+void floorBoard::setStompPos(int index, int order)
+{
+	this->stompBoxes.at(index)->setPos(this->getStompPos(order));
+	this->fx.replace(order, index);
 };

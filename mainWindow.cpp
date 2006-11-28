@@ -23,10 +23,9 @@
 #include <QLayout>
 #include <QDesktopServices>
 #include <QUrl>
-#include <QFile>
 #include <QMessageBox>
+#include <QFileDialog>
 #include "mainWindow.h"
-#include "floorBoard.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"
 
@@ -36,6 +35,7 @@ mainWindow::mainWindow(QWidget *parent)
 	createMenu();
 
 	floorBoard *fxsBoard = new floorBoard(this);
+	this->fxFloorBoard = fxsBoard;
 
 	QObject::connect(fxsBoard, SIGNAL( sizeChanged(QSize, QSize) ),
                 this, SLOT( updateSize(QSize, QSize) ) );
@@ -93,8 +93,11 @@ void mainWindow::createMenu()
 	helpMenu->addSeparator(); QAction *aboutAction = helpMenu->addAction(tr("&About"));
     menuBar->addMenu(helpMenu);
 
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
-	
+	connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
+	connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
+	connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
+	connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+
 	connect(settingsAction, SIGNAL(triggered()), this, SLOT(settings()));
 
 	connect(helpAction, SIGNAL(triggered()), this, SLOT(help()));
@@ -111,6 +114,90 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 	int y = this->geometry().y();
 	this->setFixedWidth(floorSize.width());
 	this->setGeometry(x, y, floorSize.width(), this->height());
+};
+
+/* FILE MENU */
+void mainWindow::open()
+{
+	Preferences *preferences = Preferences::Instance();
+	QString dir = preferences->getPreferences("General", "Files", "dir");
+
+	QString fileName = QFileDialog::getOpenFileName(
+                this,
+                "Choose a file",
+                dir,
+                "System Exclusive (*.syx)");
+	if (!fileName.isEmpty())	
+	{
+		file.setFile(fileName);  
+		if(file.readFile())
+		{	
+			// DO SOMETHING AFTER READING THE FILE (UPDATE THE GUI)
+			QVector<QString> stompOrder;
+			stompOrder.append("fx1");
+			stompOrder.append("fx2");
+			stompOrder.append("dout");
+			stompOrder.append("ns");
+			stompOrder.append("rev");
+			stompOrder.append("vol");
+			stompOrder.append("dd");
+			stompOrder.append("cc");
+			stompOrder.append("eq");
+			stompOrder.append("amp");
+			stompOrder.append("od");
+			stompOrder.append("lp");
+			stompOrder.append("wah");
+			stompOrder.append("comp");
+			this->fxFloorBoard->setStomps(stompOrder);
+		};
+	};
+};
+
+void mainWindow::save()
+{
+	Preferences *preferences = Preferences::Instance();
+	QString dir = preferences->getPreferences("General", "Files", "dir");
+
+	if(file.getFileName().isEmpty())
+	{
+		QString fileName = QFileDialog::getSaveFileName(
+						this,
+						"Save As",
+						dir,
+						"System Exclusive (*.syx)");
+		if (!fileName.isEmpty())	
+		{
+			if(!fileName.contains(".syx"))
+			{
+				fileName.append(".syx");
+			};
+			file.writeFile(fileName);
+		};
+	}
+	else
+	{
+		file.writeFile(file.getFileName());
+	};
+};
+
+void mainWindow::saveAs()
+{
+	Preferences *preferences = Preferences::Instance();
+	QString dir = preferences->getPreferences("General", "Files", "dir");
+
+	QString fileName = QFileDialog::getSaveFileName(
+                    this,
+                    "Save As",
+                    dir,
+                    "System Exclusive (*.syx)");
+	if (!fileName.isEmpty())	
+	{
+		if(!fileName.contains(".syx"))
+		{
+			fileName.append(".syx");
+		};
+		file.writeFile(fileName);
+	};
 };
 
 /* TOOLS MENU */

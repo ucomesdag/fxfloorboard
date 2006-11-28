@@ -20,49 +20,26 @@
 **
 ****************************************************************************/
 
-#ifndef STOMPBOX_H
-#define STOMPBOX_H
+#ifndef SYSXPARSER_H
+#define SYSXPARSER_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QString>
+#include <QVector>
+#include <qdom.h>
+//using namespace std;
 
-class stompBox : public QWidget
+class sysxParser
 {
-    Q_OBJECT
 
 public:
-    stompBox(
-		QWidget *parent = 0,
-		unsigned int id = 0,
-		QString imagePath = ":/images/od.png",
-		QPoint pos = QPoint::QPoint(0, 0),
-		QSize stompSize = QSize::QSize(94, 168));
-	void setPos o(QPoint newPos);
-	void setImage(QString imagePath);
-	void setSize(QSize newSize);
-	void setId(unsigned int id);
-	unsigned int getId();
-
-public slots:
-	void updatePos(signed int offsetDif);
-
-signals:
-	void knobValue(int);
-
-
-protected:
-	void paintEvent(QPaintEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
-
+	sysxParser();
+	~sysxParser();
+	QVector< QVector< QVector<QString> > > getSettings(QVector<QString> fileSource);
+	
 private:
-	QString imagePath;
-	QSize stompSize;
-	QPoint stompPos; 
-	unsigned int id;
-
-	QPoint dragStartPosition;
-	QPixmap image;
+	QDomElement root;
+	QVector< QVector< QVector<QString> > > settings;
+		
 };
 
-#endif // STOMPBOX_H
+#endif // SYSXPARSER_H

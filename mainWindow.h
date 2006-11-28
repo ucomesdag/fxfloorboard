@@ -25,6 +25,10 @@
 
 #include <QWidget>
 #include <QMenuBar>
+#include <QFile>
+#include "floorBoard.h"
+#include "sysxWriter.h"
+#include "sysxParser.h"
 
 class mainWindow : public QWidget
 {
@@ -40,6 +44,9 @@ public:
 
 public slots:
 	void updateSize(QSize floorSize, QSize oldFloorSize);
+	void open();
+	void save();
+	void saveAs();
 	void settings();
 	void help();
 	void homepage();
@@ -55,6 +62,9 @@ private:
 	QAction *saveAsAction;
 	QAction *exitAction;
 	QSize wSize;
+
+	sysxWriter file;
+	floorBoard* fxFloorBoard;
 };
 
 #endif // MAINWINDOW_H

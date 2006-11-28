@@ -25,6 +25,7 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include "stompBox.h"
 
 class floorBoard : public QWidget
 {
@@ -43,12 +44,15 @@ public:
 		unsigned int borderWidth = 3,
 		QPoint pos = QPoint::QPoint(0, 0));
 	~floorBoard();
-	QPoint getStompPos(unsigned int id);
+	QPoint getStompPos(int id);
 	void initSize(QSize floorSize);
 	void setSize(QSize newSize);
 	QSize getSize();
 	void setFloorBoard();
 	void initStomps();
+	void setStomps(QVector<QString> stompOrder);
+	void setStompPos(QString name, int order);
+	void setStompPos(int index, int order);
 
 public slots:
 	void setWidth(int dist);
@@ -100,8 +104,11 @@ private:
 	QPoint panelBarPos;
 
 	QVector<QPoint> fxPos;
-	QVector<signed int> fx;
+	QVector<int> fx;
 	bool colapseState;
+
+	QVector<stompBox*> stompBoxes;
+	QVector<QString> stompNames;
 };
 
 #endif // FLOORBOARD_H

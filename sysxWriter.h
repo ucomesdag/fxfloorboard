@@ -20,49 +20,28 @@
 **
 ****************************************************************************/
 
-#ifndef STOMPBOX_H
-#define STOMPBOX_H
+#ifndef SYSXWRITTER_H
+#define SYSXWRITTER_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QString>
+#include <QVector>
 
-class stompBox : public QWidget
+class sysxWriter
 {
-    Q_OBJECT
 
 public:
-    stompBox(
-		QWidget *parent = 0,
-		unsigned int id = 0,
-		QString imagePath = ":/images/od.png",
-		QPoint pos = QPoint::QPoint(0, 0),
-		QSize stompSize = QSize::QSize(94, 168));
-	void setPos o(QPoint newPos);
-	void setImage(QString imagePath);
-	void setSize(QSize newSize);
-	void setId(unsigned int id);
-	unsigned int getId();
+	sysxWriter();
+	~sysxWriter();
+	void setFile(QString fileName);
+	bool readFile();
+	QVector< QVector<QString> > getFileSource();
+	void writeFile(QString fileName);
+	QString getFileName();
 
-public slots:
-	void updatePos(signed int offsetDif);
-
-signals:
-	void knobValue(int);
-
-
-protected:
-	void paintEvent(QPaintEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
-
+	
 private:
-	QString imagePath;
-	QSize stompSize;
-	QPoint stompPos; 
-	unsigned int id;
-
-	QPoint dragStartPosition;
-	QPixmap image;
+	QString fileName;
+	QVector< QVector<QString> > fileSource;
 };
 
-#endif // STOMPBOX_H
+#endif // SYSXWRITTER_H

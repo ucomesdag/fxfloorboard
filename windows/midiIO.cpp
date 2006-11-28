@@ -43,7 +43,7 @@ void midiIO::queryMidiInDevices()
 		if (!midiInGetDevCaps(i, &mic, sizeof(MIDIINCAPS)))
 		{
 			/* Convert WCHAR to QString */
-			this->MidiInDevices.push_back(QString::fromWCharArray(mic.szPname));
+			this->MidiInDevices.append(QString::fromWCharArray(mic.szPname));
 		};
 	};
 };
@@ -62,7 +62,7 @@ void midiIO::queryMidiOutDevices()
 		if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS)))
 		{
 			/* Convert WCHAR to QString */
-			this->MidiOutDevices.push_back(QString::fromWCharArray(moc.szPname));
+			this->MidiOutDevices.append(QString::fromWCharArray(moc.szPname));
 		};
 	};
 };
