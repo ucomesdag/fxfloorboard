@@ -31,7 +31,6 @@ HEADERS += ./bankTreeList.h \
     ./floorPanelBar.h \
     ./floorPanelBarButton.h \
     ./mainWindow.h \
-    ./windows/midiIO.h \
     ./namedArray.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
@@ -55,7 +54,6 @@ SOURCES += ./bankTreeList.cpp \
     ./floorPanelBarButton.cpp \
     ./main.cpp \
     ./mainWindow.cpp \
-    ./windows/midiIO.cpp \
     ./namedArray.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
