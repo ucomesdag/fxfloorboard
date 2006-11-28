@@ -50,7 +50,7 @@ win32 {
 	INCLUDEPATH += ./windows
 	message(Including Windows specifique headers and sources...)
 }
-unix {
+linux-g++ {
 	HEADERS += ./linux/midiIO.h
 	SOURCES += ./linux/midiIO.cpp
 	INCLUDEPATH += ./unix
