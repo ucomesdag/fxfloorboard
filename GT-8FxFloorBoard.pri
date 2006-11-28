@@ -20,7 +20,6 @@
 ##
 #############################################################################
 
-#Header files
 HEADERS += ./bankTreeList.h \
     ./customButton.h \
     ./customDial.h \
@@ -32,13 +31,15 @@ HEADERS += ./bankTreeList.h \
     ./floorPanelBar.h \
     ./floorPanelBarButton.h \
     ./mainWindow.h \
-    ./midiTableParser.h \
+    ./windows/midiIO.h \
     ./namedArray.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
     ./preferencesDialog.h \
     ./preferencesPages.h \
     ./stompBox.h \
+    ./sysxParser.h \
+    ./sysxWriter.h \
     ./XMLWriter.h
 
 #Source files
@@ -54,13 +55,15 @@ SOURCES += ./bankTreeList.cpp \
     ./floorPanelBarButton.cpp \
     ./main.cpp \
     ./mainWindow.cpp \
-    ./midiTableParser.cpp \
+    ./windows/midiIO.cpp \
     ./namedArray.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
     ./preferencesDialog.cpp \
     ./preferencesPages.cpp \
     ./stompBox.cpp \
+    ./sysxParser.cpp \
+    ./sysxWriter.cpp \
     ./XMLWriter.cpp
 
 #Resource file(s)
