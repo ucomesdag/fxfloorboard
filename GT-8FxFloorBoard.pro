@@ -53,7 +53,7 @@ win32 {
 linux-g++ {
 	HEADERS += ./linux/midiIO.h
 	SOURCES += ./linux/midiIO.cpp
-	INCLUDEPATH += ./unix
+	INCLUDEPATH += ./linux
 	message(Including Linux specifique headers and sources...)
 }
 macx {
