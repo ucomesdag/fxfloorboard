@@ -37,7 +37,7 @@ public:
 		QString imagePath = ":/images/od.png",
 		QPoint pos = QPoint::QPoint(0, 0),
 		QSize stompSize = QSize::QSize(94, 168));
-	void setPos o(QPoint newPos);
+	void setPos(QPoint newPos);
 	void setImage(QString imagePath);
 	void setSize(QSize newSize);
 	void setId(unsigned int id);
