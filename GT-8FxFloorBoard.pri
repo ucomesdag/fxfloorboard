@@ -20,6 +20,7 @@
 ##
 #############################################################################
 
+#Header files
 HEADERS += ./bankTreeList.h \
     ./customButton.h \
     ./customDial.h \
@@ -31,13 +32,17 @@ HEADERS += ./bankTreeList.h \
     ./floorPanelBar.h \
     ./floorPanelBarButton.h \
     ./mainWindow.h \
+    ./windows/midiIO.h \
+    ./MidiTable.h \
+    ./MidiTableDestroyer.h \
     ./namedArray.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
     ./preferencesDialog.h \
     ./preferencesPages.h \
     ./stompBox.h \
-    ./MidiTable.h \
+    ./SysxIO.h \
+    ./SysxIODestroyer.h \
     ./sysxWriter.h \
     ./XMLWriter.h
 
@@ -54,13 +59,17 @@ SOURCES += ./bankTreeList.cpp \
     ./floorPanelBarButton.cpp \
     ./main.cpp \
     ./mainWindow.cpp \
+    ./windows/midiIO.cpp \
+    ./MidiTable.cpp \
+    ./MidiTableDestroyer.cpp \
     ./namedArray.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
     ./preferencesDialog.cpp \
     ./preferencesPages.cpp \
     ./stompBox.cpp \
-    ./MidiTable.cpp \
+    ./SysxIO.cpp \
+    ./SysxIODestroyer.cpp \
     ./sysxWriter.cpp \
     ./XMLWriter.cpp
 
