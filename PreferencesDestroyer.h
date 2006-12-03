@@ -24,7 +24,6 @@
 #define PREFERENCESDESTROYER_H
 
 #include "Preferences.h"
-//using namespace std;
 
 class PreferencesDestroyer 
 {

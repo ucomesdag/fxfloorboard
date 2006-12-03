@@ -26,7 +26,6 @@
 #include <QString>
 #include <QVector>
 #include <qdom.h>
-//using namespace std;
 
 class PreferencesDestroyer;
 

@@ -9,7 +9,7 @@
 ** the Free Software Foundation; either version 2 of the License, or
 ** (at your option) any later version.
 **
-** This program is distributed in the hope that it will be useful,
+** This program is distributed data the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
@@ -24,6 +24,7 @@
 #include <QDataStream>
 #include <QByteArray>
 #include "sysxWriter.h"	
+#include "SysxIO.h"	
 
 sysxWriter::sysxWriter() 
 {
@@ -46,22 +47,12 @@ bool sysxWriter::readFile()
 	QFile file(fileName);
     if (file.open(QIODevice::ReadOnly))
 	{
-		QByteArray in = file.readAll();
-		QVector<QString> sysxBuffer;
-		for(int i=0;i<in.size();i++)
-		{
-			unsigned char byte = (char)in[i];
-			unsigned int n = (int)byte;
-			QString hex = QString::number(n, 16).toUpper();
-			if (hex.length() < 2) hex.prepend("0");
-			sysxBuffer.append(hex);
+		QByteArray data = file.readAll();
 
-			if(hex == "F7") 
-			{
-				this->fileSource.append(sysxBuffer);
-				sysxBuffer.clear();
-			};
-		}
+		SysxIO *sysxIO = SysxIO::Instance();
+		sysxIO->setFileSource(data);
+
+		this->fileSource = sysxIO->getFileSource();
 		return true;
 	}
 	else
@@ -75,6 +66,9 @@ void sysxWriter::writeFile(QString fileName)
 	QFile file(fileName);
     if (file.open(QIODevice::WriteOnly))
 	{
+		SysxIO *sysxIO = SysxIO::Instance();
+		this->fileSource = sysxIO->getFileSource();
+		
 		QByteArray out;
 		unsigned int count=0;
 		for (QVector< QVector<QString> >::iterator dev = fileSource.begin(); dev != fileSource.end(); ++dev)

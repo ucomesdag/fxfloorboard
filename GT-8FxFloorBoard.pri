@@ -37,7 +37,7 @@ HEADERS += ./bankTreeList.h \
     ./preferencesDialog.h \
     ./preferencesPages.h \
     ./stompBox.h \
-    ./sysxParser.h \
+    ./MidiTable.h \
     ./sysxWriter.h \
     ./XMLWriter.h
 
@@ -60,7 +60,7 @@ SOURCES += ./bankTreeList.cpp \
     ./preferencesDialog.cpp \
     ./preferencesPages.cpp \
     ./stompBox.cpp \
-    ./sysxParser.cpp \
+    ./MidiTable.cpp \
     ./sysxWriter.cpp \
     ./XMLWriter.cpp
 

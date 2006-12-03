@@ -21,7 +21,6 @@
 ****************************************************************************/
 
 #include <QtGui>
-
 #include "customButton.h"
 
 customButton::customButton(bool active, QPoint buttonPos, QWidget *parent,
@@ -109,8 +108,6 @@ void customButton::mouseMoveEvent(QMouseEvent *event)
 	{
         return;
 	};
-    
-	
 	/*if(active)
 	{
 		setOffset(2);

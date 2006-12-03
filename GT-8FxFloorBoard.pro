@@ -26,6 +26,7 @@ DESTDIR = ./Release
 QT += xml
 CONFIG += release
 CONFIG += static
+CONFIG += embed_manifest_exe
 INCLUDEPATH += ./GeneratedFiles \
     ./GeneratedFiles/Release \
     .

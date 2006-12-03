@@ -150,15 +150,15 @@ void Preferences::loadPreferences(QString fileName)
 	};	
 };
 
-struct indexList // Create a structure of metaSearchData and indexnumbers to sort and match them afterwords
+struct IndexList // Create a structure of metaSearchData and indexnumbers to sort and match them afterwords
 {
 	QString metaSearchData, indexNumber;
 
-	bool operator<(const indexList& rhs) const;
+	bool operator<(const IndexList& rhs) const;
 	//indexList(QString metaSearchData_, QString indexNumber_) : metaSearchData(metaSearchData_), indexNumber(indexNumber_) {}
 };
 
-bool indexList::operator<(const indexList& rhs) const
+bool IndexList::operator<(const IndexList& rhs) const
 {
 	return (metaSearchData < rhs.metaSearchData) ? true : (metaSearchData == rhs.metaSearchData) ? rhs.indexNumber > indexNumber : false;
 };
@@ -176,8 +176,8 @@ void Preferences::savePreferences()
 	xout.writeOpenTag("Preferences");
 
 	unsigned int aSize = this->metaSearch.size();
-	QVector<indexList> sortIndexList;
-	indexList tmp;
+	QVector<IndexList> sortIndexList;
+	IndexList tmp;
 	for(unsigned int n=0;n<aSize;n++)
 	{
 		//sortIndexList.append( indexList(this->metaSearch.at(n), QString::number(n, 10)) );

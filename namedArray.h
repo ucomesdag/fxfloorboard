@@ -25,7 +25,6 @@
 
 #include <QVector>
 #include <QString>
-//using namespace std;
 
 class namedArray
 {

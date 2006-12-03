@@ -20,53 +20,35 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SYSXIO_H
+#define SYSXIO_H
 
-#include <QWidget>
-#include <QMenuBar>
-#include <QFile>
-#include "floorBoard.h"
-#include "sysxWriter.h"
-#include "MidiTable.h"
+#include <QString>
+#include <QVector>
+#include <qdom.h>
 
-class mainWindow : public QWidget
+class SysxIODestroyer;
+
+class SysxIO
 {
-    Q_OBJECT
 
 public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void createMenu();
-	QSize getWindowSize();
-	void closeEvent(QCloseEvent* ce);
+	static SysxIO* Instance(); //Singleton patern design
 
-signals:
-	void updateSignal();
+	void setFileSource(QVector< QVector<QString> > fileSource);
+	void setFileSource(QByteArray data);
+	QVector< QVector<QString> > getFileSource();
 
-public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void open();
-	void save();
-	void saveAs();
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
+protected :
+	SysxIO();
+	friend class SysxIODestroyer;
+	virtual ~SysxIO() { };
 
 private:
-	QMenuBar *menuBar;
-	QMenu *fileMenu;
-	QAction *openAction;
-	QAction *saveAction;
-	QAction *saveAsAction;
-	QAction *exitAction;
-	QSize wSize;
+	static SysxIO* _instance;
+	static SysxIODestroyer _destroyer;
 
-	sysxWriter file;
-	floorBoard* fxFloorBoard;
+	QVector< QVector<QString> > fileSource;
 };
 
-#endif // MAINWINDOW_H
+#endif // SYSXIO_H

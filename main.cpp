@@ -26,6 +26,7 @@
 #include <QFile>
 #include "mainWindow.h"
 #include "Preferences.h"
+#include "MidiTable.h"
 #include "customSplashScreen.h"
 
 int main(int argc, char *argv[])
@@ -69,6 +70,11 @@ int main(int argc, char *argv[])
 		file.copy("license.txt");
 		file.close();
 	};
+
+	app.processEvents(); 
+
+	splash->showStatusMessage(QObject::tr("Loading midi mapping..."));
+	MidiTable *midiTable = MidiTable::Instance();
 
 	app.processEvents(); 
 

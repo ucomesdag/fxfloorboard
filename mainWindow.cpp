@@ -28,6 +28,7 @@
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"
+#include "SysxIO.h"
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
@@ -97,15 +98,12 @@ void mainWindow::createMenu()
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 	connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 	connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
-
 	connect(settingsAction, SIGNAL(triggered()), this, SLOT(settings()));
-
 	connect(helpAction, SIGNAL(triggered()), this, SLOT(help()));
 	connect(homepageAction, SIGNAL(triggered()), this, SLOT(homepage()));
 	connect(donationAction, SIGNAL(triggered()), this, SLOT(donate()));
 	connect(licenseAction, SIGNAL(triggered()), this, SLOT(license()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
-
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
@@ -133,22 +131,10 @@ void mainWindow::open()
 		if(file.readFile())
 		{	
 			// DO SOMETHING AFTER READING THE FILE (UPDATE THE GUI)
-			QVector<QString> stompOrder;
-			stompOrder.append("fx1");
-			stompOrder.append("fx2");
-			stompOrder.append("dout");
-			stompOrder.append("ns");
-			stompOrder.append("rev");
-			stompOrder.append("vol");
-			stompOrder.append("dd");
-			stompOrder.append("cc");
-			stompOrder.append("eq");
-			stompOrder.append("amp");
-			stompOrder.append("od");
-			stompOrder.append("lp");
-			stompOrder.append("wah");
-			stompOrder.append("comp");
-			this->fxFloorBoard->setStomps(stompOrder);
+			SysxIO *sysxIO = SysxIO::Instance();
+			sysxIO->setFileSource(file.getFileSource());
+
+			emit updateSignal();
 		};
 	};
 };
@@ -215,14 +201,8 @@ void mainWindow::settings()
 		QString midiIn = QString::number(dialog->midiSettings->midiInCombo->currentIndex() - 1, 10); // -1 because there is a default entry at index 0
 		QString midiOut = QString::number(dialog->midiSettings->midiOutCombo->currentIndex() - 1, 10);
 
-		if(midiIn=="-1")
-		{
-			midiIn = "";
-		};
-		if(midiOut=="-1")
-		{
-			midiOut = "";
-		};
+		if(midiIn=="-1") { midiIn = ""; };
+		if(midiOut=="-1") {	midiOut = ""; };
 
 		preferences->setPreferences("General", "Files", "dir", dir);
 		preferences->setPreferences("Midi", "MidiIn", "device", midiIn);
@@ -254,12 +234,6 @@ void mainWindow::donate()
 
 void mainWindow::license()
 {
-	/*
-	QString licensePath = QDir::currentPath();
-	licensePath.append("/license.txt");
-	QUrl licenseUrl = QUrl::fromLocalFile(licensePath);
-	QDesktopServices::openUrl(licenseUrl);
-	*/
 	QDesktopServices::openUrl(QUrl(":license.txt"));
 };
 

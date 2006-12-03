@@ -20,53 +20,19 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "SysxIODestroyer.h"
 
-#include <QWidget>
-#include <QMenuBar>
-#include <QFile>
-#include "floorBoard.h"
-#include "sysxWriter.h"
-#include "MidiTable.h"
-
-class mainWindow : public QWidget
+SysxIODestroyer::SysxIODestroyer(SysxIO* s) 
 {
-    Q_OBJECT
-
-public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void createMenu();
-	QSize getWindowSize();
-	void closeEvent(QCloseEvent* ce);
-
-signals:
-	void updateSignal();
-
-public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void open();
-	void save();
-	void saveAs();
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
-
-private:
-	QMenuBar *menuBar;
-	QMenu *fileMenu;
-	QAction *openAction;
-	QAction *saveAction;
-	QAction *saveAsAction;
-	QAction *exitAction;
-	QSize wSize;
-
-	sysxWriter file;
-	floorBoard* fxFloorBoard;
+	_sysxIO = s;
 };
 
-#endif // MAINWINDOW_H
+SysxIODestroyer::~SysxIODestroyer ()
+{
+	delete _sysxIO;
+};
+
+void SysxIODestroyer::SetSysxIO(SysxIO* s)
+{
+	_sysxIO = s;
+};

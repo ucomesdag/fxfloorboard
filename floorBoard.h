@@ -57,6 +57,7 @@ public:
 public slots:
 	void setWidth(int dist);
 	void setCollapse();
+	void updateStompBoxes();
 
 signals:
 	void knobValue(int);
@@ -66,9 +67,9 @@ signals:
 	void sizeChanged(QSize newsize, QSize oldSize);
 	void setCollapseState(bool state);
 	void resizeSignal(QRect newrect);
-
 	void showDragBar(QPoint newpos);
 	void hideDragBar();
+	void updateSignal();
 	
 protected:
 	void paintEvent(QPaintEvent *event);

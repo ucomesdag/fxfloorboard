@@ -30,7 +30,10 @@
 #include "floorBoardDisplay.h"
 #include "floorPanelBar.h"
 #include "floorBoard.h"
-#include "Preferences.h"	
+#include "Preferences.h"
+#include "MidiTable.h"
+#include "sysxWriter.h"
+#include "SysxIO.h"
 
 floorBoard::floorBoard(QWidget *parent, 
 						QString imagePathFloor, 
@@ -92,32 +95,18 @@ floorBoard::floorBoard(QWidget *parent,
 	bar->setDragBarMinOffset(2, 8);
 	bar->setDragBarMaxOffset(offset - panelBarOffset + 5);
 
-	QObject::connect(this, SIGNAL( knobValue(int) ),
-                display, SLOT( setValueDisplay(int) ) );
+	QObject::connect(this, SIGNAL(knobValue(int)), display, SLOT(setValueDisplay(int)));
+	QObject::connect(panelBar, SIGNAL(resizeSignal(int)), this, SLOT(setWidth(int)));
+	QObject::connect(panelBar, SIGNAL(collapseSignal()), this, SLOT(setCollapse()));
+	QObject::connect(this, SIGNAL(setCollapseState(bool)), panelBar, SIGNAL(collapseState(bool)));
+	QObject::connect(this, SIGNAL(setDisplayPos(QPoint)), display, SLOT(setPos(QPoint)));
+	QObject::connect(this, SIGNAL(setFloorPanelBarPos(QPoint)), panelBar, SLOT(setPos(QPoint)));
+	QObject::connect(this->parent(), SIGNAL(updateSignal()), this, SIGNAL(updateSignal()));
+	QObject::connect(this, SIGNAL(updateSignal()), this, SLOT(updateStompBoxes()));
 
-	QObject::connect(panelBar, SIGNAL( resizeSignal(int) ),
-                this, SLOT( setWidth(int) ) );
-
-	QObject::connect(panelBar, SIGNAL( collapseSignal() ),
-                this, SLOT( setCollapse() ) );
-
-	QObject::connect(this, SIGNAL( setCollapseState(bool) ),
-                panelBar, SIGNAL( collapseState(bool) ) );
-
-	QObject::connect(this, SIGNAL( setDisplayPos(QPoint) ),
-                display, SLOT( setPos(QPoint) ) );
-
-	QObject::connect(this, SIGNAL( setFloorPanelBarPos(QPoint) ),
-                panelBar, SLOT( setPos(QPoint) ) );
-
-	QObject::connect(this, SIGNAL( setDragBarOffset(QVector<int>) ),
-                panelBar, SIGNAL( setDragBarOffset(QVector<int>) ) );
-
-	QObject::connect(panelBar, SIGNAL( showDragBar(QPoint) ),
-                this, SIGNAL( showDragBar(QPoint) ) );
-
-	QObject::connect(panelBar, SIGNAL( hideDragBar() ),
-                this, SIGNAL( hideDragBar() ) );
+	QObject::connect(this, SIGNAL(setDragBarOffset(QVector<int>)), panelBar, SIGNAL(setDragBarOffset(QVector<int>)));
+	QObject::connect(panelBar, SIGNAL(showDragBar(QPoint)), this, SIGNAL(showDragBar(QPoint)));
+	QObject::connect(panelBar, SIGNAL(hideDragBar()), this, SIGNAL(hideDragBar()));
 
 	bool ok;
 	Preferences *preferences = Preferences::Instance();
@@ -165,7 +154,7 @@ void floorBoard::paintEvent(QPaintEvent *)
 
 	QPainter painter(this);
 	painter.drawPixmap(target, image, source);
-	setAcceptDrops(true);
+	this->setAcceptDrops(true);
 };
 
 void floorBoard::setFloorBoard() {
@@ -213,34 +202,38 @@ void floorBoard::setFloorBoard() {
 
 void floorBoard::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-stompbox")) {
+	QByteArray data = event->mimeData()->data("text/uri-list");
+	QString uri(data);
+	
+	if (event->mimeData()->hasFormat("application/x-stompbox") ||
+		uri.contains(".syx", Qt::CaseInsensitive)) {
         if (children().contains(event->source())) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
         } else {
             event->acceptProposedAction();
-        }
-    } else if (event->mimeData()->hasText()) {
-        event->acceptProposedAction();
+        };
     } else {
         event->ignore();
-    }
+    };
 };
 
 void floorBoard::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-stompbox")) {
+	QByteArray data = event->mimeData()->data("text/uri-list");
+	QString uri(data);
+	
+	if (event->mimeData()->hasFormat("application/x-stompbox") ||
+		uri.contains(".syx", Qt::CaseInsensitive)) {
         if (children().contains(event->source())) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
         } else {
             event->acceptProposedAction();
-        }
-    } else if (event->mimeData()->hasText()) {
-        event->acceptProposedAction();
+        };
     } else {
         event->ignore();
-    }
+    };
 };
 
 void floorBoard::dropEvent(QDropEvent *event)
@@ -296,8 +289,40 @@ void floorBoard::dropEvent(QDropEvent *event)
 	} 
 	else 
 	{
-        event->ignore();
-    }
+		if(event->mimeData()->hasFormat("text/uri-list"))
+		{
+			QByteArray data = event->mimeData()->data("text/uri-list");
+			QString uri(data);
+			if(uri.contains(".syx", Qt::CaseInsensitive))
+			{
+				QString removeFromStart = "file:///";
+				QString removeFromEnd = ".syx";
+				QString filePath = uri;
+				filePath.replace(0, filePath.indexOf(removeFromStart) + removeFromStart.length(), "");
+				filePath.truncate(filePath.indexOf(removeFromEnd) + removeFromEnd.length());
+				filePath.replace("%20", " ");
+
+				sysxWriter file;
+				file.setFile(filePath);
+				if(file.readFile())
+				{	
+					emit updateSignal();
+				}
+				else
+				{
+					event->ignore();
+				};
+			}
+			else
+			{
+				event->ignore();
+			};
+		}
+		else
+		{
+			event->ignore();
+		};
+    };
 };
 
 void floorBoard::initSize(QSize floorSize)
@@ -755,4 +780,30 @@ void floorBoard::setStompPos(int index, int order)
 {
 	this->stompBoxes.at(index)->setPos(this->getStompPos(order));
 	this->fx.replace(order, index);
+};
+
+void floorBoard::updateStompBoxes()
+{
+	MidiTable *midiTable = MidiTable::Instance();
+	QVector<Midi> midiMap = midiTable->getMidiMap();
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	QVector< QVector<QString> > fileSource = sysxIO->getFileSource();
+	
+	QVector<QString> stompOrder;
+	stompOrder.append("fx1");
+	stompOrder.append("fx2");
+	stompOrder.append("dout");
+	stompOrder.append("ns");
+	stompOrder.append("rev");
+	stompOrder.append("vol");
+	stompOrder.append("dd");
+	stompOrder.append("cc");
+	stompOrder.append("eq");
+	stompOrder.append("amp");
+	stompOrder.append("od");
+	stompOrder.append("lp");
+	stompOrder.append("wah");
+	stompOrder.append("comp");
+	setStomps(stompOrder);
 };
