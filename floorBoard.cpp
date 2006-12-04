@@ -789,6 +789,8 @@ void floorBoard::updateStompBoxes()
 
 	SysxIO *sysxIO = SysxIO::Instance();
 	QVector< QVector<QString> > fileSource = sysxIO->getFileSource();
+
+
 	
 	QVector<QString> stompOrder;
 	stompOrder.append("fx1");
