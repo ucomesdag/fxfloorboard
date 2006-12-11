@@ -4,7 +4,7 @@
 	<General>
 		<Application version="0.0a"/>
 		<Donate url="http://sourceforge.net/donate/index.php?group_id=171049"/>
-		<Files dir="My Patches"/>
+		<Files dir=""/>
 		<Help url="http://sourceforge.net/forum/forum.php?forum_id=585786"/>
 		<Language code="en"/>
 		<Webpage url="http://fxfloorboard.sourceforge.net/"/>
@@ -15,7 +15,7 @@
 	</Midi>
 	<Window>
 		<Collapsed bool="false"/>
-		<Position x="306" y="223"/>
+		<Position x="" y=""/>
 		<Restore sidepanel="false" window="false"/>
 		<Size default_width="945" width="945"/>
 		<Splash bool="true"/>

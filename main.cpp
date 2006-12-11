@@ -42,7 +42,15 @@ int main(int argc, char *argv[])
 	QPixmap splashImage(":images/splash.png");
 
 	customSplashScreen *splash = new customSplashScreen(splashImage);
-	splash->setMessageRect(QRect::QRect(170, 400, 245, 14)); // Setting the message position.
+	splash->setMessageRect(QRect::QRect(148, 340, 332, 14)); // Setting the message position.
+
+	QFont splashFont;
+	splashFont.setFamily("Arial");
+	//splashFont.setBold(true);
+	splashFont.setPixelSize(9);
+	splashFont.setStretch(125);
+
+	splash->setFont(splashFont);
 	splash->setMask(splashImage.mask());
 	splash->setWindowOpacity(0.95);
 	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
