@@ -466,7 +466,7 @@ void floorBoard::initStomps()
 	pal.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
 	pal.setColor(QPalette::Shadow,QColor(0,1,62));
 
-	QFont font;
+	   QFont font;
 	font.setFamily("Arial");
 	font.setBold(true);
 	font.setPixelSize(10);
@@ -497,15 +497,15 @@ void floorBoard::initStomps()
                          fx1_led, SLOT(setValue(bool)));
 
 	/* COMP */
-	stompBox *comp = new stompBox(this);
-	this->stompBoxes.append(comp);
-	this->stompNames.append("comp");
+	stompBox *cs = new stompBox(this);
+	this->stompBoxes.append(cs);
+	this->stompNames.append("cs");
 
-	comp->setId(1);
-	comp->setImage(":/images/comp.png");
-	comp->setPos(this->getStompPos(1));
+	cs->setId(1);
+	cs->setImage(":/images/cs.png");
+	cs->setPos(this->getStompPos(1));
 
-	QComboBox *comp_comboBox = new QComboBox(comp); 
+	QComboBox *comp_comboBox = new QComboBox(cs); 
 	comp_comboBox->addItem( "Test 1" ); 
 	comp_comboBox->addItem( "Test 2" ); 
 	comp_comboBox->addItem( "Test 3" );
@@ -516,10 +516,10 @@ void floorBoard::initStomps()
 	comp_comboBox->setPalette(pal);
 	comp_comboBox->setFrame(false);
 
-	customDial *comp_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), comp);
-	customDial *comp_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), comp);
-	customButton *comp_button = new customButton(false, QPoint::QPoint(4, 110), comp);
-	customLed *comp_led = new customLed(false, QPoint::QPoint(41, 4), comp);
+	customDial *comp_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), cs);
+	customDial *comp_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), cs);
+	customButton *comp_button = new customButton(false, QPoint::QPoint(4, 110), cs);
+	customLed *comp_led = new customLed(false, QPoint::QPoint(41, 4), cs);
 	QObject::connect(comp_button, SIGNAL(valueChanged(bool)),
                          comp_led, SLOT(setValue(bool)));	
 	/* WAH */
@@ -596,12 +596,12 @@ void floorBoard::initStomps()
 	QObject::connect(od_button, SIGNAL(valueChanged(bool)),
                          od_led, SLOT(setValue(bool)));
 	/* AMP */
-	stompBox *amp = new stompBox(this);
-	this->stompBoxes.append(amp);
-	this->stompNames.append("amp");
-	amp->setId(5);
-	amp->setImage(":/images/amp.png");
-	amp->setPos(this->getStompPos(5)); 
+	stompBox *pre = new stompBox(this);
+	this->stompBoxes.append(pre);
+	this->stompNames.append("pre");
+	pre->setId(5);
+	pre->setImage(":/images/pre.png");
+	pre->setPos(this->getStompPos(5)); 
 
 	/* EQ */
 	stompBox *eq = new stompBox(this);
@@ -664,14 +664,14 @@ void floorBoard::initStomps()
 	QObject::connect(dd_button, SIGNAL(valueChanged(bool)),
                          dd_led, SLOT(setValue(bool)));	
 	/* Chorus */
-	stompBox *cc = new stompBox(this);
-	this->stompBoxes.append(cc);
-	this->stompNames.append("cc");
-	cc->setId(9);
-	cc->setImage(":/images/cc.png");
-	cc->setPos(this->getStompPos(9));
+	stompBox *ce = new stompBox(this);
+	this->stompBoxes.append(ce);
+	this->stompNames.append("ce");
+	ce->setId(9);
+	ce->setImage(":/images/ce.png");
+	ce->setPos(this->getStompPos(9));
 
-	QComboBox *cc_comboBox = new QComboBox(cc); 
+	QComboBox *cc_comboBox = new QComboBox(ce); 
 	cc_comboBox->addItem( "Test 1" ); 
 	cc_comboBox->addItem( "Test 2" ); 
 	cc_comboBox->addItem( "Test 3" );
@@ -682,21 +682,21 @@ void floorBoard::initStomps()
 	cc_comboBox->setPalette(pal);
 	cc_comboBox->setFrame(false);
 
-	customDial *cc_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), cc);
-	customDial *cc_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), cc);
-	customButton *cc_button = new customButton(false, QPoint::QPoint(4, 110), cc);
-	customLed *cc_led = new customLed(false, QPoint::QPoint(41, 4), cc);
+	customDial *cc_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), ce);
+	customDial *cc_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), ce);
+	customButton *cc_button = new customButton(false, QPoint::QPoint(4, 110), ce);
+	customLed *cc_led = new customLed(false, QPoint::QPoint(41, 4), ce);
 	QObject::connect(cc_button, SIGNAL(valueChanged(bool)),
                          cc_led, SLOT(setValue(bool)));	
 	/* REVERB */
-	stompBox *rev = new stompBox(this);
-	this->stompBoxes.append(rev);
-	this->stompNames.append("rev");
-	rev->setId(10);
-	rev->setImage(":/images/rev.png");
-	rev->setPos(this->getStompPos(10)); 
+	stompBox *rv = new stompBox(this);
+	this->stompBoxes.append(rv);
+	this->stompNames.append("rv");
+	rv->setId(10);
+	rv->setImage(":/images/rv.png");
+	rv->setPos(this->getStompPos(10)); 
 
-	QComboBox *rev_comboBox = new QComboBox(rev); 
+	QComboBox *rev_comboBox = new QComboBox(rv); 
 	rev_comboBox->addItem( "Test 1" ); 
 	rev_comboBox->addItem( "Test 2" ); 
 	rev_comboBox->addItem( "Test 3" );
@@ -707,21 +707,21 @@ void floorBoard::initStomps()
 	rev_comboBox->setPalette(pal);
 	rev_comboBox->setFrame(false);
 
-	customDial *rev_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), rev);
-	customDial *rev_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), rev);
-	customButton *rev_button = new customButton(false, QPoint::QPoint(4, 110), rev);
-	customLed *rev_led = new customLed(false, QPoint::QPoint(41, 4), rev);
+	customDial *rev_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), rv);
+	customDial *rev_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), rv);
+	customButton *rev_button = new customButton(false, QPoint::QPoint(4, 110), rv);
+	customLed *rev_led = new customLed(false, QPoint::QPoint(41, 4), rv);
 	QObject::connect(rev_button, SIGNAL(valueChanged(bool)),
                          rev_led, SLOT(setValue(bool)));	
 	/* VOLUME */
-	stompBox *vol = new stompBox(this);
-	this->stompBoxes.append(vol);
-	this->stompNames.append("vol");
-	vol->setId(11);
-	vol->setImage(":/images/vol.png");
-	vol->setPos(this->getStompPos(11)); 
+	stompBox *fv = new stompBox(this);
+	this->stompBoxes.append(fv);
+	this->stompNames.append("fv");
+	fv->setId(11);
+	fv->setImage(":/images/fv.png");
+	fv->setPos(this->getStompPos(11)); 
 
-	QComboBox *vol_comboBox = new QComboBox(vol); 
+	QComboBox *vol_comboBox = new QComboBox(fv); 
 	vol_comboBox->addItem( "Test 1" ); 
 	vol_comboBox->addItem( "Test 2" ); 
 	vol_comboBox->addItem( "Test 3" );
@@ -732,8 +732,8 @@ void floorBoard::initStomps()
 	vol_comboBox->setPalette(pal);
 	vol_comboBox->setFrame(false);
 
-	customButton *vol_button = new customButton(false, QPoint::QPoint(0, 109), vol, ":/images/pedal.png", QSize::QSize(85, 59));
-	customLed *vol_led = new customLed(false, QPoint::QPoint(41, 4), vol);
+	customButton *vol_button = new customButton(false, QPoint::QPoint(0, 109), fv, ":/images/pedal.png", QSize::QSize(85, 59));
+	customLed *vol_led = new customLed(false, QPoint::QPoint(41, 4), fv);
 	QObject::connect(vol_button, SIGNAL(valueChanged(bool)),
                          vol_led, SLOT(setValue(bool)));
 	/* NS */
@@ -751,12 +751,12 @@ void floorBoard::initStomps()
 	QObject::connect(ns_button, SIGNAL(valueChanged(bool)),
                          ns_led, SLOT(setValue(bool)));	
 	/* D-OUT */
-	stompBox *dout = new stompBox(this);
-	this->stompBoxes.append(dout);
-	this->stompNames.append("dout");
-	dout->setId(13);
-	dout->setImage(":/images/dout.png");
-	dout->setPos(this->getStompPos(13));
+	stompBox *dgt = new stompBox(this);
+	this->stompBoxes.append(dgt);
+	this->stompNames.append("dgt");
+	dgt->setId(13);
+	dgt->setImage(":/images/dgt.png");
+	dgt->setPos(this->getStompPos(13));
 };
 
 void floorBoard::setStomps(QVector<QString> stompOrder)
@@ -767,7 +767,6 @@ void floorBoard::setStomps(QVector<QString> stompOrder)
 		setStompPos(name, i);
 		this->fx.replace(i, stompNames.indexOf(name));
 	};
-	
 };
 
 void floorBoard::setStompPos(QString name, int order)
@@ -788,24 +787,19 @@ void floorBoard::updateStompBoxes()
 	QVector<Midi> midiMap = midiTable->getMidiMap();
 
 	SysxIO *sysxIO = SysxIO::Instance();
-	QVector< QVector<QString> > fileSource = sysxIO->getFileSource();
-
-
+	SysxData fileSource = sysxIO->getFileSource();
 	
+	QVector<QString> tmp = fileSource.hex.at( fileSource.adress.indexOf("1100") );
+
+	QList<QString> hex, data;
+	hex	<< "00" <<  "01" << "02" <<  "03" << "04" << "05" << "06" <<  "07" <<  "08" << "09" << "0A" << "0B" << "0C" << "0D";
+	data << "fx1" << "cs" << "wah" << "lp" << "od" << "pre" << "eq" << "fx2" << "dd" << "ce" << "rv" << "ns" << "fv" << "dgt";
+
 	QVector<QString> stompOrder;
-	stompOrder.append("fx1");
-	stompOrder.append("fx2");
-	stompOrder.append("dout");
-	stompOrder.append("ns");
-	stompOrder.append("rev");
-	stompOrder.append("vol");
-	stompOrder.append("dd");
-	stompOrder.append("cc");
-	stompOrder.append("eq");
-	stompOrder.append("amp");
-	stompOrder.append("od");
-	stompOrder.append("lp");
-	stompOrder.append("wah");
-	stompOrder.append("comp");
+	for(int i=11;i<tmp.size() - 2;i++ )
+	{
+		QString bldsa = tmp.at(i);
+		stompOrder.append( data.at( hex.indexOf(bldsa) ) );
+	};
 	setStomps(stompOrder);
 };

@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 	
 	/* Splash Screen setup uses subclassed QSplashScreen for message position controle. */
 	QPixmap splashImage(":images/splash.png");
+	QPixmap splashMask(":images/splashmask.png");
+	splashImage.setMask(splashMask);
 
 	customSplashScreen *splash = new customSplashScreen(splashImage);
 	splash->setMessageRect(QRect::QRect(148, 340, 332, 14)); // Setting the message position.

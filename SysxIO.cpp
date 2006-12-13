@@ -48,33 +48,35 @@ SysxIO* SysxIO::Instance()
 	*/
 };
 
-void SysxIO::setFileSource(QVector< QVector<QString> > fileSource)
+void SysxIO::setFileSource(SysxData fileSource)
 {
 	this->fileSource = fileSource;
 };
 
 void SysxIO::setFileSource(QByteArray data)
 {
-		this->fileSource.clear();
-		
-		QVector<QString> sysxBuffer;
-		for(int i=0;i<data.size();i++)
-		{
-			unsigned char byte = (char)data[i];
-			unsigned int n = (int)byte;
-			QString hex = QString::number(n, 16).toUpper();
-			if (hex.length() < 2) hex.prepend("0");
-			sysxBuffer.append(hex);
+	this->fileSource.adress.clear();
+	this->fileSource.hex.clear();
+	
+	QVector<QString> sysxBuffer;
+	for(int i=0;i<data.size();i++)
+	{
+		unsigned char byte = (char)data[i];
+		unsigned int n = (int)byte;
+		QString hex = QString::number(n, 16).toUpper();
+		if (hex.length() < 2) hex.prepend("0");
+		sysxBuffer.append(hex);
 
-			if(hex == "F7") 
-			{
-				this->fileSource.append(sysxBuffer);
-				sysxBuffer.clear();
-			};
-		}
+		if(hex == "F7") 
+		{
+			this->fileSource.adress.append( sysxBuffer.at(9) + sysxBuffer.at(10) );
+			this->fileSource.hex.append(sysxBuffer);
+			sysxBuffer.clear();
+		};
+	};
 };
 
-QVector< QVector<QString> > SysxIO::getFileSource()
+SysxData SysxIO::getFileSource()
 {
 	return this->fileSource;
 };

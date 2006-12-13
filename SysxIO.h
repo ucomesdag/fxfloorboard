@@ -29,15 +29,21 @@
 
 class SysxIODestroyer;
 
+struct SysxData
+{
+	QVector<QString> adress;
+	QVector< QVector<QString> > hex;
+};
+
 class SysxIO
 {
 
 public:
 	static SysxIO* Instance(); //Singleton patern design
 
-	void setFileSource(QVector< QVector<QString> > fileSource);
+	void setFileSource(SysxData fileSource);
 	void setFileSource(QByteArray data);
-	QVector< QVector<QString> > getFileSource();
+	SysxData getFileSource();
 
 protected :
 	SysxIO();
@@ -48,7 +54,7 @@ private:
 	static SysxIO* _instance;
 	static SysxIODestroyer _destroyer;
 
-	QVector< QVector<QString> > fileSource;
+	SysxData fileSource;
 };
 
 #endif // SYSXIO_H

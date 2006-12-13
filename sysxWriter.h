@@ -25,6 +25,7 @@
 
 #include <QString>
 #include <QVector>
+#include "SysxIO.h"	
 
 class sysxWriter
 {
@@ -34,14 +35,14 @@ public:
 	~sysxWriter();
 	void setFile(QString fileName);
 	bool readFile();
-	QVector< QVector<QString> > getFileSource();
+	SysxData getFileSource();
 	void writeFile(QString fileName);
 	QString getFileName();
 
 	
 private:
 	QString fileName;
-	QVector< QVector<QString> > fileSource;
+	SysxData fileSource;
 };
 
 #endif // SYSXWRITTER_H
