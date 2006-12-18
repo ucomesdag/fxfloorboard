@@ -67,8 +67,8 @@
         <DATA value="02" name="" abbr="" desc="FX1:FX Select">
           <PARAM value="00" name="ACS" desc="Compressor" />
           <PARAM value="01" name="LM" desc="Limitter" />
-          <PARAM value="02" name="TW" desc="Touch Whah" />
-          <PARAM value="03" name="AW" desc="Auto Whah" />
+          <PARAM value="02" name="TW" desc="Touch Wah" />
+          <PARAM value="03" name="AW" desc="Auto Wah" />
           <PARAM value="04" name="TM" desc="Tone Modify" />
           <PARAM value="05" name="GS" desc="Guitar Sim" />
           <PARAM value="06" name="TR" desc="Tremelo" />
@@ -798,8 +798,8 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Type">
-          <PARAM value="00" name="Comp" desc="" />
-          <PARAM value="01" name="Limiter" desc="" />
+          <PARAM value="00" name="Comp" desc="Compressor" />
+          <PARAM value="01" name="Limiter" desc="Limiter" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Sustain">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
@@ -829,15 +829,15 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Type">
-          <PARAM value="00" name="CRY WAH" desc="" />
-          <PARAM value="01" name="VO WAH" desc="" />
-          <PARAM value="02" name="Fat WAH" desc="" />
-          <PARAM value="03" name="Light WAH" desc="" />
-          <PARAM value="04" name="7String WAH" desc="" />
-          <PARAM value="05" name="Resonance WAH" desc="" />
-          <PARAM value="06" name="Custom1" desc="" />
-          <PARAM value="07" name="Custom2" desc="" />
-          <PARAM value="08" name="Custom3" desc="" />
+          <PARAM value="00" name="CRY WAH" desc="Cry Baby" />
+          <PARAM value="01" name="VO WAH" desc="Vox Wah" />
+          <PARAM value="02" name="Fat WAH" desc="Fat Wah" />
+          <PARAM value="03" name="Light WAH" desc="Light Wah" />
+          <PARAM value="04" name="7String WAH" desc="7String Wah" />
+          <PARAM value="05" name="Resonance WAH" desc="Resonance Wah" />
+          <PARAM value="06" name="Custom1" desc="Custom 1" />
+          <PARAM value="07" name="Custom2" desc="Custom 2" />
+          <PARAM value="08" name="Custom3" desc="Custom 3" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Pdl Position">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
@@ -855,9 +855,9 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Mode">
-          <PARAM value="00" name="Normal" desc="" />
-          <PARAM value="01" name="Direct Mix" desc="" />
-          <PARAM value="02" name="Branch Out" desc="" />
+          <PARAM value="00" name="Normal" desc="Normal" />
+          <PARAM value="01" name="Direct Mix" desc="Direct Mix" />
+          <PARAM value="02" name="Branch Out" desc="Branch Out" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Send Level">
           <PARAM value="range" name="00/64/00/200" desc="0 - 200" />
@@ -875,39 +875,39 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Type">
-          <PARAM value="00" name="Booster" desc="" />
-          <PARAM value="01" name="Blues OD" desc="" />
-          <PARAM value="02" name="Crunch" desc="" />
-          <PARAM value="03" name="Natural OD" desc="" />
-          <PARAM value="04" name="Turbo OD" desc="" />
-          <PARAM value="05" name="Fat OD" desc="" />
-          <PARAM value="06" name="OD-1" desc="" />
-          <PARAM value="07" name="T-Scream" desc="" />
-          <PARAM value="08" name="Warm OD" desc="" />
-          <PARAM value="09" name="Distortion" desc="" />
-          <PARAM value="0A" name="Mild DS" desc="" />
-          <PARAM value="0B" name="Drive DS" desc="" />
-          <PARAM value="0C" name="RAT" desc="" />
-          <PARAM value="0D" name="GUV DS" desc="" />
-          <PARAM value="0E" name="DST+" desc="" />
-          <PARAM value="0F" name="Solid DS" desc="" />
-          <PARAM value="10" name="Mid DS" desc="" />
-          <PARAM value="11" name="Stack" desc="" />
-          <PARAM value="12" name="Modern DS" desc="" />
-          <PARAM value="13" name="Power DS" desc="" />
-          <PARAM value="14" name="R-MAN" desc="" />
-          <PARAM value="15" name="Metal Zone" desc="" />
-          <PARAM value="16" name="Heavy Metal" desc="" />
-          <PARAM value="17" name="Lead" desc="" />
-          <PARAM value="18" name="Loud" desc="" />
-          <PARAM value="19" name="Sharp" desc="" />
-          <PARAM value="1A" name="Mechanical" desc="" />
-          <PARAM value="1B" name="'60s FUZZ" desc="" />
-          <PARAM value="1C" name="Oct FUZZ" desc="" />
-          <PARAM value="1D" name="MUFF FUZZ" desc="" />
-          <PARAM value="1E" name="Custom1" desc="" />
-          <PARAM value="1F" name="Custom2" desc="" />
-          <PARAM value="20" name="Custom3" desc="" />
+          <PARAM value="00" name="Booster" desc="Booster" />
+          <PARAM value="01" name="Blues OD" desc="Blues OD" />
+          <PARAM value="02" name="Crunch" desc="Crunch" />
+          <PARAM value="03" name="Natural OD" desc="Natural OD" />
+          <PARAM value="04" name="Turbo OD" desc="Turbo OD" />
+          <PARAM value="05" name="Fat OD" desc="Fat OD" />
+          <PARAM value="06" name="OD-1" desc="OD-1" />
+          <PARAM value="07" name="T-Scream" desc="T-Scream" />
+          <PARAM value="08" name="Warm OD" desc="Warm OD" />
+          <PARAM value="09" name="Distortion" desc="Distortion" />
+          <PARAM value="0A" name="Mild DS" desc="Mild DS" />
+          <PARAM value="0B" name="Drive DS" desc="Drive DS" />
+          <PARAM value="0C" name="RAT" desc="RAT" />
+          <PARAM value="0D" name="GUV DS" desc="GUV DS" />
+          <PARAM value="0E" name="DST+" desc="DST+" />
+          <PARAM value="0F" name="Solid DS" desc="Solid DS" />
+          <PARAM value="10" name="Mid DS" desc="Mid DS" />
+          <PARAM value="11" name="Stack" desc="Stack" />
+          <PARAM value="12" name="Modern DS" desc="Modern DS" />
+          <PARAM value="13" name="Power DS" desc="Power DS" />
+          <PARAM value="14" name="R-MAN" desc="R-MAN" />
+          <PARAM value="15" name="Metal Zone" desc="Metal Zone" />
+          <PARAM value="16" name="Heavy Metal" desc="Heavy Metal" />
+          <PARAM value="17" name="Lead" desc="Lead" />
+          <PARAM value="18" name="Loud" desc="Loud" />
+          <PARAM value="19" name="Sharp" desc="Sharp" />
+          <PARAM value="1A" name="Mechanical" desc="Mechanical" />
+          <PARAM value="1B" name="'60s FUZZ" desc="'60s FUZZ" />
+          <PARAM value="1C" name="Oct FUZZ" desc="Oct FUZZ" />
+          <PARAM value="1D" name="MUFF FUZZ" desc="MUFF FUZZ" />
+          <PARAM value="1E" name="Custom1" desc="Custom 1" />
+          <PARAM value="1F" name="Custom2" desc="Custom 2" />
+          <PARAM value="20" name="Custom3" desc="Custom 3" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Drive">
           <PARAM value="range" name="00/78/00/120" desc="0 - 120" />
@@ -2710,18 +2710,18 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Type">
-          <PARAM value="00" name="Single" desc="" />
-          <PARAM value="01" name="Pan" desc="" />
-          <PARAM value="02" name="Stereo" desc="" />
-          <PARAM value="03" name="Dualseries" desc="" />
-          <PARAM value="04" name="Dualparallel" desc="" />
-          <PARAM value="05" name="DualL/R" desc="" />
-          <PARAM value="06" name="Reverse" desc="" />
-          <PARAM value="07" name="Analog" desc="" />
-          <PARAM value="08" name="Tape" desc="" />
-          <PARAM value="09" name="Warp" desc="" />
-          <PARAM value="0A" name="Modulate" desc="" />
-          <PARAM value="0B" name="Hold" desc="" />
+          <PARAM value="00" name="Single" desc="Single" />
+          <PARAM value="01" name="Pan" desc="Pan" />
+          <PARAM value="02" name="Stereo" desc="Stereo" />
+          <PARAM value="03" name="Dualseries" desc="Dualseries" />
+          <PARAM value="04" name="Dualparallel" desc="Dualparallel" />
+          <PARAM value="05" name="DualL/R" desc="DualL/R" />
+          <PARAM value="06" name="Reverse" desc="Reverse" />
+          <PARAM value="07" name="Analog" desc="Analog" />
+          <PARAM value="08" name="Tape" desc="Tape" />
+          <PARAM value="09" name="Warp" desc="Warp" />
+          <PARAM value="0A" name="Modulate" desc="Modulate" />
+          <PARAM value="0B" name="Hold" desc="Hold" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Delay Time">
           <DATA value="00" name="" abbr="" desc="Delay Time(LSB)">
@@ -2950,9 +2950,9 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Mode">
-          <PARAM value="00" name="Mono" desc="" />
-          <PARAM value="01" name="Stereo1" desc="" />
-          <PARAM value="02" name="Stereo2" desc="" />
+          <PARAM value="00" name="Mono" desc="Mono" />
+          <PARAM value="01" name="Stereo1" desc="Stereo 1" />
+          <PARAM value="02" name="Stereo2" desc="Stereo 2" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Rate">
           <PARAM value="range" name="00/64/00/100" desc="Rate" />
@@ -3014,13 +3014,13 @@
         </DATA>
         <DATA value="01" name="" abbr="" desc="(Reserved)"></DATA>
         <DATA value="02" name="" abbr="" desc="Type">
-          <PARAM value="00" name="Ambience" desc="" />
-          <PARAM value="01" name="Room" desc="" />
-          <PARAM value="02" name="Hall1" desc="" />
-          <PARAM value="03" name="Hall2" desc="" />
-          <PARAM value="04" name="Plate" desc="" />
-          <PARAM value="05" name="Spring" desc="" />
-          <PARAM value="06" name="Mod" desc="" />
+          <PARAM value="00" name="Ambience" desc="Ambience" />
+          <PARAM value="01" name="Room" desc="Room" />
+          <PARAM value="02" name="Hall1" desc="Hall 1" />
+          <PARAM value="03" name="Hall2" desc="Hall 2" />
+          <PARAM value="04" name="Plate" desc="Plate" />
+          <PARAM value="05" name="Spring" desc="Spring" />
+          <PARAM value="06" name="Mod" desc="Modulate" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Reverb Time">
           <PARAM value="range" name="00/63/0.1/10.0" desc="0.1s - 10.0s" />

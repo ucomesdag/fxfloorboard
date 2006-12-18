@@ -25,6 +25,8 @@
 #include "customDial.h"
 #include "customButton.h"
 #include "customLed.h"
+
+#include "stompbox_fx1.h"
 #include "dragBar.h"
 #include "bankTreeList.h"
 #include "floorBoardDisplay.h"
@@ -466,11 +468,14 @@ void floorBoard::initStomps()
 	pal.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
 	pal.setColor(QPalette::Shadow,QColor(0,1,62));
 
-	   QFont font;
+	QFont font;
 	font.setFamily("Arial");
 	font.setBold(true);
 	font.setPixelSize(10);
-	font.setStretch(120);
+	font.setStretch(115);
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	MidiTable *midiTable = MidiTable::Instance();
 
 	/* FX1 */
 	stompBox *fx1 = new stompBox(this);
@@ -480,22 +485,29 @@ void floorBoard::initStomps()
 	fx1->setImage(":/images/fx1.png");
 	fx1->setPos(this->getStompPos(0)); 
 
-	QComboBox *fx1_comboBox = new QComboBox(fx1); 
-	fx1_comboBox->addItem( "Test 1" ); 
-	fx1_comboBox->addItem( "Test 2" ); 
-	fx1_comboBox->addItem( "Test 3" );
-
+	Midi fx1Options = midiTable->getMidiMap("Stucture", "00", "00", "02");
+	QComboBox *fx1_comboBox = new QComboBox(fx1);
+	int maxLenght = 0;
+	int itemsCount;
+	for(itemsCount=0;itemsCount<fx1Options.level.size();itemsCount++ )
+	{
+		QString item = fx1Options.level.at(itemsCount).desc;
+		fx1_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
 	fx1_comboBox->setGeometry(8, 31, 79, 13);
 	fx1_comboBox->setEditable(false);
 	fx1_comboBox->setFont(font);
 	fx1_comboBox->setPalette(pal);
 	fx1_comboBox->setFrame(false);
+	fx1_comboBox->setMaxVisibleItems(itemsCount);
+	fx1_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customButton *fx1_button = new customButton(false, QPoint::QPoint(4, 110), fx1);
 	customLed *fx1_led = new customLed(false, QPoint::QPoint(41, 4), fx1);
 	QObject::connect(fx1_button, SIGNAL(valueChanged(bool)),
                          fx1_led, SLOT(setValue(bool)));
-
 	/* COMP */
 	stompBox *cs = new stompBox(this);
 	this->stompBoxes.append(cs);
@@ -505,16 +517,23 @@ void floorBoard::initStomps()
 	cs->setImage(":/images/cs.png");
 	cs->setPos(this->getStompPos(1));
 
-	QComboBox *comp_comboBox = new QComboBox(cs); 
-	comp_comboBox->addItem( "Test 1" ); 
-	comp_comboBox->addItem( "Test 2" ); 
-	comp_comboBox->addItem( "Test 3" );
-
-	comp_comboBox->setGeometry(7, 79, 80, 13);
-	comp_comboBox->setEditable(false);
-	comp_comboBox->setFont(font);
-	comp_comboBox->setPalette(pal);
-	comp_comboBox->setFrame(false);
+	Midi csOptions = midiTable->getMidiMap("Stucture", "02", "00", "02");
+	QComboBox *cs_comboBox = new QComboBox(cs);
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<csOptions.level.size();itemsCount++ )
+	{
+		QString item = csOptions.level.at(itemsCount).desc;
+		cs_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
+	cs_comboBox->setGeometry(7, 79, 80, 13);
+	cs_comboBox->setEditable(false);
+	cs_comboBox->setFont(font);
+	cs_comboBox->setPalette(pal);
+	cs_comboBox->setFrame(false);
+	cs_comboBox->setMaxVisibleItems(itemsCount);
+	cs_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customDial *comp_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), cs);
 	customDial *comp_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), cs);
@@ -530,16 +549,23 @@ void floorBoard::initStomps()
 	wah->setImage(":/images/wah.png");
 	wah->setPos(this->getStompPos(2)); 
 
-	QComboBox *wah_comboBox = new QComboBox(wah); 
-	wah_comboBox->addItem( "Test 1" ); 
-	wah_comboBox->addItem( "Test 2" ); 
-	wah_comboBox->addItem( "Test 3" );
-
+	Midi wahOptions = midiTable->getMidiMap("Stucture", "03", "00", "02");
+	QComboBox *wah_comboBox = new QComboBox(wah);
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<wahOptions.level.size();itemsCount++ )
+	{
+		QString item = wahOptions.level.at(itemsCount).desc;
+		wah_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
 	wah_comboBox->setGeometry(7, 79, 80, 13);
 	wah_comboBox->setEditable(false);
 	wah_comboBox->setFont(font);
 	wah_comboBox->setPalette(pal);
 	wah_comboBox->setFrame(false);
+	wah_comboBox->setMaxVisibleItems(itemsCount);
+	wah_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customButton *wah_button = new customButton(false, QPoint::QPoint(0, 109), wah, ":/images/pedal.png", QSize::QSize(85, 59));
 	customLed *wah_led = new customLed(false, QPoint::QPoint(41, 4), wah);
@@ -553,16 +579,23 @@ void floorBoard::initStomps()
 	lp->setImage(":/images/lp.png");
 	lp->setPos(this->getStompPos(3)); 
 
-	QComboBox *lp_comboBox = new QComboBox(lp); 
-	lp_comboBox->addItem( "Test 1" ); 
-	lp_comboBox->addItem( "Test 2" ); 
-	lp_comboBox->addItem( "Test 3" );
-
+	Midi lpOptions = midiTable->getMidiMap("Stucture", "04", "00", "02");
+	QComboBox *lp_comboBox = new QComboBox(lp);
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<lpOptions.level.size();itemsCount++ )
+	{
+		QString item = lpOptions.level.at(itemsCount).desc;
+		lp_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
 	lp_comboBox->setGeometry(7, 79, 80, 13);
 	lp_comboBox->setEditable(false);
 	lp_comboBox->setFont(font);
 	lp_comboBox->setPalette(pal);
 	lp_comboBox->setFrame(false);
+	lp_comboBox->setMaxVisibleItems(itemsCount);
+	lp_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customDial *lp_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), lp);
 	customDial *lp_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), lp);
@@ -578,16 +611,23 @@ void floorBoard::initStomps()
 	od->setImage(":/images/od.png");
 	od->setPos(this->getStompPos(4)); 
 
+	Midi odOptions = midiTable->getMidiMap("Stucture", "06", "00", "02");
 	QComboBox *od_comboBox = new QComboBox(od); 
-	od_comboBox->addItem( "Test 1" ); 
-	od_comboBox->addItem( "Test 2" ); 
-	od_comboBox->addItem( "Test 3" );
-
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<odOptions.level.size();itemsCount++ )
+	{
+		QString item = odOptions.level.at(itemsCount).desc;
+		od_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
 	od_comboBox->setGeometry(7, 79, 80, 13);
 	od_comboBox->setEditable(false);
 	od_comboBox->setFont(font);
 	od_comboBox->setPalette(pal);
 	od_comboBox->setFrame(false);
+	od_comboBox->setMaxVisibleItems(itemsCount);
+	od_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customDial *od_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), od);
 	customDial *od_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), od);
@@ -623,16 +663,23 @@ void floorBoard::initStomps()
 	fx2->setImage(":/images/fx2.png");
 	fx2->setPos(this->getStompPos(7)); 
 
+	Midi fx2Options = midiTable->getMidiMap("Stucture", "09", "00", "02");
 	QComboBox *fx2_comboBox = new QComboBox(fx2); 
-	fx2_comboBox->addItem( "Test 1" ); 
-	fx2_comboBox->addItem( "Test 2" ); 
-	fx2_comboBox->addItem( "Test 3" );
-
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<fx2Options.level.size();itemsCount++ )
+	{
+		QString item = fx2Options.level.at(itemsCount).desc;
+		fx2_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
 	fx2_comboBox->setGeometry(8, 31, 79, 13);
 	fx2_comboBox->setEditable(false);
 	fx2_comboBox->setFont(font);
 	fx2_comboBox->setPalette(pal);
 	fx2_comboBox->setFrame(false);
+	fx2_comboBox->setMaxVisibleItems(itemsCount);
+	fx2_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customButton *fx2_button = new customButton(false, QPoint::QPoint(4, 110), fx2);
 	customLed *fx2_led = new customLed(false, QPoint::QPoint(41, 4), fx2);
@@ -646,16 +693,23 @@ void floorBoard::initStomps()
 	dd->setImage(":/images/dd.png");
 	dd->setPos(this->getStompPos(8));
 
+	Midi ddOptions = midiTable->getMidiMap("Stucture", "0B", "00", "02");
 	QComboBox *dd_comboBox = new QComboBox(dd); 
-	dd_comboBox->addItem( "Test 1" ); 
-	dd_comboBox->addItem( "Test 2" ); 
-	dd_comboBox->addItem( "Test 3" );
-
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<ddOptions.level.size();itemsCount++ )
+	{
+		QString item = ddOptions.level.at(itemsCount).desc;
+		dd_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
 	dd_comboBox->setGeometry(7, 79, 80, 13);
 	dd_comboBox->setEditable(false);
 	dd_comboBox->setFont(font);
 	dd_comboBox->setPalette(pal);
 	dd_comboBox->setFrame(false);
+	dd_comboBox->setMaxVisibleItems(itemsCount);
+	dd_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customDial *dd_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), dd);
 	customDial *dd_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), dd);
@@ -671,16 +725,23 @@ void floorBoard::initStomps()
 	ce->setImage(":/images/ce.png");
 	ce->setPos(this->getStompPos(9));
 
-	QComboBox *cc_comboBox = new QComboBox(ce); 
-	cc_comboBox->addItem( "Test 1" ); 
-	cc_comboBox->addItem( "Test 2" ); 
-	cc_comboBox->addItem( "Test 3" );
-
-	cc_comboBox->setGeometry(7, 79, 80, 13);
-	cc_comboBox->setEditable(false);
-	cc_comboBox->setFont(font);
-	cc_comboBox->setPalette(pal);
-	cc_comboBox->setFrame(false);
+	Midi ceOptions = midiTable->getMidiMap("Stucture", "0C", "00", "02");
+	QComboBox *ce_comboBox = new QComboBox(ce);  
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<ceOptions.level.size();itemsCount++ )
+	{
+		QString item = ceOptions.level.at(itemsCount).desc;
+		ce_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
+	ce_comboBox->setGeometry(7, 79, 80, 13);
+	ce_comboBox->setEditable(false);
+	ce_comboBox->setFont(font);
+	ce_comboBox->setPalette(pal);
+	ce_comboBox->setFrame(false);
+	ce_comboBox->setMaxVisibleItems(itemsCount);
+	ce_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customDial *cc_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), ce);
 	customDial *cc_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), ce);
@@ -696,16 +757,23 @@ void floorBoard::initStomps()
 	rv->setImage(":/images/rv.png");
 	rv->setPos(this->getStompPos(10)); 
 
-	QComboBox *rev_comboBox = new QComboBox(rv); 
-	rev_comboBox->addItem( "Test 1" ); 
-	rev_comboBox->addItem( "Test 2" ); 
-	rev_comboBox->addItem( "Test 3" );
-
-	rev_comboBox->setGeometry(7, 79, 80, 13);
-	rev_comboBox->setEditable(false);
-	rev_comboBox->setFont(font);
-	rev_comboBox->setPalette(pal);
-	rev_comboBox->setFrame(false);
+	Midi rvOptions = midiTable->getMidiMap("Stucture", "0C", "00", "02");
+	QComboBox *rv_comboBox = new QComboBox(rv);   
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<rvOptions.level.size();itemsCount++ )
+	{
+		QString item = rvOptions.level.at(itemsCount).desc;
+		rv_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
+	rv_comboBox->setGeometry(7, 79, 80, 13);
+	rv_comboBox->setEditable(false);
+	rv_comboBox->setFont(font);
+	rv_comboBox->setPalette(pal);
+	rv_comboBox->setFrame(false);
+	rv_comboBox->setMaxVisibleItems(itemsCount);
+	rv_comboBox->view()->setMinimumWidth( maxLenght + 10 );
 
 	customDial *rev_knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), rv);
 	customDial *rev_knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), rv);
@@ -720,17 +788,24 @@ void floorBoard::initStomps()
 	fv->setId(11);
 	fv->setImage(":/images/fv.png");
 	fv->setPos(this->getStompPos(11)); 
-
-	QComboBox *vol_comboBox = new QComboBox(fv); 
-	vol_comboBox->addItem( "Test 1" ); 
-	vol_comboBox->addItem( "Test 2" ); 
-	vol_comboBox->addItem( "Test 3" );
-
-	vol_comboBox->setGeometry(7, 79, 80, 13);
-	vol_comboBox->setEditable(false);
-	vol_comboBox->setFont(font);
-	vol_comboBox->setPalette(pal);
-	vol_comboBox->setFrame(false);
+ 
+	/*Midi fvOptions = midiTable->getMidiMap("Stucture", "0C", "00", "02");
+	QComboBox *fv_comboBox = new QComboBox(fv);   
+	maxLenght = 0;
+	for(itemsCount=0;itemsCount<fvOptions.level.size();itemsCount++ )
+	{
+		QString item = fvOptions.level.at(itemsCount).desc;
+		fv_comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(font).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
+	fv_comboBox->setGeometry(7, 79, 80, 13);
+	fv_comboBox->setEditable(false);
+	fv_comboBox->setFont(font);
+	fv_comboBox->setPalette(pal);
+	fv_comboBox->setFrame(false);
+	fv_comboBox->setMaxVisibleItems(itemsCount);
+	fv_comboBox->view()->setMinimumWidth( maxLenght + 10 );*/
 
 	customButton *vol_button = new customButton(false, QPoint::QPoint(0, 109), fv, ":/images/pedal.png", QSize::QSize(85, 59));
 	customLed *vol_led = new customLed(false, QPoint::QPoint(41, 4), fv);
