@@ -25,6 +25,28 @@
 stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint stompPos, QSize stompSize)
     : QWidget(parent)
 {
+    this->pal.setColor(QPalette::Base,QColor(0,1,62));
+    this->pal.setColor(QPalette::Text,QColor(0,255,204));
+	this->pal.setColor(QPalette::Highlight,QColor(0,1,62));
+	this->pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
+
+	this->pal.setColor(QPalette::Window,QColor(0,1,62));
+	this->pal.setColor(QPalette::WindowText,QColor(0,255,204));		//List Border
+	this->pal.setColor(QPalette::Button,QColor(0,1,62));
+	this->pal.setColor(QPalette::ButtonText,QColor(0,255,204));
+
+	this->pal.setColor(QPalette::Light,QColor(0,1,62));				//Lighter than Button color.
+	this->pal.setColor(QPalette::Midlight,QColor(0,1,62));			//Between Button and Light.
+	this->pal.setColor(QPalette::Dark,QColor(0,1,62));				//Darker than Button.
+	this->pal.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
+	this->pal.setColor(QPalette::Shadow,QColor(0,1,62));
+
+	QFont font;
+	this->font.setFamily("Arial");
+	this->font.setBold(true);
+	this->font.setPixelSize(10);
+	this->font.setStretch(115);
+	
 	this->id = id;
 	this->imagePath = imagePath;
 	this->stompSize = stompSize;
@@ -136,5 +158,38 @@ void stompBox::setId(unsigned int id)
 
 unsigned int stompBox::getId()
 {
-	return id;
+	return this->id;
+};
+
+QPalette stompBox::getPal()
+{
+	return this->pal;
+};
+
+QFont stompBox::getFont()
+{
+	return this->font;
+};
+
+void stompBox::setComboBox(Midi items, QRect geometry)
+{
+	int maxLenght = 0;
+	int itemsCount;
+
+	QComboBox *comboBox = new QComboBox(this);
+	
+	for(itemsCount=0;itemsCount<items.level.size();itemsCount++ )
+	{
+		QString item = items.level.at(itemsCount).desc;
+		comboBox->addItem(item);
+		int pixelWidth = QFontMetrics(this->getFont()).width(item);
+		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+	};
+	comboBox->setGeometry(geometry);
+	comboBox->setEditable(false);
+	comboBox->setFont(this->getFont());
+	comboBox->setPalette(this->getPal());
+	comboBox->setFrame(false);
+	comboBox->setMaxVisibleItems(itemsCount);
+	comboBox->view()->setMinimumWidth( maxLenght + 10 );
 };
