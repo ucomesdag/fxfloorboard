@@ -784,8 +784,7 @@ void floorBoard::setStompPos(int index, int order)
 void floorBoard::updateStompBoxes()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	SysxData fileSource = sysxIO->getFileSource();
-	QVector<QString> fxChain = fileSource.hex.at( fileSource.adress.indexOf("1100") );
+	QVector<QString> fxChain = sysxIO->getFileSource("11", "00");
 
 	MidiTable *midiTable = MidiTable::Instance();
 	QVector<QString> stompOrder;

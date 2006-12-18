@@ -21,13 +21,17 @@
 ****************************************************************************/
 
 #include "floorBoardDisplay.h"
-#include "Preferences.h"	
+#include "Preferences.h"
+#include "MidiTable.h"
+#include "SysxIO.h"
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
     : QWidget(parent)
 {
 	Preferences *preferences = Preferences::Instance();
 	QString version = preferences->getPreferences("General", "Application", "version");
+
+	QObject::connect(this->parent(), SIGNAL(updateSignal()), this, SLOT(updateDisplay()));
 	
 	this->pos = pos;
 
@@ -131,15 +135,18 @@ void floorBoardDisplay::setValueDisplay(int num)
 
 void floorBoardDisplay::setPatchDisplay(QString patchName)
 {
+	SysxIO *sysxIO = SysxIO::Instance();
+	QString fileName = sysxIO->getFileName();
+	
 	QString str;
 	str.append("<html><body>");
 	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td align='left'>");
-	str.append("{PATCH NAME}");
+	str.append(patchName);
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
-	str.append("{patch_file_name_name.syx}");
+	str.append(fileName.section('/', -1, -1));
 	str.append("</font></td></tr></table>");
 	str.append("</body></html>");
-	valueDisplay->setHtml(str);
+	patchDisplay->setHtml(str);
 };
 
 void floorBoardDisplay::setPatchNumDisplay(int patchNumber)
@@ -153,4 +160,19 @@ void floorBoardDisplay::setPatchNumDisplay(int patchNumber)
 	str.append("</td></tr></table>");
 	str.append("</body></html>");
 	patchNumDisplay->setHtml(str);
+};
+
+void floorBoardDisplay::updateDisplay()
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	QVector<QString> nameArray = sysxIO->getFileSource("12", "00");
+
+	MidiTable *midiTable = MidiTable::Instance();
+	QString patchName;
+	for(int i=11;i<nameArray.size() - 2;i++ )
+	{
+		patchName.append( midiTable->getMidiMap("Stucture", "12", "00", "00", nameArray.at(i)).name);
+	};	
+	setPatchDisplay(patchName);
+	valueDisplay->clear();
 };

@@ -51,6 +51,7 @@ bool sysxWriter::readFile()
 
 		SysxIO *sysxIO = SysxIO::Instance();
 		sysxIO->setFileSource(data);
+		sysxIO->setFileName(this->fileName);
 
 		this->fileSource = sysxIO->getFileSource();
 		return true;

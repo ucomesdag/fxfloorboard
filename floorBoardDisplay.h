@@ -40,6 +40,7 @@ public slots:
 	void setPatchDisplay(QString patchName);
 	void setPatchNumDisplay(int patchNumber);
 	void setPos(QPoint newPos);
+	void updateDisplay();
 
 private:
 	QPoint pos;

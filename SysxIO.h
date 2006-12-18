@@ -43,7 +43,10 @@ public:
 
 	void setFileSource(SysxData fileSource);
 	void setFileSource(QByteArray data);
+	void setFileName(QString fileName);
+	QString getFileName();
 	SysxData getFileSource();
+	QVector<QString> getFileSource(QString hex1, QString hex2);
 
 protected :
 	SysxIO();
@@ -55,6 +58,8 @@ private:
 	static SysxIODestroyer _destroyer;
 
 	SysxData fileSource;
+	QString fileName;
+
 };
 
 #endif // SYSXIO_H

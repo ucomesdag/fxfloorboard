@@ -76,8 +76,27 @@ void SysxIO::setFileSource(QByteArray data)
 	};
 };
 
+void SysxIO::setFileName(QString fileName)
+{
+	this->fileName = fileName;	
+};
+
+QString SysxIO::getFileName()
+{
+	return this->fileName;	
+};
+
 SysxData SysxIO::getFileSource()
 {
 	return this->fileSource;
+};
+
+QVector<QString> SysxIO::getFileSource(QString hex1, QString hex2)
+{
+	QString address;
+	address.append(hex1);
+	address.append(hex2);
+	QVector<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.adress.indexOf(address) );
+	return sysxMsg;
 };
 
