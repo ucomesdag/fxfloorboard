@@ -28,43 +28,11 @@
 #include <qdom.h>
 
 /* Declaring struc types */
-struct Level5
-{
-	QString value, name, desc;
-	QString id;
-};
-struct Level4
-{
-	QString value, name, abbr, desc;
-	QString id;
-	QVector<Level5> level5;
-	bool empty;
-};
-struct Level3
-{
-	QString value, name, abbr, desc;
-	QString id;
-	QVector<Level4> level4;
-	bool empty;
-};
-struct Level2
-{
-	QString value, name, abbr, desc;
-	QString id;
-	QVector<Level3> level3;
-	bool empty;
-};
-struct Level1
-{
-	QString value, name, abbr, desc;
-	QString id;
-	QVector<Level2> level2;
-	bool empty;
-};
 struct Midi
 {
-	QString id;
-	QVector<Level1> level1;
+	QString value, name, abbr, desc;
+	QVector<QString> type, id;
+	QVector<Midi> level;
 };
 
 class MidiTableDestroyer;
@@ -76,9 +44,13 @@ public:
 	static MidiTable* Instance(); //Singleton patern design
 
 	void loadMidiMap();
-	QVector<Midi> getMidiMap();
+	Midi getMidiMap(QString root, QString hex1);
+	Midi getMidiMap(QString root, QString hex1, QString hex2);
+	Midi getMidiMap(QString root, QString hex1, QString hex2, QString hex3);
+	Midi getMidiMap(QString root, QString hex1, QString hex2, QString hex3, QString hex4);
+	Midi getMidiMap(QString root, QString hex1, QString hex2, QString hex3, QString hex4, QString hex5);
 	
-protected :
+protected:
 	MidiTable();
 	friend class MidiTableDestroyer;
 	virtual ~MidiTable() { };
@@ -88,7 +60,7 @@ private:
 	static MidiTableDestroyer _destroyer;
 
 	QDomElement root;
-	QVector<Midi> midiMap;		
+	Midi midiMap;
 };
 
 #endif // MIDITABLE_H

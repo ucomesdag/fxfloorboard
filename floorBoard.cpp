@@ -783,23 +783,15 @@ void floorBoard::setStompPos(int index, int order)
 
 void floorBoard::updateStompBoxes()
 {
-	MidiTable *midiTable = MidiTable::Instance();
-	QVector<Midi> midiMap = midiTable->getMidiMap();
-
 	SysxIO *sysxIO = SysxIO::Instance();
 	SysxData fileSource = sysxIO->getFileSource();
-	
-	QVector<QString> tmp = fileSource.hex.at( fileSource.adress.indexOf("1100") );
+	QVector<QString> fxChain = fileSource.hex.at( fileSource.adress.indexOf("1100") );
 
-	QList<QString> hex, data;
-	hex	<< "00" <<  "01" << "02" <<  "03" << "04" << "05" << "06" <<  "07" <<  "08" << "09" << "0A" << "0B" << "0C" << "0D";
-	data << "fx1" << "cs" << "wah" << "lp" << "od" << "pre" << "eq" << "fx2" << "dd" << "ce" << "rv" << "ns" << "fv" << "dgt";
-
+	MidiTable *midiTable = MidiTable::Instance();
 	QVector<QString> stompOrder;
-	for(int i=11;i<tmp.size() - 2;i++ )
+	for(int i=11;i<fxChain.size() - 2;i++ )
 	{
-		QString bldsa = tmp.at(i);
-		stompOrder.append( data.at( hex.indexOf(bldsa) ) );
+		stompOrder.append( midiTable->getMidiMap("Stucture", "11", "00", "00", fxChain.at(i)).name.toLower() );
 	};
 	setStomps(stompOrder);
 };
