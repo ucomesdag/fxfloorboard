@@ -2,7 +2,6 @@
     <qresource prefix="/" >
         <file>about</file>
         <file>images/GT-8FxFloorBoard.png</file>
-        <file>images/pre.png</file>
         <file>images/button.png</file>
         <file>images/ce.png</file>
         <file>images/cs.png</file>
@@ -11,6 +10,7 @@
         <file>images/dragbar.png</file>
         <file>images/eq.png</file>
         <file>images/floor.png</file>
+        <file>images/fv.png</file>
         <file>images/fx1.png</file>
         <file>images/fx2.png</file>
         <file>images/general.png</file>
@@ -24,11 +24,12 @@
         <file>images/panelbar.png</file>
         <file>images/panelbarbutton.png</file>
         <file>images/pedal.png</file>
+        <file>images/pre.png</file>
         <file>images/rv.png</file>
         <file>images/splash.png</file>
         <file>images/splashmask.png</file>
         <file>images/stompbg.png</file>
-        <file>images/fv.png</file>
+        <file>images/switch.png</file>
         <file>images/wah.png</file>
         <file>images/window.png</file>
         <file>images/windowicon.png</file>

@@ -33,4 +33,7 @@ stompbox_pre::stompbox_pre(QWidget *parent)
 	/* PRE */
 	this->setImage(":/images/pre.png");
 
+	customSwitch *button = new customSwitch(false, QPoint::QPoint(5, 41), this);
+	/*QObject::connect(button, SIGNAL(valueChanged(bool)),
+                         led, SLOT(setValue(bool)));*/
 };

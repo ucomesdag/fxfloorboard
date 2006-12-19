@@ -25,12 +25,6 @@
 
 #include <QtGui>
 #include <QWidget>
-#include <QPixmap>
-#include <QVector>
-#include <QComboBox>
-#include "customDial.h"
-#include "customButton.h"
-#include "customLed.h"
 #include "stompBox.h"
 
 class stompbox_fv : public stompBox

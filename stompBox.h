@@ -25,7 +25,13 @@
 
 #include <QtGui>
 #include <QWidget>
+#include <QPixmap>
+#include <QVector>
 #include <QComboBox>
+#include "customDial.h"
+#include "customButton.h"
+#include "customSwitch.h"
+#include "customLed.h"
 #include "MidiTable.h"
 
 class stompBox : public QWidget

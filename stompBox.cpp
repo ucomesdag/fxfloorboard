@@ -45,7 +45,7 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 	this->font.setFamily("Arial");
 	this->font.setBold(true);
 	this->font.setPixelSize(10);
-	this->font.setStretch(115);
+	this->font.setStretch(110);
 	
 	this->id = id;
 	this->imagePath = imagePath;

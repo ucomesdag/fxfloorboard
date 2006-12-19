@@ -22,14 +22,9 @@
 
 #ifndef STOMPBOX_RV_H
 #define STOMPBOX_RV_H
+
 #include <QtGui>
 #include <QWidget>
-#include <QPixmap>
-#include <QVector>
-#include <QComboBox>
-#include "customDial.h"
-#include "customButton.h"
-#include "customLed.h"
 #include "stompBox.h"
 
 class stompbox_rv : public stompBox
