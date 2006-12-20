@@ -28,10 +28,11 @@
 #include <QPixmap>
 #include <QVector>
 #include <QComboBox>
-#include "customDial.h"
 #include "customButton.h"
-#include "customSwitch.h"
+#include "customDial.h"
 #include "customLed.h"
+#include "customSlider.h"
+#include "customSwitch.h"
 #include "MidiTable.h"
 
 class stompBox : public QWidget
