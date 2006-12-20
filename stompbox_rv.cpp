@@ -23,7 +23,7 @@
 #include "stompbox_rv.h"
 #include "MidiTable.h"
 #include "SysxIO.h"
-
+ 
 stompbox_rv::stompbox_rv(QWidget *parent)
     : stompBox(parent)
 {
