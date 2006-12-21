@@ -171,15 +171,7 @@ Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex
 	Midi section = midiMap.level.at( midiMap.id.indexOf(root) );
 	Midi level1 = section.level.at( section.id.indexOf(hex1) );
 	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
-	Midi level3;
-	if(!level2.id.contains(hex3) && level2.id.contains("range"))
-	{
-		level3 = level2.level.at( level2.id.indexOf("range") );
-	}
-	else
-	{
-		level3 = level2.level.at( level2.id.indexOf(hex3) );
-	};
+	Midi level3 = level2.level.at( level2.id.indexOf(hex3) );
 	return level3; 
 };
 
@@ -199,7 +191,7 @@ Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex
 	};
 
 	Midi level4 = level3.level.at( level3.id.indexOf(hex4) );
-	return section; 
+	return level4; 
 };
 
 Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex3,  QString hex4, QString hex5)
