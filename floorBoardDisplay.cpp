@@ -165,7 +165,7 @@ void floorBoardDisplay::setPatchNumDisplay(int patchNumber)
 void floorBoardDisplay::updateDisplay()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	QVector<QString> nameArray = sysxIO->getFileSource("12", "00");
+	QList<QString> nameArray = sysxIO->getFileSource("12", "00");
 
 	MidiTable *midiTable = MidiTable::Instance();
 	QString patchName;

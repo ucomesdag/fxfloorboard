@@ -24,7 +24,7 @@
 #define PREFERENCES_H
 
 #include <QString>
-#include <QVector>
+#include <QList>
 #include <qdom.h>
 
 class PreferencesDestroyer;
@@ -50,11 +50,11 @@ private:
 	static PreferencesDestroyer _destroyer;
 
 	QDomElement root;
-	QVector<QString> metaSearch;
-	QVector<QString> prefValues;
-	QVector<QString> groupNames;
-	QVector<QString> typeNames;
-	QVector<QString> itemNames;
+	QList<QString> metaSearch;
+	QList<QString> prefValues;
+	QList<QString> groupNames;
+	QList<QString> typeNames;
+	QList<QString> itemNames;
 };
 
 #endif // PREFERENCES_H

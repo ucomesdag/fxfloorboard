@@ -24,15 +24,15 @@
 #define MIDITABLE_H
 
 #include <QString>
-#include <QVector>
+#include <QList>
 #include <qdom.h>
 
 /* Declaring struc types */
 struct Midi
 {
 	QString value, name, abbr, desc;
-	QVector<QString> type, id;
-	QVector<Midi> level;
+	QList<QString> type, id;
+	QList<Midi> level;
 };
 
 class MidiTableDestroyer;

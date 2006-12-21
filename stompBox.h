@@ -26,7 +26,7 @@
 #include <QtGui>
 #include <QWidget>
 #include <QPixmap>
-#include <QVector>
+#include <QList>
 #include <QComboBox>
 #include "MidiTable.h"
 

@@ -58,7 +58,7 @@ void MidiTable::loadMidiMap()
     QDomElement root = doc.documentElement();   // Points to <SysX> 
     this->root = root; 
  
-    //QVector<Midi> midiMap; 
+    //QList<Midi> midiMap; 
      
     QDomNode node = root.firstChild(); 
     while ( !node.isNull() )  

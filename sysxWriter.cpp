@@ -72,10 +72,10 @@ void sysxWriter::writeFile(QString fileName)
 		
 		QByteArray out;
 		unsigned int count=0;
-		for (QVector< QVector<QString> >::iterator dev = fileSource.hex.begin(); dev != fileSource.hex.end(); ++dev)
+		for (QList< QList<QString> >::iterator dev = fileSource.hex.begin(); dev != fileSource.hex.end(); ++dev)
 		{
-			QVector<QString> data(*dev);
-			for (QVector<QString>::iterator code = data.begin(); code != data.end(); ++code)
+			QList<QString> data(*dev);
+			for (QList<QString>::iterator code = data.begin(); code != data.end(); ++code)
 			{
 				QString str(*code);
 				bool ok;

@@ -22,7 +22,7 @@
 
 #include "Preferences.h"
 #include "PreferencesDestroyer.h"
-#include <QVector>
+#include <QList>
 #include <QFile>
 #include "XMLWriter.h"
 
@@ -176,7 +176,7 @@ void Preferences::savePreferences()
 	xout.writeOpenTag("Preferences");
 
 	unsigned int aSize = this->metaSearch.size();
-	QVector<IndexList> sortIndexList;
+	QList<IndexList> sortIndexList;
 	IndexList tmp;
 	for(unsigned int n=0;n<aSize;n++)
 	{

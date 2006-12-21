@@ -31,7 +31,7 @@ midiIO::midiIO()
 
 /*********************** queryMidiOutDevices() ****************************
  * Retrieves all MIDI In devices installed on your system and stores them 
- * as a QVector of QStrings and device id's. 
+ * as a QList of QStrings and device id's. 
  *************************************************************************/
 void midiIO::queryMidiInDevices()
 {
@@ -50,7 +50,7 @@ void midiIO::queryMidiInDevices()
 
 /*********************** queryMidiOutDevices() ****************************
  * Retrieves all MIDI Out devices installed on your system and stores them 
- * as a QVector of QStrings and device id's. 
+ * as a QList of QStrings and device id's. 
  *************************************************************************/
 void midiIO::queryMidiOutDevices()
 {
@@ -67,12 +67,12 @@ void midiIO::queryMidiOutDevices()
 	};
 };
 
-QVector<QString> midiIO::getMidiInDevices()
+QList<QString> midiIO::getMidiInDevices()
 {
 	return this->MidiInDevices;
 };
 
-QVector<QString> midiIO::getMidiOutDevices()
+QList<QString> midiIO::getMidiOutDevices()
 {
 	return this->MidiOutDevices;
 };

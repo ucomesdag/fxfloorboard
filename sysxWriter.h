@@ -24,7 +24,7 @@
 #define SYSXWRITTER_H
 
 #include <QString>
-#include <QVector>
+#include <QList>
 #include "SysxIO.h"	
 
 class sysxWriter

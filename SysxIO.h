@@ -24,15 +24,15 @@
 #define SYSXIO_H
 
 #include <QString>
-#include <QVector>
+#include <QList>
 #include <qdom.h>
 
 class SysxIODestroyer;
 
 struct SysxData
 {
-	QVector<QString> adress;
-	QVector< QVector<QString> > hex;
+	QList<QString> adress;
+	QList< QList<QString> > hex;
 };
 
 class SysxIO
@@ -46,7 +46,7 @@ public:
 	void setFileName(QString fileName);
 	QString getFileName();
 	SysxData getFileSource();
-	QVector<QString> getFileSource(QString hex1, QString hex2);
+	QList<QString> getFileSource(QString hex1, QString hex2);
 
 protected :
 	SysxIO();

@@ -72,8 +72,8 @@ MidiPage::MidiPage(QWidget *parent)
 	QString midiOutDevice = preferences->getPreferences("Midi", "MidiOut", "device");
 	int midiInDeviceID = midiInDevice.toInt(&ok, 10);
 	int midiOutDeviceID = midiOutDevice.toInt(&ok, 10);
-	QVector<QString> midiInDevices = midi->getMidiInDevices();
-	QVector<QString> midiOutDevices = midi->getMidiOutDevices();
+	QList<QString> midiInDevices = midi->getMidiInDevices();
+	QList<QString> midiOutDevices = midi->getMidiOutDevices();
 	
 	QGroupBox *midiGroup = new QGroupBox(tr("Midi settings"));
 
@@ -85,7 +85,7 @@ MidiPage::MidiPage(QWidget *parent)
 	this->midiInCombo = midiInCombo;
 	midiInCombo->addItem(tr("Select midi-in device"));
 	id = 0;
-	for (QVector<QString>::iterator dev = midiInDevices.begin(); dev != midiInDevices.end(); ++dev)
+	for (QList<QString>::iterator dev = midiInDevices.begin(); dev != midiInDevices.end(); ++dev)
     {
 		QString str(*dev);
 		midiInCombo->addItem(str.toAscii().data());
@@ -100,7 +100,7 @@ MidiPage::MidiPage(QWidget *parent)
 	this->midiOutCombo = midiOutCombo;
 	midiOutCombo->addItem(tr("Select midi-out device"));
 	id = 0;
-	for (QVector<QString>::iterator dev = midiOutDevices.begin(); dev != midiOutDevices.end(); ++dev)
+	for (QList<QString>::iterator dev = midiOutDevices.begin(); dev != midiOutDevices.end(); ++dev)
     {
 		QString str(*dev);
 		midiOutCombo->addItem(str.toAscii().data());

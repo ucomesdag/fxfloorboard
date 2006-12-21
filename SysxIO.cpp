@@ -58,7 +58,7 @@ void SysxIO::setFileSource(QByteArray data)
 	this->fileSource.adress.clear();
 	this->fileSource.hex.clear();
 	
-	QVector<QString> sysxBuffer;
+	QList<QString> sysxBuffer;
 	for(int i=0;i<data.size();i++)
 	{
 		unsigned char byte = (char)data[i];
@@ -91,12 +91,12 @@ SysxData SysxIO::getFileSource()
 	return this->fileSource;
 };
 
-QVector<QString> SysxIO::getFileSource(QString hex1, QString hex2)
+QList<QString> SysxIO::getFileSource(QString hex1, QString hex2)
 {
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
-	QVector<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.adress.indexOf(address) );
+	QList<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.adress.indexOf(address) );
 	return sysxMsg;
 };
 

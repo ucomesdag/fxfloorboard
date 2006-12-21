@@ -50,7 +50,7 @@ public:
 	QSize getSize();
 	void setFloorBoard();
 	void initStomps();
-	void setStomps(QVector<QString> stompOrder);
+	void setStomps(QList<QString> stompOrder);
 	void setStompPos(QString name, int order);
 	void setStompPos(int index, int order);
 
@@ -104,12 +104,12 @@ private:
 	QPoint displayPos;
 	QPoint panelBarPos;
 
-	QVector<QPoint> fxPos;
-	QVector<int> fx;
+	QList<QPoint> fxPos;
+	QList<int> fx;
 	bool colapseState;
 
-	QVector<stompBox*> stompBoxes;
-	QVector<QString> stompNames;
+	QList<stompBox*> stompBoxes;
+	QList<QString> stompNames;
 };
 
 #endif // FLOORBOARD_H

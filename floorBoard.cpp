@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QVector>
+#include <QList>
 
 #include "dragBar.h"
 #include "bankTreeList.h"
@@ -71,21 +71,9 @@ floorBoard::floorBoard(QWidget *parent,
 	this->borderWidth = borderWidth;
 	this->pos = pos;
 	
-	QVector<signed int> fx(14);
-	fx[0]  = 0; //FX1
-	fx[1]  = 1; //CS
-	fx[2]  = 2; //WAH
-	fx[3]  = 3; //LP
-	fx[4]  = 4; //OD
-	fx[5]  = 5; //PRE
-	fx[6]  = 6; //EQ
-	fx[7]  = 7; //FX2
-	fx[8]  = 8; //DD
-	fx[9]  = 9; //CE
-	fx[10] = 10; //RV
-	fx[11] = 11; //FV
-	fx[12] = 12; //NS
-	fx[13] = 13; //DGT
+	QList<signed int> fx;
+	fx << 0 << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13;
+	/*    FX1  CS   WAH  LP   OD   PRE  EQ   FX2  DD   CE   RV    FV    NS    DGT */
 	this->fx = fx;
 
 	bankTreeList *bankList = new bankTreeList(this);
@@ -116,7 +104,7 @@ floorBoard::floorBoard(QWidget *parent,
 	QObject::connect(this->parent(), SIGNAL(updateSignal()), this, SIGNAL(updateSignal()));
 	QObject::connect(this, SIGNAL(updateSignal()), this, SLOT(updateStompBoxes()));
 
-	QObject::connect(this, SIGNAL(setDragBarOffset(QVector<int>)), panelBar, SIGNAL(setDragBarOffset(QVector<int>)));
+	QObject::connect(this, SIGNAL(setDragBarOffset(QList<int>)), panelBar, SIGNAL(setDragBarOffset(QList<int>)));
 	QObject::connect(panelBar, SIGNAL(showDragBar(QPoint)), this, SIGNAL(showDragBar(QPoint)));
 	QObject::connect(panelBar, SIGNAL(hideDragBar()), this, SIGNAL(hideDragBar()));
 
@@ -341,7 +329,7 @@ void floorBoard::initSize(QSize floorSize)
 {
 	this->floorSize = floorSize;
 	this->l_floorSize = floorSize;
-	QVector<QPoint> fxPos(14); 
+	QList<QPoint> fxPos; 
 	
 	unsigned int spacingV = (floorSize.height() - (marginStompBoxesTop + marginStompBoxesBottom)) - (stompSize.height() * 2);
 	unsigned int spacingH = ( (floorSize.width() - offset - (marginStompBoxesWidth * 2)) - (stompSize.width() * 7) ) / 6;
@@ -354,7 +342,7 @@ void floorBoard::initSize(QSize floorSize)
 			y = y + stompSize.height() + spacingV;
 			x = x - (( stompSize.width() + spacingH ) * 7);
 		};
-		fxPos[i] = QPoint::QPoint(offset + x, y);
+		fxPos.append(QPoint::QPoint(offset + x, y));
 	};
 
 	this->fxPos = fxPos;
@@ -560,7 +548,7 @@ void floorBoard::initStomps()
 	this->stompNames.append("dgt");
 };
 
-void floorBoard::setStomps(QVector<QString> stompOrder)
+void floorBoard::setStomps(QList<QString> stompOrder)
 {
 	for(int i=0;i<stompOrder.size();i++)
 	{
@@ -585,10 +573,10 @@ void floorBoard::setStompPos(int index, int order)
 void floorBoard::updateStompBoxes()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	QVector<QString> fxChain = sysxIO->getFileSource("11", "00");
+	QList<QString> fxChain = sysxIO->getFileSource("11", "00");
 
 	MidiTable *midiTable = MidiTable::Instance();
-	QVector<QString> stompOrder;
+	QList<QString> stompOrder;
 	for(int i=11;i<fxChain.size() - 2;i++ )
 	{
 		stompOrder.append( midiTable->getMidiMap("Stucture", "11", "00", "00", fxChain.at(i)).name.toLower() );

@@ -48,7 +48,7 @@ signals:
 
 	void showDragBar(QPoint newpos);
 	void hideDragBar();
-	void setDragBarOffset(QVector<int> offsetVector);
+	void setDragBarOffset(QList<int> offsetVector);
 
 protected:
 	void paintEvent(QPaintEvent *event);
