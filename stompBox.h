@@ -28,11 +28,6 @@
 #include <QPixmap>
 #include <QVector>
 #include <QComboBox>
-#include "customButton.h"
-#include "customDial.h"
-#include "customLed.h"
-#include "customSlider.h"
-#include "customSwitch.h"
 #include "MidiTable.h"
 
 class stompBox : public QWidget
@@ -44,8 +39,7 @@ public:
 		QWidget *parent = 0,
 		unsigned int id = 0,
 		QString imagePath = ":/images/od.png",
-		QPoint pos = QPoint::QPoint(0, 0),
-		QSize stompSize = QSize::QSize(94, 168));
+		QPoint stompPos = QPoint::QPoint(0, 0));
 	void setPos(QPoint newPos);
 	void setImage(QString imagePath);
 	void setSize(QSize newSize);

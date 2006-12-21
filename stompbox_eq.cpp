@@ -24,6 +24,10 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 
+#include "customButton.h"
+#include "customLed.h"
+#include "customSlider.h"
+
 stompbox_eq::stompbox_eq(QWidget *parent)
     : stompBox(parent)
 {

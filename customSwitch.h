@@ -32,11 +32,9 @@ class customSwitch : public QWidget
 public:
     customSwitch(
 		bool active = false,
-		QPoint buttonPos = QPoint::QPoint(0, 0),
+		QPoint switchPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
-		QString imagePath = ":/images/switch.png",
-		QSize buttonSize = QSize::QSize(18, 14),
-		unsigned int imageRange = 1);
+		QString imagePath = ":/images/switch.png");
 	void setOffset(signed int imageNr);
 	void setValue(bool value);
 
@@ -53,9 +51,9 @@ private:
 	bool active;
 	bool m_value;
 	QString imagePath;
-	QSize buttonSize;
+	QSize switchSize;
 	unsigned int imageRange;
-	QPoint buttonPos; 
+	QPoint switchPos; 
 	QPoint dragStartPosition;
 	signed int yOffset;
 };

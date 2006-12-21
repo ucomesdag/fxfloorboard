@@ -22,7 +22,7 @@
 
 #include "stompBox.h"
 
-stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint stompPos, QSize stompSize)
+stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint stompPos)
     : QWidget(parent)
 {
     this->pal.setColor(QPalette::Base,QColor(0,1,62));
@@ -49,7 +49,7 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 	
 	this->id = id;
 	this->imagePath = imagePath;
-	this->stompSize = stompSize;
+	this->stompSize = QPixmap(imagePath).size();
 	this->stompPos = stompPos;	
 
 	this->setFixedSize(stompSize);

@@ -23,6 +23,10 @@
 #include "stompbox_rv.h"
 #include "MidiTable.h"
 #include "SysxIO.h"
+
+#include "customButton.h"
+#include "customLed.h"
+#include "customDial.h"
  
 stompbox_rv::stompbox_rv(QWidget *parent)
     : stompBox(parent)

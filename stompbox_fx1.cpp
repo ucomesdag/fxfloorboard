@@ -24,6 +24,12 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 
+#include "customButton.h"
+#include "customLed.h"
+
+#include "customButton.h"
+#include "customLed.h"
+
 stompbox_fx1::stompbox_fx1(QWidget *parent)
     : stompBox(parent)
 {

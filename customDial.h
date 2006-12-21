@@ -39,7 +39,6 @@ public:
 		QPoint dialPos = QPoint::QPoint(0, 0), 
 		QWidget *parent = 0,
 		QString imagePath = ":/images/knob.png",
-		QSize dialSize = QSize::QSize(35, 35),
 		unsigned int imageRange = 62);
 	void setOffset(double value);
 	void setValue(double value);
@@ -67,8 +66,8 @@ private:
 
 	signed int xOffset;
 	double _lastValue;
-	QPoint _startdialPos;
-	QPoint _lastdialPos;
+	QPoint _startpos;
+	QPoint _lastpos;
 
 	
 	double m_value;

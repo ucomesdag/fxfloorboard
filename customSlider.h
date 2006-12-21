@@ -31,7 +31,7 @@ class customSlider : public QWidget
 
 public:
     customSlider(
-		double value = 50, 
+		double value = 50,
 		double min = 0, 
 		double max = 100, 
 		double single = 1, 
@@ -39,11 +39,9 @@ public:
 		QPoint sliderPos = QPoint::QPoint(0, 0), 
 		QWidget *parent = 0,
 		QString slideImagePath = ":/images/slide.png",
-		QString sliderButtonImagePath = ":/images/sliderbutton.png",
-		QSize slideSize = QSize::QSize(7, 38),
-		QSize sliderButtonSize = QSize::QSize(7, 11));
+		QString sliderButtonImagePath = ":/images/sliderbutton.png");
 	void setOffset(double value);
-	void setOffset(QPoint pos);
+	void setOffset(QPoint sliderPos);
 	void setValue(double value);
 	void mouseTrigger(QPoint mousePos);
 
@@ -71,8 +69,8 @@ private:
 
 	signed int yOffset;
 	double _lastValue;
-	QPoint _startsliderPos;
-	QPoint _lastsliderPos;
+	QPoint _startpos;
+	QPoint _lastpos;
 
 	double m_value;
 };

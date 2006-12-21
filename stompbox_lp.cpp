@@ -24,6 +24,10 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 
+#include "customButton.h"
+#include "customLed.h"
+#include "customDial.h"
+
 stompbox_lp::stompbox_lp(QWidget *parent)
     : stompBox(parent)
 {

@@ -23,23 +23,24 @@
 #include <QtGui>
 #include "customSwitch.h"
 
-customSwitch::customSwitch(bool active, QPoint buttonPos, QWidget *parent,
-						   QString imagePath, QSize buttonSize, unsigned int imageRange)
+customSwitch::customSwitch(bool active, QPoint switchPos, QWidget *parent,
+						   QString imagePath)
     : QWidget(parent)
 {
 	this->active = active;
 	this->imagePath = imagePath;
-	this->buttonSize = buttonSize;
-	this->imageRange = imageRange;
-	this->buttonPos = buttonPos;
+	QSize imageSize = QPixmap(imagePath).size();
+	this->switchSize = QSize(imageSize.width(), imageSize.height()/2);
+	this->imageRange = 1;
+	this->switchPos = switchPos;
 	setOffset(0);
-    setGeometry(buttonPos.x(), buttonPos.y(), buttonSize.width(), buttonSize.height());
+    setGeometry(switchPos.x(), switchPos.y(), switchSize.width(), switchSize.height());
 };
 
 void customSwitch::paintEvent(QPaintEvent *)
 {
-	QRectF target(0.0 , 0.0, buttonSize.width(), buttonSize.height());
-	QRectF source(0.0, yOffset, buttonSize.width(), buttonSize.height());
+	QRectF target(0.0 , 0.0, switchSize.width(), switchSize.height());
+	QRectF source(0.0, yOffset, switchSize.width(), switchSize.height());
 	QPixmap image(imagePath);
 
 	QPainter painter(this);
@@ -48,7 +49,7 @@ void customSwitch::paintEvent(QPaintEvent *)
 
 void customSwitch::setOffset(signed int imageNr)
 {
-	this->yOffset = imageNr*buttonSize.height();
+	this->yOffset = imageNr*switchSize.height();
 	this->update();
 };
 

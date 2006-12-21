@@ -24,6 +24,9 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 
+#include "customButton.h"
+#include "customLed.h"
+
 stompbox_wah::stompbox_wah(QWidget *parent)
     : stompBox(parent)
 {
@@ -35,7 +38,7 @@ stompbox_wah::stompbox_wah(QWidget *parent)
 
 	this->setComboBox(midiTable->getMidiMap("Stucture", "03", "00", "02"));
 
-	customButton *button = new customButton(false, QPoint::QPoint(0, 109), this, ":/images/pedal.png", QSize::QSize(85, 59));
+	customButton *button = new customButton(false, QPoint::QPoint(0, 109), this, ":/images/pedal.png");
 	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
 	QObject::connect(button, SIGNAL(valueChanged(bool)),
                          led, SLOT(setValue(bool)));	

@@ -24,6 +24,8 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 
+#include "customSwitch.h"
+
 stompbox_pre::stompbox_pre(QWidget *parent)
     : stompBox(parent)
 {

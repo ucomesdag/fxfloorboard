@@ -25,7 +25,7 @@
 #include "customDial.h"
 
 customDial::customDial(double value, double min, double max, double single, double page, QPoint dialPos, QWidget *parent, 
-						QString imagePath, QSize dialSize, unsigned int imageRange)
+						QString imagePath, unsigned int imageRange)
     : QWidget(parent)
 {
 	this->value = value;
@@ -33,9 +33,10 @@ customDial::customDial(double value, double min, double max, double single, doub
 	this->max = max;
 	this->single = single;
 	this->page = page;
-	this->imagePath = imagePath;
-	this->dialSize = dialSize;
 	this->imageRange = imageRange;
+	this->imagePath = imagePath;
+	QSize imageSize = QPixmap(imagePath).size();
+	this->dialSize = QSize(imageSize.width()/(imageRange+1), imageSize.height());
 	this->dialPos = dialPos;
 
 	setOffset(value);
@@ -84,8 +85,8 @@ void customDial::mousePressEvent(QMouseEvent *event)
 {
 	if ( event->button() == Qt::LeftButton )
 	{	
-		this->_lastdialPos = event->pos();
-		this->_startdialPos = event->pos();
+		this->_lastpos = event->pos();
+		this->_startpos = event->pos();
 		this->_lastValue = value;
 		setFocus();
 	};
@@ -93,15 +94,15 @@ void customDial::mousePressEvent(QMouseEvent *event)
 
 void customDial::mouseMoveEvent(QMouseEvent *event)
 {
-	double distY = (double)event->pos().y() - (double)_startdialPos.y();
+	double distY = (double)event->pos().y() - (double)_startpos.y();
 	double numSteps = (int)((distY/1.5) + 0.5);
 	
 	double _newValue = _lastValue - (numSteps * single);
 	
-	if( (_startdialPos.y() < _lastdialPos.y() && _newValue < min)
-		|| (_startdialPos.y() > _lastdialPos.y() && _newValue > max) ) 
+	if( (_startpos.y() < _lastpos.y() && _newValue < min)
+		|| (_startpos.y() > _lastpos.y() && _newValue > max) ) 
 	{
-		this->_startdialPos =  _lastdialPos;
+		this->_startpos =  _lastpos;
 	};
 	
 	if(_newValue < min)
@@ -115,7 +116,7 @@ void customDial::mouseMoveEvent(QMouseEvent *event)
 		this->_lastValue = value;
 	};
 	
-	this->_lastdialPos = event->pos();
+	this->_lastpos = event->pos();
 	setOffset(_newValue);
 };
 

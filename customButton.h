@@ -34,9 +34,7 @@ public:
 		bool active = false,
 		QPoint buttonPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
-		QString imagePath = ":/images/button.png",
-		QSize buttonSize = QSize::QSize(85, 52),
-		unsigned int imageRange = 3);
+		QString imagePath = ":/images/button.png");
 	void setOffset(signed int imageNr);
 	void setValue(bool value);
 
@@ -54,7 +52,6 @@ private:
 	bool m_value;
 	QString imagePath;
 	QSize buttonSize;
-	unsigned int imageRange;
 	QPoint buttonPos; 
 	QPoint dragStartPosition;
 	signed int yOffset;

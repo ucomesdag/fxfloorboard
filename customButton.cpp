@@ -24,13 +24,13 @@
 #include "customButton.h"
 
 customButton::customButton(bool active, QPoint buttonPos, QWidget *parent,
-						   QString imagePath, QSize buttonSize, unsigned int imageRange)
+						   QString imagePath)
     : QWidget(parent)
 {
 	this->active = active;
 	this->imagePath = imagePath;
-	this->buttonSize = buttonSize;
-	this->imageRange = imageRange;
+	QSize imageSize = QPixmap(imagePath).size();
+	this->buttonSize =  QSize(imageSize.width(), imageSize.height()/4);
 	this->buttonPos = buttonPos;
 	setOffset(0);
     setGeometry(buttonPos.x(), buttonPos.y(), buttonSize.width(), buttonSize.height());

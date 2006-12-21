@@ -34,8 +34,7 @@ public:
 		bool active = false,
 		QPoint ledPos = QPoint::QPoint(0, 0), 
 		QWidget *parent = 0,
-		QString imagePath = ":/images/led.png",
-		QSize ledSize = QSize::QSize(12, 12));
+		QString imagePath = ":/images/led.png");
 	void setOffset(signed int imageNr);
 
 public slots:

@@ -25,12 +25,13 @@
 #include "customLed.h"
 
 customLed::customLed(bool active, QPoint ledPos, QWidget *parent,
-					 QString imagePath, QSize ledSize)
+					 QString imagePath)
     : QWidget(parent)
 {
 	this->active = active;
 	this->imagePath = imagePath;
-	this->ledSize = ledSize;
+	QSize imageSize = QPixmap(imagePath).size();
+	this->ledSize = QSize(imageSize.width(), imageSize.height()/2);
 	this->ledPos = ledPos;
 
 	setOffset(0);

@@ -50,7 +50,9 @@ HEADERS += ./stompBox.h \
     ./customButton.h \
     ./customDial.h \
     ./customLed.h \
+    ./customSlider.h \
     ./customSplashScreen.h \
+    ./customSwitch.h \
     ./dragBar.h \
     ./floorBoard.h \
     ./floorBoardDisplay.h \
@@ -89,7 +91,9 @@ SOURCES += ./main.cpp \
     ./customButton.cpp \
     ./customDial.cpp \
     ./customLed.cpp \
+    ./customSlider.cpp \
     ./customSplashScreen.cpp \
+    ./customSwitch.cpp \
     ./dragBar.cpp \
     ./floorBoard.cpp \
     ./floorBoardDisplay.cpp \

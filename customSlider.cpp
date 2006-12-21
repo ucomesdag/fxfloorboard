@@ -26,8 +26,7 @@
 
 customSlider::customSlider(double value, double min, double max, double single, double page, 
 						QPoint sliderPos, QWidget *parent, 
-						QString slideImagePath, QString sliderButtonImagePath, 
-						QSize slideSize, QSize sliderButtonSize)
+						QString slideImagePath, QString sliderButtonImagePath)
     : QWidget(parent)
 {
 	this->value = value;
@@ -37,8 +36,8 @@ customSlider::customSlider(double value, double min, double max, double single, 
 	this->page = page;
 	this->slideImagePath = slideImagePath;
 	this->sliderButtonImagePath = sliderButtonImagePath;
-	this->slideSize = slideSize;
-	this->sliderButtonSize = sliderButtonSize;
+	this->slideSize = QPixmap(slideImagePath).size();
+	this->sliderButtonSize = QPixmap(sliderButtonImagePath).size();
 	this->sliderPos = sliderPos;
 
 	setOffset(value);
@@ -79,9 +78,9 @@ void customSlider::setOffset(double _newValue)
 	setValue(_newValue);
 };
 
-void customSlider::setOffset(QPoint pos)
+void customSlider::setOffset(QPoint sliderPos)
 {
-	this->yOffset = pos.y();
+	this->yOffset = sliderPos.y();
 	this->update();
 	setValue(this->value);
 };
