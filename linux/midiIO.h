@@ -24,10 +24,10 @@
 #define midiIO_H
 
 #include <QString>
-#include <QVector>
+#include <QList>
 
 #include <QString>
-#include <QVector>
+#include <QList>
 using namespace std;
 
 class midiIO
@@ -38,16 +38,16 @@ class midiIO
 
 		void queryMidiInDevices();
 		void queryMidiOutDevices();
-		QVector<QString> getMidiInDevices();
-		QVector<QString> getMidiOutDevices();
+		QList<QString> getMidiInDevices();
+		QList<QString> getMidiOutDevices();
 		
 		/*void setMidiOutDevices();
-		QVector<QString> getMidiOutDevices();
+		QList<QString> getMidiOutDevices();
 		void setMidiOut(unsigned int MidiOut);
 		unsigned int getMidiOut();
 
 		void setMidiInDevices();
-		QVector<QString> getMidiInDevices();
+		QList<QString> getMidiInDevices();
 		void setMidiIn(unsigned int MidiIn);
 		unsigned int getMidiIn();
 
@@ -58,8 +58,8 @@ class midiIO
 		int getMsgLengthIn();*/
 
 	private:
-		QVector<QString> MidiOutDevices;
-		QVector<QString> MidiInDevices;
+		QList<QString> MidiOutDevices;
+		QList<QString> MidiInDevices;
 		/*QString sysxOut;
 		int msgLengthOut;
 		QString sysxIn;
