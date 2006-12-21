@@ -36,7 +36,7 @@ stompbox_lp::stompbox_lp(QWidget *parent)
 
 	/* LOOP */
 	this->setImage(":/images/lp.png");
-	
+
 	this->setComboBox(midiTable->getMidiMap("Stucture", "04", "00", "02"));
 
 	customDial *knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), this);
