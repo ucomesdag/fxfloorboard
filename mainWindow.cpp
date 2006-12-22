@@ -32,27 +32,18 @@ mainWindow::mainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
 	floorBoard *fxsBoard = new floorBoard(this);
-	this->fxFloorBoard = fxsBoard;
 	
 	this->setWindowTitle("GT-8 FX FloorBoard");
 	this->setCentralWidget(fxsBoard);
 	
-	createActions();
-	createMenus();
-	createStatusBar();
+	this->createActions();
+	this->createMenus();
+	this->createStatusBar();
+
+	this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	QObject::connect(fxsBoard, SIGNAL( sizeChanged(QSize, QSize) ),
                 this, SLOT( updateSize(QSize, QSize) ) );
-
-	/*QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->setMenuBar(menuBar);
-	mainLayout->addWidget(fxsBoard);
-	mainLayout->setMargin(0);
-	mainLayout->setSpacing(0);
-	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
-	setLayout(mainLayout);*/
-	this->wSize = fxsBoard->getSize();
-	this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 };
 
 mainWindow::~mainWindow()
@@ -90,7 +81,8 @@ void mainWindow::createActions()
 	saveAct->setStatusTip(tr("Save the document to disk"));
 	connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
-	saveAsAct = new QAction(tr("Save &As..."), this);
+	saveAsAct = new QAction(QIcon(":/images/saveas.png"),tr("Save &As..."), this);
+	saveAsAct->setShortcut(tr("Ctrl+Shift+S"));
 	saveAsAct->setStatusTip(tr("Save the document under a new name"));
 	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
@@ -99,28 +91,24 @@ void mainWindow::createActions()
 	exitAct->setStatusTip(tr("Exit the application"));
 	connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-	settingsAct = new QAction(QIcon(":/images/cut.png"), tr("&Preferences"), this);
-	settingsAct->setShortcut(tr("Ctrl+X"));
+	settingsAct = new QAction(QIcon(":/images/preferences.png"), tr("&Preferences"), this);
+	settingsAct->setShortcut(tr("Ctrl+P"));
 	settingsAct->setStatusTip(tr("...."));
 	connect(settingsAct, SIGNAL(triggered()), this, SLOT(settings()));
 
-	helpAct = new QAction(QIcon(":/images/copy.png"), tr("GT-8 FX FloorBoard &Help"), this);
-	helpAct->setShortcut(tr("Ctrl+C"));
+	helpAct = new QAction(QIcon(":/images/help.png"), tr("GT-8 FX FloorBoard &Help"), this);
+	helpAct->setShortcut(tr("Ctrl+F1"));
 	helpAct->setStatusTip(tr("....."));
 	connect(helpAct, SIGNAL(triggered()), this, SLOT(help()));
 
-	homepageAct = new QAction(QIcon(":/images/paste.png"), tr("GT-8 FX FloorBoard &Webpage"), this);
-	homepageAct->setShortcut(tr("Ctrl+V"));
+	homepageAct = new QAction(QIcon(":/images/home.png"), tr("GT-8 FX FloorBoard &Webpage"), this);
 	homepageAct->setStatusTip(tr("........"));
 	connect(homepageAct, SIGNAL(triggered()), this, SLOT(homepage()));
 
-	donationAct = new QAction(QIcon(":/images/paste.png"), tr("Make a &Donation"), this);
-	donationAct->setShortcut(tr("Ctrl+V"));
-	donationAct->setStatusTip(tr("........"));
+	donationAct = new QAction(QIcon(":/images/donate.png"), tr("Make a &Donation"), this);
 	connect(donationAct, SIGNAL(triggered()), this, SLOT(donate()));
 
-	licenseAct = new QAction(QIcon(":/images/paste.png"), tr("&License"), this);
-	licenseAct->setShortcut(tr("Ctrl+V"));
+	licenseAct = new QAction(QIcon(":/images/license.png"), tr("&License"), this);
 	licenseAct->setStatusTip(tr("........"));
 	connect(licenseAct, SIGNAL(triggered()), this, SLOT(license()));
 
@@ -157,7 +145,7 @@ void mainWindow::createMenus()
 	helpMenu->addAction(licenseAct);
 	helpMenu->addSeparator(); 
 	helpMenu->addAction(aboutAct);
-	helpMenu->addAction(aboutQtAct);
+	//helpMenu->addAction(aboutQtAct);
     menuBar()->addMenu(helpMenu);
 };
 
@@ -301,11 +289,6 @@ void mainWindow::about()
 		QMessageBox::about(this, tr("GT-8 Fx FloorBoard - About"), 
 			"GT-8 FX FloorBoard, " + tr("version") + " " + version + "\n" + file.readAll());
 	};
-};
-
-QSize mainWindow::getWindowSize()
-{
-	return this->wSize;
 };
 
 void mainWindow::closeEvent(QCloseEvent* ce)

@@ -47,7 +47,6 @@ public:
 	QPoint getStompPos(int id);
 	void initSize(QSize floorSize);
 	void setSize(QSize newSize);
-	QSize getSize();
 	void setFloorBoard();
 	void initStomps();
 	void setStomps(QList<QString> stompOrder);

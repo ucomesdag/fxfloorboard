@@ -355,11 +355,6 @@ QPoint floorBoard::getStompPos(int id)
 	return fxPos.at(id);
 };
 
-QSize floorBoard::getSize()
-{
-	return this->floorSize;
-};
-
 void floorBoard::setCollapse()
 {
 	if(floorSize.width() > minSize.width())

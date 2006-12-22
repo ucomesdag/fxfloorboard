@@ -36,7 +36,6 @@ class mainWindow : public QMainWindow
 public:
     mainWindow(QWidget *parent = 0);
 	~mainWindow();
-	QSize getWindowSize();
 	void closeEvent(QCloseEvent* ce);
 
 signals:
@@ -74,10 +73,9 @@ private:
 	QAction *licenseAct;
 	QAction *aboutAct;
 	QAction *aboutQtAct;
-	QSize wSize;
 
 	sysxWriter file;
-	floorBoard* fxFloorBoard;
+	floorBoard *fxsBoard;
 };
 
 #endif // MAINWINDOW_H
