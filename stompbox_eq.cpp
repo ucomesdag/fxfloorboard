@@ -37,11 +37,11 @@ stompbox_eq::stompbox_eq(QWidget *parent)
 	/* EQ */
 	this->setImage(":/images/eq.png");
 
-	customSlider *slider1 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(8, 17), this);
-	customSlider *slider2 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(24, 17), this);
-	customSlider *slider3 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(40, 17), this);
-	customSlider *slider4 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(56, 17), this);	
-	customSlider *slider5 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(79, 17), this);	
+	customSlider *slider1 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(8, 17), this, "08", "03");
+	customSlider *slider2 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(24, 17), this, "08", "06");
+	customSlider *slider3 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(40, 17), this, "08", "09");
+	customSlider *slider4 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(56, 17), this, "08", "0A");	
+	customSlider *slider5 = new customSlider(50, 0, 100, 1, 10, QPoint::QPoint(79, 17), this, "08", "0C");	
 	customButton *button = new customButton(false, QPoint::QPoint(4, 110), this);
 	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
 	QObject::connect(button, SIGNAL(valueChanged(bool)),

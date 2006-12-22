@@ -25,10 +25,12 @@
 #include "customSlider.h"
 
 customSlider::customSlider(double value, double min, double max, double single, double page, 
-						QPoint sliderPos, QWidget *parent, 
+						QPoint sliderPos, QWidget *parent, QString typeId, QString valueId, 
 						QString slideImagePath, QString sliderButtonImagePath)
     : QWidget(parent)
 {
+	this->typeId = typeId;
+	this->valueId = valueId;	
 	this->value = value;
 	this->min = min;
 	this->max = max;
@@ -43,8 +45,8 @@ customSlider::customSlider(double value, double min, double max, double single, 
 	setOffset(value);
     setGeometry(sliderPos.x(), sliderPos.y(), slideSize.width(), slideSize.height());
 
-	QObject::connect(this, SIGNAL( valueChanged(int) ),
-                this->parent(), SIGNAL( sliderValue(int) ));
+	QObject::connect(this, SIGNAL( valueChanged(int, QString, QString) ),
+                this->parent(), SLOT( valueChanged(int, QString, QString) ));
 };
 
 void customSlider::paintEvent(QPaintEvent *)
@@ -70,7 +72,7 @@ void customSlider::setOffset(double _newValue)
 	double dataRange = max - min;
 	double range = slideSize.height()  - sliderButtonSize.height();
 	//double result = (0 - min) + (_newValue / (dataRange / range));
-	double result = (_newValue - min) * (range / dataRange);
+	double result = (max - _newValue) * (range / dataRange);
 	
 	this->value = _newValue;	
 	this->yOffset = result;
@@ -78,41 +80,30 @@ void customSlider::setOffset(double _newValue)
 	setValue(_newValue);
 };
 
-void customSlider::setOffset(QPoint sliderPos)
-{
-	this->yOffset = sliderPos.y();
-	this->update();
-	setValue(this->value);
-};
-
 void customSlider::mouseTrigger(QPoint mousePos)
 {
-	this->_lastValue = value;
-
 	double dataRange = max - min;
 	double range = slideSize.height() - sliderButtonSize.height();
 
-	double _newValue = (double)(mousePos.y() - (sliderButtonSize.height() * 2) * (range / dataRange)) *  (dataRange / range);
+	this->_lastValue = value;
+
+	double _newValue = (double)max - ((mousePos.y() - (sliderButtonSize.height() * 2) * (range / dataRange)) *  (dataRange / range));
 
 	QPoint buttonCenter = QPoint(0, (sliderButtonSize.height()/2));
 	QPoint relativePos = mousePos - buttonCenter;
 	int minY = 0;
 	int maxY = slideSize.height() - sliderButtonSize.height();
-	if( relativePos.y() > minY && relativePos.y() < maxY )
+	
+	if(relativePos.y() <= minY)
 	{
-		setOffset(relativePos);
-		this->value = _newValue;
-	} 
-	else if(relativePos.y() <= minY)
-	{
-		setOffset(QPoint(0, minY));
-		this->value = min;
+		_newValue = max;		
 	}
 	else if(relativePos.y() >= maxY)
 	{
-		setOffset(QPoint(0, maxY));
-		this->value = max;
+		_newValue = min;
+				
 	};
+	setOffset(_newValue);
 };
 
 void customSlider::mousePressEvent(QMouseEvent *event)
@@ -138,7 +129,7 @@ void customSlider::wheelEvent(QWheelEvent *event)
 	{
 		this->_lastValue = value;
 		
-		double _newValue = _lastValue - (numSteps * single);
+		double _newValue = _lastValue + (numSteps * single);
 
 		if(_newValue < min)
 		{
@@ -159,13 +150,13 @@ void customSlider::keyPressEvent(QKeyEvent *event)
 	
 	switch(event->key())
 	{
-		case Qt::Key_Up: numSteps = single;break;
-		case Qt::Key_Down: numSteps = -single;break;
-		case Qt::Key_Plus: numSteps = single;break;
-		case Qt::Key_Minus: numSteps = -single;break;
+		case Qt::Key_Up: numSteps = -single;break;
+		case Qt::Key_Down: numSteps = single;break;
+		case Qt::Key_Plus: numSteps = -single;break;
+		case Qt::Key_Minus: numSteps = single;break;
 
-		case Qt::Key_PageUp: numSteps = page;break;
-		case Qt::Key_PageDown: numSteps = -page;break;
+		case Qt::Key_PageUp: numSteps = -page;break;
+		case Qt::Key_PageDown: numSteps = page;break;
 
 		case Qt::Key_Right: numSteps = -(max-min);break;
 		case Qt::Key_Left: numSteps = max-min;break;
@@ -192,6 +183,6 @@ void customSlider::setValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
-		emit valueChanged((int)(value));
+		emit valueChanged((int)value, this->typeId, this->valueId);
     };
 };

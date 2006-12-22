@@ -60,7 +60,7 @@ public slots:
 	void updateStompBoxes();
 
 signals:
-	void knobValue(int);
+	void valueChanged(QString fxName, QString valueName, QString value);
 	void setDisplayPos(QPoint newpos);
 	void setFloorPanelBarPos(QPoint newpos);
 	void updateStompOffset(signed int offsetDif);

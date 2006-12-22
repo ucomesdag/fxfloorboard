@@ -52,9 +52,10 @@ public:
 
 public slots:
 	void updatePos(signed int offsetDif);
-
+	void valueChanged(int value, QString typeId, QString valueId);
+	
 signals:
-	void knobValue(int);
+	void valueChanged(QString fxName, QString valueName, QString valueHex);
 
 protected:
 	void paintEvent(QPaintEvent *event);

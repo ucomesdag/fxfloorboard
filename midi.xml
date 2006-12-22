@@ -816,7 +816,7 @@
         <DATA value="07" name="" abbr="" desc="Tone">
           <PARAM value="range" name="00/64/-50/+50" desc="-50 - +50" />
         </DATA>
-        <DATA value="08" name="" abbr="" desc="Level">
+        <DATA value="08" name="" abbr="" desc="Effect Level">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
         </DATA>
       </LSB>
@@ -847,7 +847,7 @@
         </DATA>
       </LSB>
     </LSB>
-    <LSB value="04" name="Loop FX" abbr="LP" desc="LP">
+    <LSB value="04" name="Loop" abbr="LP" desc="LP">
       <LSB value="00" name="" abbr="" desc="Address MSB">
         <DATA value="00" name="" abbr="" desc="On/Off">
           <PARAM value="00" name="Off" desc="" />
@@ -918,7 +918,7 @@
         <DATA value="05" name="" abbr="" desc="Tone">
           <PARAM value="range" name="00/64/-50/+50" desc="-50 - +50" />
         </DATA>
-        <DATA value="06" name="" abbr="" desc="Level">
+        <DATA value="06" name="" abbr="" desc="Effect Level">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
         </DATA>
         <DATA value="07" name="" abbr="" desc="Direct Level">
@@ -1309,7 +1309,7 @@
           <PARAM value="08" name="11.0kHz" desc="" />
           <PARAM value="09" name="Flat" desc="" />
         </DATA>
-        <DATA value="0C" name="" abbr="" desc="Level">
+        <DATA value="0C" name="" abbr="" desc="Effect Level">
           <PARAM value="range" name="00/28/-20/+20" desc="-20dB - +20dB" />
         </DATA>
       </LSB>

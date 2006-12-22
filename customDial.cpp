@@ -24,10 +24,13 @@
 
 #include "customDial.h"
 
-customDial::customDial(double value, double min, double max, double single, double page, QPoint dialPos, QWidget *parent, 
-						QString imagePath, unsigned int imageRange)
+customDial::customDial(double value, double min, double max, double single, double page, 
+					   QPoint dialPos, QWidget *parent, QString typeId, QString valueId, 
+					   QString imagePath, unsigned int imageRange)
     : QWidget(parent)
 {
+	this->typeId = typeId;
+	this->valueId = valueId;
 	this->value = value;
 	this->min = min;
 	this->max = max;
@@ -42,8 +45,8 @@ customDial::customDial(double value, double min, double max, double single, doub
 	setOffset(value);
     setGeometry(dialPos.x(), dialPos.y(), dialSize.width(), dialSize.height());
 
-	QObject::connect(this, SIGNAL( valueChanged(int) ),
-                this->parent(), SIGNAL( knobValue(int) ));
+	QObject::connect(this, SIGNAL( valueChanged(int, QString, QString) ),
+                this->parent(), SLOT( valueChanged(int, QString, QString) ));
 };
 
 void customDial::paintEvent(QPaintEvent *)
@@ -183,6 +186,6 @@ void customDial::setValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
-		emit valueChanged((int)(value));
+		emit valueChanged((int)value, this->typeId, this->valueId);
     };
 };

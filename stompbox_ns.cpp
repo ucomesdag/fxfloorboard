@@ -37,8 +37,8 @@ stompbox_ns::stompbox_ns(QWidget *parent)
 	/* NS */
 	this->setImage(":/images/ns.png");
 
-	customDial *knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), this);
-	customDial *knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), this);
+	customDial *knob1 = new customDial(0, -20, 20, 1, 10, QPoint::QPoint(6, 9), this, "0E", "01");
+	customDial *knob2 = new customDial(50, 0, 100, 1, 10, QPoint::QPoint(53, 9), this, "0E", "02");
 	customButton *button = new customButton(false, QPoint::QPoint(4, 110), this);
 	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
 	QObject::connect(button, SIGNAL(valueChanged(bool)),

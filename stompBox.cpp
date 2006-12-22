@@ -54,8 +54,8 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 
 	this->setFixedSize(stompSize);
 
-	QObject::connect(this, SIGNAL( knobValue(int) ),
-                this->parent(), SIGNAL( knobValue(int) ));
+	QObject::connect(this, SIGNAL( valueChanged(QString, QString, QString) ),
+                this->parent(), SIGNAL( valueChanged(QString, QString, QString) ));
 	
 	QObject::connect(this->parent(), SIGNAL( updateStompOffset(signed int) ),
                 this, SLOT( updatePos(signed int) ));
@@ -192,4 +192,23 @@ void stompBox::setComboBox(Midi items, QRect geometry)
 	comboBox->setFrame(false);
 	comboBox->setMaxVisibleItems(itemsCount);
 	comboBox->view()->setMinimumWidth( maxLenght + 10 );
+};
+
+void stompBox::valueChanged(int value, QString typeId, QString valueId)
+{
+	MidiTable *midiTable = MidiTable::Instance();
+	Midi items = midiTable->getMidiMap("Stucture", typeId, "00", valueId);
+	QString fxName, valueName;
+	if(typeId == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency
+	{
+		fxName = "Noise Suppressor";
+		valueName = items.desc.remove("NS :");
+	}
+	else
+	{
+		fxName = midiTable->getMidiMap("Stucture", typeId).name;
+		valueName = items.desc;
+	};
+	QString valueHex = QString::number(value, 10);
+	emit valueChanged(fxName, valueName, valueHex);
 };

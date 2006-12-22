@@ -95,7 +95,8 @@ floorBoard::floorBoard(QWidget *parent,
 	bar->setDragBarMinOffset(2, 8);
 	bar->setDragBarMaxOffset(offset - panelBarOffset + 5);
 
-	QObject::connect(this, SIGNAL(knobValue(int)), display, SLOT(setValueDisplay(int)));
+	QObject::connect(this, SIGNAL(valueChanged(QString, QString, QString)), 
+		display, SLOT(setValueDisplay(QString, QString, QString)));
 	QObject::connect(panelBar, SIGNAL(resizeSignal(int)), this, SLOT(setWidth(int)));
 	QObject::connect(panelBar, SIGNAL(collapseSignal()), this, SLOT(setCollapse()));
 	QObject::connect(this, SIGNAL(setCollapseState(bool)), panelBar, SIGNAL(collapseState(bool)));

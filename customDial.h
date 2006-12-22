@@ -38,13 +38,15 @@ public:
 		double page = 10,
 		QPoint dialPos = QPoint::QPoint(0, 0), 
 		QWidget *parent = 0,
+		QString typeId = "void",
+		QString valueId = "void",
 		QString imagePath = ":/images/knob.png",
 		unsigned int imageRange = 62);
 	void setOffset(double value);
 	void setValue(double value);
 
 signals:
-	void valueChanged(int newValue);
+	void valueChanged(int newValue, QString typeId, QString valueId);
 
 protected:
    void paintEvent(QPaintEvent *event);
@@ -54,6 +56,8 @@ protected:
    void keyPressEvent(QKeyEvent *event);
 
 private:
+	QString typeId;
+	QString valueId;
 	double value; 
 	double min; 
 	double max; 

@@ -36,7 +36,7 @@ public:
 	QPoint getPos();
 
 public slots:
-	void setValueDisplay(int num);
+	void setValueDisplay(QString fxName, QString valueName, QString value);
 	void setPatchDisplay(QString patchName);
 	void setPatchNumDisplay(int patchNumber);
 	void setPos(QPoint newPos);
