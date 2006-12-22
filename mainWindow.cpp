@@ -26,31 +26,33 @@
 #include "preferencesDialog.h"
 #include "SysxIO.h"
 
-mainWindow::mainWindow(QWidget *parent)
-    : QWidget(parent)
 /*mainWindow::mainWindow(QWidget *parent)
-	: QMainWindow(parent)*/
+    : QWidget(parent)*/
+mainWindow::mainWindow(QWidget *parent)
+	: QMainWindow(parent)
 {
-	createMenu();
-	createStatusBar();
-
 	floorBoard *fxsBoard = new floorBoard(this);
 	this->fxFloorBoard = fxsBoard;
+	
+	this->setWindowTitle("GT-8 FX FloorBoard");
+	this->setCentralWidget(fxsBoard);
+	
+	createActions();
+	createMenus();
+	createStatusBar();
 
 	QObject::connect(fxsBoard, SIGNAL( sizeChanged(QSize, QSize) ),
                 this, SLOT( updateSize(QSize, QSize) ) );
 
-	QVBoxLayout *mainLayout = new QVBoxLayout;
+	/*QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->setMenuBar(menuBar);
 	mainLayout->addWidget(fxsBoard);
 	mainLayout->setMargin(0);
 	mainLayout->setSpacing(0);
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
-	setLayout(mainLayout);
-
+	setLayout(mainLayout);*/
 	this->wSize = fxsBoard->getSize();
-	
-	setWindowTitle("GT-8 FX FloorBoard");
+	this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 };
 
 mainWindow::~mainWindow()
@@ -68,55 +70,101 @@ mainWindow::~mainWindow()
 	};
 };
 
-void mainWindow::createMenu()
+void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 {
-    menuBar = new QMenuBar;
+	this->setFixedWidth(floorSize.width());
+	int x = this->geometry().x() - ((floorSize.width() - oldFloorSize.width()) / 2);
+	int y = this->geometry().y();	
+	this->setGeometry(x, y, floorSize.width(), this->geometry().height());
+};
+
+void mainWindow::createActions()
+{
+	openAct = new QAction(QIcon(":/images/open.png"), tr("&Open File..."), this);
+	openAct->setShortcut(tr("Ctrl+O"));
+	openAct->setStatusTip(tr("Open an existing file"));
+	connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
+
+	saveAct = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
+	saveAct->setShortcut(tr("Ctrl+S"));
+	saveAct->setStatusTip(tr("Save the document to disk"));
+	connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
+
+	saveAsAct = new QAction(tr("Save &As..."), this);
+	saveAsAct->setStatusTip(tr("Save the document under a new name"));
+	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
+
+	exitAct = new QAction(tr("E&xit"), this);
+	exitAct->setShortcut(tr("Ctrl+Q"));
+	exitAct->setStatusTip(tr("Exit the application"));
+	connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
+
+	settingsAct = new QAction(QIcon(":/images/cut.png"), tr("&Preferences"), this);
+	settingsAct->setShortcut(tr("Ctrl+X"));
+	settingsAct->setStatusTip(tr("...."));
+	connect(settingsAct, SIGNAL(triggered()), this, SLOT(settings()));
+
+	helpAct = new QAction(QIcon(":/images/copy.png"), tr("GT-8 FX FloorBoard &Help"), this);
+	helpAct->setShortcut(tr("Ctrl+C"));
+	helpAct->setStatusTip(tr("....."));
+	connect(helpAct, SIGNAL(triggered()), this, SLOT(help()));
+
+	homepageAct = new QAction(QIcon(":/images/paste.png"), tr("GT-8 FX FloorBoard &Webpage"), this);
+	homepageAct->setShortcut(tr("Ctrl+V"));
+	homepageAct->setStatusTip(tr("........"));
+	connect(homepageAct, SIGNAL(triggered()), this, SLOT(homepage()));
+
+	donationAct = new QAction(QIcon(":/images/paste.png"), tr("Make a &Donation"), this);
+	donationAct->setShortcut(tr("Ctrl+V"));
+	donationAct->setStatusTip(tr("........"));
+	connect(donationAct, SIGNAL(triggered()), this, SLOT(donate()));
+
+	licenseAct = new QAction(QIcon(":/images/paste.png"), tr("&License"), this);
+	licenseAct->setShortcut(tr("Ctrl+V"));
+	licenseAct->setStatusTip(tr("........"));
+	connect(licenseAct, SIGNAL(triggered()), this, SLOT(license()));
+
+	aboutAct = new QAction(tr("&About"), this);
+	aboutAct->setStatusTip(tr("Show the application's About box"));
+	connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+
+	aboutQtAct = new QAction(tr("About &Qt"), this);
+	aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
+	connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+};
+
+void mainWindow::createMenus()
+{
+    /*menuBar = new QMenuBar;*/
 
     QMenu *fileMenu = new QMenu(tr("&File"), this);
-	QAction *openAction = fileMenu->addAction(tr("&Open File..."));
-	QAction *saveAction = fileMenu->addAction(tr("&Save"));
-	QAction *saveAsAction = fileMenu->addAction(tr("Save &As..."));
+	fileMenu->addAction(openAct);
+	fileMenu->addAction(saveAct);
+	fileMenu->addAction(saveAsAct);
 	fileMenu->addSeparator();
-    QAction *exitAction = fileMenu->addAction(tr("E&xit"));
-    menuBar->addMenu(fileMenu);
+    fileMenu->addAction(exitAct);
+    menuBar()->addMenu(fileMenu);
 
 	QMenu *toolsMenu = new QMenu(tr("&Tools"), this);
-	QAction *settingsAction = toolsMenu->addAction(tr("&Preferences"));
-    menuBar->addMenu(toolsMenu);
+	toolsMenu->addAction(settingsAct);
+    menuBar()->addMenu(toolsMenu);
 
 	QMenu *helpMenu = new QMenu(tr("&Help"), this);
-	QAction *helpAction = helpMenu->addAction(tr("GT-8 FX FloorBoard &Help"));
-	QAction *homepageAction = helpMenu->addAction(tr("GT-8 FX FloorBoard &Webpage"));
+	helpMenu->addAction(helpAct);
+	helpMenu->addAction(homepageAct);
 	helpMenu->addSeparator();
-	QAction *donationAction = helpMenu->addAction(tr("Make a &Donation"));
-	QAction *licenseAction = helpMenu->addAction(tr("&License"));
-	helpMenu->addSeparator(); QAction *aboutAction = helpMenu->addAction(tr("&About"));
-    menuBar->addMenu(helpMenu);
-
-	connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
-	connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
-	connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
-	connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
-	connect(settingsAction, SIGNAL(triggered()), this, SLOT(settings()));
-	connect(helpAction, SIGNAL(triggered()), this, SLOT(help()));
-	connect(homepageAction, SIGNAL(triggered()), this, SLOT(homepage()));
-	connect(donationAction, SIGNAL(triggered()), this, SLOT(donate()));
-	connect(licenseAction, SIGNAL(triggered()), this, SLOT(license()));
-	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+	helpMenu->addAction(donationAct);
+	helpMenu->addAction(licenseAct);
+	helpMenu->addSeparator(); 
+	helpMenu->addAction(aboutAct);
+	helpMenu->addAction(aboutQtAct);
+    menuBar()->addMenu(helpMenu);
 };
 
 void mainWindow::createStatusBar()
 {
-	/*statusBar()->setSizeGripEnabled(false);
-	statusBar()->showMessage(tr("Ready"), 2000);*/
-};
-
-void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
-{
-	int x = this->geometry().x() - ((floorSize.width() - oldFloorSize.width()) / 2);
-	int y = this->geometry().y();
-	this->setFixedWidth(floorSize.width());
-	this->setGeometry(x, y, floorSize.width(), this->height());
+	statusBar()->setSizeGripEnabled(false);
+	statusBar()->showMessage(tr("Ready"));
 };
 
 /* FILE MENU */

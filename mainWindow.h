@@ -28,16 +28,14 @@
 #include "sysxWriter.h"
 #include "MidiTable.h"
 
-class mainWindow : public QWidget
-//class mainWindow : public QMainWindow
+//class mainWindow : public QWidget
+class mainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     mainWindow(QWidget *parent = 0);
 	~mainWindow();
-	void createMenu();
-	void createStatusBar();
 	QSize getWindowSize();
 	void closeEvent(QCloseEvent* ce);
 
@@ -57,13 +55,25 @@ public slots:
 	void about();
 
 private:
-	QMenuBar *menuBar;
-	//QStatusBar *statusBar;
+	void createActions();
+	void createMenus();
+	void createStatusBar();
+
+	//QMenuBar *menuBar;
 	QMenu *fileMenu;
-	QAction *openAction;
-	QAction *saveAction;
-	QAction *saveAsAction;
-	QAction *exitAction;
+	QMenu *toolsMenu;
+	QMenu *helpMenu;
+	QAction *openAct;
+	QAction *saveAct;
+	QAction *saveAsAct;
+	QAction *exitAct;
+	QAction *settingsAct;
+	QAction *helpAct;
+	QAction *homepageAct;
+	QAction *donationAct;
+	QAction *licenseAct;
+	QAction *aboutAct;
+	QAction *aboutQtAct;
 	QSize wSize;
 
 	sysxWriter file;
