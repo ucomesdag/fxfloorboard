@@ -20,11 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QLayout>
-#include <QDesktopServices>
-#include <QUrl>
-#include <QMessageBox>
-#include <QFileDialog>
+#include <QtGui>
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"
@@ -32,8 +28,11 @@
 
 mainWindow::mainWindow(QWidget *parent)
     : QWidget(parent)
+/*mainWindow::mainWindow(QWidget *parent)
+	: QMainWindow(parent)*/
 {
 	createMenu();
+	createStatusBar();
 
 	floorBoard *fxsBoard = new floorBoard(this);
 	this->fxFloorBoard = fxsBoard;
@@ -104,6 +103,12 @@ void mainWindow::createMenu()
 	connect(donationAction, SIGNAL(triggered()), this, SLOT(donate()));
 	connect(licenseAction, SIGNAL(triggered()), this, SLOT(license()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+};
+
+void mainWindow::createStatusBar()
+{
+	/*statusBar()->setSizeGripEnabled(false);
+	statusBar()->showMessage(tr("Ready"), 2000);*/
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)

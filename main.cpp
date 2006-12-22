@@ -20,10 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtGui>
-#include <QDesktopWidget>
-#include <QFile>
+#include <QApplication>
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "MidiTable.h"

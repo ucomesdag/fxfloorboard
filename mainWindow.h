@@ -23,14 +23,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QWidget>
-#include <QMenuBar>
-#include <QFile>
+#include <QMainWindow>
 #include "floorBoard.h"
 #include "sysxWriter.h"
 #include "MidiTable.h"
 
 class mainWindow : public QWidget
+//class mainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -38,6 +37,7 @@ public:
     mainWindow(QWidget *parent = 0);
 	~mainWindow();
 	void createMenu();
+	void createStatusBar();
 	QSize getWindowSize();
 	void closeEvent(QCloseEvent* ce);
 
@@ -58,6 +58,7 @@ public slots:
 
 private:
 	QMenuBar *menuBar;
+	//QStatusBar *statusBar;
 	QMenu *fileMenu;
 	QAction *openAction;
 	QAction *saveAction;

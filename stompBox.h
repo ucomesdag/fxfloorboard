@@ -24,10 +24,6 @@
 #define STOMPBOX_H
 
 #include <QtGui>
-#include <QWidget>
-#include <QPixmap>
-#include <QList>
-#include <QComboBox>
 #include "MidiTable.h"
 
 class stompBox : public QWidget
