@@ -194,21 +194,23 @@ void stompBox::setComboBox(Midi items, QRect geometry)
 	comboBox->view()->setMinimumWidth( maxLenght + 10 );
 };
 
-void stompBox::valueChanged(int value, QString typeId, QString valueId)
+void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 {
 	MidiTable *midiTable = MidiTable::Instance();
-	Midi items = midiTable->getMidiMap("Stucture", typeId, "00", valueId);
+	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
 	QString fxName, valueName;
-	if(typeId == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency
+	if(hex1 == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency.
 	{
 		fxName = "Noise Suppressor";
 		valueName = items.desc.remove("NS :");
 	}
 	else
 	{
-		fxName = midiTable->getMidiMap("Stucture", typeId).name;
+		fxName = midiTable->getMidiMap("Stucture", hex1).name;
 		valueName = items.desc;
 	};
-	QString valueHex = QString::number(value, 10);
-	emit valueChanged(fxName, valueName, valueHex);
+	QString valueHex = QString::number(value, 16).toUpper();
+	if(valueHex.length() < 2) valueHex.prepend("0");
+	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+	emit valueChanged(fxName, valueName, valueStr);
 };

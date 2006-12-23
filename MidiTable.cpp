@@ -211,13 +211,89 @@ int MidiTable::getRange(QString root, QString hex1, QString hex2, QString hex3)
 	Midi range = getMidiMap(root, hex1, hex2, hex3);
 	bool ok;
 	int lastIndex;
-	if (range.level.last().value == "range")
+	if(range.level.last().value == "range")
 	{
 		lastIndex = range.level.last().name.split("/").at(1).toInt(&ok, 16);
+	}
+	else if(range.level.last().type.contains("DATA"))
+	{
+		int maxRange = QString("7F").toInt(&ok, 16) + 1; // index starts at 0 -> 0-127 = 128 entry's.
+		int lastIndex1 = range.level.last().value.toInt(&ok, 16);
+		int lastIndex2 = range.level.last().level.last().value.toInt(&ok, 16);
+		lastIndex = (lastIndex1 * maxRange) + lastIndex2;
 	}
 	else
 	{
 		lastIndex = range.level.last().value.toInt(&ok, 16);
 	};
 	return lastIndex;
+};
+
+QString MidiTable::getValue(QString root, QString hex1, QString hex2, QString hex3, QString hex4)
+{
+	Midi range = getMidiMap(root, hex1, hex2, hex3);
+	QString valueStr; bool ok;
+	if(range.level.last().type.contains("DATA"))
+	{
+		int maxRange = QString("7F").toInt(&ok, 16) + 1;
+		int value = hex4.toInt(&ok, 16);
+		int dif = value/maxRange;
+		QString index1 = QString::number(dif, 16).toUpper();
+		if(index1.length() < 2) index1.prepend("0");
+		QString index2 = QString::number(value - (dif * maxRange), 16).toUpper();
+		if(index2.length() < 2) index2.prepend("0");
+
+		Midi dataRange = range.level.at(range.id.indexOf(index1));
+		valueStr = rangeToValue(dataRange, index2);
+	}
+	else
+	{
+		valueStr = rangeToValue(range, hex4);
+	};
+	return valueStr;
+};
+
+QString MidiTable::rangeToValue(Midi range, QString hex)
+{
+	QString valueStr;
+	if(!range.id.contains(hex) && range.id.contains("range"))
+	{
+		int i = 0; bool ok;
+		while(range.id.indexOf("range", i) != -1)
+		{
+			QStringList rangeList = range.level.at(range.id.indexOf("range", i)).name.split("/");
+			QString desc = range.level.at(range.id.indexOf("range", i)).desc;
+			
+			int valueInt = hex.toInt(&ok, 16);
+			int start = rangeList.at(0).toInt(&ok, 16);
+			int end = rangeList.at(1).toInt(&ok, 16);
+			
+			if(valueInt == start || (valueInt > start && valueInt < end) || valueInt == end)
+			{
+				
+				double min = rangeList.at(2).toDouble(&ok);
+				double max = rangeList.at(3).toDouble(&ok);
+				double dataRange = max - min;
+				double range = end - start;
+				double result = ((double)valueInt * (dataRange / range)) + min;
+				int precision;
+				if(rangeList.at(3).contains("."))
+				{
+					precision = rangeList.at(3).split(".").last().length();
+				}
+				else
+				{
+					precision = 0;
+				};
+				valueStr = QString::number(result, 10, precision) + desc;
+				break;
+			};
+			i++;
+		};
+	}
+	else
+	{
+		valueStr = range.level.at(range.id.indexOf(hex)).name;
+	};
+	return valueStr;
 };

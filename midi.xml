@@ -802,7 +802,7 @@
           <PARAM value="01" name="Limiter" desc="Limiter" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Sustain">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="04" name="" abbr="" desc="Attack">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
@@ -817,7 +817,7 @@
           <PARAM value="range" name="00/64/-50/+50" desc="-50 - +50" />
         </DATA>
         <DATA value="08" name="" abbr="" desc="Effect Level">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
       </LSB>
     </LSB>
@@ -860,10 +860,10 @@
           <PARAM value="02" name="Branch Out" desc="Branch Out" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Send Level">
-          <PARAM value="range" name="00/64/00/200" desc="0 - 200" />
+          <PARAM value="range" name="00/64/00/200" desc="" />
         </DATA>
         <DATA value="04" name="" abbr="" desc="Return Level">
-          <PARAM value="range" name="00/64/00/200" desc="0 - 200" />
+          <PARAM value="range" name="00/64/00/200" desc="" />
         </DATA>
       </LSB>
     </LSB>
@@ -910,7 +910,7 @@
           <PARAM value="20" name="Custom3" desc="Custom 3" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Drive">
-          <PARAM value="range" name="00/78/00/120" desc="0 - 120" />
+          <PARAM value="range" name="00/78/00/120" desc="" />
         </DATA>
         <DATA value="04" name="" abbr="" desc="Bottom">
           <PARAM value="range" name="00/64/-50/+50" desc="-50 - +50" />
@@ -919,7 +919,7 @@
           <PARAM value="range" name="00/64/-50/+50" desc="-50 - +50" />
         </DATA>
         <DATA value="06" name="" abbr="" desc="Effect Level">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="07" name="" abbr="" desc="Direct Level">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
@@ -1210,7 +1210,7 @@
           <PARAM value="0A" name="800Hz" desc="" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Low EQ">
-          <PARAM value="range" name="00/28/-20/+20" desc="-20dB - +20dB" />
+          <PARAM value="range" name="00/28/-20/+20" desc="dB" />
         </DATA>
         <DATA value="04" name="" abbr="" desc="Low-Middle Frequency">
           <PARAM value="00" name="20.0Hz" desc="" />
@@ -1251,7 +1251,7 @@
           <PARAM value="05" name="16" desc="" />
         </DATA>
         <DATA value="06" name="" abbr="" desc="Low-Middle EQ">
-          <PARAM value="range" name="00/28/-20/+20" desc="-20dB - +20dB" />
+          <PARAM value="range" name="00/28/-20/+20" desc="dB" />
         </DATA>
         <DATA value="07" name="" abbr="" desc="High-Middle Frequency">
           <PARAM value="00" name="20.0Hz" desc="" />
@@ -1292,10 +1292,10 @@
           <PARAM value="05" name="16" desc="" />
         </DATA>
         <DATA value="09" name="" abbr="" desc="High-Middle EQ">
-          <PARAM value="range" name="00/28/-20/+20" desc="-20dB - +20dB" />
+          <PARAM value="range" name="00/28/-20/+20" desc="dB" />
         </DATA>
         <DATA value="0A" name="" abbr="" desc="High EQ">
-          <PARAM value="range" name="00/28/-20/+20" desc="-20dB - +20dB" />
+          <PARAM value="range" name="00/28/-20/+20" desc="dB" />
         </DATA>
         <DATA value="0B" name="" abbr="" desc="High Cut">
           <PARAM value="00" name="700Hz" desc="" />
@@ -1310,7 +1310,7 @@
           <PARAM value="09" name="Flat" desc="" />
         </DATA>
         <DATA value="0C" name="" abbr="" desc="Effect Level">
-          <PARAM value="range" name="00/28/-20/+20" desc="-20dB - +20dB" />
+          <PARAM value="range" name="00/28/-20/+20" desc="dB" />
         </DATA>
       </LSB>
     </LSB>
@@ -2723,51 +2723,51 @@
           <PARAM value="0A" name="Modulate" desc="Modulate" />
           <PARAM value="0B" name="Hold" desc="Hold" />
         </DATA>
-        <DATA value="03" name="" abbr="" desc="Delay Time">
+        <DATA value="03" name="Delay Time" abbr="" desc="Time">
           <DATA value="00" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/00/127" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/00/127" desc="ms" />
           </DATA>
           <DATA value="01" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/128/255" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/128/255" desc="ms" />
           </DATA>
           <DATA value="02" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/256/383" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/256/383" desc="ms" />
           </DATA>
           <DATA value="03" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/384/511" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/384/511" desc="ms" />
           </DATA>
           <DATA value="04" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/512/639" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/512/639" desc="ms" />
           </DATA>
           <DATA value="05" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/640/767" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/640/767" desc="ms" />
           </DATA>
           <DATA value="06" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/768/895" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/768/895" desc="ms" />
           </DATA>
           <DATA value="07" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/896/1023" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/896/1023" desc="ms" />
           </DATA>
           <DATA value="08" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/1024/1151" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/1024/1151" desc="ms" />
           </DATA>
           <DATA value="09" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/1152/1279" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/1152/1279" desc="ms" />
           </DATA>
           <DATA value="0A" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/1280/1407" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/1280/1407" desc="ms" />
           </DATA>
           <DATA value="0B" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/1408/1535" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/1408/1535" desc="ms" />
           </DATA>
           <DATA value="0C" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/1536/1663" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/1536/1663" desc="ms" />
           </DATA>
           <DATA value="0D" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/7F/1664/1791" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/7F/1664/1791" desc="ms" />
           </DATA>
           <DATA value="0E" name="" abbr="" desc="Delay Time(LSB)">
-            <PARAM value="range" name="00/08/1792/1800" desc="0ms - 1800ms" />
+            <PARAM value="range" name="00/08/1792/1800" desc="ms" />
             <PARAM value="09" name="sixteenth note" desc="" />
             <PARAM value="0A" name="eighth note triplet" desc="" />
             <PARAM value="0B" name="doted sixteenth note" desc="" />
@@ -2787,7 +2787,7 @@
           <PARAM value="range" name="00/64/00/100" desc="0% - 100%" />
         </DATA>
         <DATA value="06" name="" abbr="" desc="Feedback">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="07" name="" abbr="" desc="High Cut">
           <PARAM value="00" name="700Hz" desc="" />
@@ -2955,23 +2955,23 @@
           <PARAM value="02" name="Stereo2" desc="Stereo 2" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Rate">
-          <PARAM value="range" name="00/64/00/100" desc="Rate" />
-          <PARAM value="65" name="whole note" desc="Rate" />
-          <PARAM value="66" name="doted half note" desc="Rate" />
-          <PARAM value="67" name="whole note triplet" desc="Rate" />
-          <PARAM value="68" name="half note" desc="Rate" />
-          <PARAM value="69" name="doted quarter note" desc="Rate" />
-          <PARAM value="6A" name="half note triplet" desc="Rate" />
-          <PARAM value="6B" name="quarter note" desc="Rate" />
-          <PARAM value="6C" name="doted eighth note" desc="Rate" />
-          <PARAM value="6D" name="quarter note triplet" desc="Rate" />
-          <PARAM value="6E" name="eighth note" desc="Rate" />
-          <PARAM value="6F" name="doted sixteenth note" desc="Rate" />
-          <PARAM value="70" name="eighth note triplet" desc="Rate" />
-          <PARAM value="71" name="sixteenth note" desc="Rate" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
+          <PARAM value="65" name="whole note" desc="" />
+          <PARAM value="66" name="doted half note" desc="" />
+          <PARAM value="67" name="whole note triplet" desc="" />
+          <PARAM value="68" name="half note" desc="" />
+          <PARAM value="69" name="doted quarter note" desc="" />
+          <PARAM value="6A" name="half note triplet" desc="" />
+          <PARAM value="6B" name="quarter note" desc="" />
+          <PARAM value="6C" name="doted eighth note" desc="" />
+          <PARAM value="6D" name="quarter note triplet" desc="" />
+          <PARAM value="6E" name="eighth note" desc="" />
+          <PARAM value="6F" name="doted sixteenth note" desc="" />
+          <PARAM value="70" name="eighth note triplet" desc="" />
+          <PARAM value="71" name="sixteenth note" desc="" />
         </DATA>
         <DATA value="04" name="" abbr="" desc="Depth">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="05" name="" abbr="" desc="Pre Delay">
           <PARAM value="range" name="00/50/0.0/40.0" desc="0.0ms - 40.0ms" />
@@ -3023,7 +3023,7 @@
           <PARAM value="06" name="Mod" desc="Modulate" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="Reverb Time">
-          <PARAM value="range" name="00/63/0.1/10.0" desc="0.1s - 10.0s" />
+          <PARAM value="range" name="00/63/0.1/10.0" desc="s" />
         </DATA>
         <DATA value="04" name="" abbr="" desc="Pre Delay">
           <PARAM value="range" name="00/64/00/100" desc="0msec - 100msec" />
@@ -3057,7 +3057,7 @@
           <PARAM value="range" name="00/0A/00/10" desc="0 - 10" />
         </DATA>
         <DATA value="08" name="" abbr="" desc="Effect Level">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="09" name="" abbr="" desc="Direct Level">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
@@ -3071,10 +3071,10 @@
           <PARAM value="01" name="On" desc="" />
         </DATA>
         <DATA value="01" name="" abbr="" desc="NS :Threshold">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="02" name="" abbr="" desc="NS :Release">
-          <PARAM value="range" name="00/64/00/100" desc="0 - 100" />
+          <PARAM value="range" name="00/64/00/100" desc="" />
         </DATA>
         <DATA value="03" name="" abbr="" desc="NS :Detect">
           <PARAM value="00" name="Input" desc="" />

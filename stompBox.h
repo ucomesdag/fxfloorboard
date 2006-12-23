@@ -48,10 +48,10 @@ public:
 
 public slots:
 	void updatePos(signed int offsetDif);
-	void valueChanged(int value, QString typeId, QString valueId);
+	void valueChanged(int value, QString hex1, QString hex2, QString hex3);
 	
 signals:
-	void valueChanged(QString fxName, QString valueName, QString valueHex);
+	void valueChanged(QString fxName, QString valueName, QString valueStr);
 
 protected:
 	void paintEvent(QPaintEvent *event);

@@ -25,12 +25,13 @@
 #include "customSlider.h"
 
 customSlider::customSlider(double value, double min, double max, double single, double page, 
-						QPoint sliderPos, QWidget *parent, QString typeId, QString valueId, 
+						QPoint sliderPos, QWidget *parent, QString hex1, QString hex2, QString hex3, 
 						QString slideImagePath, QString sliderButtonImagePath)
     : QWidget(parent)
 {
-	this->typeId = typeId;
-	this->valueId = valueId;	
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;	
 	this->value = value;
 	this->min = min;
 	this->max = max;
@@ -45,8 +46,8 @@ customSlider::customSlider(double value, double min, double max, double single, 
 	setOffset(value);
     setGeometry(sliderPos.x(), sliderPos.y(), slideSize.width(), slideSize.height());
 
-	QObject::connect(this, SIGNAL( valueChanged(int, QString, QString) ),
-                this->parent(), SLOT( valueChanged(int, QString, QString) ));
+	QObject::connect(this, SIGNAL( valueChanged(int, QString, QString, QString) ),
+                this->parent(), SLOT( valueChanged(int, QString, QString, QString) ));
 };
 
 void customSlider::paintEvent(QPaintEvent *)
@@ -85,7 +86,7 @@ void customSlider::mouseTrigger(QPoint mousePos)
 	
 	double dataRange = max - min;
 	double range = slideSize.height() - sliderButtonSize.height();
-	double result = mousePos.y() - (sliderButtonSize.height() / 2) - 0.5; // -0.5 because button / 2 is not a round number and we want the pointer to hit the middle
+	double result = mousePos.y() - (sliderButtonSize.height() / 2);
 	double _newValue = max - (result / (range / dataRange));
 
 	QPoint buttonCenter = QPoint(0, (sliderButtonSize.height()/2));
@@ -182,6 +183,6 @@ void customSlider::setValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
-		emit valueChanged((int)value, this->typeId, this->valueId);
+		emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
     };
 };

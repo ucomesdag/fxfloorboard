@@ -55,6 +55,9 @@ public:
 	int getRange(QString root, QString hex1, QString hex2, QString hex3);
 	//int getRange(QString root, QString hex1, QString hex2, QString hex3, QString hex4);
 	//int getRange(QString root, QString hex1, QString hex2, QString hex3, QString hex4, QString hex5);
+
+	QString getValue(QString root, QString hex1, QString hex2, QString hex3, QString hex4);
+	QString rangeToValue(Midi range, QString value);
 	
 protected:
 	MidiTable();

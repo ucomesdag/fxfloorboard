@@ -25,12 +25,13 @@
 #include "customDial.h"
 
 customDial::customDial(double value, double min, double max, double single, double page, 
-					   QPoint dialPos, QWidget *parent, QString typeId, QString valueId, 
+					   QPoint dialPos, QWidget *parent, QString hex1, QString hex2, QString hex3, 
 					   QString imagePath, unsigned int imageRange)
     : QWidget(parent)
 {
-	this->typeId = typeId;
-	this->valueId = valueId;
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;
 	this->value = value;
 	this->min = min;
 	this->max = max;
@@ -45,8 +46,8 @@ customDial::customDial(double value, double min, double max, double single, doub
 	setOffset(value);
     setGeometry(dialPos.x(), dialPos.y(), dialSize.width(), dialSize.height());
 
-	QObject::connect(this, SIGNAL( valueChanged(int, QString, QString) ),
-                this->parent(), SLOT( valueChanged(int, QString, QString) ));
+	QObject::connect(this, SIGNAL( valueChanged(int, QString, QString, QString) ),
+                this->parent(), SLOT( valueChanged(int, QString, QString, QString) ));
 };
 
 void customDial::paintEvent(QPaintEvent *)
@@ -96,9 +97,11 @@ void customDial::mousePressEvent(QMouseEvent *event)
 
 void customDial::mouseMoveEvent(QMouseEvent *event)
 {
+	double dataRange = max - min;
+	double range = imageRange - 0;
 	double distY = (double)event->pos().y() - (double)_startpos.y();
 	double numSteps = (int)((distY/1.5) + 0.5);
-	
+	//double numSteps = (int)((distY/2) + 0.5) * (dataRange / range); //Same distance for all.
 	double _newValue = _lastValue - (numSteps * single);
 	
 	if( (_startpos.y() < _lastpos.y() && _newValue < min)
@@ -185,6 +188,6 @@ void customDial::setValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
-		emit valueChanged((int)value, this->typeId, this->valueId);
+		emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
     };
 };

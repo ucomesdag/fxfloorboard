@@ -42,8 +42,8 @@ stompbox_lp::stompbox_lp(QWidget *parent)
 	int range1 = midiTable->getRange("Stucture", "04", "00", "03");
 	int range2 = midiTable->getRange("Stucture", "04", "00", "04");
 
-	customDial *knob1 = new customDial(0, 0, range1, 1, 10, QPoint::QPoint(6, 9), this, "04", "03");
-	customDial *knob2 = new customDial(0, 0, range2, 1, 10, QPoint::QPoint(53, 9), this, "04", "04");
+	customDial *knob1 = new customDial(0, 0, range1, 1, 10, QPoint::QPoint(6, 9), this, "04", "00", "03");
+	customDial *knob2 = new customDial(0, 0, range2, 1, 10, QPoint::QPoint(53, 9), this, "04", "00", "04");
 	customButton *button = new customButton(false, QPoint::QPoint(4, 110), this);
 	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
 	QObject::connect(button, SIGNAL(valueChanged(bool)),

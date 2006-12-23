@@ -38,8 +38,9 @@ public:
 		double page = 10,
 		QPoint sliderPos = QPoint::QPoint(0, 0), 
 		QWidget *parent = 0,
-		QString typeId = "void",
-		QString valueId = "void",
+		QString hex1 = "void",
+		QString hex2 = "void",
+		QString hex3 = "void",
 		QString slideImagePath = ":/images/slide.png",
 		QString sliderButtonImagePath = ":/images/sliderbutton.png");
 	void setOffset(double value);
@@ -47,7 +48,7 @@ public:
 	void mouseTrigger(QPoint mousePos);
 
 signals:
-	void valueChanged(int newValue, QString typeId, QString valueId);
+	void valueChanged(int newValue, QString hex1, QString hex2, QString hex3);
 
 protected:
    void paintEvent(QPaintEvent *event);
@@ -57,7 +58,9 @@ protected:
    void keyPressEvent(QKeyEvent *event);
 
 private:
-	QString typeId;
+	QString hex1;
+	QString hex2;
+	QString hex3;
 	QString valueId;
 	double value; 
 	double min; 
