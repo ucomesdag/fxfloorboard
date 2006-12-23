@@ -154,7 +154,7 @@ floorBoard::~floorBoard()
 		preferences->setPreferences("Window", "Collapsed", "width", "");
 	};
 	preferences->setPreferences("Window", "Collapsed", "bool", QString(this->colapseState?"true":"false"));
-	preferences->savePreferences();
+	//preferences->savePreferences();
 };					
 
 void floorBoard::paintEvent(QPaintEvent *)
@@ -216,10 +216,13 @@ void floorBoard::dragEnterEvent(QDragEnterEvent *event)
 	QString uri(data);
 	
 	if (event->mimeData()->hasFormat("application/x-stompbox") ||
-		uri.contains(".syx", Qt::CaseInsensitive)) {
-        if (children().contains(event->source())) {
+		uri.contains(".syx", Qt::CaseInsensitive) &&
+		event->answerRect().intersects(this->geometry())) 
+	{
+        if (children().contains(event->source())) 
+		{
             event->setDropAction(Qt::MoveAction);
-            event->accept();
+			event->accept();
         } else {
             event->acceptProposedAction();
         };
@@ -233,11 +236,14 @@ void floorBoard::dragMoveEvent(QDragMoveEvent *event)
 	QByteArray data = event->mimeData()->data("text/uri-list");
 	QString uri(data);
 	
-	if (event->mimeData()->hasFormat("application/x-stompbox") ||
-		uri.contains(".syx", Qt::CaseInsensitive)) {
-        if (children().contains(event->source())) {
+	if ( event->mimeData()->hasFormat("application/x-stompbox") ||
+		uri.contains(".syx", Qt::CaseInsensitive) &&
+		event->answerRect().intersects(this->geometry()) ) 
+	{
+        if (children().contains(event->source())) 
+		{
             event->setDropAction(Qt::MoveAction);
-            event->accept();
+			event->accept();
         } else {
             event->acceptProposedAction();
         };
@@ -261,7 +267,7 @@ void floorBoard::dropEvent(QDropEvent *event)
 		QPoint dragPoint = (event->pos() - topLeftOffset) + QPoint::QPoint(stompSize.width()/2, stompSize.height()/2);
 		int stompSpacing = fxPos.at(1).x() - (fxPos.at(0).x() + stompSize.width());
 		
-		int destIndex;
+		int destIndex = -1; // Set to out of range by default.
 		int orgIndex = fx.indexOf(stompId);
 		for(int x=0;x<fx.size();x++)
 		{
@@ -272,29 +278,37 @@ void floorBoard::dropEvent(QDropEvent *event)
 				destIndex = fx.indexOf(fx.at(x));
 			}
 			else if( (x == (int)fx.size()-1 || 
-			( x == (int)(fx.size()/2)-1 && fx.at(stompId) != fx.size()/2 ) ) 
+						( x == (int)(fx.size()/2)-1 && fx.at(stompId) != fx.size()/2 ) ) 
 						&& lastDropRect.contains(dragPoint))
 			{
 				destIndex = fx.indexOf(fx.at(x)) + 1;
 			};
 		};
 
-		if( orgIndex < destIndex )
+		if(destIndex > -1 && destIndex < fx.size() + 1)  
+			// Make sure we are not dropping the stomp out of range. 
 		{
-			destIndex = destIndex - 1;
-			for(int i=orgIndex;i<destIndex ;i++)
+			if( orgIndex < destIndex )
 			{
-				setStompPos(fx.at(i + 1), i);
+				destIndex = destIndex - 1;
+				for(int i=orgIndex;i<destIndex ;i++)
+				{
+					setStompPos(fx.at(i + 1), i);
+				};
+				setStompPos(stompId, destIndex );
+			}
+			else if( orgIndex > destIndex )
+			{
+				for(int i=orgIndex;i>destIndex;i--)
+				{
+					setStompPos(fx.at(i - 1), i);
+				};
+				setStompPos(stompId, destIndex);
 			};
-			setStompPos(stompId, destIndex );
 		}
-		else if( orgIndex > destIndex )
+		else
 		{
-			for(int i=orgIndex;i>destIndex;i--)
-			{
-				setStompPos(fx.at(i - 1), i);
-			};
-			setStompPos(stompId, destIndex);
+			event->ignore();
 		};
 	} 
 	else 

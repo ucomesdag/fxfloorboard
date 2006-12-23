@@ -176,7 +176,7 @@ WindowPage::WindowPage(QWidget *parent)
 	QGroupBox *splashScreenGroup = new QGroupBox(tr("Show splash screen"));
 
 	QLabel *splashDescriptionLabel = new QLabel(tr("Disable or enable the splash screen."));
-	QCheckBox *splashCheckBox = new QCheckBox(tr("Splash Screen"));
+	QCheckBox *splashCheckBox = new QCheckBox(tr("Splash screen"));
 	this->splashCheckBox = splashCheckBox;
 
 	if(splashScreen=="true")

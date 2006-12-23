@@ -71,7 +71,6 @@ void customSlider::setOffset(double _newValue)
 {
 	double dataRange = max - min;
 	double range = slideSize.height()  - sliderButtonSize.height();
-	//double result = (0 - min) + (_newValue / (dataRange / range));
 	double result = (max - _newValue) * (range / dataRange);
 	
 	this->value = _newValue;	
@@ -82,12 +81,12 @@ void customSlider::setOffset(double _newValue)
 
 void customSlider::mouseTrigger(QPoint mousePos)
 {
+	this->_lastValue = value;
+	
 	double dataRange = max - min;
 	double range = slideSize.height() - sliderButtonSize.height();
-
-	this->_lastValue = value;
-
-	double _newValue = (double)max - ((mousePos.y() - (sliderButtonSize.height() * 2) * (range / dataRange)) *  (dataRange / range));
+	double result = mousePos.y() - (sliderButtonSize.height() / 2) - 0.5; // -0.5 because button / 2 is not a round number and we want the pointer to hit the middle
+	double _newValue = max - (result / (range / dataRange));
 
 	QPoint buttonCenter = QPoint(0, (sliderButtonSize.height()/2));
 	QPoint relativePos = mousePos - buttonCenter;

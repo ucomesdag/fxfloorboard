@@ -65,7 +65,6 @@ void customDial::setOffset(double _newValue)
 {
 	double dataRange = max - min;
 	double range = imageRange - 0;
-	//double result = (0 - min) + (_newValue / (dataRange / range));
 	double result = (_newValue - min) * (range / dataRange);
 	
 	int imageNr = (int)(result + 0.5);

@@ -23,6 +23,7 @@
 #include "MidiTable.h"     
 #include "MidiTableDestroyer.h" 
 #include <QFile> 
+#include <QStringList>
  
 MidiTable::MidiTable()  
 { 
@@ -158,13 +159,13 @@ Midi MidiTable::getMidiMap(QString root, QString hex1)
 	return level1; 
 };
 
-Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2)
+/*Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2)
 { 
 	Midi section = midiMap.level.at( midiMap.id.indexOf(root) );
 	Midi level1 = section.level.at( section.id.indexOf(hex1) );
 	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
 	return level2; 
-};
+};*/
 
 Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex3)
 { 
@@ -194,7 +195,7 @@ Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex
 	return level4; 
 };
 
-Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex3,  QString hex4, QString hex5)
+/*Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex3,  QString hex4, QString hex5)
 { 
 	Midi section = midiMap.level.at( midiMap.id.indexOf(root) );
 	Midi level1 = section.level.at( section.id.indexOf(hex1) );
@@ -203,4 +204,20 @@ Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex
 	Midi level4 = level3.level.at( level3.id.indexOf(hex4) );
 	Midi level5 = level4.level.at( level4.id.indexOf(hex5) );
 	return level5; 
+};*/
+
+int MidiTable::getRange(QString root, QString hex1, QString hex2, QString hex3)
+{
+	Midi range = getMidiMap(root, hex1, hex2, hex3);
+	bool ok;
+	int lastIndex;
+	if (range.level.last().value == "range")
+	{
+		lastIndex = range.level.last().name.split("/").at(1).toInt(&ok, 16);
+	}
+	else
+	{
+		lastIndex = range.level.last().value.toInt(&ok, 16);
+	};
+	return lastIndex;
 };

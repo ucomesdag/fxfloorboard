@@ -88,7 +88,7 @@ mainWindow::~mainWindow()
 		preferences->setPreferences("Window", "Size", "width", "");
 		preferences->setPreferences("Window", "Size", "height", "");
 	};
-	preferences->savePreferences();
+	//preferences->savePreferences();
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
@@ -101,17 +101,17 @@ void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
 
 void mainWindow::createActions()
 {
-	openAct = new QAction(QIcon(":/images/open.png"), tr("&Open File..."), this);
+	openAct = new QAction(/*QIcon(":/images/open.png"),*/ tr("&Open File..."), this);
 	openAct->setShortcut(tr("Ctrl+O"));
 	openAct->setStatusTip(tr("Open an existing file"));
 	connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-	saveAct = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
+	saveAct = new QAction(/*QIcon(":/images/save.png"),*/ tr("&Save"), this);
 	saveAct->setShortcut(tr("Ctrl+S"));
 	saveAct->setStatusTip(tr("Save the document to disk"));
 	connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
-	saveAsAct = new QAction(QIcon(":/images/saveas.png"),tr("Save &As..."), this);
+	saveAsAct = new QAction(/*QIcon(":/images/saveas.png"),*/ tr("Save &As..."), this);
 	saveAsAct->setShortcut(tr("Ctrl+Shift+S"));
 	saveAsAct->setStatusTip(tr("Save the document under a new name"));
 	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
@@ -121,24 +121,24 @@ void mainWindow::createActions()
 	exitAct->setStatusTip(tr("Exit the application"));
 	connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-	settingsAct = new QAction(QIcon(":/images/preferences.png"), tr("&Preferences"), this);
+	settingsAct = new QAction(/*QIcon(":/images/preferences.png"),*/ tr("&Preferences"), this);
 	settingsAct->setShortcut(tr("Ctrl+P"));
 	settingsAct->setStatusTip(tr("...."));
 	connect(settingsAct, SIGNAL(triggered()), this, SLOT(settings()));
 
-	helpAct = new QAction(QIcon(":/images/help.png"), tr("GT-8 FX FloorBoard &Help"), this);
+	helpAct = new QAction(/*QIcon(":/images/help.png"),*/ tr("GT-8 FX FloorBoard &Help"), this);
 	helpAct->setShortcut(tr("Ctrl+F1"));
 	helpAct->setStatusTip(tr("....."));
 	connect(helpAct, SIGNAL(triggered()), this, SLOT(help()));
 
-	homepageAct = new QAction(QIcon(":/images/home.png"), tr("GT-8 FX FloorBoard &Webpage"), this);
+	homepageAct = new QAction(/*QIcon(":/images/home.png"),*/ tr("GT-8 FX FloorBoard &Webpage"), this);
 	homepageAct->setStatusTip(tr("........"));
 	connect(homepageAct, SIGNAL(triggered()), this, SLOT(homepage()));
 
-	donationAct = new QAction(QIcon(":/images/donate.png"), tr("Make a &Donation"), this);
+	donationAct = new QAction(/*QIcon(":/images/donate.png"),*/ tr("Make a &Donation"), this);
 	connect(donationAct, SIGNAL(triggered()), this, SLOT(donate()));
 
-	licenseAct = new QAction(QIcon(":/images/license.png"), tr("&License"), this);
+	licenseAct = new QAction(/*QIcon(":/images/license.png"),*/ tr("&License"), this);
 	licenseAct->setStatusTip(tr("........"));
 	connect(licenseAct, SIGNAL(triggered()), this, SLOT(license()));
 
@@ -328,7 +328,7 @@ void mainWindow::about()
 
 void mainWindow::closeEvent(QCloseEvent* ce)
 {
-	Preferences *preferences = Preferences::Instance();
-	preferences->savePreferences();
+	//Preferences *preferences = Preferences::Instance();
+	//preferences->savePreferences();
 	ce->accept();
 };
