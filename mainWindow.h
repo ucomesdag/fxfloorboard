@@ -28,8 +28,8 @@
 #include "sysxWriter.h"
 #include "MidiTable.h"
 
-//class mainWindow : public QWidget
-class mainWindow : public QMainWindow
+class mainWindow : public QWidget
+//class mainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -58,7 +58,8 @@ private:
 	void createMenus();
 	void createStatusBar();
 
-	//QMenuBar *menuBar;
+	QMenuBar *menuBar;
+	QStatusBar *statusBar;
 	QMenu *fileMenu;
 	QMenu *toolsMenu;
 	QMenu *helpMenu;

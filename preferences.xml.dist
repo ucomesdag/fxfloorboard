@@ -14,10 +14,10 @@
 		<MidiOut device=""/>
 	</Midi>
 	<Window>
-		<Collapsed bool="false"/>
-		<Position x="" y=""/>
-		<Restore sidepanel="false" window="false"/>
-		<Size default_width="945" width="945"/>
-		<Splash bool="true"/>
-	</Window>
+    <Collapsed bool="false" defaultwidth="945" width=""/>
+    <Position x="" y=""/>
+    <Restore sidepanel="false" window="false"/>
+    <Size height="" minheight="548" minwidth="788" width=""/>
+    <Splash bool="true"/>
+  </Window>
 </Preferences>

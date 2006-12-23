@@ -112,13 +112,14 @@ floorBoard::floorBoard(QWidget *parent,
 	bool ok;
 	Preferences *preferences = Preferences::Instance();
 	QString collapseState = preferences->getPreferences("Window", "Collapsed", "bool");
-	QString width = preferences->getPreferences("Window", "Size", "width");
-	QString default_width = preferences->getPreferences("Window", "Size", "default_width");
+	QString width = preferences->getPreferences("Window", "Collapsed", "width");
+	QString defaultwidth = preferences->getPreferences("Window", "Collapsed", "defaultwidth");
+	if(width.isEmpty()){ width = defaultwidth; }
+
+	this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
 	
 	if(preferences->getPreferences("Window", "Restore", "sidepanel")=="true")
 	{
-		this->l_floorSize = QSize::QSize(width.toInt(&ok, 10), floorSize.height());
-		
 		if(collapseState=="true")
 		{ 
 			this->setSize(l_floorSize);
@@ -134,7 +135,7 @@ floorBoard::floorBoard(QWidget *parent,
 	}
 	else
 	{
-		this->l_floorSize = QSize::QSize(default_width.toInt(&ok, 10), floorSize.height());
+		//this->l_floorSize = QSize::QSize(defaultwidth.toInt(&ok, 10), floorSize.height());
 		this->setSize(minSize);
 		this->colapseState = false;
 		emit setCollapseState(false);
@@ -144,8 +145,16 @@ floorBoard::floorBoard(QWidget *parent,
 floorBoard::~floorBoard()
 {
 	Preferences *preferences = Preferences::Instance();
-	preferences->setPreferences("Window", "Size", "width", QString::number(this->l_floorSize.width(), 10));
+	if(preferences->getPreferences("Window", "Restore", "sidepanel")=="true")
+	{
+		preferences->setPreferences("Window", "Collapsed", "width", QString::number(this->l_floorSize.width(), 10));
+	}
+	else
+	{
+		preferences->setPreferences("Window", "Collapsed", "width", "");
+	};
 	preferences->setPreferences("Window", "Collapsed", "bool", QString(this->colapseState?"true":"false"));
+	preferences->savePreferences();
 };					
 
 void floorBoard::paintEvent(QPaintEvent *)

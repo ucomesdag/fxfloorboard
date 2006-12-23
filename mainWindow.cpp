@@ -26,21 +26,33 @@
 #include "preferencesDialog.h"
 #include "SysxIO.h"
 
-/*mainWindow::mainWindow(QWidget *parent)
-    : QWidget(parent)*/
 mainWindow::mainWindow(QWidget *parent)
-	: QMainWindow(parent)
+    : QWidget(parent)
+/* For a stange reason when deriving from QMainWindow 
+	the performance is dead slow???
+
+mainWindow::mainWindow(QWidget *parent)
+	: QMainWindow(parent) */
 {
-	floorBoard *fxsBoard = new floorBoard(this);
+	fxsBoard = new floorBoard(this);
 	
 	this->setWindowTitle("GT-8 FX FloorBoard");
-	this->setCentralWidget(fxsBoard);
+	//this->setCentralWidget(fxsBoard);
 	
 	this->createActions();
 	this->createMenus();
 	this->createStatusBar();
 
-	this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->setMenuBar(menuBar);
+	mainLayout->addWidget(fxsBoard);
+	mainLayout->addWidget(statusBar);
+	mainLayout->setMargin(0);
+	mainLayout->setSpacing(0);
+	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+	setLayout(mainLayout);
+
+	//this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	QObject::connect(fxsBoard, SIGNAL( sizeChanged(QSize, QSize) ),
                 this, SLOT( updateSize(QSize, QSize) ) );
@@ -51,14 +63,32 @@ mainWindow::~mainWindow()
 	Preferences *preferences = Preferences::Instance();
 	if(preferences->getPreferences("Window", "Restore", "window")=="true")
 	{
-		preferences->setPreferences("Window", "Position", "x", QString::number(this->x(), 10));
+		QString posx, width;
+		if(preferences->getPreferences("Window", "Restore", "sidepanel")=="true" &&
+			preferences->getPreferences("Window", "Collapsed", "bool")=="true")
+		{
+			width = QString::number(this->width(), 10);
+			posx = QString::number(this->x(), 10);
+		}
+		else
+		{
+			bool ok;
+			width = preferences->getPreferences("Window", "Size", "minwidth");
+			posx = QString::number(this->x()+((this->width()-width.toInt(&ok,10))/2), 10);
+		};
+		preferences->setPreferences("Window", "Position", "x", posx);
 		preferences->setPreferences("Window", "Position", "y", QString::number(this->y(), 10));
+		preferences->setPreferences("Window", "Size", "width", width);
+		preferences->setPreferences("Window", "Size", "height", QString::number(this->height(), 10));
 	}
 	else
 	{
 		preferences->setPreferences("Window", "Position", "x", "");
 		preferences->setPreferences("Window", "Position", "y", "");
+		preferences->setPreferences("Window", "Size", "width", "");
+		preferences->setPreferences("Window", "Size", "height", "");
 	};
+	preferences->savePreferences();
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
@@ -123,7 +153,7 @@ void mainWindow::createActions()
 
 void mainWindow::createMenus()
 {
-    /*menuBar = new QMenuBar;*/
+    menuBar = new QMenuBar;
 
     QMenu *fileMenu = new QMenu(tr("&File"), this);
 	fileMenu->addAction(openAct);
@@ -131,11 +161,14 @@ void mainWindow::createMenus()
 	fileMenu->addAction(saveAsAct);
 	fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
-    menuBar()->addMenu(fileMenu);
+	menuBar->addMenu(fileMenu);
+    //menuBar()->addMenu(fileMenu);
+
 
 	QMenu *toolsMenu = new QMenu(tr("&Tools"), this);
 	toolsMenu->addAction(settingsAct);
-    menuBar()->addMenu(toolsMenu);
+	menuBar->addMenu(toolsMenu);
+    //menuBar()->addMenu(toolsMenu);
 
 	QMenu *helpMenu = new QMenu(tr("&Help"), this);
 	helpMenu->addAction(helpAct);
@@ -146,13 +179,15 @@ void mainWindow::createMenus()
 	helpMenu->addSeparator(); 
 	helpMenu->addAction(aboutAct);
 	//helpMenu->addAction(aboutQtAct);
-    menuBar()->addMenu(helpMenu);
+	menuBar->addMenu(helpMenu);
+    //menuBar()->addMenu(helpMenu);
 };
 
 void mainWindow::createStatusBar()
 {
-	statusBar()->setSizeGripEnabled(false);
-	statusBar()->showMessage(tr("Ready"));
+	statusBar = new QStatusBar;
+	statusBar->setSizeGripEnabled(false);
+	statusBar->showMessage(tr("Ready"));
 };
 
 /* FILE MENU */

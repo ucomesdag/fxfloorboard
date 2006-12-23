@@ -97,26 +97,63 @@ int main(int argc, char *argv[])
 
 	app.processEvents(); 
 
-	window.show(); // need to show the windows to get the size of it before that it doesn't exist
-	int windowWidth = window.width();                  
-	int windowHeight = window.height();
+	//window.show(); // need to show the windows to get the size of it before that it doesn't exist
+	//int windowWidth = window.width();                  
+	//int windowHeight = window.height();
 
 	app.processEvents(); 
+
+	int windowWidth, windowHeight;
+	if(preferences->getPreferences("Window", "Collapsed", "bool")=="true" && 
+		preferences->getPreferences("Window", "Restore", "sidepanel")=="true")
+	{
+		
+		if(preferences->getPreferences("Window", "Collapsed", "width").isEmpty())
+		{
+			windowWidth = preferences->getPreferences("Window", "Collapsed", "defaultwidth").toInt(&ok, 10);
+		}
+		else
+		{
+			windowWidth = preferences->getPreferences("Window", "Collapsed", "width").toInt(&ok, 10);
+		};
+	}
+	else
+	{
+		if(preferences->getPreferences("Window", "Size", "width").isEmpty())
+		{
+			windowWidth = preferences->getPreferences("Window", "Size", "minwidth").toInt(&ok, 10);
+		}
+		else
+		{
+			windowWidth = preferences->getPreferences("Window", "Size", "width").toInt(&ok, 10);
+		};
+	}
+
+	app.processEvents(); 
+
 
 	if(preferences->getPreferences("Window", "Restore", "window")=="true" && !x_str.isEmpty())
 	{
 		splash->showStatusMessage(QObject::tr("Restoring window position..."));
-		window.show();
+		if(preferences->getPreferences("Window", "Size", "height").isEmpty())
+		{
+			windowHeight = preferences->getPreferences("Window", "Size", "minheight").toInt(&ok, 10);
+		}
+		else
+		{
+			windowHeight = preferences->getPreferences("Window", "Size", "height").toInt(&ok, 10);
+		};
 		window.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), windowWidth, windowHeight);
 	}
 	else
 	{
 		splash->showStatusMessage(QObject::tr("Centering main window..."));
 		QDesktopWidget *desktop = new QDesktopWidget;
-		//QRect screen = desktop->screenGeometry(desktop->primaryScreen());
 		QRect screen = desktop->availableGeometry(desktop->primaryScreen()); 
-		int screenWidth = screen.width();                    // returns screen width
-		int screenHeight = screen.height();                  // returns screen height
+		int screenWidth = screen.width();                    // returns available screen width
+		int screenHeight = screen.height();                  // returns available screen height
+
+		windowHeight = preferences->getPreferences("Window", "Size", "minheight").toInt(&ok, 10);
 
 		int x = (screenWidth - windowWidth) / 2;
 		int y = (screenHeight - windowHeight) / 2;
@@ -127,7 +164,7 @@ int main(int argc, char *argv[])
 
 	splash->showStatusMessage(QObject::tr("Finished Initializing..."));
 
-	//window.show();
+	window.show();
 	splash->finish(&window);
 	return app.exec();
 };
