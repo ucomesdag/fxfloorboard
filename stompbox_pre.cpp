@@ -21,21 +21,16 @@
 ****************************************************************************/
 
 #include "stompbox_pre.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
-
-#include "customSwitch.h"
 
 stompbox_pre::stompbox_pre(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* PRE */
-	this->setImage(":/images/pre.png");
+	setImage(":/images/pre.png");
+	setSwitch(); 
+};
 
-	customSwitch *button = new customSwitch(false, QPoint::QPoint(5, 41), this);
-	/*QObject::connect(button, SIGNAL(valueChanged(bool)),
-                         led, SLOT(setValue(bool)));*/
+void stompbox_pre::updateSignal()
+{
+	updateSwitch("07", "00", "00");
 };

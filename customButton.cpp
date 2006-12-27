@@ -75,30 +75,24 @@ void customButton::mouseReleaseEvent(QMouseEvent *event)
 	{	
 		if(active)
 		{
-			this->active = false;
+			setOffset(0);
+			emitValue(false);
 		}
 		else
-		{
-			this->active = true;
-		};
-		if(active)
 		{
 			setOffset(2);
-		}
-		else
-		{
-			setOffset(0);
+			emitValue(true);
 		};
 		clearFocus();
-		setValue(active);
 	};
 };
 
-void customButton::setValue(bool value)
+void customButton::emitValue(bool value)
 {
-    if (value != m_value) {
+    this->active = value;
+	if (value != m_value) {
         this->m_value = value;
-        emit valueChanged((int)value);
+        emit valueChanged((bool)value);
     };
 };
 
@@ -116,4 +110,18 @@ void customButton::mouseMoveEvent(QMouseEvent *event)
 	{
 		setOffset(0);
 	};*/
+};
+
+void customButton::setValue(bool value)
+{
+	this->active = value;
+	if(active)
+	{
+		setOffset(2);
+	}
+	else
+	{
+		setOffset(0);
+	};
+	clearFocus();
 };

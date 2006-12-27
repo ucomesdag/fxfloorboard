@@ -26,6 +26,12 @@
 #include <QtGui>
 #include "MidiTable.h"
 
+#include "customButton.h"
+#include "customLed.h"
+#include "customDial.h"
+#include "customSlider.h"
+#include "customSwitch.h"
+
 class stompBox : public QWidget
 {
     Q_OBJECT
@@ -40,15 +46,41 @@ public:
 	void setImage(QString imagePath);
 	void setSize(QSize newSize);
 	void setId(unsigned int id);
-	void setComboBox(Midi items, 
+
+	void setComboBox(QString hex1, QString hex2, QString hex3, 
 		QRect geometry = QRect::QRect(7, 79, 80, 13));
+	void setKnob1(QString hex1, QString hex2, QString hex3);
+	void setKnob2(QString hex1, QString hex2, QString hex3);
+	void setSlider1(QString hex1, QString hex2, QString hex3);
+	void setSlider2(QString hex1, QString hex2, QString hex3);
+	void setSlider3(QString hex1, QString hex2, QString hex3);
+	void setSlider4(QString hex1, QString hex2, QString hex3);
+	void setSlider5(QString hex1, QString hex2, QString hex3);
+	void setButton();
+	void setButton(QPoint pos, QString imagePath);
+	void setSwitch();
+	void setLed();
+	void updateKnob1(QString hex1, QString hex2, QString hex3);
+	void updateKnob2(QString hex1, QString hex2, QString hex3);
+	void updateSlider1(QString hex1, QString hex2, QString hex3);
+	void updateSlider2(QString hex1, QString hex2, QString hex3);
+	void updateSlider3(QString hex1, QString hex2, QString hex3);
+	void updateSlider4(QString hex1, QString hex2, QString hex3);
+	void updateSlider5(QString hex1, QString hex2, QString hex3);
+	void updateComboBox(QString hex1, QString hex2, QString hex3);
+	void updateButton(QString hex1, QString hex2, QString hex3);
+	void updateSwitch(QString hex1, QString hex2, QString hex3);
+
+	void setComboBoxCurrentIndex(int index);
 	unsigned int getId();
+
 	QPalette getPal();
 	QFont getFont();
 
 public slots:
 	void updatePos(signed int offsetDif);
 	void valueChanged(int value, QString hex1, QString hex2, QString hex3);
+	virtual void updateSignal() {};
 	
 signals:
 	void valueChanged(QString fxName, QString valueName, QString valueStr);
@@ -59,6 +91,8 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 
 private:
+	QList<QString> getSourceItems(QString hex1, QString hex2);
+	int getSourceValue(QString hex1, QString hex2, QString hex3);
 	QString imagePath;
 	QSize stompSize;
 	QPoint stompPos; 
@@ -69,6 +103,18 @@ private:
 
 	QPalette pal;
 	QFont font;
+
+	customDial *knob1;
+	customDial *knob2;
+	customSlider *slider1;
+	customSlider *slider2;
+	customSlider *slider3;
+	customSlider *slider4;
+	customSlider *slider5;
+	customButton *button;
+	customLed *led;
+	customSwitch *switchbutton;
+	QComboBox *comboBox;
 };
 
 #endif // STOMPBOX_H

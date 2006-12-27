@@ -31,8 +31,11 @@ class stompbox_rv : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_rv(QWidget *parent);
+public:
+	stompbox_rv(QWidget *parent);
+
+public slots:
+	void updateSignal();
 };
 
 #endif // STOMPBOX_RV_H

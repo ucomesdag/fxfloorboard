@@ -68,30 +68,24 @@ void customSwitch::mouseReleaseEvent(QMouseEvent *event)
 	{	
 		if(active)
 		{
-			this->active = false;
+			setOffset(0);
+			emitValue(false);
 		}
 		else
-		{
-			this->active = true;
-		};
-		if(active)
 		{
 			setOffset(1);
-		}
-		else
-		{
-			setOffset(0);
+			emitValue(true);
 		};
 		clearFocus();
-		setValue(active);
 	};
 };
 
-void customSwitch::setValue(bool value)
+void customSwitch::emitValue(bool value)
 {
-    if (value != m_value) {
+    this->active = value;
+	if (value != m_value) {
         this->m_value = value;
-        emit valueChanged((int)value);
+        emit valueChanged((bool)value);
     };
 };
 
@@ -101,4 +95,18 @@ void customSwitch::mouseMoveEvent(QMouseEvent *event)
 	{
         return;
 	};
+};
+
+void customSwitch::setValue(bool value)
+{
+	this->active = value;
+	if(active)
+	{
+		setOffset(1);
+	}
+	else
+	{
+		setOffset(0);
+	};
+	clearFocus();
 };

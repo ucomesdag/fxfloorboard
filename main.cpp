@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
 			windowHeight = preferences->getPreferences("Window", "Size", "height").toInt(&ok, 10);
 		};
 		window.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), windowWidth, windowHeight);
+		//window.resize(QSize(windowWidth, windowHeight));
+		//window.move(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10));
 	}
 	else
 	{

@@ -21,25 +21,16 @@
 ****************************************************************************/
 
 #include "stompbox_wah.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
-
-#include "customButton.h"
-#include "customLed.h"
 
 stompbox_wah::stompbox_wah(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* WAH */
-	this->setImage(":/images/wah.png");
+	setImage(":/images/wah.png");
+	setButton(QPoint::QPoint(0, 109), ":/images/pedal.png");
+};
 
-	this->setComboBox(midiTable->getMidiMap("Stucture", "03", "00", "02"));
-
-	customButton *button = new customButton(false, QPoint::QPoint(0, 109), this, ":/images/pedal.png");
-	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
-	QObject::connect(button, SIGNAL(valueChanged(bool)),
-                         led, SLOT(setValue(bool)));	
+void stompbox_wah::updateSignal()
+{
+	updateButton("03", "00", "00");
 };

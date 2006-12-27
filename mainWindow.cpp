@@ -88,7 +88,7 @@ mainWindow::~mainWindow()
 		preferences->setPreferences("Window", "Size", "width", "");
 		preferences->setPreferences("Window", "Size", "height", "");
 	};
-	//preferences->savePreferences();
+	preferences->savePreferences();
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
@@ -328,7 +328,7 @@ void mainWindow::about()
 
 void mainWindow::closeEvent(QCloseEvent* ce)
 {
-	//Preferences *preferences = Preferences::Instance();
-	//preferences->savePreferences();
+	Preferences *preferences = Preferences::Instance();
+	preferences->savePreferences();
 	ce->accept();
 };

@@ -33,6 +33,9 @@ class stompbox_eq : public stompBox
 
 	public:
 		stompbox_eq(QWidget *parent);
+
+public slots:
+	void updateSignal();
 };
 
 #endif // STOMPBOX_EQ_H

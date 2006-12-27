@@ -81,7 +81,7 @@ void customDial::setOffset(double _newValue)
 	this->value = _newValue;	
 	this->xOffset = imageNr*dialSize.width();	
 	this->update();
-	setValue(_newValue);
+	emitValue(_newValue);
 };
 
 void customDial::mousePressEvent(QMouseEvent *event)
@@ -184,10 +184,15 @@ void customDial::keyPressEvent(QKeyEvent *event)
 	};
 };
 
-void customDial::setValue(double value)
+void customDial::emitValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
 		emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
     };
+};
+
+void customDial::setValue(int value)
+{
+	setOffset((double)value);
 };

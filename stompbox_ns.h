@@ -31,8 +31,12 @@ class stompbox_ns : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_ns(QWidget *parent);
+public:
+	stompbox_ns(QWidget *parent);
+
+
+public slots:
+	void updateSignal();
 };
 
 #endif // STOMPBOX_NS_H

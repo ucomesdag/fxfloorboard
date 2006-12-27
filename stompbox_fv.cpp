@@ -21,23 +21,16 @@
 ****************************************************************************/
 
 #include "stompbox_fv.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
-
-#include "customButton.h"
-#include "customLed.h"
 
 stompbox_fv::stompbox_fv(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* VOLUME */
-	this->setImage(":/images/fv.png");
+	setImage(":/images/fv.png");
+	setButton(QPoint::QPoint(0, 109), ":/images/pedal.png");
+};
 
-	customButton *button = new customButton(false, QPoint::QPoint(0, 109), this, ":/images/pedal.png");
-	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
-	QObject::connect(button, SIGNAL(valueChanged(bool)),
-                         led, SLOT(setValue(bool)));	
+void stompbox_fv::updateSignal()
+{
+	updateButton("15", "00", "00");
 };

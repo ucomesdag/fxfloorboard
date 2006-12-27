@@ -229,6 +229,19 @@ int MidiTable::getRange(QString root, QString hex1, QString hex2, QString hex3)
 	return lastIndex;
 };
 
+bool MidiTable::isData(QString root, QString hex1, QString hex2, QString hex3)
+{
+	Midi range = getMidiMap(root, hex1, hex2, hex3);
+	if(range.level.last().type.contains("DATA"))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	};
+};
+
 QString MidiTable::getValue(QString root, QString hex1, QString hex2, QString hex3, QString hex4)
 {
 	Midi range = getMidiMap(root, hex1, hex2, hex3);

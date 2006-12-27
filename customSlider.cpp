@@ -77,7 +77,7 @@ void customSlider::setOffset(double _newValue)
 	this->value = _newValue;	
 	this->yOffset = result;
 	this->update();
-	setValue(_newValue);
+	emitValue(_newValue);
 };
 
 void customSlider::mouseTrigger(QPoint mousePos)
@@ -179,10 +179,15 @@ void customSlider::keyPressEvent(QKeyEvent *event)
 	};
 };
 
-void customSlider::setValue(double value)
+void customSlider::emitValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
 		emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
     };
+};
+
+void customSlider::setValue(int value)
+{
+	setOffset((double)value);
 };

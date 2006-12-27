@@ -35,15 +35,17 @@ public:
 		QPoint ledPos = QPoint::QPoint(0, 0), 
 		QWidget *parent = 0,
 		QString imagePath = ":/images/led.png");
-	void setOffset(signed int imageNr);
+	void setValue(bool value);
 
 public slots:
-	void setValue(bool value);
+	void changeValue(bool value);
 
 protected:
    void paintEvent(QPaintEvent *event);
 
 private:
+	void setOffset(signed int imageNr);
+
 	bool active;
 	QString imagePath;
 	QSize ledSize;

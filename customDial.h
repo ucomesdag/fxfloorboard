@@ -43,8 +43,7 @@ public:
 		QString hex3 = "void",
 		QString imagePath = ":/images/knob.png",
 		unsigned int imageRange = 62);
-	void setOffset(double value);
-	void setValue(double value);
+	void setValue(int value);
 
 signals:
 	void valueChanged(int newValue, QString hex1, QString hex2, QString hex3);
@@ -57,6 +56,9 @@ protected:
    void keyPressEvent(QKeyEvent *event);
 
 private:
+	void setOffset(double value);
+	void emitValue(double value);
+
 	QString hex1;
 	QString hex2;
 	QString hex3;

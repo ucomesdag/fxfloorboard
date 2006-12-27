@@ -21,28 +21,18 @@
 ****************************************************************************/
 
 #include "stompbox_fx1.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
-
-#include "customButton.h"
-#include "customLed.h"
-
-#include "customButton.h"
-#include "customLed.h"
 
 stompbox_fx1::stompbox_fx1(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* FX1 */
-	this->setImage(":/images/fx1.png");
+	setImage(":/images/fx1.png");
+	setComboBox("00", "00", "02", QRect(8, 31, 79, 13));
+	setButton();
+};
 
-	this->setComboBox(midiTable->getMidiMap("Stucture", "00", "00", "02"), QRect(8, 31, 79, 13));
-
-	customButton *button = new customButton(false, QPoint::QPoint(4, 110), this);
-	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
-	QObject::connect(button, SIGNAL(valueChanged(bool)),
-                         led, SLOT(setValue(bool)));
+void stompbox_fx1::updateSignal()
+{
+	updateComboBox("00", "00", "02");
+	updateButton("00", "00", "00");
 };

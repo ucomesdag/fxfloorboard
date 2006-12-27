@@ -31,8 +31,11 @@ class stompbox_dd : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_dd(QWidget *parent);
+public:
+	stompbox_dd(QWidget *parent);
+
+public slots:
+	void updateSignal();
 };
 
 #endif // STOMPBOX_DD_H

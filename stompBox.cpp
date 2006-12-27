@@ -21,6 +21,8 @@
 ****************************************************************************/
 
 #include "stompBox.h"
+#include "MidiTable.h"
+#include "SysxIO.h"
 
 stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint stompPos)
     : QWidget(parent)
@@ -59,6 +61,9 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 	
 	QObject::connect(this->parent(), SIGNAL( updateStompOffset(signed int) ),
                 this, SLOT( updatePos(signed int) ));
+
+	QObject::connect(this->parent(), SIGNAL( updateSignal() ),
+                this, SLOT( updateSignal() ));
 };
 
 void stompBox::paintEvent(QPaintEvent *)
@@ -171,12 +176,15 @@ QFont stompBox::getFont()
 	return this->font;
 };
 
-void stompBox::setComboBox(Midi items, QRect geometry)
+void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geometry)
 {
 	int maxLenght = 0;
 	int itemsCount;
 
-	QComboBox *comboBox = new QComboBox(this);
+	MidiTable *midiTable = MidiTable::Instance();
+	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+
+	comboBox = new QComboBox(this);
 	
 	for(itemsCount=0;itemsCount<items.level.size();itemsCount++ )
 	{
@@ -193,6 +201,148 @@ void stompBox::setComboBox(Midi items, QRect geometry)
 	comboBox->setMaxVisibleItems(itemsCount);
 	comboBox->view()->setMinimumWidth( maxLenght + 10 );
 };
+
+void stompBox::setComboBoxCurrentIndex(int index)
+{
+	comboBox->setCurrentIndex(index);
+};
+
+void stompBox::setKnob1(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	knob1 = new customDial(0, 0, range, 1, 10, QPoint::QPoint(6, 9), this, hex1, hex2, hex3);
+};
+
+void stompBox::setKnob2(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	knob2 = new customDial(0, 0, range, 1, 10, QPoint::QPoint(53, 9), this, hex1, hex2, hex3);
+};
+
+void stompBox::setSlider1(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	slider1 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(8, 17), this, hex1, hex2, hex3);
+};
+
+void stompBox::setSlider2(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	slider2 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(24, 17), this, hex1, hex2, hex3);
+};
+
+void stompBox::setSlider3(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	slider3 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(40, 17), this, hex1, hex2, hex3);
+};
+
+void stompBox::setSlider4(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	slider4 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(56, 17), this, hex1, hex2, hex3);
+};
+
+void stompBox::setSlider5(QString hex1, QString hex2, QString hex3)
+{	
+	MidiTable *midiTable = MidiTable::Instance();
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	slider5 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(79, 17), this, hex1, hex2, hex3);
+};
+
+void stompBox::setButton()
+{
+	button = new customButton(false, QPoint::QPoint(4, 110), this);
+	led = new customLed(false, QPoint::QPoint(41, 4), this);
+
+	QObject::connect(button, SIGNAL(valueChanged(bool)),
+				led, SLOT(changeValue(bool)));	
+};
+
+void stompBox::setButton(QPoint pos, QString imagePath)
+{
+	button = new customButton(false, pos, this, imagePath);
+	led = new customLed(false, QPoint::QPoint(41, 4), this);
+
+	QObject::connect(button, SIGNAL(valueChanged(bool)),
+				led, SLOT(changeValue(bool)));	
+};
+
+void stompBox::setSwitch(){
+	switchbutton = new customSwitch(false, QPoint::QPoint(5, 41), this);	
+};
+
+QList<QString> stompBox::getSourceItems(QString hex1, QString hex2)
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	QList<QString> items = sysxIO->getFileSource(hex1, hex2);	
+	return items; 
+};
+
+void stompBox::updateComboBox(QString hex1, QString hex2, QString hex3)
+{	
+	setComboBoxCurrentIndex(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateKnob1(QString hex1, QString hex2, QString hex3)
+{	
+	knob1->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateKnob2(QString hex1, QString hex2, QString hex3)
+{	
+	knob2->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateSlider1(QString hex1, QString hex2, QString hex3)
+{	
+	slider1->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateSlider2(QString hex1, QString hex2, QString hex3)
+{	
+	slider2->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateSlider3(QString hex1, QString hex2, QString hex3)
+{	
+	slider3->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateSlider4(QString hex1, QString hex2, QString hex3)
+{	
+	slider4->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateSlider5(QString hex1, QString hex2, QString hex3)
+{	
+	slider5->setValue(getSourceValue(hex1, hex2, hex3));
+};
+
+void stompBox::updateButton(QString hex1, QString hex2, QString hex3)
+{
+	int value = getSourceValue(hex1, hex2, hex3);
+	if(hex1 == "15")
+	{
+		//Exception for the Foot Volume -> it's on when Expresion pedal is off.
+		(value==1)?value=0:value=1;
+	};
+	led->setValue((value==1)?true:false);
+	button->setValue((value==1)?true:false);
+};
+
+void stompBox::updateSwitch(QString hex1, QString hex2, QString hex3)
+{
+	int value = getSourceValue(hex1, hex2, hex3);
+	switchbutton->setValue((value==1)?true:false);
+};
+
 
 void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 {
@@ -213,4 +363,26 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	if(valueHex.length() < 2) valueHex.prepend("0");
 	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
 	emit valueChanged(fxName, valueName, valueStr);
+};
+
+int stompBox::getSourceValue(QString hex1, QString hex2, QString hex3)
+{
+	MidiTable *midiTable = MidiTable::Instance();
+
+	bool ok;
+	int value; int dataOffset = 11;
+	QList<QString> items = getSourceItems(hex1, hex2);
+	if(midiTable->isData("Stucture", hex1, hex2, hex3))
+	{
+		int maxRange = QString("7F").toInt(&ok, 16) + 1;
+		int listindex = dataOffset + QString(hex3).toInt(&ok, 16);
+		int valueData1 = items.at(listindex).toInt(&ok, 16);
+		int valueData2 = items.at(listindex + 1).toInt(&ok, 16);
+		value = (valueData1 * maxRange) + valueData2;
+	}
+	else
+	{
+		value = items.at(dataOffset + QString(hex3).toInt(&ok, 16)).toInt(&ok, 16);
+	};
+	return value;
 };

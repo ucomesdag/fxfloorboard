@@ -35,8 +35,8 @@ public:
 		QPoint switchPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
 		QString imagePath = ":/images/switch.png");
-	void setOffset(signed int imageNr);
 	void setValue(bool value);
+	
 
 signals:
 	void valueChanged(bool newValue);
@@ -48,6 +48,9 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 
 private:
+	void setOffset(signed int imageNr);
+	void emitValue(bool value);
+
 	bool active;
 	bool m_value;
 	QString imagePath;

@@ -35,7 +35,6 @@ public:
 		QPoint buttonPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
 		QString imagePath = ":/images/button.png");
-	void setOffset(signed int imageNr);
 	void setValue(bool value);
 
 signals:
@@ -48,6 +47,9 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 
 private:
+	void setOffset(signed int imageNr);
+	void emitValue(bool value);
+
 	bool active;
 	bool m_value;
 	QString imagePath;

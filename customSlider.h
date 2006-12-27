@@ -43,9 +43,8 @@ public:
 		QString hex3 = "void",
 		QString slideImagePath = ":/images/slide.png",
 		QString sliderButtonImagePath = ":/images/sliderbutton.png");
-	void setOffset(double value);
-	void setValue(double value);
-	void mouseTrigger(QPoint mousePos);
+	void setValue(int value);
+	
 
 signals:
 	void valueChanged(int newValue, QString hex1, QString hex2, QString hex3);
@@ -58,6 +57,10 @@ protected:
    void keyPressEvent(QKeyEvent *event);
 
 private:
+	void setOffset(double value);
+	void emitValue(double value);
+	void mouseTrigger(QPoint mousePos);
+
 	QString hex1;
 	QString hex2;
 	QString hex3;

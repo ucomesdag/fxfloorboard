@@ -67,4 +67,9 @@ void customLed::setValue(bool value)
 	{
 		setOffset(0);
 	};
-}
+};
+
+void customLed::changeValue(bool value)
+{
+	setValue(value);
+};

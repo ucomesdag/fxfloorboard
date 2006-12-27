@@ -21,15 +21,10 @@
 ****************************************************************************/
 
 #include "stompbox_dgt.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
 
 stompbox_dgt::stompbox_dgt(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* D-OUT */
 	this->setImage(":/images/dgt.png");
 };

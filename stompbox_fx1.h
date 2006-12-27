@@ -31,8 +31,11 @@ class stompbox_fx1 : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_fx1(QWidget *parent);
+public:
+	stompbox_fx1(QWidget *parent);
+
+public slots:
+	void updateSignal();
 };
 
 #endif // STOMPBOX_FX1_H

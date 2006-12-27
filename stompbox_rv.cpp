@@ -21,31 +21,22 @@
 ****************************************************************************/
 
 #include "stompbox_rv.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
-
-#include "customButton.h"
-#include "customLed.h"
-#include "customDial.h"
  
 stompbox_rv::stompbox_rv(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* REVERB */
-	this->setImage(":/images/rv.png");
+	setImage(":/images/rv.png");
+	setKnob1("0D", "00", "03");
+	setKnob2("0D", "00", "08");
+	setComboBox("0D", "00", "02");
+	setButton();
+};
 
-	this->setComboBox(midiTable->getMidiMap("Stucture", "0D", "00", "02"));
-
-	int range1 = midiTable->getRange("Stucture", "0D", "00", "03");
-	int range2 = midiTable->getRange("Stucture", "0D", "00", "08");
-
-	customDial *knob1 = new customDial(0, 0, range1, 1, 10, QPoint::QPoint(6, 9), this, "0D", "00", "03");
-	customDial *knob2 = new customDial(0, 0, range2, 1, 10, QPoint::QPoint(53, 9), this, "0D", "00", "08");
-	customButton *button = new customButton(false, QPoint::QPoint(4, 110), this);
-	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
-	QObject::connect(button, SIGNAL(valueChanged(bool)),
-                         led, SLOT(setValue(bool)));	
+void stompbox_rv::updateSignal()
+{
+	updateKnob1("0D", "00", "03");
+	updateKnob2("0D", "00", "08");
+	updateComboBox("0D", "00", "02");
+	updateButton("0D", "00", "00");
 };

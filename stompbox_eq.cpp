@@ -21,23 +21,14 @@
 ****************************************************************************/
 
 #include "stompbox_eq.h"
-#include "MidiTable.h"
-#include "SysxIO.h"
-
-#include "customButton.h"
-#include "customLed.h"
-#include "customSlider.h"
 
 stompbox_eq::stompbox_eq(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* EQ */
-	this->setImage(":/images/eq.png");
+	setImage(":/images/eq.png");
 
-	int range1 = midiTable->getRange("Stucture", "08", "00", "03");
+	/*int range1 = midiTable->getRange("Stucture", "08", "00", "03");
 	int range2 = midiTable->getRange("Stucture", "08", "00", "06");
 	int range3 = midiTable->getRange("Stucture", "08", "00", "09");
 	int range4 = midiTable->getRange("Stucture", "08", "00", "0A");
@@ -51,5 +42,21 @@ stompbox_eq::stompbox_eq(QWidget *parent)
 	customButton *button = new customButton(false, QPoint::QPoint(4, 110), this);
 	customLed *led = new customLed(false, QPoint::QPoint(41, 4), this);
 	QObject::connect(button, SIGNAL(valueChanged(bool)),
-                         led, SLOT(setValue(bool)));	
+                         led, SLOT(changeValue(bool)));	*/
+	setSlider1("08", "00", "03");
+	setSlider2("08", "00", "06");
+	setSlider3("08", "00", "09");
+	setSlider4("08", "00", "0A");
+	setSlider5("08", "00", "0C");
+	setButton();
+};
+
+void stompbox_eq::updateSignal()
+{
+	updateSlider1("08", "00", "03");
+	updateSlider2("08", "00", "06");
+	updateSlider3("08", "00", "09");
+	updateSlider4("08", "00", "0A");
+	updateSlider5("08", "00", "0C");
+	updateButton("08", "00", "00");
 };

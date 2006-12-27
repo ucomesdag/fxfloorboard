@@ -31,8 +31,11 @@ class stompbox_lp : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_lp(QWidget *parent);
+public:
+	stompbox_lp(QWidget *parent);
+
+public slots:
+	void updateSignal();
 };
 
 #endif // STOMPBOX_LP_H
