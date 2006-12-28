@@ -51,7 +51,7 @@ private:
 	void emitValue(bool value);
 
 	bool active;
-	bool m_value;
+	//bool m_value;
 	QString imagePath;
 	QSize buttonSize;
 	QPoint buttonPos; 

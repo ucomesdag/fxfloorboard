@@ -90,10 +90,10 @@ void customButton::mouseReleaseEvent(QMouseEvent *event)
 void customButton::emitValue(bool value)
 {
     this->active = value;
-	if (value != m_value) {
-        this->m_value = value;
+	//if (value != m_value) {
+    //    this->m_value = value;
         emit valueChanged((bool)value);
-    };
+    //};
 };
 
 void customButton::mouseMoveEvent(QMouseEvent *event)
