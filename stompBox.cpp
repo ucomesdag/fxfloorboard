@@ -340,7 +340,7 @@ void stompBox::updateButton(QString hex1, QString hex2, QString hex3)
 	int value = getSourceValue(hex1, hex2, hex3);
 	if(hex1 == "15")
 	{
-		//Exception for the Foot Volume -> it's on when Expresion pedal is off.
+		//Exception for the Foot Volume -> it's on when Expresion switch is off.
 		(value==1)?value=0:value=1;
 	};
 	led->setValue((value==1)?true:false);
@@ -352,7 +352,6 @@ void stompBox::updateSwitch(QString hex1, QString hex2, QString hex3)
 	int value = getSourceValue(hex1, hex2, hex3);
 	switchbutton->setValue((value==1)?true:false);
 };
-
 
 void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 {
@@ -373,6 +372,24 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	if(valueHex.length() < 2) valueHex.prepend("0");
 	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
 	emit valueChanged(fxName, valueName, valueStr);
+
+	SysxIO *sysxIO = SysxIO::Instance(); bool ok;
+	if(midiTable->isData("Stucture", hex1, hex2, hex3))
+	{	
+		int maxRange = QString("7F").toInt(&ok, 16) + 1;
+		int value = valueHex.toInt(&ok, 16);
+		int dif = value/maxRange;
+		QString valueHex1 = QString::number(dif, 16).toUpper();
+		if(valueHex1.length() < 2) valueHex1.prepend("0");
+		QString valueHex2 = QString::number(value - (dif * maxRange), 16).toUpper();
+		if(valueHex2.length() < 2) valueHex2.prepend("0");
+		
+		sysxIO->setFileSource(hex1, hex2, hex3, valueHex1, valueHex2);
+	}
+	else
+	{
+		sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
+	};
 };
 
 int stompBox::getSourceValue(QString hex1, QString hex2, QString hex3)

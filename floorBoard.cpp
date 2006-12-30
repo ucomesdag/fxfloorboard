@@ -93,17 +93,27 @@ floorBoard::floorBoard(QWidget *parent,
 
 	QObject::connect(this, SIGNAL(valueChanged(QString, QString, QString)), 
 		display, SLOT(setValueDisplay(QString, QString, QString)));
-	QObject::connect(panelBar, SIGNAL(resizeSignal(int)), this, SLOT(setWidth(int)));
-	QObject::connect(panelBar, SIGNAL(collapseSignal()), this, SLOT(setCollapse()));
-	QObject::connect(this, SIGNAL(setCollapseState(bool)), panelBar, SIGNAL(collapseState(bool)));
-	QObject::connect(this, SIGNAL(setDisplayPos(QPoint)), display, SLOT(setPos(QPoint)));
-	QObject::connect(this, SIGNAL(setFloorPanelBarPos(QPoint)), panelBar, SLOT(setPos(QPoint)));
-	QObject::connect(this->parent(), SIGNAL(updateSignal()), this, SIGNAL(updateSignal()));
-	QObject::connect(this, SIGNAL(updateSignal()), this, SLOT(updateStompBoxes()));
+	QObject::connect(panelBar, SIGNAL(resizeSignal(int)), 
+		this, SLOT(setWidth(int)));
+	QObject::connect(panelBar, SIGNAL(collapseSignal()), 
+		this, SLOT(setCollapse()));
+	QObject::connect(this, SIGNAL(setCollapseState(bool)), 
+		panelBar, SIGNAL(collapseState(bool)));
+	QObject::connect(this, SIGNAL(setDisplayPos(QPoint)), 
+		display, SLOT(setPos(QPoint)));
+	QObject::connect(this, SIGNAL(setFloorPanelBarPos(QPoint)), 
+		panelBar, SLOT(setPos(QPoint)));
+	QObject::connect(this->parent(), SIGNAL(updateSignal()), 
+		this, SIGNAL(updateSignal()));
+	QObject::connect(this, SIGNAL(updateSignal()), 
+		this, SLOT(updateStompBoxes()));
 
-	QObject::connect(this, SIGNAL(setDragBarOffset(QList<int>)), panelBar, SIGNAL(setDragBarOffset(QList<int>)));
-	QObject::connect(panelBar, SIGNAL(showDragBar(QPoint)), this, SIGNAL(showDragBar(QPoint)));
-	QObject::connect(panelBar, SIGNAL(hideDragBar()), this, SIGNAL(hideDragBar()));
+	QObject::connect(this, SIGNAL(setDragBarOffset(QList<int>)), 
+		panelBar, SIGNAL(setDragBarOffset(QList<int>)));
+	QObject::connect(panelBar, SIGNAL(showDragBar(QPoint)), 
+		this, SIGNAL(showDragBar(QPoint)));
+	QObject::connect(panelBar, SIGNAL(hideDragBar()), 
+		this, SIGNAL(hideDragBar()));
 
 	bool ok;
 	Preferences *preferences = Preferences::Instance();

@@ -43,7 +43,8 @@ public:
 
 	void setFileSource(SysxData fileSource);
 	void setFileSource(QByteArray data);
-	void setFileSource(QString hex1, QString hex2, QString hex3, QString hexValue);
+	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4);
+	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5);
 	void setFileName(QString fileName);
 	QString getFileName();
 	SysxData getFileSource();

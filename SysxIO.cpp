@@ -75,7 +75,7 @@ void SysxIO::setFileSource(QByteArray data)
 	};
 };
 
-void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hexValue)
+void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4)
 {
 	bool ok;
 	int dataOffset = 11;
@@ -84,7 +84,21 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	address.append(hex1);
 	address.append(hex2);
 	QList<QString> sysxMsg = this->fileSource.hex.at(this->fileSource.address.indexOf(address));
-	sysxMsg.replace(index, hexValue);
+	sysxMsg.replace(index, hex4);
+	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
+};
+
+void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5)
+{
+	bool ok;
+	int dataOffset = 11;
+	QString address;
+	address.append(hex1);
+	address.append(hex2);
+	QList<QString> sysxMsg = this->fileSource.hex.at(this->fileSource.address.indexOf(address));
+	int index = hex3.toInt(&ok, 16) + dataOffset;
+	sysxMsg.replace(index, hex4);
+	sysxMsg.replace(index + 1, hex5);
 	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
 };
 

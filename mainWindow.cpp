@@ -234,6 +234,16 @@ void mainWindow::save()
 				fileName.append(".syx");
 			};
 			file.writeFile(fileName);
+
+			file.setFile(fileName);  
+			if(file.readFile())
+			{	
+				// DO SOMETHING AFTER READING THE FILE (UPDATE THE GUI)
+				SysxIO *sysxIO = SysxIO::Instance();
+				sysxIO->setFileSource(file.getFileSource());
+
+				emit updateSignal();
+			};
 		};
 	}
 	else
@@ -259,6 +269,16 @@ void mainWindow::saveAs()
 			fileName.append(".syx");
 		};
 		file.writeFile(fileName);
+
+		file.setFile(fileName);  
+		if(file.readFile())
+		{	
+			// DO SOMETHING AFTER READING THE FILE (UPDATE THE GUI)
+			SysxIO *sysxIO = SysxIO::Instance();
+			sysxIO->setFileSource(file.getFileSource());
+
+			emit updateSignal();
+		};
 	};
 };
 
