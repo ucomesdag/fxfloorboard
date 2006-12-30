@@ -31,7 +31,7 @@ class SysxIODestroyer;
 
 struct SysxData
 {
-	QList<QString> adress;
+	QList<QString> address;
 	QList< QList<QString> > hex;
 };
 
@@ -43,6 +43,7 @@ public:
 
 	void setFileSource(SysxData fileSource);
 	void setFileSource(QByteArray data);
+	void setFileSource(QString hex1, QString hex2, QString hex3, QString hexValue);
 	void setFileName(QString fileName);
 	QString getFileName();
 	SysxData getFileSource();

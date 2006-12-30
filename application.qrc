@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/" >
         <file>about</file>
+        <file>default.syx</file>
         <file>images/GT-8FxFloorBoard.png</file>
         <file>images/button.png</file>
         <file>images/ce.png</file>

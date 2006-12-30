@@ -188,7 +188,17 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	
 	for(itemsCount=0;itemsCount<items.level.size();itemsCount++ )
 	{
-		QString item = items.level.at(itemsCount).desc;
+		QString item;
+		QString desc = items.level.at(itemsCount).desc;
+		QString longdesc = items.level.at(itemsCount).longdesc;
+		if(!longdesc.isEmpty())
+		{
+			item = longdesc;
+		}
+		else
+		{
+			item = desc;
+		};
 		comboBox->addItem(item);
 		int pixelWidth = QFontMetrics(this->getFont()).width(item);
 		if(maxLenght < pixelWidth) maxLenght = pixelWidth;

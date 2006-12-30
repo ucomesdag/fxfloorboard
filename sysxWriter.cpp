@@ -38,7 +38,7 @@ sysxWriter::~sysxWriter()
 void sysxWriter::setFile(QString fileName)
 {
 	this->fileName = fileName;
-	this->fileSource.adress.clear();
+	this->fileSource.address.clear();
 	this->fileSource.hex.clear();
 };
 

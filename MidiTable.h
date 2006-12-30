@@ -30,7 +30,7 @@
 /* Declaring struc types */
 struct Midi
 {
-	QString value, name, abbr, desc;
+	QString value, name, abbr, desc, longdesc;
 	QList<QString> type, id;
 	QList<Midi> level;
 };

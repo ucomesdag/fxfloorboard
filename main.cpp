@@ -24,6 +24,8 @@
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "MidiTable.h"
+#include "SysxIO.h"
+#include "sysxWriter.h"
 #include "customSplashScreen.h"
 
 int main(int argc, char *argv[])
@@ -78,10 +80,21 @@ int main(int argc, char *argv[])
 		file.close();
 	};
 
-	app.processEvents(); 
+	app.processEvents();
 
 	splash->showStatusMessage(QObject::tr("Loading midi mapping..."));
 	MidiTable *midiTable = MidiTable::Instance();
+	
+	app.processEvents(); 
+
+	splash->showStatusMessage(QObject::tr("Loading default parameters..."));
+	sysxWriter file;
+	file.setFile(":default.syx");  // Read the default sysex file so whe don't start empty handed.
+	if(file.readFile())
+	{	
+		SysxIO *sysxIO = SysxIO::Instance();
+		sysxIO->setFileSource(file.getFileSource());
+	};
 
 	app.processEvents(); 
 

@@ -25,7 +25,6 @@
 
 SysxIO::SysxIO() 
 {
-	
 };
 
 SysxIO* SysxIO::_instance = 0;// initialize pointer
@@ -55,7 +54,7 @@ void SysxIO::setFileSource(SysxData fileSource)
 
 void SysxIO::setFileSource(QByteArray data)
 {
-	this->fileSource.adress.clear();
+	this->fileSource.address.clear();
 	this->fileSource.hex.clear();
 	
 	QList<QString> sysxBuffer;
@@ -69,11 +68,24 @@ void SysxIO::setFileSource(QByteArray data)
 
 		if(hex == "F7") 
 		{
-			this->fileSource.adress.append( sysxBuffer.at(9) + sysxBuffer.at(10) );
+			this->fileSource.address.append( sysxBuffer.at(9) + sysxBuffer.at(10) );
 			this->fileSource.hex.append(sysxBuffer);
 			sysxBuffer.clear();
 		};
 	};
+};
+
+void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hexValue)
+{
+	bool ok;
+	int dataOffset = 11;
+	int index = hex3.toInt(&ok, 16) + dataOffset;
+	QString address;
+	address.append(hex1);
+	address.append(hex2);
+	QList<QString> sysxMsg = this->fileSource.hex.at(this->fileSource.address.indexOf(address));
+	sysxMsg.replace(index, hexValue);
+	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
 };
 
 void SysxIO::setFileName(QString fileName)
@@ -96,7 +108,7 @@ QList<QString> SysxIO::getFileSource(QString hex1, QString hex2)
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
-	QList<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.adress.indexOf(address) );
+	QList<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.address.indexOf(address) );
 	return sysxMsg;
 };
 

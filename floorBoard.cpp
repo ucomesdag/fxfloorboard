@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include <QList>
+#include <QVector>
 
 #include "dragBar.h"
 #include "bankTreeList.h"
@@ -264,21 +265,22 @@ void floorBoard::dropEvent(QDropEvent *event)
 		
 		int destIndex = -1; // Set to out of range by default.
 		int orgIndex = fx.indexOf(stompId);
-		for(int x=0;x<fx.size();x++)
-		{
-			QRect dropRect = QRect::QRect(fxPos.at(x).x() - stompSpacing - (stompSize.width()/2), fxPos.at(x).y(), stompSize.width() + stompSpacing, stompSize.height());
-			QRect lastDropRect = QRect::QRect(fxPos.at(x).x() + (stompSize.width()/2), fxPos.at(x).y(), stompSize.width() + stompSpacing, stompSize.height());
-			if( dropRect.contains(dragPoint) )
-			{
-				destIndex = fx.indexOf(fx.at(x));
-			}
-			else if( (x == (int)fx.size()-1 || 
-						( x == (int)(fx.size()/2)-1 && fx.at(stompId) != fx.size()/2 ) ) 
-						&& lastDropRect.contains(dragPoint))
-			{
-				destIndex = fx.indexOf(fx.at(x)) + 1;
-			};
-		};
+		for(int x=0;x<fx.size();x++) 
+        { 
+            QRect dropRect = QRect::QRect(fxPos.at(x).x() - stompSpacing - (stompSize.width()/2), fxPos.at(x).y(), stompSize.width() + stompSpacing, stompSize.height()); 
+            QRect lastDropRect = QRect::QRect(fxPos.at(x).x() + (stompSize.width()/2), fxPos.at(x).y(), stompSize.width() + stompSpacing, stompSize.height()); 
+            if( dropRect.contains(dragPoint) ) 
+            { 
+                destIndex = fx.indexOf(fx.at(x)); 
+            } 
+            else if( (x == (int)fx.size()-1 ||  
+                        ( x == (int)(fx.size()/2)-1 && fx.at(stompId) != fx.size()/2 ) )  
+                        && lastDropRect.contains(dragPoint)) 
+            { 
+                destIndex = fx.indexOf(fx.at(x)) + 1; 
+            }; 
+        }; 
+ 
 
 		if(destIndex > -1 && destIndex < fx.size() + 1)  
 			// Make sure we are not dropping the stomp out of range. 
@@ -299,6 +301,18 @@ void floorBoard::dropEvent(QDropEvent *event)
 					setStompPos(fx.at(i - 1), i);
 				};
 				setStompPos(stompId, destIndex);
+			};
+
+			SysxIO *sysxIO = SysxIO::Instance();
+			for(int index=0;index<fx.size();index++)
+			{
+				QString hexIndex = QString::number(fx.indexOf(index), 16).toUpper();
+				if(hexIndex.length() < 2) hexIndex.prepend("0");
+				
+				QString hexValue = QString::number(index, 16).toUpper();
+				if(hexValue.length() < 2) hexValue.prepend("0");
+		
+				sysxIO->setFileSource("11", "00", hexIndex, hexValue);
 			};
 		}
 		else
@@ -352,7 +366,8 @@ void floorBoard::initSize(QSize floorSize)
 	
 	unsigned int spacingV = (floorSize.height() - (marginStompBoxesTop + marginStompBoxesBottom)) - (stompSize.height() * 2);
 	unsigned int spacingH = ( (floorSize.width() - offset - (marginStompBoxesWidth * 2)) - (stompSize.width() * 7) ) / 6;
-	for(unsigned int i=0;i<14;i++)
+	//for(unsigned int i=0;i<14;i++)
+	for(int i=13;i>=0;i--)
 	{
 		unsigned int y = marginStompBoxesTop;
 		unsigned int x = marginStompBoxesWidth + (( stompSize.width() + spacingH ) * i);
@@ -465,106 +480,123 @@ void floorBoard::initStomps()
 {
 	QList<signed int> fx;
 	fx << 0 << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13;
-	/*   DGT   NS   FV   RV   CE   DD  FX2   EQ  PRE   OD   LP    WAH   CS    FX1   */
+	/*   FX   CS   WAH   LP   OD   PRE  EQ   FX2  DD   CE   RV    NS    FV    DGT :depend on midi.xml   */
 	this->fx = fx;
-	
-	/* D-OUT */
-	stompBox *dgt = new stompbox_dgt(this);
-	dgt->setId(0);
-	dgt->setPos(this->getStompPos(0));
-	this->stompBoxes.append(dgt);
-	this->stompNames.append("dgt");
 
-	/* NS */
-	stompBox *ns = new stompbox_ns(this);
-	ns->setId(1);
-	ns->setPos(this->getStompPos(1));
-	this->stompBoxes.append(ns);
-	this->stompNames.append("ns");
+	QVector<QString> initStompNames(14);
+	this->stompNames = initStompNames.toList();;
 
-	/* VOLUME */
-	stompBox *fv = new stompbox_fv(this);
-	fv->setId(2);
-	fv->setPos(this->getStompPos(2));
-	this->stompBoxes.append(fv);
-	this->stompNames.append("fv");
+	QVector<stompBox *> initStompBoxes(14);
+	this->stompBoxes = initStompBoxes.toList();;
 
-	/* REVERB */
-	stompBox *rv = new stompbox_rv(this);
-	rv->setId(3);
-	rv->setPos(this->getStompPos(3));
-	this->stompBoxes.append(rv);
-	this->stompNames.append("rv");
-
-	/* Chorus */
-	stompBox *ce = new stompbox_ce(this);
-	ce->setId(4);
-	ce->setPos(this->getStompPos(4));
-	this->stompBoxes.append(ce);
-	this->stompNames.append("ce");
-
-	/* Delay */
-	stompBox *dd = new stompbox_dd(this);
-	dd->setId(5);
-	dd->setPos(this->getStompPos(5));
-	this->stompBoxes.append(dd);
-	this->stompNames.append("dd");
-
-	/* FX 2 */
-	stompBox *fx2 = new stompbox_fx2(this);
-	fx2->setId(6);
-	fx2->setPos(this->getStompPos(6));
-	this->stompBoxes.append(fx2);
-	this->stompNames.append("fx2");
-
-	/* EQ */
-	stompBox *eq = new stompbox_eq(this);
-	eq->setId(7);
-	eq->setPos(this->getStompPos(7));
-	this->stompBoxes.append(eq);
-	this->stompNames.append("eq");
-
-	/* AMP */ 
-	stompBox *pre = new stompbox_pre(this);
-	pre->setId(8);
-	pre->setPos(this->getStompPos(8));
-	this->stompBoxes.append(pre);
-	this->stompNames.append("pre");
-
-	/* OD/DS */
-	stompBox *od = new stompbox_od(this);
-	od->setId(9);
-	od->setPos(this->getStompPos(9));
-	this->stompBoxes.append(od);
-	this->stompNames.append("od");
-
-	/* LOOP	*/
-	stompBox *lp = new stompbox_lp(this);
-	lp->setId(10);
-	lp->setPos(this->getStompPos(10));
-	this->stompBoxes.append(lp);
-	this->stompNames.append("lp");
-
-	/* WAH */
-	stompBox *wah = new stompbox_wah(this);
-	wah->setId(11);
-	wah->setPos(this->getStompPos(11));
-	this->stompBoxes.append(wah);
-	this->stompNames.append("wah");
-
-	/* COMP */	
-	stompBox *cs = new stompbox_cs(this);
-	cs->setId(12);
-	cs->setPos(this->getStompPos(12));
-	this->stompBoxes.append(cs);
-	this->stompNames.append("cs");
+	MidiTable *midiTable = MidiTable::Instance();
+	Midi midimap = midiTable->getMidiMap("Stucture", "11", "00", "00");
+	QList<int> fxID;
+	QList<QString> fxNAMES;
+	for(int i=0;i<=13;i++)
+	{
+		bool ok;
+		fxID.append(midimap.level.at(i).value.toInt(&ok, 16));
+		fxNAMES.append(midimap.level.at(i).name);
+	};
 
 	/* FX1 */
 	stompBox *fx1 = new stompbox_fx1(this);
-	fx1->setId(13);
-	fx1->setPos(this->getStompPos(13));
-	this->stompBoxes.append(fx1);
-	this->stompNames.append("fx1");
+	fx1->setId( fxID.at(fxNAMES.indexOf("FX1")) );
+	fx1->setPos(this->getStompPos(fx1->getId()));
+	this->stompBoxes.replace(fx1->getId(), fx1);
+	this->stompNames.replace(fx1->getId(), "FX1");
+
+	/* COMP */	
+	stompBox *cs = new stompbox_cs(this);
+	cs->setId( fxID.at(fxNAMES.indexOf("CS")) );
+	cs->setPos(this->getStompPos(cs->getId()));
+	this->stompBoxes.replace(cs->getId(), cs);
+	this->stompNames.replace(cs->getId(), "CS");
+
+	/* WAH */
+	stompBox *wah = new stompbox_wah(this);
+	wah->setId( fxID.at(fxNAMES.indexOf("WAH")) );
+	wah->setPos(this->getStompPos(wah->getId()));
+	this->stompBoxes.replace(wah->getId(), wah);
+	this->stompNames.replace(wah->getId(), "WAH");
+
+	/* LOOP	*/
+	stompBox *lp = new stompbox_lp(this);
+	lp->setId( fxID.at(fxNAMES.indexOf("LP")) );
+	lp->setPos(this->getStompPos(lp->getId()));
+	this->stompBoxes.replace(lp->getId(), lp);
+	this->stompNames.replace(lp->getId(), "LP");
+
+	/* OD/DS */
+	stompBox *od = new stompbox_od(this);
+	od->setId( fxID.at(fxNAMES.indexOf("OD")) );
+	od->setPos(this->getStompPos(od->getId()));
+	this->stompBoxes.replace(od->getId(), od);
+	this->stompNames.replace(od->getId(), "OD");
+
+	/* AMP */ 
+	stompBox *pre = new stompbox_pre(this);
+	pre->setId( fxID.at(fxNAMES.indexOf("PRE")) );
+	pre->setPos(this->getStompPos(pre->getId()));
+	this->stompBoxes.replace(pre->getId(), pre);
+	this->stompNames.replace(pre->getId(), "PRE");
+
+	/* EQ */
+	stompBox *eq = new stompbox_eq(this);
+	eq->setId( fxID.at(fxNAMES.indexOf("EQ")) );
+	eq->setPos(this->getStompPos(eq->getId()));
+	this->stompBoxes.replace(eq->getId(), eq);
+	this->stompNames.replace(eq->getId(), "EQ");
+
+	/* FX 2 */
+	stompBox *fx2 = new stompbox_fx2(this);
+	fx2->setId( fxID.at(fxNAMES.indexOf("FX2")) );
+	fx2->setPos(this->getStompPos(fx2->getId()));
+	this->stompBoxes.replace(fx2->getId(), fx2);
+	this->stompNames.replace(fx2->getId(), "FX2");
+
+	/* Delay */
+	stompBox *dd = new stompbox_dd(this);
+	dd->setId( fxID.at(fxNAMES.indexOf("DD")) );
+	dd->setPos(this->getStompPos(dd->getId()));
+	this->stompBoxes.replace(dd->getId(), dd);
+	this->stompNames.replace(dd->getId(), "DD");
+
+	/* Chorus */
+	stompBox *ce = new stompbox_ce(this);
+	ce->setId( fxID.at(fxNAMES.indexOf("CE")) );
+	ce->setPos(this->getStompPos(ce->getId()));
+	this->stompBoxes.replace(ce->getId(), ce);
+	this->stompNames.replace(ce->getId(), "CE");
+
+	/* REVERB */
+	stompBox *rv = new stompbox_rv(this);
+	rv->setId( fxID.at(fxNAMES.indexOf("RV")) );
+	rv->setPos(this->getStompPos(rv->getId()));
+	this->stompBoxes.replace(rv->getId(), rv);
+	this->stompNames.replace(rv->getId(), "RV");
+
+	/* NS */
+	stompBox *ns = new stompbox_ns(this);
+	ns->setId( fxID.at(fxNAMES.indexOf("NS")) );
+	ns->setPos(this->getStompPos(ns->getId()));
+	this->stompBoxes.replace(ns->getId(), ns);
+	this->stompNames.replace(ns->getId(), "NS");
+
+	/* D-OUT */
+	stompBox *dgt = new stompbox_dgt(this);
+	dgt->setId( fxID.at(fxNAMES.indexOf("DGT")) );
+	dgt->setPos(this->getStompPos(dgt->getId()));
+	this->stompBoxes.replace(dgt->getId(), dgt);
+	this->stompNames.replace(dgt->getId(), "DGT");
+
+	/* VOLUME */
+	stompBox *fv = new stompbox_fv(this);
+	fv->setId( fxID.at(fxNAMES.indexOf("FV")) );
+	fv->setPos(this->getStompPos(fv->getId()));
+	this->stompBoxes.replace(fv->getId(), fv);
+	this->stompNames.replace(fv->getId(), "FV");
 };
 
 void floorBoard::setStomps(QList<QString> stompOrder)
@@ -596,10 +628,9 @@ void floorBoard::updateStompBoxes()
 
 	MidiTable *midiTable = MidiTable::Instance();
 	QList<QString> stompOrder;
-	//for(int i=11;i<fxChain.size() - 2;i++ ) 
-	for(int i=fxChain.size() - 3;i>=11;i-- ) // Stomps start from right bottom
+	for(int i=11;i<fxChain.size() - 2;i++ ) 
 	{
-		stompOrder.append( midiTable->getMidiMap("Stucture", "11", "00", "00", fxChain.at(i)).name.toLower() );
+		stompOrder.append( midiTable->getMidiMap("Stucture", "11", "00", "00", fxChain.at(i)).name );
 	};
 	setStomps(stompOrder);
 };
