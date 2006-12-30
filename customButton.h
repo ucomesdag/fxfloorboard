@@ -34,11 +34,14 @@ public:
 		bool active = false,
 		QPoint buttonPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
+		QString hex1 = "void",
+		QString hex2 = "void",
+		QString hex3 = "void",
 		QString imagePath = ":/images/button.png");
 	void setValue(bool value);
 
 signals:
-	void valueChanged(bool newValue);
+	void valueChanged(bool value, QString hex1, QString hex2, QString hex3);
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -49,6 +52,10 @@ protected:
 private:
 	void setOffset(signed int imageNr);
 	void emitValue(bool value);
+
+	QString hex1;
+	QString hex2;
+	QString hex3;
 
 	bool active;
 	//bool m_value;

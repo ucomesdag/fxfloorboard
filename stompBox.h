@@ -56,9 +56,9 @@ public:
 	void setSlider3(QString hex1, QString hex2, QString hex3);
 	void setSlider4(QString hex1, QString hex2, QString hex3);
 	void setSlider5(QString hex1, QString hex2, QString hex3);
-	void setButton();
-	void setButton(QPoint pos, QString imagePath);
-	void setSwitch();
+	void setButton(QString hex1, QString hex2, QString hex3);
+	void setButton(QString hex1, QString hex2, QString hex3, QPoint pos, QString imagePath);
+	void setSwitch(QString hex1, QString hex2, QString hex3);
 	void setLed();
 	void updateKnob1(QString hex1, QString hex2, QString hex3);
 	void updateKnob2(QString hex1, QString hex2, QString hex3);
@@ -80,10 +80,13 @@ public:
 public slots:
 	void updatePos(signed int offsetDif);
 	void valueChanged(int value, QString hex1, QString hex2, QString hex3);
+	void valueChanged(bool value, QString hex1, QString hex2, QString hex3);
+	void valueChanged(int index);
 	virtual void updateSignal() {};
 	
 signals:
 	void valueChanged(QString fxName, QString valueName, QString valueStr);
+	void currentIndexChanged(int index);
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -115,6 +118,10 @@ private:
 	customLed *led;
 	customSwitch *switchbutton;
 	QComboBox *comboBox;
+
+	QString hex1;
+	QString hex2;
+	QString hex3;
 };
 
 #endif // STOMPBOX_H

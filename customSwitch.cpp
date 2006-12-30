@@ -23,10 +23,13 @@
 #include <QtGui>
 #include "customSwitch.h"
 
-customSwitch::customSwitch(bool active, QPoint switchPos, QWidget *parent,
+customSwitch::customSwitch(bool active, QPoint switchPos, QWidget *parent, QString hex1, QString hex2, QString hex3,
 						   QString imagePath)
     : QWidget(parent)
 {
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;
 	this->active = active;
 	this->imagePath = imagePath;
 	QSize imageSize = QPixmap(imagePath).size();
@@ -35,6 +38,9 @@ customSwitch::customSwitch(bool active, QPoint switchPos, QWidget *parent,
 	this->switchPos = switchPos;
 	setOffset(0);
     setGeometry(switchPos.x(), switchPos.y(), switchSize.width(), switchSize.height());
+
+	QObject::connect(this, SIGNAL( valueChanged(bool, QString, QString, QString) ),
+                this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
 };
 
 void customSwitch::paintEvent(QPaintEvent *)
@@ -85,7 +91,7 @@ void customSwitch::emitValue(bool value)
     this->active = value;
 	if (value != m_value) {
         this->m_value = value;
-        emit valueChanged((bool)value);
+        emit valueChanged((bool)value, this->hex1, this->hex2, this->hex3);
     };
 };
 

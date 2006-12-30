@@ -48,7 +48,7 @@ stompbox_eq::stompbox_eq(QWidget *parent)
 	setSlider3("08", "00", "09");
 	setSlider4("08", "00", "0A");
 	setSlider5("08", "00", "0C");
-	setButton();
+	setButton("08", "00", "00");
 };
 
 void stompbox_eq::updateSignal()

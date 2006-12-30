@@ -30,7 +30,7 @@ stompbox_rv::stompbox_rv(QWidget *parent)
 	setKnob1("0D", "00", "03");
 	setKnob2("0D", "00", "08");
 	setComboBox("0D", "00", "02");
-	setButton();
+	setButton("0D", "00", "00");
 };
 
 void stompbox_rv::updateSignal()

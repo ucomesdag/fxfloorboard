@@ -178,6 +178,10 @@ QFont stompBox::getFont()
 
 void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geometry)
 {
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;
+
 	int maxLenght = 0;
 	int itemsCount;
 
@@ -210,6 +214,9 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	comboBox->setFrame(false);
 	comboBox->setMaxVisibleItems(itemsCount);
 	comboBox->view()->setMinimumWidth( maxLenght + 10 );
+	
+	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)),
+                this, SLOT(valueChanged(int)));
 };
 
 void stompBox::setComboBoxCurrentIndex(int index)
@@ -266,26 +273,27 @@ void stompBox::setSlider5(QString hex1, QString hex2, QString hex3)
 	slider5 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(79, 17), this, hex1, hex2, hex3);
 };
 
-void stompBox::setButton()
+void stompBox::setButton(QString hex1, QString hex2, QString hex3)
 {
-	button = new customButton(false, QPoint::QPoint(4, 110), this);
+	button = new customButton(false, QPoint::QPoint(4, 110), this, hex1, hex2, hex3);
 	led = new customLed(false, QPoint::QPoint(41, 4), this);
 
-	QObject::connect(button, SIGNAL(valueChanged(bool)),
+	QObject::connect(button, SIGNAL(valueChanged(bool, QString, QString, QString)),
 				led, SLOT(changeValue(bool)));	
 };
 
-void stompBox::setButton(QPoint pos, QString imagePath)
+void stompBox::setButton(QString hex1, QString hex2, QString hex3, QPoint pos, QString imagePath)
 {
-	button = new customButton(false, pos, this, imagePath);
+	button = new customButton(false, pos, this, hex1, hex2, hex3, imagePath);
 	led = new customLed(false, QPoint::QPoint(41, 4), this);
 
-	QObject::connect(button, SIGNAL(valueChanged(bool)),
+	QObject::connect(button, SIGNAL(valueChanged(bool, QString, QString, QString)),
 				led, SLOT(changeValue(bool)));	
 };
 
-void stompBox::setSwitch(){
-	switchbutton = new customSwitch(false, QPoint::QPoint(5, 41), this);	
+void stompBox::setSwitch(QString hex1, QString hex2, QString hex3)
+{
+	switchbutton = new customSwitch(false, QPoint::QPoint(5, 41), this, hex1, hex2, hex3);	
 };
 
 QList<QString> stompBox::getSourceItems(QString hex1, QString hex2)
@@ -390,6 +398,39 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	{
 		sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
 	};
+};
+
+void stompBox::valueChanged(bool value, QString hex1, QString hex2, QString hex3)
+{
+	int valueInt;
+	(value)? valueInt=1: valueInt=0;
+	QString valueHex = QString::number(valueInt, 16).toUpper();
+	if(valueHex.length() < 2) valueHex.prepend("0");
+	
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
+};
+
+void stompBox::valueChanged(int index)
+{
+	QString valueHex = QString::number(index, 16).toUpper();
+	if(valueHex.length() < 2) valueHex.prepend("0");
+	
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setFileSource(this->hex1, this->hex2, this->hex3, valueHex);
+
+	MidiTable *midiTable = MidiTable::Instance();
+	Midi items = midiTable->getMidiMap("Stucture", this->hex1, this->hex2, this->hex3);
+
+	QString desc = items.level.at(index).desc;
+	QString longdesc = items.level.at(index).longdesc;
+	if(longdesc.isEmpty())
+	{
+		longdesc = desc;
+	};
+
+	this->comboBox->setCurrentIndex(index);
+	this->comboBox->setEditText(desc);
 };
 
 int stompBox::getSourceValue(QString hex1, QString hex2, QString hex3)

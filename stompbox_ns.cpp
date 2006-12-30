@@ -29,7 +29,7 @@ stompbox_ns::stompbox_ns(QWidget *parent)
 	setImage(":/images/ns.png");
 	setKnob1("0E", "00", "01");
 	setKnob2("0E", "00", "02");
-	setButton();
+	setButton("0E", "00", "00");
 };
 
 void stompbox_ns::updateSignal()

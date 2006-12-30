@@ -27,7 +27,7 @@ stompbox_wah::stompbox_wah(QWidget *parent)
 {
 	/* WAH */
 	setImage(":/images/wah.png");
-	setButton(QPoint::QPoint(0, 109), ":/images/pedal.png");
+	setButton("03", "00", "00", QPoint::QPoint(0, 109), ":/images/pedal.png");
 };
 
 void stompbox_wah::updateSignal()

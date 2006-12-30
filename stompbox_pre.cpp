@@ -27,7 +27,7 @@ stompbox_pre::stompbox_pre(QWidget *parent)
 {
 	/* PRE */
 	setImage(":/images/pre.png");
-	setSwitch(); 
+	setSwitch("07", "00", "00"); 
 };
 
 void stompbox_pre::updateSignal()

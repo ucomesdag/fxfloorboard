@@ -28,7 +28,7 @@ stompbox_fx2::stompbox_fx2(QWidget *parent)
 	/* FX2 */
 	setImage(":/images/fx2.png");
 	setComboBox("09", "00", "02", QRect(8, 31, 79, 13));
-	setButton();
+	setButton("09", "00", "00");
 };
 
 void stompbox_fx2::updateSignal()

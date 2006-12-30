@@ -27,7 +27,7 @@ stompbox_fv::stompbox_fv(QWidget *parent)
 {
 	/* VOLUME */
 	setImage(":/images/fv.png");
-	setButton(QPoint::QPoint(0, 109), ":/images/pedal.png");
+	setButton("15", "00", "00", QPoint::QPoint(0, 109), ":/images/pedal.png");
 };
 
 void stompbox_fv::updateSignal()

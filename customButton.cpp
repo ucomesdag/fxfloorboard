@@ -23,10 +23,13 @@
 #include <QtGui>
 #include "customButton.h"
 
-customButton::customButton(bool active, QPoint buttonPos, QWidget *parent,
+customButton::customButton(bool active, QPoint buttonPos, QWidget *parent, QString hex1, QString hex2, QString hex3, 
 						   QString imagePath)
     : QWidget(parent)
 {
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;
 	this->active = active;
 	this->imagePath = imagePath;
 	QSize imageSize = QPixmap(imagePath).size();
@@ -34,6 +37,9 @@ customButton::customButton(bool active, QPoint buttonPos, QWidget *parent,
 	this->buttonPos = buttonPos;
 	setOffset(0);
     setGeometry(buttonPos.x(), buttonPos.y(), buttonSize.width(), buttonSize.height());
+
+	QObject::connect(this, SIGNAL( valueChanged(bool, QString, QString, QString) ),
+                this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
 };
 
 void customButton::paintEvent(QPaintEvent *)
@@ -92,7 +98,7 @@ void customButton::emitValue(bool value)
     this->active = value;
 	//if (value != m_value) {
     //    this->m_value = value;
-        emit valueChanged((bool)value);
+        emit valueChanged((bool)value, this->hex1, this->hex2, this->hex3);
     //};
 };
 
