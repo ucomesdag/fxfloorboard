@@ -146,6 +146,8 @@ floorBoard::floorBoard(QWidget *parent,
 		this->colapseState = false;
 		emit setCollapseState(false);
 	};
+
+	emit updateSignal();
 };
 
 floorBoard::~floorBoard()

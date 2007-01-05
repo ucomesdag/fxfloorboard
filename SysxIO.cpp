@@ -20,8 +20,11 @@
 **
 ****************************************************************************/
 
+#include <QMessageBox>
 #include "SysxIO.h"
 #include "SysxIODestroyer.h"
+#include "sysxWriter.h"
+#include "MidiTable.h"
 
 SysxIO::SysxIO() 
 {
@@ -57,7 +60,9 @@ void SysxIO::setFileSource(QByteArray data)
 	this->fileSource.address.clear();
 	this->fileSource.hex.clear();
 	
-	QList<QString> sysxBuffer;
+	QString errorList;
+	QList<QString> sysxBuffer; 
+	int dataSize = 0; int offset = 0;
 	for(int i=0;i<data.size();i++)
 	{
 		unsigned char byte = (char)data[i];
@@ -66,12 +71,58 @@ void SysxIO::setFileSource(QByteArray data)
 		if (hex.length() < 2) hex.prepend("0");
 		sysxBuffer.append(hex);
 
+		unsigned char nextbyte = (char)data[i+1];
+		unsigned int nextn = (int)nextbyte;
+		QString nexthex = QString::number(nextn, 16).toUpper();
+		if (nexthex.length() < 2) nexthex.prepend("0");
+		if(offset > 6 && nexthex != "F7")
+		{		
+			dataSize += n;
+		};
+		if(nexthex == "F7")
+		{		
+			QString checksum = hex;
+
+			if(getCheckSum(dataSize) != checksum)
+			{
+				QString errorString;
+				errorString.append(tr("Address") + ": ");
+				errorString.append(sysxBuffer.at(7) + " ");
+				errorString.append(sysxBuffer.at(8) + " ");
+				errorString.append(sysxBuffer.at(9) + " ");
+				errorString.append(sysxBuffer.at(10) + " - ");
+				errorString.append(tr("checksum") + " (" + checksum + ") ");
+				errorString.append(tr("should have been") + " (" + getCheckSum(dataSize) + ")");
+				errorString.append("\n");
+				errorList.append(errorString);
+
+				int dataSize1 = dataSize;
+
+				sysxBuffer = correctSysxMsg(sysxBuffer);
+			};
+		};
+		offset++;
+
 		if(hex == "F7") 
-		{
+		{	
 			this->fileSource.address.append( sysxBuffer.at(9) + sysxBuffer.at(10) );
 			this->fileSource.hex.append(sysxBuffer);
 			sysxBuffer.clear();
+			dataSize = 0;
+			offset = 0;
 		};
+	};
+	if(!errorList.isEmpty())
+	{
+		QMessageBox *msgBox = new QMessageBox();
+		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Checksum Error"));
+		msgBox->setIcon(QMessageBox::Warning);
+		msgBox->setText(tr("The file opened contains one or more incorrect checksums."));
+		msgBox->setInformativeText(tr("The incorrect values have been corrected if possible\n"
+			  "or have been set to zero."));
+		msgBox->setDetailedText(errorList);
+		msgBox->setStandardButtons(QMessageBox::Ok);
+		msgBox->exec();
 	};
 };
 
@@ -85,6 +136,14 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	address.append(hex2);
 	QList<QString> sysxMsg = this->fileSource.hex.at(this->fileSource.address.indexOf(address));
 	sysxMsg.replace(index, hex4);
+
+	int dataSize = 0;
+	for(int i=sysxMsg.size() - 3; i>6;i--)
+	{
+		dataSize += sysxMsg.at(i).toInt(&ok, 16);
+	};
+	sysxMsg.replace(sysxMsg.size() - 2, getCheckSum(dataSize));
+
 	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
 };
 
@@ -99,6 +158,14 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	int index = hex3.toInt(&ok, 16) + dataOffset;
 	sysxMsg.replace(index, hex4);
 	sysxMsg.replace(index + 1, hex5);
+
+	int dataSize = 0;
+	for(int i=sysxMsg.size() - 2; i>6;i--)
+	{
+		dataSize += sysxMsg.at(i).toInt(&ok, 16);
+	};
+	sysxMsg.replace(sysxMsg.size() - 2, getCheckSum(dataSize));
+
 	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
 };
 
@@ -122,7 +189,89 @@ QList<QString> SysxIO::getFileSource(QString hex1, QString hex2)
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
+	if(this->fileSource.address.indexOf(address) == -1)
+	{
+		sysxWriter file;
+		file.setFile(":default.syx");  // Read the default sysex file so whe don't start empty handed.
+		if(file.readFile())
+		{	
+			setFileSource(file.getFileSource());
+		};
+	};
 	QList<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.address.indexOf(address) );
 	return sysxMsg;
 };
 
+QString SysxIO::getCheckSum(int dataSize)
+{
+	bool ok;
+	QString base = "80";
+	int sum = dataSize % base.toInt(&ok, 16);
+	if(sum!=0) sum = base.toInt(&ok, 16) - sum;
+	QString checksum = QString::number(sum, 16).toUpper();
+	if(checksum.length()<2) checksum.prepend("0");
+	return checksum;
+};
+
+QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
+{
+	QString address1 = sysxMsg.at(9);
+	QString address2 = sysxMsg.at(10); 
+
+	bool ok;
+
+	MidiTable *midiTable = MidiTable::Instance();
+	for(int i=11;i<sysxMsg.size() - 3;i++)
+	{
+		if(i==12) i++;
+		
+		QString address3 = QString::number(i - 11, 16).toUpper();
+		if(address3.length()<2) address3.prepend("0");
+		
+		int range = midiTable->getRange("Stucture", address1, address2, address3);
+
+		if(midiTable->isData("Stucture", address1, address2, address3))
+		{	
+			int maxRange = QString("7F").toInt(&ok, 16) + 1; // index starts at 0 -> 0-127 = 128 entry's.
+			int value1 = sysxMsg.at(i).toInt(&ok, 16);
+			int value2 = sysxMsg.at(i + 1).toInt(&ok, 16);
+			int value = (value1 * maxRange) + value2;
+			
+			if(value > range)
+			{
+				value = 0;//(int)(range / 2);
+				int dif = (int)(value/maxRange);
+				QString valueHex1 = QString::number(dif, 16).toUpper();
+				if(valueHex1.length() < 2) valueHex1.prepend("0");
+				QString valueHex2 = QString::number(value - (dif * maxRange), 16).toUpper();
+				if(valueHex2.length() < 2) valueHex2.prepend("0");
+				
+				sysxMsg.replace(i, valueHex1);
+				sysxMsg.replace(i + 1, valueHex2);
+			};
+
+			i++;
+		}
+		else
+		{
+			if(sysxMsg.at(i).toInt(&ok, 16) > range)
+			{
+				int value = 0;//(int)(range / 2);
+				QString valueHex = QString::number(value, 16).toUpper();
+				if(valueHex.length() < 2) valueHex.prepend("0");
+				sysxMsg.replace(i, valueHex);
+			};
+		};
+	};
+	
+	int dataSize = 0;
+	for(int i=sysxMsg.size() - 2; i>6;i--)
+	{
+		dataSize += sysxMsg.at(i).toInt(&ok, 16);
+	};
+	sysxMsg.replace(sysxMsg.size() - 1, getCheckSum(dataSize));
+
+	int dataSize2 = dataSize;
+
+	return sysxMsg;
+};

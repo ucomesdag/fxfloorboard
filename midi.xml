@@ -2139,6 +2139,7 @@
             <PARAM value="33" name="quarter note" desc="" longdesc="" />
           </DATA>
         </DATA>
+        <DATA value="05" name="" abbr="" desc="(Reserved)" longdesc=""></DATA>
         <DATA value="06" name="" abbr="" desc="HR :Voice1:Feedback" longdesc="">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" longdesc="" />
         </DATA>
@@ -2314,6 +2315,7 @@
             <PARAM value="33" name="quarter note" desc="" longdesc="" />
           </DATA>
         </DATA>
+        <DATA value="1A" name="" abbr="" desc="(Reserved)" longdesc=""></DATA>
         <DATA value="1B" name="" abbr="" desc="PS :Voice2:Level" longdesc="">
           <PARAM value="range" name="00/64/00/100" desc="0 - 100" longdesc="" />
         </DATA>

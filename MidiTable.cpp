@@ -221,8 +221,26 @@ Midi MidiTable::getMidiMap(QString root, QString hex1, QString hex2, QString hex
 
 int MidiTable::getRange(QString root, QString hex1, QString hex2, QString hex3)
 {
-	Midi range = getMidiMap(root, hex1, hex2, hex3);
+	Midi range;
+	
+	/* When FX has alot off settings (more than ) it's spanned over more then one entry in the 
+	midi.xml, so when out of range we jump to the next entry and start from 00. */
 	bool ok;
+	int maxRange = QString("7F").toInt(&ok, 16);
+	if(hex3.toInt(&ok, 16) > maxRange)
+	{
+		
+		hex1 = QString::number(hex1.toInt(&ok, 16) + 1, 16).toUpper();
+		if(hex1.length() < 2) hex1.prepend("0");
+		hex3 = QString::number(hex3.toInt(&ok, 16) - (maxRange + 1), 16).toUpper();
+		if(hex3.length() < 2) hex3.prepend("0");
+		range = getMidiMap(root, hex1, hex2, hex3);
+	}
+	else
+	{
+		range = getMidiMap(root, hex1, hex2, hex3);	
+	};
+
 	int lastIndex;
 	if(range.level.last().value == "range")
 	{
@@ -244,7 +262,25 @@ int MidiTable::getRange(QString root, QString hex1, QString hex2, QString hex3)
 
 bool MidiTable::isData(QString root, QString hex1, QString hex2, QString hex3)
 {
-	Midi range = getMidiMap(root, hex1, hex2, hex3);
+	Midi range;
+	
+	/* When FX has alot off settings (more than ) it's spanned over more then one entry in the 
+	midi.xml, so when out of range we jump to the next entry and start from 00. */
+	bool ok;
+	int maxRange = QString("7F").toInt(&ok, 16);
+	if(hex3.toInt(&ok, 16) > maxRange)
+	{
+		hex1 = QString::number(hex1.toInt(&ok, 16) + 1, 16).toUpper();
+		if(hex1.length() < 2) hex1.prepend("0");
+		hex3 = QString::number(hex3.toInt(&ok, 16) - (maxRange + 1), 16).toUpper();
+		if(hex3.length() < 2) hex3.prepend("0");
+		range = getMidiMap(root, hex1, hex2, hex3);
+	}
+	else
+	{
+		range = getMidiMap(root, hex1, hex2, hex3);	
+	};
+
 	if(range.level.last().type.contains("DATA"))
 	{
 		return true;

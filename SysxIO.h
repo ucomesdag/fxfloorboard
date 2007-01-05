@@ -23,6 +23,7 @@
 #ifndef SYSXIO_H
 #define SYSXIO_H
 
+#include <QObject>
 #include <QString>
 #include <QList>
 #include <qdom.h>
@@ -35,8 +36,9 @@ struct SysxData
 	QList< QList<QString> > hex;
 };
 
-class SysxIO
+class SysxIO: public QObject
 {
+	Q_OBJECT
 
 public:
 	static SysxIO* Instance(); //Singleton patern design
@@ -49,6 +51,8 @@ public:
 	QString getFileName();
 	SysxData getFileSource();
 	QList<QString> getFileSource(QString hex1, QString hex2);
+	QString getCheckSum(int dataSize);
+	QList<QString> correctSysxMsg(QList<QString> sysxMsg);
 
 protected :
 	SysxIO();

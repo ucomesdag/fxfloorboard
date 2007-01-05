@@ -135,17 +135,20 @@ void floorBoardDisplay::setValueDisplay(QString fxName, QString valueName, QStri
 void floorBoardDisplay::setPatchDisplay(QString patchName)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	QString fileName = sysxIO->getFileName();
-	
-	QString str;
-	str.append("<html><body>");
-	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td align='left'>");
-	str.append(patchName);
-	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
-	str.append(fileName.section('/', -1, -1));
-	str.append("</font></td></tr></table>");
-	str.append("</body></html>");
-	patchDisplay->setHtml(str);
+	if(sysxIO->getFileName() != ":default.syx") // Keep the initial version display if the default.syx is loaded at startup.
+	{
+		QString fileName = sysxIO->getFileName();
+		
+		QString str;
+		str.append("<html><body>");
+		str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td align='left'>");
+		str.append(patchName);
+		str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
+		str.append(fileName.section('/', -1, -1));
+		str.append("</font></td></tr></table>");
+		str.append("</body></html>");
+		patchDisplay->setHtml(str);
+	};
 };
 
 void floorBoardDisplay::setPatchNumDisplay(int patchNumber)

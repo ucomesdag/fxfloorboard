@@ -102,6 +102,7 @@ void customDial::mouseMoveEvent(QMouseEvent *event)
 	double distY = (double)event->pos().y() - (double)_startpos.y();
 	double numSteps = (int)((distY/1.5) + 0.5);
 	//double numSteps = (int)((distY/2) + 0.5) * (dataRange / range); //Same distance for all.
+	if(dataRange >= 300) numSteps = numSteps * 10; // To make the mousing distance shorter to get arround (DD Time).
 	double _newValue = _lastValue - (numSteps * single);
 	
 	if( (_startpos.y() < _lastpos.y() && _newValue < min)
