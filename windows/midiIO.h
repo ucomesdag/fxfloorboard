@@ -37,6 +37,9 @@ class midiIO
 		void queryMidiOutDevices();
 		QList<QString> getMidiInDevices();
 		QList<QString> getMidiOutDevices();
+
+		void sendSysxMsg(QString sysxMsg, int MidiOut);
+		QString receiveSysxMsg(QString sysxMsg, int MidiOut, int MidiIn);
 		
 		/*void setMidiOutDevices();
 		QList<QString> getMidiOutDevices();
