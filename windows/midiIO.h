@@ -20,50 +20,38 @@
 **
 ****************************************************************************/
 
-#ifndef midiIO_H
-#define midiIO_H
+#ifndef MIDIIO_H
+#define MIDIIO_H
 
+#include <QObject>
 #include <QString>
 #include <QList>
-using namespace std;
 
-class midiIO
+class midiIO: public QObject
 {
-	public:
-		midiIO();
-		~midiIO();
+	Q_OBJECT
 
-		void queryMidiInDevices();
-		void queryMidiOutDevices();
-		QList<QString> getMidiInDevices();
-		QList<QString> getMidiOutDevices();
+public:
+	midiIO();
+	~midiIO();
+	
+	QList<QString> getMidiOutDevices();
+	QList<QString> getMidiInDevices();
 
-		void sendSysxMsg(QString sysxMsg, int MidiOut);
-		QString receiveSysxMsg(QString sysxMsg, int MidiOut, int MidiIn);
-		
-		/*void setMidiOutDevices();
-		QList<QString> getMidiOutDevices();
-		void setMidiOut(unsigned int MidiOut);
-		unsigned int getMidiOut();
+	QString sendSysxMsg(QString sysxOut, int midiOut, int midiIn);
 
-		void setMidiInDevices();
-		QList<QString> getMidiInDevices();
-		void setMidiIn(unsigned int MidiIn);
-		unsigned int getMidiIn();
+private:
+	void queryMidiInDevices();
+	void queryMidiOutDevices();
 
-		void sendsysxOut(QString sysxOut);
-		QString getsysxOut();
-		QString getsysxIn();
-		int getMsgLengthOut();
-		int getMsgLengthIn();*/
+	QString getMidiOutErrorMsg(unsigned long err);
+	QString getMidiInErrorMsg(unsigned long err);
 
-	private:
-		QList<QString> MidiOutDevices;
-		QList<QString> MidiInDevices;
-		/*QString sysxOut;
-		int msgLengthOut;
-		QString sysxIn;
-		int msgLengthIn;*/
+	void showErrorMsg(QString errorMsg, QString type);
+	void sendMsg(QString sysxOutMsg, int midiOut);
+
+	QList<QString> midiOutDevices;
+	QList<QString> midiInDevices;
 };
 
-#endif // midiIO_H
+#endif // MIDIIO_H

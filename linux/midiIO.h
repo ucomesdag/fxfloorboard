@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2005-2006 Uco Mesdag. All rights reserved.
+** Copyright (C) 2005, 2006, 2007 Uco Mesdag. All rights reserved.
 **
 ** This file is part of "GT-8 FX FloorBoard".
 **
@@ -20,50 +20,38 @@
 **
 ****************************************************************************/
 
-#ifndef midiIO_H
-#define midiIO_H
+#ifndef MIDIIO_H
+#define MIDIIO_H
 
+#include <QObject>
 #include <QString>
 #include <QList>
 
-#include <QString>
-#include <QList>
-using namespace std;
-
-class midiIO
+class midiIO: public QObject
 {
-	public:
-		midiIO();
-		~midiIO();
+	Q_OBJECT
 
-		void queryMidiInDevices();
-		void queryMidiOutDevices();
-		QList<QString> getMidiInDevices();
-		QList<QString> getMidiOutDevices();
-		
-		/*void setMidiOutDevices();
-		QList<QString> getMidiOutDevices();
-		void setMidiOut(unsigned int MidiOut);
-		unsigned int getMidiOut();
+public:
+	midiIO();
+	~midiIO();
+	
+	QList<QString> getMidiOutDevices();
+	QList<QString> getMidiInDevices();
 
-		void setMidiInDevices();
-		QList<QString> getMidiInDevices();
-		void setMidiIn(unsigned int MidiIn);
-		unsigned int getMidiIn();
+	QString sendSysxMsg(QString sysxOut, int midiOut, int midiIn);
 
-		void sendsysxOut(QString sysxOut);
-		QString getsysxOut();
-		QString getsysxIn();
-		int getMsgLengthOut();
-		int getMsgLengthIn();*/
+private:
+	void queryMidiInDevices();
+	void queryMidiOutDevices();
 
-	private:
-		QList<QString> MidiOutDevices;
-		QList<QString> MidiInDevices;
-		/*QString sysxOut;
-		int msgLengthOut;
-		QString sysxIn;
-		int msgLengthIn;*/
+	QString getMidiOutErrorMsg(unsigned long err);
+	QString getMidiInErrorMsg(unsigned long err);
+
+	void showErrorMsg(QString errorMsg, QString type);
+	void sendMsg(QString sysxOutMsg, int midiOut);
+
+	QList<QString> midiOutDevices;
+	QList<QString> midiInDevices;
 };
 
-#endif // midiIO_H
+#endif // MIDIIO_H

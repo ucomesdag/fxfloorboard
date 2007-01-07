@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-#include <QTreeWidget>
 #include <QLayout>
 #include "bankTreeList.h"
 
@@ -50,7 +49,7 @@ bankTreeList::bankTreeList(QWidget *parent)
 	font.setPixelSize(10);
 	font.setStretch(120);
 
-	QTreeWidget *treeList = new QTreeWidget(this);
+	treeList = new QTreeWidget(this);
 	treeList->setColumnCount(1);
 	treeList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	treeList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);

@@ -43,8 +43,8 @@
       <PARAM value="06" name="GT-8" desc="Model ID LSB" longdesc="" />
     </DATA>
     <DATA value="06" abbr="" desc="" longdesc="">
-      <PARAM value="11" name="Send" desc="Command ID (DT1)" longdesc="" />
-      <PARAM value="12" name="Receive" desc="Command ID (DT1)" longdesc="" />
+      <PARAM value="11" name="Receive" desc="Command ID (DT1)" longdesc="" />
+      <PARAM value="12" name="Send" desc="Command ID (DT1)" longdesc="" />
     </DATA>
   </Header>
   <Address>

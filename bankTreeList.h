@@ -24,6 +24,7 @@
 #define BANKTREELIST_H
 
 #include <QWidget>
+#include <QTreeWidget>
 
 class bankTreeList : public QWidget
 {
@@ -35,6 +36,8 @@ public:
 public slots:
 	void updateSize(QRect newrect);
 
+private:
+	QTreeWidget* treeList;
 };
 
 #endif // BANKTREELIST_H
