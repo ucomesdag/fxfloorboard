@@ -40,7 +40,7 @@ midiIO::~midiIO()
  *************************************************************************/
 void midiIO::queryMidiOutDevices()
 {
-	this->MidiOutDevices.push_back(QString("Midi not implemented!"));
+	this->midiOutDevices.push_back(QString("Midi not implemented!"));
 };
 
 QList<QString> midiIO::getMidiOutDevices()
@@ -54,7 +54,7 @@ QList<QString> midiIO::getMidiOutDevices()
  *************************************************************************/
 void midiIO::queryMidiInDevices()
 {
-	this->MidiInDevices.push_back(QString("Midi not implemented!"));
+	this->midiInDevices.push_back(QString("Midi not implemented!"));
 };
 
 QList<QString> midiIO::getMidiInDevices()
