@@ -20,8 +20,6 @@
 **
 ****************************************************************************/
 
-#include <windows.h> // Needed to acces midi and linking against winmm.lib is also needed!!!
-
 #include <QMessageBox>
 #include "midiIO.h"
 
