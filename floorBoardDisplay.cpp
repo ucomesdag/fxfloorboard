@@ -113,6 +113,23 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	customButton *masterButton = new customButton(tr("MASTER"), false, QPoint(663, 6), this, ":/images/pushbutton.png");
 	customButton *systemButton = new customButton(tr("SYSTEM"), false, QPoint(663, 23), this, ":/images/pushbutton.png");
 
+	QPalette palComboBox;
+    palComboBox.setColor(QPalette::Base,QColor(0,1,62));
+    palComboBox.setColor(QPalette::Text,QColor(0,255,204));
+	palComboBox.setColor(QPalette::Highlight,QColor(0,1,62));
+	palComboBox.setColor(QPalette::HighlightedText,QColor(0,255,204));
+
+	palComboBox.setColor(QPalette::Window,QColor(0,1,62));
+	palComboBox.setColor(QPalette::WindowText,QColor(0,255,204));		//List Border
+	palComboBox.setColor(QPalette::Button,QColor(0,1,62));
+	palComboBox.setColor(QPalette::ButtonText,QColor(0,255,204));
+
+	palComboBox.setColor(QPalette::Light,QColor(0,1,62));				//Lighter than Button color.
+	palComboBox.setColor(QPalette::Midlight,QColor(0,1,62));			//Between Button and Light.
+	palComboBox.setColor(QPalette::Dark,QColor(0,1,62));				//Darker than Button.
+	palComboBox.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
+	palComboBox.setColor(QPalette::Shadow,QColor(0,1,62));
+	
 	QFont fontComboBox;
 	fontComboBox.setFamily("Arial");
 	fontComboBox.setBold(true);
@@ -121,10 +138,12 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 
 	QComboBox *initPatchcomboBox = new QComboBox(this);
 	initPatchcomboBox->addItem(tr(" [ INIT Patches ] "));
+	initPatchcomboBox->addItem(tr(" 1 "));
+	initPatchcomboBox->addItem(tr(" 2 "));
 	initPatchcomboBox->setGeometry(408, 23, 169, 15);
 	initPatchcomboBox->setEditable(false);
 	initPatchcomboBox->setFont(fontComboBox);
-	initPatchcomboBox->setPalette(pal);
+	initPatchcomboBox->setPalette(palComboBox);
 	initPatchcomboBox->setFrame(false);
 	//initPatchcomboBox->setMaxVisibleItems(itemsCount);
 	//initPatchcomboBox->view()->setMinimumWidth( maxLenght + 10 );
