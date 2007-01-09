@@ -34,10 +34,16 @@ public:
 		bool active = false,
 		QPoint buttonPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
-		QString hex1 = "void",
-		QString hex2 = "void",
-		QString hex3 = "void",
+		QString hex1 = 0,
+		QString hex2 = 0,
+		QString hex3 = 0,
 		QString imagePath = ":/images/button.png");
+	customButton(
+		QString text,
+		bool active = false,
+		QPoint buttonPos = QPoint::QPoint(0, 0),
+		QWidget *parent = 0,
+		QString imagePath = ":/images/pushbutton.png");
 	void setValue(bool value);
 
 signals:
@@ -56,6 +62,8 @@ private:
 	QString hex1;
 	QString hex2;
 	QString hex3;
+
+	QString text;
 
 	bool active;
 	//bool m_value;

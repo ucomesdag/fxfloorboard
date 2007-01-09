@@ -42,6 +42,35 @@ customButton::customButton(bool active, QPoint buttonPos, QWidget *parent, QStri
                 this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
 };
 
+customButton::customButton(QString text, bool active, QPoint buttonPos, QWidget *parent, 
+						   QString imagePath)
+    : QWidget(parent)
+{
+	this->active = active;
+	this->text = text;
+	this->imagePath = imagePath;
+	QSize imageSize = QPixmap(imagePath).size();
+	this->buttonSize =  QSize(imageSize.width(), imageSize.height()/4);
+	this->buttonPos = buttonPos;
+	setOffset(0);
+    setGeometry(buttonPos.x(), buttonPos.y(), buttonSize.width(), buttonSize.height());
+
+	QFont fontLabel;
+	fontLabel.setFamily("Arial");
+	fontLabel.setBold(true);
+	fontLabel.setPixelSize(9);
+	fontLabel.setStretch(100);
+	
+	QLabel *textLabel = new QLabel(this);
+	textLabel->setText(this->text);
+	textLabel->setFont(fontLabel);
+	textLabel->setAlignment(Qt::AlignCenter);
+	textLabel->setGeometry(0, (buttonSize.height() - textLabel->height())/2, buttonSize.width(), textLabel->height());
+
+	QObject::connect(this, SIGNAL( valueChanged(bool, QString, QString, QString) ),
+                this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
+};
+
 void customButton::paintEvent(QPaintEvent *)
 {
 	QRectF target(0.0 , 0.0, buttonSize.width(), buttonSize.height());

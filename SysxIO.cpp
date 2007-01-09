@@ -119,7 +119,8 @@ void SysxIO::setFileSource(QByteArray data)
 		msgBox->setIcon(QMessageBox::Warning);
 		msgBox->setText(tr("The file opened contains one or more incorrect checksums."));
 		msgBox->setInformativeText(tr("The incorrect values have been corrected if possible\n"
-			  "or otherwise they have been reset to zero."));
+			  "or otherwise they have been reset to zero.\n"
+			  "\nPlease verify the patch settings for consistency."));
 		msgBox->setDetailedText(errorList);
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();

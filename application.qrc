@@ -18,6 +18,7 @@
         <file>images/infobar.png</file>
         <file>images/knob.png</file>
         <file>images/led.png</file>
+        <file>images/ledbutton.png</file>
         <file>images/lp.png</file>
         <file>images/midi.png</file>
         <file>images/ns.png</file>
@@ -26,6 +27,7 @@
         <file>images/panelbarbutton.png</file>
         <file>images/pedal.png</file>
         <file>images/pre.png</file>
+        <file>images/pushbutton.png</file>
         <file>images/rv.png</file>
         <file>images/slide.png</file>
         <file>images/sliderbutton.png</file>

@@ -22,6 +22,7 @@
 
 #include <QLayout>
 #include "bankTreeList.h"
+#include "midiIO.h"
 
 bankTreeList::bankTreeList(QWidget *parent)
     : QWidget(parent)

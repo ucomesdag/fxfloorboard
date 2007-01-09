@@ -24,6 +24,7 @@
 #include "Preferences.h"
 #include "MidiTable.h"
 #include "SysxIO.h"
+#include "customButton.h"
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
     : QWidget(parent)
@@ -104,6 +105,29 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	valueDisplay->setLineWidth(0);
 	valueDisplay->setContentsMargins(0, 0, 0, 0);
 	this->valueDisplay = valueDisplay;
+
+	customButton *connectButton = new customButton(tr("CONNECT"), false, QPoint(408, 6), this, ":/images/ledbutton.png");
+	customButton *writeButton = new customButton(tr("WRITE/SYNC"), false, QPoint(493, 6), this, ":/images/ledbutton.png");
+	customButton *manualButton = new customButton(tr("MANUAL"), false, QPoint(578, 6), this, ":/images/ledbutton.png");
+	customButton *assignButton = new customButton(tr("ASSIGN"), false, QPoint(578, 23), this, ":/images/pushbutton.png");
+	customButton *masterButton = new customButton(tr("MASTER"), false, QPoint(663, 6), this, ":/images/pushbutton.png");
+	customButton *systemButton = new customButton(tr("SYSTEM"), false, QPoint(663, 23), this, ":/images/pushbutton.png");
+
+	QFont fontComboBox;
+	fontComboBox.setFamily("Arial");
+	fontComboBox.setBold(true);
+	fontComboBox.setPixelSize(10);
+	fontComboBox.setStretch(110);
+
+	QComboBox *initPatchcomboBox = new QComboBox(this);
+	initPatchcomboBox->addItem(tr(" [ INIT Patches ] "));
+	initPatchcomboBox->setGeometry(408, 23, 169, 15);
+	initPatchcomboBox->setEditable(false);
+	initPatchcomboBox->setFont(fontComboBox);
+	initPatchcomboBox->setPalette(pal);
+	initPatchcomboBox->setFrame(false);
+	//initPatchcomboBox->setMaxVisibleItems(itemsCount);
+	//initPatchcomboBox->view()->setMinimumWidth( maxLenght + 10 );
 };
 
 QPoint floorBoardDisplay::getPos()

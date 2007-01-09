@@ -238,7 +238,7 @@ void CALLBACK midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, DWORD dw
 {
 	LPMIDIHDR		lpMIDIHeader;
 	unsigned char *	ptr;
-	unsigned char 	bytes;
+	//unsigned char 	bytes;
 
 	switch (wMsg)
 	{
