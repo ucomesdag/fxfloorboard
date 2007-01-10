@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 	has started running, it is necessary to periodically call. */
 	app.processEvents(); 
 
-	splash->showStatusMessage(QObject::tr("Starting..."));
+	splash->showStatusMessage(QObject::tr("Initializing..."));
 	mainWindow window;// = new mainWindow;
 
 	app.processEvents(); 

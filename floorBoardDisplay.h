@@ -49,6 +49,7 @@ private:
 	QTextEdit *patchDisplay;
 	QTextEdit *patchNumDisplay;
 
+	void setInitPatchComboBox(QRect geometry);
 };
 
 #endif // FLOORBOARDDISPLAY_H

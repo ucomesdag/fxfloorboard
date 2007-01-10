@@ -20,6 +20,9 @@
 **
 ****************************************************************************/
 
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
 #include "floorBoardDisplay.h"
 #include "Preferences.h"
 #include "MidiTable.h"
@@ -106,47 +109,14 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	valueDisplay->setContentsMargins(0, 0, 0, 0);
 	this->valueDisplay = valueDisplay;
 
-	customButton *connectButton = new customButton(tr("CONNECT"), false, QPoint(408, 6), this, ":/images/ledbutton.png");
-	customButton *writeButton = new customButton(tr("WRITE/SYNC"), false, QPoint(493, 6), this, ":/images/ledbutton.png");
-	customButton *manualButton = new customButton(tr("MANUAL"), false, QPoint(578, 6), this, ":/images/ledbutton.png");
-	customButton *assignButton = new customButton(tr("ASSIGN"), false, QPoint(578, 23), this, ":/images/pushbutton.png");
-	customButton *masterButton = new customButton(tr("MASTER"), false, QPoint(663, 6), this, ":/images/pushbutton.png");
-	customButton *systemButton = new customButton(tr("SYSTEM"), false, QPoint(663, 23), this, ":/images/pushbutton.png");
+	customButton *connectButton = new customButton(tr("Connect"), false, QPoint(405, 5), this, ":/images/ledbutton.png");
+	customButton *writeButton = new customButton(tr("Write/Sync"), false, QPoint(494, 5), this, ":/images/ledbutton.png");
+	customButton *manualButton = new customButton(tr("Manual"), false, QPoint(583, 5), this, ":/images/ledbutton.png");
+	customButton *assignButton = new customButton(tr("Assign"), false, QPoint(583, 24), this, ":/images/pushbutton.png");
+	customButton *masterButton = new customButton(tr("Master"), false, QPoint(672, 5), this, ":/images/pushbutton.png");
+	customButton *systemButton = new customButton(tr("System"), false, QPoint(672, 24), this, ":/images/pushbutton.png");
 
-	QPalette palComboBox;
-    palComboBox.setColor(QPalette::Base,QColor(0,1,62));
-    palComboBox.setColor(QPalette::Text,QColor(0,255,204));
-	palComboBox.setColor(QPalette::Highlight,QColor(0,1,62));
-	palComboBox.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	palComboBox.setColor(QPalette::Window,QColor(0,1,62));
-	palComboBox.setColor(QPalette::WindowText,QColor(0,255,204));		//List Border
-	palComboBox.setColor(QPalette::Button,QColor(0,1,62));
-	palComboBox.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	palComboBox.setColor(QPalette::Light,QColor(0,1,62));				//Lighter than Button color.
-	palComboBox.setColor(QPalette::Midlight,QColor(0,1,62));			//Between Button and Light.
-	palComboBox.setColor(QPalette::Dark,QColor(0,1,62));				//Darker than Button.
-	palComboBox.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
-	palComboBox.setColor(QPalette::Shadow,QColor(0,1,62));
-	
-	QFont fontComboBox;
-	fontComboBox.setFamily("Arial");
-	fontComboBox.setBold(true);
-	fontComboBox.setPixelSize(10);
-	fontComboBox.setStretch(110);
-
-	QComboBox *initPatchcomboBox = new QComboBox(this);
-	initPatchcomboBox->addItem(tr(" [ INIT Patches ] "));
-	initPatchcomboBox->addItem(tr(" 1 "));
-	initPatchcomboBox->addItem(tr(" 2 "));
-	initPatchcomboBox->setGeometry(408, 23, 169, 15);
-	initPatchcomboBox->setEditable(false);
-	initPatchcomboBox->setFont(fontComboBox);
-	initPatchcomboBox->setPalette(palComboBox);
-	initPatchcomboBox->setFrame(false);
-	//initPatchcomboBox->setMaxVisibleItems(itemsCount);
-	//initPatchcomboBox->view()->setMinimumWidth( maxLenght + 10 );
+	setInitPatchComboBox(QRect(405, 24, 168, 15));
 };
 
 QPoint floorBoardDisplay::getPos()
@@ -220,4 +190,79 @@ void floorBoardDisplay::updateDisplay()
 	};	
 	setPatchDisplay(patchName);
 	valueDisplay->clear();
+};
+
+void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
+{
+	QDir initPatchesDir = "Init Patches";
+	if(initPatchesDir.exists())
+	{
+		
+		QStringList filters;
+		filters << "*.syx" << "*.syx2";
+		QStringList initPatches = initPatchesDir.entryList(filters);
+
+		QPalette pal;
+		pal.setColor(QPalette::Base,QColor(0,1,62));
+		pal.setColor(QPalette::Text,QColor(0,255,204));
+		pal.setColor(QPalette::Highlight,QColor(0,1,62));
+		pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
+
+		pal.setColor(QPalette::Window,QColor(0,1,62));
+		pal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
+		pal.setColor(QPalette::Button,QColor(0,1,62));
+		pal.setColor(QPalette::ButtonText,QColor(0,255,204));
+
+		pal.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
+		pal.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
+		pal.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
+		pal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
+		pal.setColor(QPalette::Shadow,QColor(0,1,62));
+		
+		QFont font;
+		font.setFamily("Arial");
+		font.setBold(true);
+		font.setPixelSize(10);
+		font.setStretch(110);
+
+		QComboBox *initPatchComboBox = new QComboBox(this);
+		initPatchComboBox->addItem(tr("[ INIT Patches ]"));
+		
+		int itemsCount;
+		int maxLenght = 0;
+		for(itemsCount=0; itemsCount<initPatches.size(); itemsCount++)
+		{
+			QString item = initPatches.at(itemsCount);
+			item.remove(QRegExp("^[0-9_]+"));
+			item.remove(QRegExp(".{1}(syx|syx2)"));
+			if(!item.contains("INIT_"))
+			{
+				item.prepend(tr("(My INIT) "));
+			};
+			item.remove("INIT_");
+			item.replace("_", " ");
+			item.replace("-!-", "/");
+			initPatchComboBox->addItem(item);
+			int pixelWidth = QFontMetrics(font).width(item);
+			if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+		};	
+
+		initPatchComboBox->setGeometry(geometry);
+		initPatchComboBox->setEditable(false);
+		initPatchComboBox->setFont(font);
+		initPatchComboBox->setPalette(pal);
+		initPatchComboBox->setFrame(false);
+		initPatchComboBox->setMaxVisibleItems(itemsCount + 1);
+		initPatchComboBox->view()->setMinimumWidth( maxLenght + 25 );
+	};
+
+	// Create a shortcut in the default patch directory.
+	Preferences *preferences = Preferences::Instance();
+	QDir patchesDir = preferences->getPreferences("General", "Files", "dir");
+
+	if(patchesDir.exists())
+	{
+		QString fileName = patchesDir.absolutePath().append("/Init Patches");
+		//QFile::link(initPatchesDir.absolutePath(), fileName); //Doesn't work on windows so disabled for the time being.
+	};
 };

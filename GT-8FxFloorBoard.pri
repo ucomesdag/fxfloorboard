@@ -102,4 +102,4 @@ SOURCES += ./main.cpp \
     ./mainWindow.cpp
 
 #Resource file(s)
-RESOURCES += .\application.qrc
+RESOURCES += .\GT-8FxFloorBoard.qrc
