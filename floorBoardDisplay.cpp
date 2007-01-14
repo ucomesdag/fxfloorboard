@@ -206,9 +206,9 @@ void floorBoardDisplay::updateDisplay()
 void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
 {
 	Preferences *preferences = Preferences::Instance();
-	QDir initPatchesDir = "Init Patches";
-	QDir defaultPatchesDir = preferences->getPreferences("General", "Files", "dir").remove(QRegExp("$(/)"));
-	QDir defaultInitPatchesDir = defaultPatchesDir.path().append("/").append(initPatchesDir.path());
+	QDir initPatchesDir = QDir("Init Patches");
+	QDir defaultPatchesDir = QDir(preferences->getPreferences("General", "Files", "dir").remove(QRegExp("$(/)")));
+	QDir defaultInitPatchesDir = QDir(defaultPatchesDir.path().append("/").append(initPatchesDir.path()));
 	
 	// Create a shortcut in the default patch directory.
 	if(defaultPatchesDir.exists() && !defaultInitPatchesDir.exists())
