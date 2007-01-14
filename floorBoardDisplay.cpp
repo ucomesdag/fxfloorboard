@@ -41,8 +41,8 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	this->pos = pos;
 
 	QPalette pal;
-    pal.setColor(QPalette::Base,QColor(0,1,62));
-    pal.setColor(QPalette::Text,QColor(0,255,204));
+	pal.setColor(QPalette::Base,QColor(0,1,62));
+	pal.setColor(QPalette::Text,QColor(0,255,204));
 	pal.setColor(QPalette::Highlight,QColor(0,1,62));
 	pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
 
@@ -324,11 +324,9 @@ void floorBoardDisplay::connectSignal(bool value)
 		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
 		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
 
-		QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
-		//QString sysxOut = "f0 41 00 00 00 06 12 0d 00 12 00 53 79 73 65 78 20 54 45 53 54 20 20 20 20 20 20 47 f7";
-		replyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+				QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
+		eplyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn);
 	};
-
 
 	if(replyMsg.contains("0006") && value == true)
 	{
