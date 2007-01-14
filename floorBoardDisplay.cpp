@@ -325,7 +325,7 @@ void floorBoardDisplay::connectSignal(bool value)
 		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
 
 				QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
-		eplyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+		replyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn);
 	};
 
 	if(replyMsg.contains("0006") && value == true)
