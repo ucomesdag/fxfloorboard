@@ -359,3 +359,173 @@ QString MidiTable::rangeToValue(Midi range, QString hex)
 	};
 	return valueStr;
 };
+
+QString MidiTable::getHeader(bool receive)
+{
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Header") );
+
+	QString header;
+	for(int i=0;i<section.level.size();++i)
+	{
+		int offset = 0;
+		if(!receive) 
+		{
+			offset = 1;
+		};
+		Midi level1 = section.level.at(i);
+		Midi level2 = level1.level.at(offset);
+		header.append(level2.value);
+	};
+
+	return header;
+};
+
+QString MidiTable::getFooter()
+{
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Footer") );
+
+	QString footer;
+	Midi level1 = section.level.at(0);
+	Midi level2 = level1.level.at(0);
+	footer.append(level2.value);
+
+	return footer;
+};
+
+QString MidiTable::getSize(QString hex1, QString hex2, QString hex3)
+{
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
+	Midi level1 = section.level.at( section.id.indexOf(hex1) );
+	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
+
+	QString size;
+
+	int sizeCount = 0; bool ok;
+	if(hex3 == "ALL")
+	{
+		for(int i=0;i<level2.level.size();++i)
+		{
+			hex3 = QString::number(i, 16).toUpper();
+			if (hex3.length() < 2) hex3.prepend("0");
+			
+			if(!level2.id.contains(hex3) && level2.id.contains("range"))
+			{
+				Midi level3 = level2.level.at( level2.id.indexOf("range") );
+				QStringList rangeList = level3.name.split("/");
+				sizeCount += rangeList.at(1).toInt(&ok, 16);
+			}
+			else
+			{
+				Midi level3 = level2.level.at( level2.id.indexOf(hex3) );
+				if(level3.level.last().type.contains("DATA"))
+				{
+					sizeCount += 2;
+				}
+				else
+				{
+					sizeCount += 1;
+				};	
+			};
+		};
+	}
+	else
+	{
+		if(!level2.id.contains(hex3) && level2.id.contains("range"))
+		{
+			Midi level3 = level2.level.at( level2.id.indexOf("range") );
+			QStringList rangeList = level3.name.split("/");
+			sizeCount += rangeList.at(1).toInt(&ok, 16);
+		}
+		else
+		{
+			Midi level3 = level2.level.at( level2.id.indexOf(hex3) );
+			if(level3.level.last().type.contains("DATA"))
+			{
+				sizeCount += 2;
+			}
+			else
+			{
+				sizeCount += 1;
+			};	
+		};
+	};
+
+	QString itemSize = QString::number(sizeCount, 16).toUpper();
+	if (itemSize.length() < 2) itemSize.prepend("0");
+
+	size.append("00");
+	size.append("00");
+	size.append("00");
+	size.append(itemSize);
+
+	return size;
+};
+
+QString MidiTable::getCheckSum(int dataSize)
+{
+	bool ok;
+	QString base = "80";
+	int sum = dataSize % base.toInt(&ok, 16);
+	if(sum!=0) sum = base.toInt(&ok, 16) - sum;
+	QString checksum = QString::number(sum, 16).toUpper();
+	if(checksum.length()<2) checksum.prepend("0");
+	return checksum;
+};
+
+QString MidiTable::dataRequest(QString hex1, QString hex2, QString hex3)
+{
+	QString sysxMsg;
+	sysxMsg.append(getHeader(true));
+	
+	sysxMsg.append(hex1);
+	sysxMsg.append(hex2);
+
+
+	sysxMsg.append(getFooter());
+	return sysxMsg;
+};
+
+QString MidiTable::nameRequest(int bank, int patch)
+{
+	bool ok;
+	QString addr1, addr2;
+	if(bank != 0 && patch != 0 && bank <= 85 && patch <= 4)
+	{
+		int patchOffset = (((bank -1 ) * 4) + patch) - 1;
+		if(bank > 35) patchOffset += 116; 
+		int addrMaxSize = QString("80").toInt(&ok, 16);
+		int n = (int)(patchOffset / addrMaxSize);
+		
+		addr1 = QString::number(8 + n, 16).toUpper();
+		addr2 = QString::number(patchOffset - (addrMaxSize * n), 16).toUpper();
+		if (addr1.length() < 2) addr1.prepend("0");
+		if (addr2.length() < 2) addr2.prepend("0");
+	}
+	else
+	{
+		addr1 = "0D";
+		addr2 = "00";
+	};
+
+	QString hex1 = "12";
+	QString hex2 = "00";
+
+	QString sysxMsg;
+	sysxMsg.append(getHeader(true));
+	sysxMsg.append(addr1);
+	sysxMsg.append(addr2);
+	sysxMsg.append(hex1);
+	sysxMsg.append(hex2);
+	sysxMsg.append(getSize(hex1, hex2, "ALL"));
+
+	int dataSize;
+	for(int i=7;i<sysxMsg.size();++i)
+	{
+		dataSize += sysxMsg.mid(i, 2).toInt(&ok, 16);
+		i++;
+	};	
+	sysxMsg.append(getCheckSum(dataSize));
+	sysxMsg.append(getFooter());
+
+	return sysxMsg;
+};

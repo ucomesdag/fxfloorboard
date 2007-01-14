@@ -48,6 +48,7 @@ public:
 
 signals:
 	void valueChanged(bool value, QString hex1, QString hex2, QString hex3);
+	void valueChanged(bool value);
 
 protected:
 	void paintEvent(QPaintEvent *event);

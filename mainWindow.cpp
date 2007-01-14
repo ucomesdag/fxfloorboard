@@ -209,6 +209,7 @@ void mainWindow::open()
 			// DO SOMETHING AFTER READING THE FILE (UPDATE THE GUI)
 			SysxIO *sysxIO = SysxIO::Instance();
 			sysxIO->setFileSource(file.getFileSource());
+			sysxIO->setFileName(fileName);
 
 			emit updateSignal();
 		};
@@ -219,6 +220,9 @@ void mainWindow::save()
 {
 	Preferences *preferences = Preferences::Instance();
 	QString dir = preferences->getPreferences("General", "Files", "dir");
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	file.setFile(sysxIO->getFileName());
 
 	if(file.getFileName().isEmpty())
 	{

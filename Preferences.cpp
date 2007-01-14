@@ -25,7 +25,6 @@
 #include <QList>
 #include <QFile>
 #include "XMLWriter.h"
-
 #include <QMessageBox>
 
 Preferences::Preferences() 

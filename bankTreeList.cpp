@@ -22,6 +22,8 @@
 
 #include <QLayout>
 #include "bankTreeList.h"
+#include "Preferences.h"
+#include "MidiTable.h"
 #include "midiIO.h"
 
 bankTreeList::bankTreeList(QWidget *parent)
@@ -43,26 +45,59 @@ bankTreeList::bankTreeList(QWidget *parent)
 	//pal.setColor(QPalette::Dark,QColor(Qt::gray));				//Darker than Button. (Dots)
 	//pal.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
 	//pal.setColor(QPalette::Shadow,QColor(Qt::red));
+	this->pal = pal;
 
 	QFont font;
 	font.setFamily("Arial");
 	font.setBold(true);
 	font.setPixelSize(10);
 	font.setStretch(120);
+	this->font = font;
 
-	treeList = new QTreeWidget(this);
-	treeList->setColumnCount(1);
-	treeList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	treeList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	treeList->setPalette(pal);
-	treeList->setFont(font);
+	this->treeList = newTreeList(false);
+	
+	QVBoxLayout *treeListLayout = new QVBoxLayout;
+	treeListLayout->addWidget(treeList);
+	treeListLayout->setMargin(0);
+	treeListLayout->setSpacing(0);
+	setLayout(treeListLayout);
+};
 
+QPalette bankTreeList::getPal()
+{
+	return this->pal;
+};
+
+QFont bankTreeList::getFont()
+{
+	return this->font;
+};
+
+void bankTreeList::updateSize(QRect newrect)
+{
+	this->setGeometry(newrect);
+};
+
+void bankTreeList::connectedToDevice()
+{
+	//this->treeList = newTreeList(true);
+	QString snork = getPatchName(1, 1);
+};
+
+QTreeWidget* bankTreeList::newTreeList(bool connected)
+{
+	QTreeWidget *newTreeList = new QTreeWidget();
+	newTreeList->setColumnCount(1);
+	newTreeList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	newTreeList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	newTreeList->setPalette(getPal());
+	newTreeList->setFont(getFont());
+	
 	QStringList headers;
     headers << "Boss GT-8";
-    treeList->setHeaderLabels(headers);
+    newTreeList->setHeaderLabels(headers);
 
-
-	QTreeWidgetItem *user = new QTreeWidgetItem(treeList);
+	QTreeWidgetItem *user = new QTreeWidgetItem(newTreeList);
 	user->setText(0, "User");
 	user->setWhatsThis(0, "User Banks");
 	//user->setIcon(...);
@@ -96,7 +131,7 @@ bankTreeList::bankTreeList(QWidget *parent)
 	user->addChildren(userBankRanges);
 
 
-	QTreeWidgetItem *preset = new QTreeWidgetItem(treeList);
+	QTreeWidgetItem *preset = new QTreeWidgetItem(newTreeList);
 	preset->setText(0, "Preset");
 	preset->setWhatsThis(0, "Preset Banks");
 	//user->setIcon(...);
@@ -129,17 +164,38 @@ bankTreeList::bankTreeList(QWidget *parent)
 	};
 	preset->addChildren(presetBankRanges);
 
-	treeList->setExpanded(treeList->model()->index(0, 0), true);
-	treeList->setExpanded(treeList->model()->index(1, 0), true);
-
-	QVBoxLayout *treeListLayout = new QVBoxLayout;
-	treeListLayout->addWidget(treeList);
-	treeListLayout->setMargin(0);
-	treeListLayout->setSpacing(0);
-	setLayout(treeListLayout);
+	newTreeList->setExpanded(newTreeList->model()->index(0, 0), true);
+	newTreeList->setExpanded(newTreeList->model()->index(1, 0), true);
+	return newTreeList;
 };
 
-void bankTreeList::updateSize(QRect newrect)
+QString bankTreeList::getPatchName(int bank, int patch)
 {
-	this->setGeometry(newrect);
+	midiIO *midi = new midiIO();
+
+	Preferences *preferences = Preferences::Instance(); bool ok;
+	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
+	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
+
+	/* Patch name request. */
+	MidiTable *midiTable = MidiTable::Instance();
+	QString sysxOut = midiTable->nameRequest(bank, patch);
+	QString replyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn).remove(" ").toUpper();
+	
+	QString patchName; 
+	int count = 0;
+	int dataStartOffset = 11;
+	QString hex1, hex2, hex3, hex4;
+	for(int i=dataStartOffset*2; i<replyMsg.size()-(2*2);++i)
+	{
+		hex1 = replyMsg.mid(9*2, 2);
+		hex2 = replyMsg.mid(10*2, 2);
+		hex3 = QString::number(count, 16).toUpper();
+		if (hex3.length() < 2) hex3.prepend("0");
+		hex4 = replyMsg.mid(i, 2);;
+		patchName.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
+		i++;
+	};
+
+	return patchName.trimmed();
 };

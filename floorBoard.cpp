@@ -82,6 +82,8 @@ floorBoard::floorBoard(QWidget *parent,
 
 	floorBoardDisplay *display = new floorBoardDisplay(this);
 	display->setPos(displayPos);
+	
+	QObject::connect(display, SIGNAL(connectedToDevice()), bankList, SLOT(connectedToDevice()));
 
 	floorPanelBar *panelBar = new floorPanelBar(this);
 	panelBar->setPos(panelBarPos);	
@@ -90,6 +92,9 @@ floorBoard::floorBoard(QWidget *parent,
 	bar->setDragBarSize(QSize::QSize(4, panelBar->height() ));
 	bar->setDragBarMinOffset(2, 8);
 	bar->setDragBarMaxOffset(offset - panelBarOffset + 5);
+
+	/*floorBoardDisplay *display2 = new floorBoardDisplay(this);
+	display2->setPos(liberainPos);*/
 
 	QObject::connect(this, SIGNAL(valueChanged(QString, QString, QString)), 
 		display, SLOT(setValueDisplay(QString, QString, QString)));
@@ -195,6 +200,11 @@ void floorBoard::setFloorBoard() {
 	QRectF targetInfoBar(offset, 0.0, imageInfoBar.width(), imageInfoBar.height());
 	painter.drawPixmap(targetInfoBar, imageInfoBar, sourceInfoBar);
 
+	// Draw LiberianBar
+	QRectF sourceLiberianBar(0.0, 0.0, imageInfoBar.width(), imageInfoBar.height());
+	QRectF targetLiberianBar(offset, (imageFloor.height() - imageInfoBar.height()) - 2, imageInfoBar.width(), imageInfoBar.height());
+	painter.drawPixmap(targetLiberianBar, imageInfoBar, sourceLiberianBar);
+
 	// Draw stomp boxes background
 	QRectF source(0.0, 0.0, imagestompBG.width(), imagestompBG.height());
 	for(int i=0;i<fxPos.size();i++)
@@ -213,6 +223,9 @@ void floorBoard::setFloorBoard() {
 	
 	QPoint newDisplayPos = QPoint::QPoint(offset, 0);
 	this->displayPos = newDisplayPos;
+
+	/*QPoint newLiberainPos = QPoint::QPoint(offset, floorHeight);
+	this->liberainPos = newLiberainPos;*/
 
 	QRect newBankListRect = QRect::QRect(borderWidth, borderWidth, offset - panelBarOffset - (borderWidth*2), floorHeight - (borderWidth*2));
 	emit resizeSignal(newBankListRect);
@@ -346,7 +359,10 @@ void floorBoard::dropEvent(QDropEvent *event)
 				filePath.replace(0, filePath.indexOf(removeFromStart) + removeFromStart.length(), "");
 				filePath.truncate(filePath.indexOf(removeFromEnd) + removeFromEnd.length());
 				filePath.replace("%20", " ");
-
+				
+				SysxIO *sysxIO = SysxIO::Instance();
+				sysxIO->setFileName(filePath);
+				
 				sysxWriter file;
 				file.setFile(filePath);
 				if(file.readFile())

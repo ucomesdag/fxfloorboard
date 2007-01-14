@@ -25,6 +25,7 @@
 
 #include <QtGui>
 #include <QWidget>
+#include "customButton.h"
 
 class floorBoardDisplay : public QWidget
 {
@@ -41,6 +42,13 @@ public slots:
 	void setPatchNumDisplay(int patchNumber);
 	void setPos(QPoint newPos);
 	void updateDisplay();
+	void loadInitPatch(int index);
+	void connectSignal(bool value);
+
+signals:
+	void currentIndexChanged(int index);
+	void updateSignal();
+	void connectedToDevice();
 
 private:
 	QPoint pos;
@@ -48,8 +56,17 @@ private:
 	QTextEdit *valueDisplay;
 	QTextEdit *patchDisplay;
 	QTextEdit *patchNumDisplay;
+	QComboBox *initPatchComboBox;
 
 	void setInitPatchComboBox(QRect geometry);
+	QList<QString> initPatches;
+
+	customButton *connectButton;
+	customButton *writeButton;
+	customButton *manualButton;
+	customButton *assignButton;
+	customButton *masterButton;
+	customButton *systemButton;
 };
 
 #endif // FLOORBOARDDISPLAY_H

@@ -27,7 +27,8 @@
 #include "Preferences.h"
 #include "MidiTable.h"
 #include "SysxIO.h"
-#include "customButton.h"
+#include "midiIO.h"
+#include "sysxWriter.h"
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
     : QWidget(parent)
@@ -109,12 +110,14 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	valueDisplay->setContentsMargins(0, 0, 0, 0);
 	this->valueDisplay = valueDisplay;
 
-	customButton *connectButton = new customButton(tr("Connect"), false, QPoint(405, 5), this, ":/images/ledbutton.png");
-	customButton *writeButton = new customButton(tr("Write/Sync"), false, QPoint(494, 5), this, ":/images/ledbutton.png");
-	customButton *manualButton = new customButton(tr("Manual"), false, QPoint(583, 5), this, ":/images/ledbutton.png");
-	customButton *assignButton = new customButton(tr("Assign"), false, QPoint(583, 24), this, ":/images/pushbutton.png");
-	customButton *masterButton = new customButton(tr("Master"), false, QPoint(672, 5), this, ":/images/pushbutton.png");
-	customButton *systemButton = new customButton(tr("System"), false, QPoint(672, 24), this, ":/images/pushbutton.png");
+	this->connectButton = new customButton(tr("Connect"), false, QPoint(405, 5), this, ":/images/ledbutton.png");
+	this->writeButton = new customButton(tr("Write/Sync"), false, QPoint(494, 5), this, ":/images/ledbutton.png");
+	this->manualButton = new customButton(tr("Manual"), false, QPoint(583, 5), this, ":/images/ledbutton.png");
+	this->assignButton = new customButton(tr("Assign"), false, QPoint(583, 24), this, ":/images/pushbutton.png");
+	this->masterButton = new customButton(tr("Master"), false, QPoint(672, 5), this, ":/images/pushbutton.png");
+	this->systemButton = new customButton(tr("System"), false, QPoint(672, 24), this, ":/images/pushbutton.png");
+
+	QObject::connect(this->connectButton, SIGNAL(valueChanged(bool)), this, SLOT(connectSignal(bool)));
 
 	setInitPatchComboBox(QRect(405, 24, 168, 15));
 };
@@ -162,6 +165,14 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 		str.append("</body></html>");
 		patchDisplay->setHtml(str);
 	};
+	if(sysxIO->getFileName() == tr("init patch"))
+	{
+		sysxIO->setFileName("");
+	}
+	else
+	{
+		this->initPatchComboBox->setCurrentIndex(0);
+	};	
 };
 
 void floorBoardDisplay::setPatchNumDisplay(int patchNumber)
@@ -194,45 +205,62 @@ void floorBoardDisplay::updateDisplay()
 
 void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
 {
+	Preferences *preferences = Preferences::Instance();
 	QDir initPatchesDir = "Init Patches";
-	if(initPatchesDir.exists())
+	QDir defaultPatchesDir = preferences->getPreferences("General", "Files", "dir").remove(QRegExp("$(/)"));
+	QDir defaultInitPatchesDir = defaultPatchesDir.path().append("/").append(initPatchesDir.path());
+	
+	// Create a shortcut in the default patch directory.
+	if(defaultPatchesDir.exists() && !defaultInitPatchesDir.exists())
 	{
-		
+		/*Doesn't work on windows so disabled for the time being.
+		QFile::link(initPatchesDir.absolutePath(), deafultInitPatchesDir.absolutePath());*/
+	};
+
+	if(defaultInitPatchesDir.exists())
+	{
+		initPatchesDir = defaultInitPatchesDir;
+	};
+
+	QPalette pal;
+	pal.setColor(QPalette::Base,QColor(0,1,62));
+	pal.setColor(QPalette::Text,QColor(0,255,204));
+	pal.setColor(QPalette::Highlight,QColor(0,1,62));
+	pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
+
+	pal.setColor(QPalette::Window,QColor(0,1,62));
+	pal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
+	pal.setColor(QPalette::Button,QColor(0,1,62));
+	pal.setColor(QPalette::ButtonText,QColor(0,255,204));
+
+	pal.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
+	pal.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
+	pal.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
+	pal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
+	pal.setColor(QPalette::Shadow,QColor(0,1,62));
+	
+	QFont font;
+	font.setFamily("Arial");
+	font.setBold(true);
+	font.setPixelSize(10);
+	font.setStretch(110);
+
+	this->initPatchComboBox = new QComboBox(this);
+	initPatchComboBox->addItem(tr("[ INIT Patches ]"));
+
+	if(initPatchesDir.exists())
+	{		
 		QStringList filters;
 		filters << "*.syx" << "*.syx2";
-		QStringList initPatches = initPatchesDir.entryList(filters);
-
-		QPalette pal;
-		pal.setColor(QPalette::Base,QColor(0,1,62));
-		pal.setColor(QPalette::Text,QColor(0,255,204));
-		pal.setColor(QPalette::Highlight,QColor(0,1,62));
-		pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-		pal.setColor(QPalette::Window,QColor(0,1,62));
-		pal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
-		pal.setColor(QPalette::Button,QColor(0,1,62));
-		pal.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-		pal.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
-		pal.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
-		pal.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
-		pal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
-		pal.setColor(QPalette::Shadow,QColor(0,1,62));
-		
-		QFont font;
-		font.setFamily("Arial");
-		font.setBold(true);
-		font.setPixelSize(10);
-		font.setStretch(110);
-
-		QComboBox *initPatchComboBox = new QComboBox(this);
-		initPatchComboBox->addItem(tr("[ INIT Patches ]"));
+		QStringList initPatchesList = initPatchesDir.entryList(filters);
 		
 		int itemsCount;
 		int maxLenght = 0;
-		for(itemsCount=0; itemsCount<initPatches.size(); itemsCount++)
+		for(itemsCount=0; itemsCount<initPatchesList.size(); itemsCount++)
 		{
-			QString item = initPatches.at(itemsCount);
+			QString path = initPatchesDir.absolutePath().append("/").append(initPatchesList.at(itemsCount));
+			this->initPatches.append(path);
+			QString item = initPatchesList.at(itemsCount);
 			item.remove(QRegExp("^[0-9_]+"));
 			item.remove(QRegExp(".{1}(syx|syx2)"));
 			if(!item.contains("INIT_"))
@@ -247,22 +275,79 @@ void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
 			if(maxLenght < pixelWidth) maxLenght = pixelWidth;
 		};	
 
-		initPatchComboBox->setGeometry(geometry);
-		initPatchComboBox->setEditable(false);
-		initPatchComboBox->setFont(font);
-		initPatchComboBox->setPalette(pal);
-		initPatchComboBox->setFrame(false);
 		initPatchComboBox->setMaxVisibleItems(itemsCount + 1);
-		initPatchComboBox->view()->setMinimumWidth( maxLenght + 25 );
+		initPatchComboBox->view()->setMinimumWidth( maxLenght + 25 );		
+
+		QObject::connect(initPatchComboBox, SIGNAL(currentIndexChanged(int)),
+                this, SLOT(loadInitPatch(int)));
+		QObject::connect(this, SIGNAL(updateSignal()),
+			this->parent(), SIGNAL(updateSignal()));
 	};
 
-	// Create a shortcut in the default patch directory.
-	Preferences *preferences = Preferences::Instance();
-	QDir patchesDir = preferences->getPreferences("General", "Files", "dir");
+	initPatchComboBox->setGeometry(geometry);
+	initPatchComboBox->setEditable(false);
+	initPatchComboBox->setFont(font);
+	initPatchComboBox->setPalette(pal);
+	initPatchComboBox->setFrame(false);
+};
 
-	if(patchesDir.exists())
+void floorBoardDisplay::loadInitPatch(int index)
+{
+	if(index > 0)
 	{
-		QString fileName = patchesDir.absolutePath().append("/Init Patches");
-		//QFile::link(initPatchesDir.absolutePath(), fileName); //Doesn't work on windows so disabled for the time being.
+		QString fileName = this->initPatches.at(index - 1 );
+		if (!fileName.isEmpty())	
+		{
+			sysxWriter file;
+			file.setFile(fileName);  
+			if(file.readFile())
+			{	
+				// DO SOMETHING AFTER READING THE FILE (UPDATE THE GUI)
+				SysxIO *sysxIO = SysxIO::Instance();
+				sysxIO->setFileSource(file.getFileSource());
+				sysxIO->setFileName(tr("init patch"));
+				emit updateSignal();
+			};
+		};
+	};
+};
+
+void floorBoardDisplay::connectSignal(bool value)
+{
+	QString replyMsg;
+
+	if(value == true)
+	{
+		midiIO *midi = new midiIO();
+
+		Preferences *preferences = Preferences::Instance(); bool ok;
+		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
+		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
+
+		QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
+		//QString sysxOut = "f0 41 00 00 00 06 12 0d 00 12 00 53 79 73 65 78 20 54 45 53 54 20 20 20 20 20 20 47 f7";
+		replyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+	};
+
+
+	if(replyMsg.contains("0006") && value == true)
+	{
+		this->connectButton->setValue(true);
+		emit connectedToDevice();
+	}
+	else if(!replyMsg.isEmpty())
+	{
+		this->connectButton->setValue(false);
+
+		QMessageBox *msgBox = new QMessageBox();
+		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Connection Error"));
+		msgBox->setIcon(QMessageBox::Warning);
+		msgBox->setText(tr("The device connected is not a GT-8 Guitar Effects Processor."));
+		msgBox->setStandardButtons(QMessageBox::Ok);
+		msgBox->exec();
+	}
+	else
+	{
+		this->connectButton->setValue(false);
 	};
 };

@@ -59,6 +59,12 @@ public:
 	QString getValue(QString root, QString hex1, QString hex2, QString hex3, QString hex4);
 	bool isData(QString root, QString hex1, QString hex2, QString hex3);
 	QString rangeToValue(Midi range, QString value);
+	QString getHeader(bool receive);
+	QString getFooter();
+	QString getSize(QString hex1, QString hex2, QString hex3);
+	QString dataRequest(QString hex1, QString hex2, QString hex3);
+	QString nameRequest(int bank, int patch);
+	QString getCheckSum(int dataSize);
 	
 protected:
 	MidiTable();

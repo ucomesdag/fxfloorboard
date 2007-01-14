@@ -35,9 +35,16 @@ public:
 
 public slots:
 	void updateSize(QRect newrect);
+	void connectedToDevice();
 
 private:
+	QTreeWidget* newTreeList(bool connected);
+	QString getPatchName(int bank, int patch);
+	QPalette getPal();
+	QFont getFont();
 	QTreeWidget* treeList;
+	QPalette pal;
+	QFont font;
 };
 
 #endif // BANKTREELIST_H

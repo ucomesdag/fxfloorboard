@@ -23,6 +23,9 @@
 #ifndef MIDIIO_H
 #define MIDIIO_H
 
+#include <windows.h> // Needed to acces midi and linking against winmm.lib is also needed!!!
+#include <mmsystem.h>
+
 #include <QObject>
 #include <QString>
 #include <QList>
@@ -52,6 +55,16 @@ private:
 
 	QList<QString> midiOutDevices;
 	QList<QString> midiInDevices;
+
+	static void CALLBACK midiCallback(HMIDIIN handle, 
+		UINT wMsg, DWORD dwInstance, 
+		DWORD dwParam1, DWORD dwParam2);
+
+	static QString sysxBuffer;
+	static bool dataReceive;
+	static unsigned char SysXFlag;
+	static int count;
+	static unsigned char SysXBuffer[256];
 };
 
 #endif // MIDIIO_H

@@ -47,7 +47,9 @@ win32 {
 		message("AFTER INSTALLATION CHANGE THE CORRECT (DOS) PATH IN THE "GT-8FxFloorBoard.pro" FILE")
 	}
 	HEADERS += ./windows/midiIO.h
+	HEADERS += ./windows/midiIODestroyer.h
 	SOURCES += ./windows/midiIO.cpp
+	SOURCES += ./windows/midiIODestroyer.cpp
 	INCLUDEPATH += ./windows
 	message(Including Windows specifique headers and sources...)
 }

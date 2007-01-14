@@ -127,7 +127,14 @@ void customButton::emitValue(bool value)
     this->active = value;
 	//if (value != m_value) {
     //    this->m_value = value;
-        emit valueChanged((bool)value, this->hex1, this->hex2, this->hex3);
+		if(this->hex1 == 0 && this->hex2 == 0 && this->hex3 == 0)
+		{
+			emit valueChanged((bool)value);
+		}
+		else
+		{
+			emit valueChanged((bool)value, this->hex1, this->hex2, this->hex3);
+		};
     //};
 };
 
