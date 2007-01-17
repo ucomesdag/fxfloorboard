@@ -24,6 +24,7 @@
 #define CUSTOMBUTTON_H
 
 #include <QWidget>
+#include <QTimer>
 
 class customButton : public QWidget
 {
@@ -45,6 +46,10 @@ public:
 		QWidget *parent = 0,
 		QString imagePath = ":/images/pushbutton.png");
 	void setValue(bool value);
+	void setBlink(bool value);
+
+public slots:
+	void blink();
 
 signals:
 	void valueChanged(bool value, QString hex1, QString hex2, QString hex3);
@@ -67,6 +72,10 @@ private:
 	QString text;
 
 	bool active;
+
+	QTimer* timer;
+	bool on;
+
 	//bool m_value;
 	QString imagePath;
 	QSize buttonSize;

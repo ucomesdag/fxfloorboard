@@ -26,6 +26,7 @@
 #include <QtGui>
 #include <QWidget>
 #include "customButton.h"
+#include "midiIO.h"
 
 class floorBoardDisplay : public QWidget
 {
@@ -44,6 +45,7 @@ public slots:
 	void updateDisplay();
 	void loadInitPatch(int index);
 	void connectSignal(bool value);
+	void connectionResult(QString);
 
 signals:
 	void currentIndexChanged(int index);
@@ -67,6 +69,10 @@ private:
 	customButton *assignButton;
 	customButton *masterButton;
 	customButton *systemButton;
+
+	midiIO *midi;
+
+	bool connectButtonActive;
 };
 
 #endif // FLOORBOARDDISPLAY_H

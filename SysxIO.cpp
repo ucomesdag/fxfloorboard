@@ -25,6 +25,7 @@
 #include "SysxIODestroyer.h"
 #include "sysxWriter.h"
 #include "MidiTable.h"
+#include "globalVariables.h"
 
 SysxIO::SysxIO() 
 {
@@ -130,7 +131,7 @@ void SysxIO::setFileSource(QByteArray data)
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4)
 {
 	bool ok;
-	int dataOffset = 11;
+	int dataOffset = sysxDataOffset - 1;
 	int index = hex3.toInt(&ok, 16) + dataOffset;
 	QString address;
 	address.append(hex1);
@@ -151,7 +152,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5)
 {
 	bool ok;
-	int dataOffset = 11;
+	int dataOffset = sysxDataOffset - 1;
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
@@ -222,11 +223,11 @@ QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 	bool ok;
 
 	MidiTable *midiTable = MidiTable::Instance();
-	for(int i=11;i<sysxMsg.size() - 3;i++)
+	for(int i=sysxDataOffset - 1;i<sysxMsg.size() - 3;i++)
 	{
-		if(i==12) i++;
+		if(i==12) i++; // is reserved memmory address on the GT-8 so we skip it.
 		
-		QString address3 = QString::number(i - 11, 16).toUpper();
+		QString address3 = QString::number(i - (sysxDataOffset - 1), 16).toUpper();
 		if(address3.length()<2) address3.prepend("0");
 		
 		int range = midiTable->getRange("Stucture", address1, address2, address3);
@@ -266,13 +267,11 @@ QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 	};
 	
 	int dataSize = 0;
-	for(int i=sysxMsg.size() - 2; i>6;i--)
+	for(int i=sysxMsg.size() - 2; i>=sysxAddressOffset - 1;i--)
 	{
 		dataSize += sysxMsg.at(i).toInt(&ok, 16);
 	};
 	sysxMsg.replace(sysxMsg.size() - 1, getCheckSum(dataSize));
-
-	int dataSize2 = dataSize;
 
 	return sysxMsg;
 };

@@ -25,6 +25,7 @@
 #include "Preferences.h"
 #include "MidiTable.h"
 #include "midiIO.h"
+#include "globalVariables.h"
 
 bankTreeList::bankTreeList(QWidget *parent)
     : QWidget(parent)
@@ -80,8 +81,8 @@ void bankTreeList::updateSize(QRect newrect)
 
 void bankTreeList::connectedToDevice()
 {
-	//this->treeList = newTreeList(true);
-	QString snork = getPatchName(1, 1);
+	this->patchNames.clear();
+	updatePatchNames("");
 };
 
 QTreeWidget* bankTreeList::newTreeList(bool connected)
@@ -89,12 +90,12 @@ QTreeWidget* bankTreeList::newTreeList(bool connected)
 	QTreeWidget *newTreeList = new QTreeWidget();
 	newTreeList->setColumnCount(1);
 	newTreeList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	newTreeList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	newTreeList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Qt::ScrollBarAsNeeded
 	newTreeList->setPalette(getPal());
 	newTreeList->setFont(getFont());
 	
 	QStringList headers;
-    headers << "Boss GT-8";
+	headers << "Boss GT-8";
     newTreeList->setHeaderLabels(headers);
 
 	QTreeWidgetItem *user = new QTreeWidgetItem(newTreeList);
@@ -120,7 +121,15 @@ QTreeWidget* bankTreeList::newTreeList(bool connected)
 			for (int c=1; c<=4; c++)
 			{
 				QTreeWidgetItem* patch = new QTreeWidgetItem(bank);
-				patch->setText(0, QString::QString("Patch ").append(QString::number(c, 10)));
+				if(connected != true)
+				{
+					patch->setText(0, QString::QString("Patch ").append(QString::number(c, 10)));
+				}
+				else
+				{
+					int patchNumber = (((b - 1) * 4) + c) - 1;
+					patch->setText(0, this->patchNames.at(patchNumber));
+				};
 				patch->setWhatsThis(0, "");
 				//patch->setIcon(...);
 			};
@@ -154,7 +163,15 @@ QTreeWidget* bankTreeList::newTreeList(bool connected)
 			for (int c=1; c<=4; c++)
 			{
 				QTreeWidgetItem* patch = new QTreeWidgetItem(bank);
-				patch->setText(0, QString::QString("Patch ").append(QString::number(c, 10)));
+				if(connected != true)
+				{
+					patch->setText(0, QString::QString("Patch ").append(QString::number(c, 10)));
+				}
+				else
+				{
+					int patchNumber = (((b - 1) * 4) + c) - 1;
+					patch->setText(0, this->patchNames.at(patchNumber));
+				};
 				patch->setWhatsThis(0, "");
 				//patch->setIcon(...);
 			};
@@ -169,33 +186,57 @@ QTreeWidget* bankTreeList::newTreeList(bool connected)
 	return newTreeList;
 };
 
-QString bankTreeList::getPatchName(int bank, int patch)
+void bankTreeList::updatePatchNames(QString replyMsg)
 {
 	midiIO *midi = new midiIO();
 
+	QObject::connect(midi, SIGNAL(replyMsg(QString)), 
+			this, SLOT(updatePatchNames(QString)));
+
+	MidiTable *midiTable = MidiTable::Instance();
+	
 	Preferences *preferences = Preferences::Instance(); bool ok;
 	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
 	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
 
-	/* Patch name request. */
-	MidiTable *midiTable = MidiTable::Instance();
-	QString sysxOut = midiTable->nameRequest(bank, patch);
-	QString replyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn).remove(" ").toUpper();
+	replyMsg = replyMsg.remove(" ").toUpper();
 	
-	QString patchName; 
-	int count = 0;
-	int dataStartOffset = 11;
-	QString hex1, hex2, hex3, hex4;
-	for(int i=dataStartOffset*2; i<replyMsg.size()-(2*2);++i)
+	if(replyMsg != "")
 	{
-		hex1 = replyMsg.mid(9*2, 2);
-		hex2 = replyMsg.mid(10*2, 2);
-		hex3 = QString::number(count, 16).toUpper();
-		if (hex3.length() < 2) hex3.prepend("0");
-		hex4 = replyMsg.mid(i, 2);;
-		patchName.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
-		i++;
+		QString patchName; 
+		int count = 0;
+		int dataStartOffset = sysxDataOffset - 1;
+		QString hex1, hex2, hex3, hex4;
+		for(int i=dataStartOffset*2; i<replyMsg.size()-(2*2);++i)
+		{
+			hex1 = replyMsg.mid((sysxAddressOffset + 1)*2, 2);
+			hex2 = replyMsg.mid((sysxAddressOffset + 2)*2, 2);
+			hex3 = QString::number(count, 16).toUpper();
+			if (hex3.length() < 2) hex3.prepend("0");
+			hex4 = replyMsg.mid(i, 2);;
+			patchName.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
+			i++;
+		};
+
+		this->patchNames.append(patchName.trimmed());
 	};
 
-	return patchName.trimmed();
+	int bank = (int)(this->patchNames.size() / patchPerBank) + 1;
+	int patch = this->patchNames.size() - ((bank - 1) * patchPerBank) + 1;
+
+	if(bank <= bankTotalAll)
+	{		
+		/* Patch name request. */
+		QString sysxOut = midiTable->nameRequest(bank, patch);
+
+		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+		
+	}
+	else if (bank > bankTotalAll)
+	{
+		QTreeWidget *bufferTreeList = treeList;
+		this->treeList = newTreeList(true);
+		this->layout()->removeWidget(bufferTreeList);
+		this->layout()->addWidget(treeList);
+	};
 };

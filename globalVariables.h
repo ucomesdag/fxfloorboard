@@ -20,32 +20,16 @@
 **
 ****************************************************************************/
 
-#ifndef BANKTREELIST_H
-#define BANKTREELIST_H
+#ifndef GLOBALVARIABLES_H
+#define GLOBALVARIABLES_H
 
-#include <QWidget>
-#include <QTreeWidget>
+/* Sysex Message Parameters */
+const int sysxAddressOffset = 8;
+const int sysxDataOffset = 12;
 
-class bankTreeList : public QWidget
-{
-	Q_OBJECT
+/* Patches and Banks */
+const int bankTotalUser = 35;
+const int bankTotalAll = 85;
+const int patchPerBank = 4;
 
-public:
-	bankTreeList(QWidget *parent = 0);
-
-public slots:
-	void updateSize(QRect newrect);
-	void connectedToDevice();
-	void updatePatchNames(QString replyMsg);
-
-private:
-	QTreeWidget* newTreeList(bool connected);
-	QList<QString> patchNames;
-	QPalette getPal();
-	QFont getFont();
-	QTreeWidget* treeList;
-	QPalette pal;
-	QFont font;
-};
-
-#endif // BANKTREELIST_H
+#endif // GLOBALVARIABLES_H

@@ -26,22 +26,26 @@
 #include <windows.h> // Needed to acces midi and linking against winmm.lib is also needed!!!
 #include <mmsystem.h>
 
-#include <QObject>
+#include <QThread>
 #include <QString>
 #include <QList>
 
-class midiIO: public QObject
+class midiIO: public QThread
 {
 	Q_OBJECT
 
 public:
-	midiIO();
-	~midiIO();
-	
+	void run();
+	void sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn);
 	QList<QString> getMidiOutDevices();
 	QList<QString> getMidiInDevices();
 
-	QString sendSysxMsg(QString sysxOut, int midiOut, int midiIn);
+signals:
+	void errorSignal(QString windowTitle, QString errorMsg);
+	void replyMsg(QString sysxInMsg);
+	void started();
+	void finished();
+	void terminated();
 
 private:
 	void queryMidiInDevices();
@@ -65,6 +69,11 @@ private:
 	static unsigned char SysXFlag;
 	static int count;
 	static unsigned char SysXBuffer[256];
+
+	int midiOut;
+	int midiIn;
+	QString sysxOutMsg;
+	QString sysxInMsg;
 };
 
 #endif // MIDIIO_H

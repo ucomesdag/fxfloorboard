@@ -67,6 +67,9 @@ customButton::customButton(QString text, bool active, QPoint buttonPos, QWidget 
 	textLabel->setAlignment(Qt::AlignCenter);
 	textLabel->setGeometry(0, (buttonSize.height() - textLabel->height())/2, buttonSize.width(), textLabel->height());
 
+	timer = new QTimer(this);
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(blink()) );
+
 	QObject::connect(this, SIGNAL( valueChanged(bool, QString, QString, QString) ),
                 this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
 };
@@ -111,6 +114,7 @@ void customButton::mouseReleaseEvent(QMouseEvent *event)
 		if(active)
 		{
 			setOffset(0);
+			setBlink(false);
 			emitValue(false);
 		}
 		else
@@ -164,6 +168,33 @@ void customButton::setValue(bool value)
 	else
 	{
 		setOffset(0);
+	};
+	clearFocus();
+};
+
+void customButton::setBlink(bool value)
+{
+	 if(value)
+	 {
+		timer->start(500);
+	 }
+	 else
+	 {
+		timer->stop();
+	 };
+};
+
+void customButton::blink()
+{
+	if(on)
+	{
+		on = false;
+		setOffset(0);
+	}
+	else
+	{
+		on = true;
+		setOffset(2);
 	};
 	clearFocus();
 };

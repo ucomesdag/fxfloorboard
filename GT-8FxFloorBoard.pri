@@ -21,7 +21,8 @@
 #############################################################################
 
 #Header files
-HEADERS += ./stompBox.h \
+HEADERS += ./globalVariables.h \
+	./stompBox.h \
     ./stompbox_ce.h \
     ./stompbox_cs.h \
     ./stompbox_dd.h \

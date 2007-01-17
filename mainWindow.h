@@ -42,6 +42,7 @@ signals:
 	void updateSignal();
 
 public slots:
+	void errorSignal(QString windowTitle, QString errorMsg);
 	void updateSize(QSize floorSize, QSize oldFloorSize);
 	void open();
 	void save();

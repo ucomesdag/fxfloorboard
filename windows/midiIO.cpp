@@ -20,18 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QMessageBox>
 #include "midiIO.h"
-
-midiIO::midiIO() 
-{
-	queryMidiOutDevices();
-	queryMidiInDevices();
-};
-
-midiIO::~midiIO()
-{
-};
 
 unsigned char midiIO::SysXBuffer[256];
 unsigned char midiIO::SysXFlag = 0;
@@ -61,6 +50,7 @@ void midiIO::queryMidiOutDevices()
 
 QList<QString> midiIO::getMidiOutDevices()
 {
+	queryMidiOutDevices();
 	return this->midiOutDevices;
 };
 
@@ -86,6 +76,7 @@ void midiIO::queryMidiInDevices()
 
 QList<QString> midiIO::getMidiInDevices()
 {
+	queryMidiInDevices();
 	return this->midiInDevices;
 };
 
@@ -114,6 +105,7 @@ QString midiIO::getMidiOutErrorMsg(unsigned long err)
 
 	this->dataReceive = false;
 	return errorMsg;
+	exit();
 };
 
 /************************* getMidiInErrorMsg() ***************************
@@ -144,6 +136,7 @@ QString midiIO::getMidiInErrorMsg(unsigned long err)
 	};
 
 	return errorMsg;
+	exit();
 };
 
 /*********************** sendMsg() **********************************
@@ -151,7 +144,7 @@ QString midiIO::getMidiInErrorMsg(unsigned long err)
  * converts the message from a QString to a char* and opens, sends 
  * and closes the MIDI device.
  *************************************************************************/
-void midiIO::sendMsg(QString sysxMsg, int midiOut)
+void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 {
 	HMIDIOUT    outHandle;
 	MIDIHDR     midiHdr;
@@ -163,17 +156,17 @@ void midiIO::sendMsg(QString sysxMsg, int midiOut)
 		err = 0;
 
 		/* Convert QString to char* (hex value) */
-		int msgLength = sysxMsg.length()/2;
+		int msgLength = sysxOutMsg.length()/2;
 
 		char *sysEx = new char[msgLength];
 		
 		char *ptr;
 		ptr = &sysEx[0];
-		for(int i=0;i<sysxMsg.length();i++)
+		for(int i=0;i<sysxOutMsg.length();i++)
 		{	
 			unsigned int n;
 			QString hex = "0x";
-			hex.append(sysxMsg.mid(i, 2));
+			hex.append(sysxOutMsg.mid(i, 2));
 			bool ok;
 			n = hex.toInt(&ok, 16);
 			*ptr = (char)n;
@@ -184,7 +177,7 @@ void midiIO::sendMsg(QString sysxMsg, int midiOut)
 		midiHdr.lpData = (LPSTR) &sysEx[0];
 
 		 /* Store its size in the MIDIHDR */
-		midiHdr.dwBufferLength = (UINT) msgLength;//sizeof(sysxMsg);
+		midiHdr.dwBufferLength = (UINT) msgLength;//sizeof(sysxOutMsg);
 
 		/* Flags must be set to 0 */
 		midiHdr.dwFlags = 0;
@@ -206,7 +199,7 @@ void midiIO::sendMsg(QString sysxMsg, int midiOut)
 			while (MIDIERR_STILLPLAYING == midiOutUnprepareHeader(outHandle, &midiHdr, sizeof(MIDIHDR))) 
 			{
 				//* Delay to give it time to finish */
-				Sleep(100);
+				Sleep(0);
 			};
 			
 		}
@@ -309,24 +302,22 @@ void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, 
   }
 };
 
-/*********************** sendSysxMsg() ********************************
- * Processes the sysex message and handles if yes or no it has to start 
- * receiving a reply on the MIDI In device midiIn. If so midiCallback() 
- * will handle the receive of the incomming sysex message.
+/**************************** run() **************************************
+ * New QThread that processes the sysex message and handles if yes or no 
+ * it has to start receiving a reply on the MIDI In device midiIn. If so 
+ * midiCallback() will handle the receive of the incomming sysex message.
  *************************************************************************/
-QString midiIO::sendSysxMsg(QString sysxMsg, int midiOut, int midiIn)
-{	
-    this->SysXFlag = 0;
+void midiIO::run()
+{
+	this->SysXFlag = 0;
     this->count = 0;
     this->dataReceive = false;
     this->sysxBuffer = "";
-	QString sysxInMsg = 0;
+	this->sysxInMsg = "";
 
 	/* Check if we are going to receive something on sending */
-	QString sysxOutMsg = sysxMsg.simplified().toUpper().remove("0X").remove(" ");	
-
 	bool receive;
-	(sysxOutMsg.mid(12, 2) != "12")? receive = true: receive = false;
+	(this->sysxOutMsg.mid(12, 2) != "12")? receive = true: receive = false;
 
 	if(receive==true)
 	{
@@ -359,14 +350,14 @@ QString midiIO::sendSysxMsg(QString sysxMsg, int midiOut, int midiIn)
 					if (!err)
 					{
 						//printf("Recording started...\r\n");
-						this->dataReceive = true;
+						dataReceive = true;
 						sendMsg(sysxOutMsg, midiOut);
-						this->count=0;
-						while(this->dataReceive && this->count < 5)
+						count=0;
+						while(dataReceive && this->count < 5)
 						{
 							//printf("Waiting for data.... \r\n");
 							Sleep(150); //1000
-							this->count++;
+							count++;
 							//if (this->count > 5 && this->dataReceive) this->dataReceive = false;
 						};
 
@@ -377,9 +368,9 @@ QString midiIO::sendSysxMsg(QString sysxMsg, int midiOut, int midiIn)
 						   allow midiCallback() to midiInAddBuffer() again, we'd
 						   never get the driver to finish with our midiHdr
 						*/
-						this->SysXFlag |= 0x80;
+						SysXFlag |= 0x80;
 						//printf("Recording stopped!\r\n\r\n");
-						sysxInMsg = this->sysxBuffer.toUpper();
+						sysxInMsg = sysxBuffer.toUpper();
 					};
 
 					/* Stop recording */
@@ -420,10 +411,22 @@ QString midiIO::sendSysxMsg(QString sysxMsg, int midiOut, int midiIn)
 		sendMsg(sysxOutMsg, midiOut);
 	};
 	
-	return sysxInMsg;
+	this->sysxInMsg = sysxInMsg;
+	emit replyMsg(sysxInMsg);
 };
 
-/*********************** showErrorMsg() ********************************
+/*********************** sendSysxMsg() ***********************************
+ * Starts a new thread that handles the sen and receive of sysex messages.
+ *************************************************************************/
+void midiIO::sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn)
+{	
+	this->sysxOutMsg = sysxOutMsg.simplified().toUpper().remove("0X").remove(" ");
+	this->midiOut = midiOut;
+	this->midiIn = midiIn;	
+	start();
+};
+
+/*********************** showErrorMsg() **********************************
  * Formats the error message received by the midi-in or midi-out device 
  * and outputs a warning text box to the user.
  *************************************************************************/
@@ -439,10 +442,6 @@ void midiIO::showErrorMsg(QString errorMsg, QString type)
 		windowTitle = tr("GT-8 Fx FloorBoard - Midi Input Error");
 	};
 
-	QMessageBox *msgBox = new QMessageBox();
-	msgBox->setWindowTitle(windowTitle);
-	msgBox->setIcon(QMessageBox::Warning);
-	msgBox->setText(errorMsg);
-	msgBox->setStandardButtons(QMessageBox::Ok);
-	msgBox->exec();
+	emit errorSignal(windowTitle, errorMsg);
 };
+

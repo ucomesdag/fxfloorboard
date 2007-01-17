@@ -356,3 +356,13 @@ void mainWindow::closeEvent(QCloseEvent* ce)
 	preferences->savePreferences();
 	ce->accept();
 };
+
+void mainWindow::errorSignal(QString windowTitle, QString errorMsg)
+{
+	QMessageBox *msgBox = new QMessageBox();
+	msgBox->setWindowTitle(windowTitle);
+	msgBox->setIcon(QMessageBox::Warning);
+	msgBox->setText(errorMsg);
+	msgBox->setStandardButtons(QMessageBox::Ok);
+	msgBox->exec();
+};

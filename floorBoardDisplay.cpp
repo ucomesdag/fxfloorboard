@@ -27,7 +27,6 @@
 #include "Preferences.h"
 #include "MidiTable.h"
 #include "SysxIO.h"
-#include "midiIO.h"
 #include "sysxWriter.h"
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
@@ -316,36 +315,53 @@ void floorBoardDisplay::connectSignal(bool value)
 {
 	QString replyMsg;
 
-	if(value == true)
+	this->connectButtonActive = value;
+
+	if(connectButtonActive == true)
 	{
-		midiIO *midi = new midiIO();
+		midi = new midiIO();
+
+		QObject::connect(midi, SIGNAL(errorSignal(QString, QString)), 
+			this->parent()->parent(), SLOT(errorSignal(QString, QString)));
+		QObject::connect(midi, SIGNAL(replyMsg(QString)), 
+			this, SLOT(connectionResult(QString)));
 
 		Preferences *preferences = Preferences::Instance(); bool ok;
 		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
 		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
 
-				QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
-		replyMsg = midi->sendSysxMsg(sysxOut, midiOut, midiIn);
-	};
+		QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
+		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
 
-	if(replyMsg.contains("0006") && value == true)
+		this->connectButton->setBlink(true);
+	};
+};
+
+void floorBoardDisplay::connectionResult(QString replyMsg)
+{
+	//QString replyMsg = midi->sysxInMsg;
+	if(replyMsg.contains("0006") && connectButtonActive == true)
 	{
+		this->connectButton->setBlink(false);
 		this->connectButton->setValue(true);
 		emit connectedToDevice();
 	}
 	else if(!replyMsg.isEmpty())
 	{
+		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 
 		QMessageBox *msgBox = new QMessageBox();
 		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Connection Error"));
 		msgBox->setIcon(QMessageBox::Warning);
-		msgBox->setText(tr("The device connected is not a GT-8 Guitar Effects Processor."));
+		msgBox->setText(tr("The device connected is not the GT-8 Guitar Effects Processor."));
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();
 	}
 	else
 	{
+		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 	};
+
 };

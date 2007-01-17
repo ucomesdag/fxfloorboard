@@ -24,6 +24,7 @@
 #include "MidiTableDestroyer.h" 
 #include <QFile> 
 #include <QStringList>
+#include "globalVariables.h"
  
 MidiTable::MidiTable()  
 { 
@@ -489,10 +490,12 @@ QString MidiTable::nameRequest(int bank, int patch)
 {
 	bool ok;
 	QString addr1, addr2;
-	if(bank != 0 && patch != 0 && bank <= 85 && patch <= 4)
+	if(bank != 0 && patch != 0 && bank <= bankTotalAll && patch <= patchPerBank)
 	{
-		int patchOffset = (((bank -1 ) * 4) + patch) - 1;
-		if(bank > 35) patchOffset += 116; 
+		int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
+		int memmorySize = QString("7F").toInt(&ok, 16) + 1;
+		int emptyAddresses = (memmorySize) - ((bankTotalUser * patchPerBank) - (memmorySize));
+		if(bank > bankTotalUser) patchOffset += emptyAddresses; //System patches start at a new memmory range.
 		int addrMaxSize = QString("80").toInt(&ok, 16);
 		int n = (int)(patchOffset / addrMaxSize);
 		
@@ -518,7 +521,7 @@ QString MidiTable::nameRequest(int bank, int patch)
 	sysxMsg.append(hex2);
 	sysxMsg.append(getSize(hex1, hex2, "ALL"));
 
-	int dataSize;
+	int dataSize = 0;
 	for(int i=7;i<sysxMsg.size();++i)
 	{
 		dataSize += sysxMsg.mid(i, 2).toInt(&ok, 16);
