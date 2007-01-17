@@ -29,6 +29,7 @@
 
 SysxIO::SysxIO() 
 {
+	setConnected(false);
 };
 
 SysxIO* SysxIO::_instance = 0;// initialize pointer
@@ -274,4 +275,14 @@ QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 	sysxMsg.replace(sysxMsg.size() - 1, getCheckSum(dataSize));
 
 	return sysxMsg;
+};
+
+void SysxIO::setConnected(bool connected)
+{
+	this->connected = connected;	
+};
+
+bool SysxIO::getConnected()
+{
+	return this->connected;	
 };

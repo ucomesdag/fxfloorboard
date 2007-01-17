@@ -74,16 +74,11 @@ floorBoard::floorBoard(QWidget *parent,
 
 	bankTreeList *bankList = new bankTreeList(this);
 	
-	QObject::connect(this, SIGNAL( resizeSignal(QRect) ),
-                bankList, SLOT( updateSize(QRect) ) );
-
 	setFloorBoard();
 	initStomps();
 
 	floorBoardDisplay *display = new floorBoardDisplay(this);
 	display->setPos(displayPos);
-	
-	QObject::connect(display, SIGNAL(connectedToDevice()), bankList, SLOT(connectedToDevice()));
 
 	floorPanelBar *panelBar = new floorPanelBar(this);
 	panelBar->setPos(panelBarPos);	
@@ -96,6 +91,10 @@ floorBoard::floorBoard(QWidget *parent,
 	/*floorBoardDisplay *display2 = new floorBoardDisplay(this);
 	display2->setPos(liberainPos);*/
 
+	QObject::connect(this, SIGNAL( resizeSignal(QRect) ),
+                bankList, SLOT( updateSize(QRect) ) );
+	QObject::connect(display, SIGNAL(connectedSignal()), 
+		bankList, SLOT(connectedSignal()));
 	QObject::connect(this, SIGNAL(valueChanged(QString, QString, QString)), 
 		display, SLOT(setValueDisplay(QString, QString, QString)));
 	QObject::connect(panelBar, SIGNAL(resizeSignal(int)), 
@@ -113,8 +112,6 @@ floorBoard::floorBoard(QWidget *parent,
 	QObject::connect(this, SIGNAL(updateSignal()), 
 		this, SLOT(updateStompBoxes()));
 
-	QObject::connect(this, SIGNAL(setDragBarOffset(QList<int>)), 
-		panelBar, SIGNAL(setDragBarOffset(QList<int>)));
 	QObject::connect(panelBar, SIGNAL(showDragBar(QPoint)), 
 		this, SIGNAL(showDragBar(QPoint)));
 	QObject::connect(panelBar, SIGNAL(hideDragBar()), 

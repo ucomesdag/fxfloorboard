@@ -50,7 +50,7 @@ public slots:
 signals:
 	void currentIndexChanged(int index);
 	void updateSignal();
-	void connectedToDevice();
+	void connectedSignal();
 
 private:
 	QPoint pos;

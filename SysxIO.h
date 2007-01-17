@@ -53,6 +53,8 @@ public:
 	QList<QString> getFileSource(QString hex1, QString hex2);
 	QString getCheckSum(int dataSize);
 	QList<QString> correctSysxMsg(QList<QString> sysxMsg);
+	void setConnected(bool connected);
+	bool getConnected();
 
 protected :
 	SysxIO();
@@ -66,6 +68,7 @@ private:
 	SysxData fileSource;
 	QString fileName;
 
+	bool connected;
 };
 
 #endif // SYSXIO_H

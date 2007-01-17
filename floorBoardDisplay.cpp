@@ -334,22 +334,32 @@ void floorBoardDisplay::connectSignal(bool value)
 		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
 
 		this->connectButton->setBlink(true);
+	}
+	else
+	{
+		SysxIO *sysxIO = SysxIO::Instance();
+		this->connectButton->setBlink(false);
+		this->connectButton->setValue(false);
+		sysxIO->setConnected(false);
 	};
 };
 
 void floorBoardDisplay::connectionResult(QString replyMsg)
 {
-	//QString replyMsg = midi->sysxInMsg;
+	SysxIO *sysxIO = SysxIO::Instance();
 	if(replyMsg.contains("0006") && connectButtonActive == true)
 	{
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(true);
-		emit connectedToDevice();
+		sysxIO->setConnected(true);
+
+		emit connectedSignal();
 	}
 	else if(!replyMsg.isEmpty())
 	{
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
+		sysxIO->setConnected(false);
 
 		QMessageBox *msgBox = new QMessageBox();
 		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Connection Error"));
@@ -362,6 +372,7 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 	{
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
+		sysxIO->setConnected(false);
 	};
 
 };
