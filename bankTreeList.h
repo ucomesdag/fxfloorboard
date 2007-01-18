@@ -24,6 +24,7 @@
 #define BANKTREELIST_H
 
 #include <QWidget>
+#include <QList>
 #include <QTreeWidget>
 
 class bankTreeList : public QWidget
@@ -36,24 +37,30 @@ public:
 public slots:
 	void updateSize(QRect newrect);
 	void updatePatchNames(QString replyMsg);
-	void updateTree(QTreeWidgetItem *item);
+	void setClosedItems(QTreeWidgetItem *item);
+	void setOpenItems(QTreeWidgetItem *item);
 	void connectedSignal();
 
 signals:
 	void itemExpanded(QTreeWidgetItem *item);
+	void itemCollapsed(QTreeWidgetItem *item);
 
 private:
+	void updateTree(QTreeWidgetItem *item);
+	void closeChildren(QTreeWidgetItem *item);
 	QTreeWidget* newTreeList();
-	QTreeWidgetItem* item;
+	QList<QTreeWidgetItem*> openBankTreeItems;
+	QList<QTreeWidgetItem*> openPatchTreeItems;
+	QList<QTreeWidgetItem*> currentPatchTreeItems;
 	QPalette getPal();
 	QFont getFont();
-	QFont getPatchFont();
 	QTreeWidget* treeList;
 	QPalette pal;
 	QFont font;
-	QFont patchFont;
 	int itemIndex;
+	int listIndex;
 	bool noItem;
+	bool ready;
 };
 
 #endif // BANKTREELIST_H

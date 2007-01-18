@@ -38,6 +38,7 @@ customButton::customButton(bool active, QPoint buttonPos, QWidget *parent, QStri
 	setOffset(0);
     setGeometry(buttonPos.x(), buttonPos.y(), buttonSize.width(), buttonSize.height());
 
+	timer = new QTimer(this);
 	QObject::connect(this, SIGNAL( valueChanged(bool, QString, QString, QString) ),
                 this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
 };

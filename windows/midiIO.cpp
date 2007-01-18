@@ -413,6 +413,8 @@ void midiIO::run()
 	
 	this->sysxInMsg = sysxInMsg;
 	emit replyMsg(sysxInMsg);
+
+	this->exec();
 };
 
 /*********************** sendSysxMsg() ***********************************
@@ -422,7 +424,7 @@ void midiIO::sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn)
 {	
 	this->sysxOutMsg = sysxOutMsg.simplified().toUpper().remove("0X").remove(" ");
 	this->midiOut = midiOut;
-	this->midiIn = midiIn;	
+	this->midiIn = midiIn;
 	start();
 };
 
