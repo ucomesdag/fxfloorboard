@@ -40,7 +40,7 @@ public:
 public slots:
 	void setValueDisplay(QString fxName, QString valueName, QString value);
 	void setPatchDisplay(QString patchName);
-	void setPatchNumDisplay(int patchNumber);
+	void setPatchNumDisplay(int bank, int patch);
 	void setPos(QPoint newPos);
 	void updateDisplay();
 	void loadInitPatch(int index);
@@ -55,6 +55,7 @@ signals:
 private:
 	QPoint pos;
 
+	QFont fontDisplay;
 	QTextEdit *valueDisplay;
 	QTextEdit *patchDisplay;
 	QTextEdit *patchNumDisplay;

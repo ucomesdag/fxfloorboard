@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	splashImage.setMask(splashMask);
 
 	customSplashScreen *splash = new customSplashScreen(splashImage);
-	splash->setMessageRect(QRect::QRect(148, 340, 332, 14)); // Setting the message position.
+	splash->setMessageRect(QRect::QRect(148, 300, 332, 14)); // Setting the message position.
 
 	QFont splashFont;
 	splashFont.setFamily("Arial");
@@ -170,5 +170,15 @@ int main(int argc, char *argv[])
 
 	window.show();
 	splash->finish(&window);
+
+	/* PREVIEW WARNING */
+	QMessageBox *msgBox = new QMessageBox();
+	msgBox->setWindowTitle("WARNING");
+	msgBox->setIcon(QMessageBox::Warning);
+	msgBox->setText("This is a PREVIEW of work in progress, and not fully functional software!");
+	msgBox->setStandardButtons(QMessageBox::Ok);
+	msgBox->exec();
+	/* END WARNING */
+
 	return app.exec();
 };

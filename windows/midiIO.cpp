@@ -26,7 +26,7 @@ unsigned char midiIO::SysXBuffer[256];
 unsigned char midiIO::SysXFlag = 0;
 int midiIO::count = 0;
 bool midiIO::dataReceive = false;
-QString midiIO::sysxBuffer = 0;
+QString midiIO::sysxBuffer;
 
 /*********************** queryMidiOutDevices() *****************************
  * Retrieves all MIDI Out devices installed on your system and stores them 
@@ -211,7 +211,6 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 		/* Close the MIDI device */
 		midiOutClose(outHandle); /*For some reason this does the same as midiOutReset()???. 
 								 Or are prepare and unprepareHeaders not doeing there job?*/
-
 		delete[] sysEx;
 	}
 	else
@@ -269,13 +268,16 @@ void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, 
 					/* Indicate we're done handling this particular System Exclusive message */
 					SysXFlag &= (~0x01);
 				};
+				QString tmp;
 				while((lpMIDIHeader->dwBytesRecorded--))
 				{
 					//printf("%x ", *ptr);
 					unsigned int n = (int)*ptr;
 					QString hex = QString::number(n, 16).toUpper();
-					if (hex.length() < 2) sysxBuffer.append("0");
+					if (hex.length() < 2) hex.prepend("0");
 					sysxBuffer.append(hex);
+					tmp.append(hex);
+					tmp.append(" ");
 					ptr++;
 				}
 
@@ -353,12 +355,25 @@ void midiIO::run()
 						dataReceive = true;
 						sendMsg(sysxOutMsg, midiOut);
 						count=0;
-						while(dataReceive && this->count < 5)
+						if(multiple)
 						{
-							//printf("Waiting for data.... \r\n");
-							Sleep(150); //1000
-							count++;
-							//if (this->count > 5 && this->dataReceive) this->dataReceive = false;
+							/* Make the loop wait a bit more for the rest
+							due to the crapy midi api of windows */
+							while(dataReceive || count < 4)
+							{
+								//printf("Waiting for data.... \r\n");
+								Sleep(100);
+								count++;
+							};
+						}
+						else
+						{
+							while(dataReceive && count < 1) // count is in case we get stuck
+							{
+								//printf("Waiting for data.... \r\n");
+								Sleep(100);
+								count++;
+							};
 						};
 
 						/* We need to set a flag to tell our callback midiCallback()
@@ -418,11 +433,16 @@ void midiIO::run()
 };
 
 /*********************** sendSysxMsg() ***********************************
- * Starts a new thread that handles the sen and receive of sysex messages.
+ * Starts a new thread that handles the send and receive of sysex messages.
  *************************************************************************/
 void midiIO::sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn)
 {	
 	this->sysxOutMsg = sysxOutMsg.simplified().toUpper().remove("0X").remove(" ");
+	this->multiple = false;
+	if(sysxOutMsg.size() == 34 && sysxOutMsg.mid(sysxOutMsg.size()-8, 2) != "00")
+	{
+		this->multiple = true;
+	};
 	this->midiOut = midiOut;
 	this->midiIn = midiIn;
 	start();
@@ -447,3 +467,56 @@ void midiIO::showErrorMsg(QString errorMsg, QString type)
 	emit errorSignal(windowTitle, errorMsg);
 };
 
+/*********************** sendMidi() **********************************
+ * Send a midi command to the midi-out device. This is used to change 
+ * the current patch displayed.
+ *************************************************************************/
+void midiIO::sendMidi(QString midiMsg, int midiOut)
+{	
+	HMIDIOUT    outHandle;
+	UINT        err;
+	DWORD		midi;
+
+	/* Open default MIDI Out device */
+	if (!(err = midiOutOpen(&outHandle, midiOut, 0, 0, CALLBACK_NULL)))
+	{
+		err = 0;
+
+		/* Convert the QString to DWORD (hex value) */
+		bool ok;
+		if(midiMsg.count("0x") > 1)
+		{
+			QStringList msgList = midiMsg.split("0x", QString::SkipEmptyParts);
+			for(int i=0;i<msgList.size();++i)
+			{
+				QString midiMsg = msgList.at(i);
+				midiMsg.prepend("0x");
+				midi = (DWORD)midiMsg.toInt(&ok, 16);
+
+				/* Output the midi command */
+				midiOutShortMsg(outHandle, midi);
+			};
+		}
+		else  
+		{
+			if(!midiMsg.contains("0x"))
+			{
+				midiMsg.prepend("0x");
+			}
+			midi = (DWORD)midiMsg.toInt(&ok, 16);
+
+			/* Output the midi command */
+			midiOutShortMsg(outHandle, midi);
+		};		
+
+		/* Close the MIDI device */
+		midiOutClose(outHandle);
+	}
+	else
+	{
+		QString errorMsg = tr("Error opening default MIDI Out device!");
+		errorMsg.append("\r\n");
+		errorMsg.append(getMidiOutErrorMsg(err));
+		showErrorMsg(errorMsg, "out");
+	};;
+};

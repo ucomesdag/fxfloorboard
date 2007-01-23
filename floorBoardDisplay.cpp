@@ -20,6 +20,7 @@
 **
 ****************************************************************************/
 
+#include <QFileInfo>
 #include <QFile>
 #include <QDir>
 #include <QRegExp>
@@ -28,6 +29,7 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 #include "sysxWriter.h"
+#include "globalVariables.h"
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
     : QWidget(parent)
@@ -50,6 +52,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	fontDisplay.setBold(true);
 	fontDisplay.setPixelSize(11);
 	fontDisplay.setStretch(140);
+	this->fontDisplay = fontDisplay;
 
 	QTextEdit *patchNumDisplay = new QTextEdit(this);
 	patchNumDisplay->setGeometry(25, 5, 50, 34);
@@ -60,7 +63,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	patchNumDisplay->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	patchNumDisplay->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	patchNumDisplay->setLineWrapMode(QTextEdit::NoWrap);
-	patchNumDisplay->setAlignment(Qt::AlignJustify);
+	patchNumDisplay->setAlignment(Qt::AlignCenter);
 	patchNumDisplay->setDisabled(true);
 	patchNumDisplay->setLineWidth(0);
 	patchNumDisplay->setContentsMargins(0, 0, 0, 0);
@@ -83,14 +86,15 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 
 	QString str;
 	str.append("<html><body>");
+	str.append("<table width='143' cellspacing='0' cellpadding='0' border='0'><tr><td align='center'>");
 	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td colspan='2' align='left'>");
 	str.append("GT-8 FX FloorBoard");
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
 	str.append(tr("version"));
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
-
 	str.append(version);
 	str.append("</font></td></tr></table>");
+	str.append("</td></tr></table>");
 	str.append("</body></html>");
 	patchDisplay->setHtml(str);
 
@@ -170,18 +174,46 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 	}
 	else
 	{
+		if(sysxIO->getFileName() == tr("GT-8 patch"))
+		{
+			sysxIO->setFileName("");
+		};
 		this->initPatchComboBox->setCurrentIndex(0);
 	};	
 };
 
-void floorBoardDisplay::setPatchNumDisplay(int patchNumber)
+void floorBoardDisplay::setPatchNumDisplay(int bank, int patch)
 {
-	QString str;
+	QString str, color;
 	str.append("<html><body>");
-	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td align='left' valign='middle'>");
-	str.append("35");
-	str.append("</td><td align='left' valign='middle'>");
-	str.append("4");
+	str.append("<font size='-1'>");
+	if(bank <= bankTotalUser)
+	{
+		str.append("<font size='-1'>User</font>");
+	}
+	else
+	{
+		color = "color='red' ";
+		str.append("<font "+color+"size='-1'>Preset</font>");
+	};
+	str.append("</font>");
+	str.append("<table cellspacing='0' cellpadding='0' border='0'><tr>");
+	str.append("<td align='right' valign='middle'>");
+	str.append("<font "+color+"size='+2'>");
+	if(bank < 10)
+	{
+		str.append("0");
+	};
+	str.append(QString::number(bank, 10));
+	str.append("</font>");
+	str.append("</td><td align='center' valign='middle'>");
+	str.append("<font "+color+"size='+1'>");
+	str.append(":");
+	str.append("</font>");
+	str.append("</td><td align='right' valign='middle'>");
+	str.append("<font "+color+"size='+2'>");
+	str.append(QString::number(patch, 10));
+	str.append("</font>");
 	str.append("</td></tr></table>");
 	str.append("</body></html>");
 	patchNumDisplay->setHtml(str);
@@ -198,7 +230,34 @@ void floorBoardDisplay::updateDisplay()
 	{
 		patchName.append( midiTable->getMidiMap("Stucture", "12", "00", "00", nameArray.at(i)).name);
 	};	
+
+	patchName.trimmed();
+	patchName.replace("<", "&lt;");
+	patchName.replace(">", "&gt;");
+	int maxWidth = patchDisplay->width() - 2;
+	int nameWidth = QFontMetrics(fontDisplay).width(patchName);
+
+	patchName.replace("&lt;", "<font face='Verdana'>&lt;</font>");
+	patchName.replace("&gt;", "<font face='Verdana'>&gt;</font>");
+	patchName.replace("-", "<font face='Verdana'>-</font>");
+
+	if(nameWidth > maxWidth)
+	{
+		patchName.prepend("<small>");
+		patchName.append("</small>&nbsp;");
+	};
+
 	setPatchDisplay(patchName);
+	if(sysxIO->getSource() == "device")
+	{
+		int bank = sysxIO->getBank();
+		int patch = sysxIO->getPatch();
+		setPatchNumDisplay(bank, patch);
+	}
+	else
+	{
+		patchNumDisplay->clear();
+	};
 	valueDisplay->clear();
 };
 
@@ -206,16 +265,31 @@ void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
 {
 	Preferences *preferences = Preferences::Instance();
 	QDir initPatchesDir = QDir("Init Patches");
+	if(QFileInfo( initPatchesDir.path().append(".lnk") ).exists())
+	{
+		initPatchesDir.setPath(QFileInfo( initPatchesDir.path().append(".lnk") ).symLinkTarget());
+	};
+
 	QDir defaultPatchesDir = QDir(preferences->getPreferences("General", "Files", "dir").remove(QRegExp("$(/)")));
-	QDir defaultInitPatchesDir = QDir(defaultPatchesDir.path().append("/").append(initPatchesDir.path()));
-	
+	QDir defaultInitPatchesDir = QDir(defaultPatchesDir.path().append("/").append("Init Patches"));
+	if(QFileInfo( defaultInitPatchesDir.path().append(".lnk") ).exists())
+	{
+		defaultInitPatchesDir.setPath(QFileInfo( defaultInitPatchesDir.path().append(".lnk") ).symLinkTarget());
+	};
+
 	// Create a shortcut in the default patch directory.
 	if(defaultPatchesDir.exists() && !defaultInitPatchesDir.exists())
 	{
-		/*Doesn't work on windows so disabled for the time being.
-		QFile::link(initPatchesDir.absolutePath(), deafultInitPatchesDir.absolutePath());*/
+		#ifdef Q_OS_UNIX
+			QFile::link(initPatchesDir.absolutePath(), defaultInitPatchesDir.absolutePath());
+		#endif
+
+		#ifdef Q_OS_WIN
+			QFile::link(initPatchesDir.absolutePath(), defaultInitPatchesDir.absolutePath().append(".lnk"));
+		#endif
 	};
 
+	QString snork = defaultInitPatchesDir.path();
 	if(defaultInitPatchesDir.exists())
 	{
 		initPatchesDir = defaultInitPatchesDir;
@@ -314,11 +388,12 @@ void floorBoardDisplay::loadInitPatch(int index)
 void floorBoardDisplay::connectSignal(bool value)
 {
 	QString replyMsg;
-
+	SysxIO *sysxIO = SysxIO::Instance();
 	this->connectButtonActive = value;
-
-	if(connectButtonActive == true)
+	if(connectButtonActive == true && sysxIO->getDeviceStatus())
 	{
+		sysxIO->setDeviceStatus(false);
+
 		midi = new midiIO();
 
 		QObject::connect(midi, SIGNAL(errorSignal(QString, QString)), 
@@ -337,7 +412,6 @@ void floorBoardDisplay::connectSignal(bool value)
 	}
 	else
 	{
-		SysxIO *sysxIO = SysxIO::Instance();
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
@@ -352,7 +426,7 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(true);
 		sysxIO->setConnected(true);
-
+		sysxIO->setDeviceStatus(true);
 		emit connectedSignal();
 	}
 	else if(!replyMsg.isEmpty())
@@ -360,11 +434,12 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
+		sysxIO->setDeviceStatus(true);
 
 		QMessageBox *msgBox = new QMessageBox();
 		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Connection Error"));
 		msgBox->setIcon(QMessageBox::Warning);
-		msgBox->setText(tr("The device connected is not the GT-8 Guitar Effects Processor."));
+		msgBox->setText(tr("The device connected is not a Boss GT-8 Guitar Effects Processor."));
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();
 	}
@@ -373,6 +448,7 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
+		sysxIO->setDeviceStatus(true);
 	};
 
 };

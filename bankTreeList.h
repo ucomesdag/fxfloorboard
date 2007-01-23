@@ -37,13 +37,19 @@ public:
 public slots:
 	void updateSize(QRect newrect);
 	void updatePatchNames(QString replyMsg);
+	void updatePatch(QString replyMsg);
 	void setClosedItems(QTreeWidgetItem *item);
 	void setOpenItems(QTreeWidgetItem *item);
 	void connectedSignal();
+	void setItemClicked(QTreeWidgetItem *item, int column);
+	void setItemDoubleClicked(QTreeWidgetItem *item, int column);
 
 signals:
 	void itemExpanded(QTreeWidgetItem *item);
 	void itemCollapsed(QTreeWidgetItem *item);
+	void itemClicked(QTreeWidgetItem *item, int column);
+	void itemDoubleClicked(QTreeWidgetItem *item, int column);
+	void updateSignal();
 
 private:
 	void updateTree(QTreeWidgetItem *item);
@@ -60,7 +66,6 @@ private:
 	int itemIndex;
 	int listIndex;
 	bool noItem;
-	bool ready;
 };
 
 #endif // BANKTREELIST_H

@@ -45,6 +45,7 @@ public:
 
 	void setFileSource(SysxData fileSource);
 	void setFileSource(QByteArray data);
+	void setFileSource(QString data);
 	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4);
 	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5);
 	void setFileName(QString fileName);
@@ -55,6 +56,14 @@ public:
 	QList<QString> correctSysxMsg(QList<QString> sysxMsg);
 	void setConnected(bool connected);
 	bool getConnected();
+	void setDeviceStatus(bool deviceready);
+	bool getDeviceStatus();
+	void setSource(QString source);
+	QString getSource();
+	void setBank(int bank);
+	void setPatch(int patch);
+	int getBank();
+	int getPatch();
 
 protected :
 	SysxIO();
@@ -69,6 +78,11 @@ private:
 	QString fileName;
 
 	bool connected;
+	bool deviceready;
+
+	int bank;
+	int patch;
+	QString source;
 };
 
 #endif // SYSXIO_H

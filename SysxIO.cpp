@@ -30,6 +30,7 @@
 SysxIO::SysxIO() 
 {
 	setConnected(false);
+	setDeviceStatus(true);
 };
 
 SysxIO* SysxIO::_instance = 0;// initialize pointer
@@ -107,7 +108,7 @@ void SysxIO::setFileSource(QByteArray data)
 
 		if(hex == "F7") 
 		{	
-			this->fileSource.address.append( sysxBuffer.at(9) + sysxBuffer.at(10) );
+			this->fileSource.address.append( sysxBuffer.at(sysxAddressOffset + 1) + sysxBuffer.at(sysxAddressOffset +2) );
 			this->fileSource.hex.append(sysxBuffer);
 			sysxBuffer.clear();
 			dataSize = 0;
@@ -126,6 +127,27 @@ void SysxIO::setFileSource(QByteArray data)
 		msgBox->setDetailedText(errorList);
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();
+	};
+};
+
+void SysxIO::setFileSource(QString data)
+{
+	this->fileSource.address.clear();
+	this->fileSource.hex.clear();
+	
+	QList<QString> sysxBuffer;
+	for(int i=0;i<data.size();i++)
+	{
+		QString hex = data.mid(i, 2);
+		sysxBuffer.append(hex);
+		i++;
+
+		if(hex == "F7") 
+		{	
+			this->fileSource.address.append( sysxBuffer.at(sysxAddressOffset + 1) + sysxBuffer.at(sysxAddressOffset + 2) );
+			this->fileSource.hex.append(sysxBuffer);
+			sysxBuffer.clear();
+		};
 	};
 };
 
@@ -218,8 +240,8 @@ QString SysxIO::getCheckSum(int dataSize)
 
 QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 {
-	QString address1 = sysxMsg.at(9);
-	QString address2 = sysxMsg.at(10); 
+	QString address1 = sysxMsg.at(sysxAddressOffset + 1);
+	QString address2 = sysxMsg.at(sysxAddressOffset + 2); 
 
 	bool ok;
 
@@ -285,4 +307,42 @@ void SysxIO::setConnected(bool connected)
 bool SysxIO::getConnected()
 {
 	return this->connected;	
+};
+
+void SysxIO::setDeviceStatus(bool deviceready)
+{
+	this->deviceready = deviceready;	
+};
+
+bool SysxIO::getDeviceStatus()
+{
+	return this->deviceready;	
+};
+
+void SysxIO::setSource(QString source)
+{
+	this->source = source;		
+};
+
+QString SysxIO::getSource()
+{
+	return this->source;	
+};
+
+void SysxIO::setBank(int bank)
+{
+	this->bank = bank;	
+};
+
+void SysxIO::setPatch(int patch)
+{
+	this->patch = patch;	
+};
+
+int SysxIO::getBank(){
+	return this->bank;	
+};
+
+int SysxIO::getPatch(){
+	return this->patch;	
 };

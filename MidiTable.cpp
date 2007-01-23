@@ -49,8 +49,8 @@ MidiTable* MidiTable::Instance()
     static Preferences inst; 
     return &inst; 
     */ 
-}; 
- 
+};
+
 void MidiTable::loadMidiMap() 
 { 
     QDomDocument doc( "MIDI Transalation" ); 
@@ -398,39 +398,39 @@ QString MidiTable::getSize(QString hex1, QString hex2, QString hex3)
 	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
 	Midi level1 = section.level.at( section.id.indexOf(hex1) );
 	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
+	QString currenFxName = level2.level.at( level2.id.indexOf(hex3) ).name;
+	QString nextFxName = level2.level.at( level2.id.indexOf(hex3) + 1 ).name;
+	
+	int sizeCount = 1; bool ok;
+	if(currenFxName == nextFxName) sizeCount += 1;
+	sizeCount += hex3.toInt(&ok, 16);
+	
+	QString itemSize = QString::number(sizeCount, 16).toUpper();
+	if (itemSize.length() < 2) itemSize.prepend("0");
+	
+	QString size;
+	size.append(hex3);
+	size.append("00");
+	size.append(itemSize);
+	size.append("00");
+	return size;
+};
+
+QString MidiTable::getSize(QString hex1, QString hex2)
+{
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
+	Midi level1 = section.level.at( section.id.indexOf(hex1) );
+	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
 
 	QString size;
 
-	int sizeCount = 0; bool ok;
-	if(hex3 == "ALL")
+	int sizeCount = 1; bool ok;
+	
+	for(int i=0;i<level2.level.size();++i)
 	{
-		for(int i=0;i<level2.level.size();++i)
-		{
-			hex3 = QString::number(i, 16).toUpper();
-			if (hex3.length() < 2) hex3.prepend("0");
-			
-			if(!level2.id.contains(hex3) && level2.id.contains("range"))
-			{
-				Midi level3 = level2.level.at( level2.id.indexOf("range") );
-				QStringList rangeList = level3.name.split("/");
-				sizeCount += rangeList.at(1).toInt(&ok, 16);
-			}
-			else
-			{
-				Midi level3 = level2.level.at( level2.id.indexOf(hex3) );
-				if(level3.level.last().type.contains("DATA"))
-				{
-					sizeCount += 2;
-				}
-				else
-				{
-					sizeCount += 1;
-				};	
-			};
-		};
-	}
-	else
-	{
+		QString hex3 = QString::number(i, 16).toUpper();
+		if (hex3.length() < 2) hex3.prepend("0");
+		
 		if(!level2.id.contains(hex3) && level2.id.contains("range"))
 		{
 			Midi level3 = level2.level.at( level2.id.indexOf("range") );
@@ -440,15 +440,23 @@ QString MidiTable::getSize(QString hex1, QString hex2, QString hex3)
 		else
 		{
 			Midi level3 = level2.level.at( level2.id.indexOf(hex3) );
-			if(level3.level.last().type.contains("DATA"))
+			if(!level3.level.isEmpty())
 			{
-				sizeCount += 2;
+				if(level3.level.last().type.contains("DATA"))
+				{
+					sizeCount += 1;
+				}
+				else
+				{
+					sizeCount += 1;
+				};
 			}
 			else
 			{
 				sizeCount += 1;
-			};	
+			};
 		};
+		
 	};
 
 	QString itemSize = QString::number(sizeCount, 16).toUpper();
@@ -458,7 +466,25 @@ QString MidiTable::getSize(QString hex1, QString hex2, QString hex3)
 	size.append("00");
 	size.append("00");
 	size.append(itemSize);
+	return size;
+};
 
+QString MidiTable::getSize()
+{
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
+
+	QString size;
+	bool ok;
+	int sizeCount = 1;
+	sizeCount += section.level.last().value.toInt(&ok, 16);
+
+	QString itemSize = QString::number(sizeCount, 16).toUpper();
+	if (itemSize.length() < 2) itemSize.prepend("0");
+	
+	size.append("00");
+	size.append("00");
+	size.append(itemSize);
+	size.append("00");
 	return size;
 };
 
@@ -519,7 +545,54 @@ QString MidiTable::nameRequest(int bank, int patch)
 	sysxMsg.append(addr2);
 	sysxMsg.append(hex1);
 	sysxMsg.append(hex2);
-	sysxMsg.append(getSize(hex1, hex2, "ALL"));
+	sysxMsg.append(getSize(hex1, hex2));
+
+	int dataSize = 0;
+	for(int i=7;i<sysxMsg.size();++i)
+	{
+		dataSize += sysxMsg.mid(i, 2).toInt(&ok, 16);
+		i++;
+	};	
+	sysxMsg.append(getCheckSum(dataSize));
+	sysxMsg.append(getFooter());
+
+	return sysxMsg;
+};
+
+QString MidiTable::patchRequest(int bank, int patch)
+{
+	bool ok;
+	QString addr1, addr2;
+	if(bank != 0 && patch != 0 && bank <= bankTotalAll && patch <= patchPerBank)
+	{
+		int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
+		int memmorySize = QString("7F").toInt(&ok, 16) + 1;
+		int emptyAddresses = (memmorySize) - ((bankTotalUser * patchPerBank) - (memmorySize));
+		if(bank > bankTotalUser) patchOffset += emptyAddresses; //System patches start at a new memmory range.
+		int addrMaxSize = QString("80").toInt(&ok, 16);
+		int n = (int)(patchOffset / addrMaxSize);
+		
+		addr1 = QString::number(8 + n, 16).toUpper();
+		addr2 = QString::number(patchOffset - (addrMaxSize * n), 16).toUpper();
+		if (addr1.length() < 2) addr1.prepend("0");
+		if (addr2.length() < 2) addr2.prepend("0");
+	}
+	else
+	{
+		addr1 = "0D";
+		addr2 = "00";
+	};
+
+	QString hex1 = "00";
+	QString hex2 = "00";
+
+	QString sysxMsg;
+	sysxMsg.append(getHeader(true));
+	sysxMsg.append(addr1);
+	sysxMsg.append(addr2);
+	sysxMsg.append(hex1);
+	sysxMsg.append(hex2);
+	sysxMsg.append(getSize());
 
 	int dataSize = 0;
 	for(int i=7;i<sysxMsg.size();++i)

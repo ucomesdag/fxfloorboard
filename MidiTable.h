@@ -62,9 +62,12 @@ public:
 	QString getHeader(bool receive);
 	QString getFooter();
 	QString getSize(QString hex1, QString hex2, QString hex3);
+	QString getSize(QString hex1, QString hex2);
+	QString getSize();
 	QString dataRequest(QString hex1, QString hex2, QString hex3);
 	QString nameRequest(int bank, int patch);
 	QString getCheckSum(int dataSize);
+	QString patchRequest(int bank, int patch);
 	
 protected:
 	MidiTable();

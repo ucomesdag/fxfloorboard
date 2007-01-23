@@ -28,6 +28,7 @@
 
 #include <QThread>
 #include <QString>
+#include <QStringList>
 #include <QList>
 
 class midiIO: public QThread
@@ -37,6 +38,7 @@ class midiIO: public QThread
 public:
 	void run();
 	void sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn);
+	void sendMidi(QString midiMsg, int midiOut);
 	QList<QString> getMidiOutDevices();
 	QList<QString> getMidiInDevices();
 
@@ -74,6 +76,7 @@ private:
 	int midiIn;
 	QString sysxOutMsg;
 	QString sysxInMsg;
+	bool multiple;
 };
 
 #endif // MIDIIO_H
