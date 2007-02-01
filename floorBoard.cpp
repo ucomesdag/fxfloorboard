@@ -359,6 +359,8 @@ void floorBoard::dropEvent(QDropEvent *event)
 				
 				SysxIO *sysxIO = SysxIO::Instance();
 				sysxIO->setFileName(filePath);
+				sysxIO->setSyncStatus(false);
+				sysxIO->setDevice(false);
 				
 				sysxWriter file;
 				file.setFile(filePath);

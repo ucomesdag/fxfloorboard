@@ -115,12 +115,13 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 
 	this->connectButton = new customButton(tr("Connect"), false, QPoint(405, 5), this, ":/images/ledbutton.png");
 	this->writeButton = new customButton(tr("Write/Sync"), false, QPoint(494, 5), this, ":/images/ledbutton.png");
-	this->manualButton = new customButton(tr("Manual"), false, QPoint(583, 5), this, ":/images/ledbutton.png");
-	this->assignButton = new customButton(tr("Assign"), false, QPoint(583, 24), this, ":/images/pushbutton.png");
-	this->masterButton = new customButton(tr("Master"), false, QPoint(672, 5), this, ":/images/pushbutton.png");
-	this->systemButton = new customButton(tr("System"), false, QPoint(672, 24), this, ":/images/pushbutton.png");
+	//this->manualButton = new customButton(tr("Manual"), false, QPoint(583, 5), this, ":/images/ledbutton.png");
+	//this->assignButton = new customButton(tr("Assign"), false, QPoint(583, 24), this, ":/images/pushbutton.png");
+	//this->masterButton = new customButton(tr("Master"), false, QPoint(672, 5), this, ":/images/pushbutton.png");
+	//this->systemButton = new customButton(tr("System"), false, QPoint(672, 24), this, ":/images/pushbutton.png");
 
 	QObject::connect(this->connectButton, SIGNAL(valueChanged(bool)), this, SLOT(connectSignal(bool)));
+	QObject::connect(this->writeButton, SIGNAL(valueChanged(bool)), this, SLOT(writeSignal(bool)));
 
 	setInitPatchComboBox(QRect(405, 24, 168, 15));
 };
@@ -248,7 +249,7 @@ void floorBoardDisplay::updateDisplay()
 	};
 
 	setPatchDisplay(patchName);
-	if(sysxIO->getSource() == "device")
+	if(sysxIO->isDevice())
 	{
 		int bank = sysxIO->getBank();
 		int patch = sysxIO->getPatch();
@@ -259,6 +260,37 @@ void floorBoardDisplay::updateDisplay()
 		patchNumDisplay->clear();
 	};
 	valueDisplay->clear();
+
+	if(sysxIO->isDevice())
+	{
+		if(sysxIO->getBank() > 35)
+		{
+			this->writeButton->setBlink(false);
+			this->writeButton->setValue(true);
+		}
+		else
+		{
+			this->writeButton->setBlink(false);
+			this->writeButton->setValue(true);
+		};
+		int bank = sysxIO->getBank();
+		int patch = sysxIO->getPatch();
+		setPatchNumDisplay(bank, patch);
+	}
+	else if(sysxIO->getBank() != 0)
+	{
+		this->writeButton->setBlink(true);
+		this->writeButton->setValue(false);
+		int bank = sysxIO->getBank();
+		int patch = sysxIO->getPatch();
+		setPatchNumDisplay(bank, patch);
+	}
+	else
+	{
+		patchNumDisplay->clear();
+		this->writeButton->setBlink(false);
+		this->writeButton->setValue(false);
+	};
 };
 
 void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
@@ -415,6 +447,7 @@ void floorBoardDisplay::connectSignal(bool value)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
+		sysxIO->setDeviceStatus(true);
 	};
 };
 
@@ -451,4 +484,124 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		sysxIO->setDeviceStatus(true);
 	};
 
+};
+
+void floorBoardDisplay::writeSignal(bool value)
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	if(sysxIO->getConnected() && sysxIO->getDeviceStatus())
+	{
+		sysxIO->setDeviceStatus(false);
+
+		QString sysxOut; bool ok;
+		QList< QList<QString> > patchData = sysxIO->getFileSource().hex;
+		QList<QString> patchAddress = sysxIO->getFileSource().address;
+		if(!sysxIO->getSyncStatus())
+		{
+			for(int i=0;i<patchData.size();++i)
+			{
+				QList<QString> data = patchData.at(i);
+				for(int x=0;x<data.size();++x)
+				{
+					sysxOut.append(data.at(x));
+				};
+			}; 
+			sysxIO->setSyncStatus(true);
+			this->writeButton->setBlink(false);
+			this->writeButton->setValue(true);
+		}
+		else
+		{
+			if(sysxIO->getBank() > 35)
+			{
+				QMessageBox *msgBox = new QMessageBox();
+				msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+				msgBox->setIcon(QMessageBox::Warning);
+				msgBox->setText(tr("You can't write to the preset banks.\n"
+					"Please select a user bank to write this patch to and try again."));
+				msgBox->setStandardButtons(QMessageBox::Ok);
+				msgBox->exec();
+				this->writeButton->setBlink(true);
+				this->writeButton->setValue(true);
+			}
+			else
+			{
+				QMessageBox *msgBox = new QMessageBox();
+				msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+				msgBox->setIcon(QMessageBox::Warning);
+				msgBox->setText(tr("You have chosen to write the patch into memory.\n"
+					"This will overwrite the patch currently stored at this\n"
+					"location and can't be undone.\n\n"
+					"Are you sure you want to continue?\n"));
+				msgBox->setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+
+				if(msgBox->exec())
+				{
+					/*int bank = sysxIO->getBank();
+					int patch = sysxIO->getPatch();
+					int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
+					int memmorySize = QString("7F").toInt(&ok, 16) + 1;
+					int emptyAddresses = (memmorySize) - ((bankTotalUser * patchPerBank) - (memmorySize));
+					if(bank > bankTotalUser) patchOffset += emptyAddresses; //System patches start at a new memmory range.
+					int addrMaxSize = QString("80").toInt(&ok, 16);
+					int n = (int)(patchOffset / addrMaxSize);
+					
+					QString addr1 = QString::number(8 + n, 16).toUpper();
+					QString addr2 = QString::number(patchOffset - (addrMaxSize * n), 16).toUpper();
+					
+					for(int i=0;i<patchData.size();++i)
+					{
+						QList<QString> data = patchData.at(i);
+						for(int x=0;x<data.size();++x)
+						{
+							QString hex;
+							if(x == sysxAddressOffset - 1)
+							{ 
+								hex = addr1;
+							}
+							else if(x == sysxAddressOffset)
+							{
+								hex = addr2;
+							}
+							else
+							{
+								hex = data.at(x);
+							};
+							sysxOut.append(hex);
+						};
+					};*/
+
+					sysxIO->setSyncStatus(true);
+					this->writeButton->setBlink(false);
+					this->writeButton->setValue(true);
+				};
+			};
+		};
+
+		Preferences *preferences = Preferences::Instance();
+		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
+		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
+
+		midiIO *midi = new midiIO();
+
+		QObject::connect(midi, SIGNAL(replyMsg(QString)), 
+			this, SLOT(resetDevice(QString)));
+
+		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+
+		emit connectedSignal();
+	}
+	else
+	{
+		sysxIO->setSyncStatus(false);
+		this->writeButton->setValue(false);
+		this->writeButton->setBlink(false);
+	};
+
+};
+
+void floorBoardDisplay::resetDevice(QString replyMsg) 
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setDeviceStatus(true);
 };

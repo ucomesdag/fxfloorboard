@@ -45,7 +45,9 @@ public slots:
 	void updateDisplay();
 	void loadInitPatch(int index);
 	void connectSignal(bool value);
+	void writeSignal(bool value);
 	void connectionResult(QString);
+	void resetDevice(QString replyMsg);
 
 signals:
 	void currentIndexChanged(int index);
