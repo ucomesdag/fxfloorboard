@@ -37,3 +37,4 @@ const int timeout = 100;
 const int maxTimeoutCount = 4;*/
 
 #endif // GLOBALVARIABLES_H
+
