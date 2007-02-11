@@ -58,12 +58,16 @@ public:
 	bool getConnected();
 	void setDeviceStatus(bool deviceready);
 	bool getDeviceStatus();
-	void setSource(QString source);
-	QString getSource();
+	void setDevice(bool isdevice);
+	bool isDevice();
+	void setSyncStatus(bool syncStatus);
+	bool getSyncStatus();
 	void setBank(int bank);
 	void setPatch(int patch);
 	int getBank();
 	int getPatch();
+	void setRequestName(QString requestName);
+	QString getRequestName();	
 
 protected :
 	SysxIO();
@@ -82,7 +86,10 @@ private:
 
 	int bank;
 	int patch;
-	QString source;
+	bool isdevice;
+	bool syncStatus;
+
+	QString requestName;
 };
 
 #endif // SYSXIO_H

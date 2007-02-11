@@ -445,6 +445,7 @@ void midiIO::sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn)
 	};
 	this->midiOut = midiOut;
 	this->midiIn = midiIn;
+
 	start();
 };
 
@@ -481,7 +482,7 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 	if (!(err = midiOutOpen(&outHandle, midiOut, 0, 0, CALLBACK_NULL)))
 	{
 		err = 0;
-
+		
 		/* Convert the QString to DWORD (hex value) */
 		bool ok;
 		if(midiMsg.count("0x") > 1)
@@ -495,6 +496,7 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 				/* Output the midi command */
 				midiOutShortMsg(outHandle, midi);
+				Sleep(25);
 			};
 		}
 		else  
@@ -507,7 +509,11 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 			/* Output the midi command */
 			midiOutShortMsg(outHandle, midi);
-		};		
+		};	
+
+		/* Give it some time to finish else there is a change that 
+		the device is closed before finishing the transmission */
+		Sleep(25);
 
 		/* Close the MIDI device */
 		midiOutClose(outHandle);
@@ -518,5 +524,7 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 		errorMsg.append("\r\n");
 		errorMsg.append(getMidiOutErrorMsg(err));
 		showErrorMsg(errorMsg, "out");
-	};;
+	};
+
+	emit midiFinished();
 };

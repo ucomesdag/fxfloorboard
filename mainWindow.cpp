@@ -67,19 +67,19 @@ mainWindow::~mainWindow()
 		if(preferences->getPreferences("Window", "Restore", "sidepanel")=="true" &&
 			preferences->getPreferences("Window", "Collapsed", "bool")=="true")
 		{
-			width = QString::number(this->width(), 10);
-			posx = QString::number(this->x(), 10);
+			width = QString::number(this->geometry().width(), 10);
+			posx = QString::number(this->geometry().x(), 10);
 		}
 		else
 		{
 			bool ok;
 			width = preferences->getPreferences("Window", "Size", "minwidth");
-			posx = QString::number(this->x()+((this->width()-width.toInt(&ok,10))/2), 10);
+			posx = QString::number(this->geometry().x()+((this->geometry().width()-width.toInt(&ok,10))/2), 10);
 		};
 		preferences->setPreferences("Window", "Position", "x", posx);
-		preferences->setPreferences("Window", "Position", "y", QString::number(this->y(), 10));
+		preferences->setPreferences("Window", "Position", "y", QString::number(this->geometry().y(), 10));
 		preferences->setPreferences("Window", "Size", "width", width);
-		preferences->setPreferences("Window", "Size", "height", QString::number(this->height(), 10));
+		preferences->setPreferences("Window", "Size", "height", QString::number(this->geometry().height(), 10));
 	}
 	else
 	{
@@ -210,6 +210,8 @@ void mainWindow::open()
 			SysxIO *sysxIO = SysxIO::Instance();
 			sysxIO->setFileSource(file.getFileSource());
 			sysxIO->setFileName(fileName);
+			sysxIO->setSyncStatus(false);
+			sysxIO->setDevice(false);
 
 			emit updateSignal();
 		};

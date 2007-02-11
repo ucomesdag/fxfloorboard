@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
 	app.processEvents(); 
 
-	//window.show(); // need to show the windows to get the size of it before that it doesn't exist
+	//window.show(); // need to show the windows to get the size of it, before that it doesn't exist
 	//int windowWidth = window.width();                  
 	//int windowHeight = window.height();
 
@@ -145,9 +145,9 @@ int main(int argc, char *argv[])
 		{
 			windowHeight = preferences->getPreferences("Window", "Size", "height").toInt(&ok, 10);
 		};
-		window.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), windowWidth, windowHeight);
-		//window.resize(QSize(windowWidth, windowHeight));
-		//window.move(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10));
+		//window.setGeometry(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10), windowWidth, windowHeight);
+		window.resize(QSize(windowWidth, windowHeight));
+		window.move(x_str.toInt(&ok, 10), y_str.toInt(&ok, 10));
 	}
 	else
 	{
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
 
 	/* PREVIEW WARNING */
 	QMessageBox *msgBox = new QMessageBox();
-	msgBox->setWindowTitle("WARNING");
-	msgBox->setIcon(QMessageBox::Warning);
+	msgBox->setWindowTitle("Notice");
+	msgBox->setIcon(QMessageBox::Information);
 	msgBox->setText("This is a PREVIEW of work in progress, and not fully functional software!");
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->exec();

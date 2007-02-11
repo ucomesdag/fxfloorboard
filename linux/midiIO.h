@@ -23,22 +23,29 @@
 #ifndef MIDIIO_H
 #define MIDIIO_H
 
-#include <QObject>
+#include <QThread>
 #include <QString>
+#include <QStringList>
 #include <QList>
 
-class midiIO: public QObject
+class midiIO: public QThread
 {
 	Q_OBJECT
 
 public:
-	midiIO();
-	~midiIO();
-	
+	void run();
+	void sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn);
+	void sendMidi(QString midiMsg, int midiOut);
 	QList<QString> getMidiOutDevices();
 	QList<QString> getMidiInDevices();
 
-	QString sendSysxMsg(QString sysxOut, int midiOut, int midiIn);
+signals:
+	void errorSignal(QString windowTitle, QString errorMsg);
+	void replyMsg(QString sysxInMsg);
+	void midiFinished();
+	void started();
+	void finished();
+	void terminated();
 
 private:
 	void queryMidiInDevices();
@@ -52,6 +59,18 @@ private:
 
 	QList<QString> midiOutDevices;
 	QList<QString> midiInDevices;
+
+	static QString sysxBuffer;
+	static bool dataReceive;
+	static unsigned char SysXFlag;
+	static int count;
+	static unsigned char SysXBuffer[256];
+
+	int midiOut;
+	int midiIn;
+	QString sysxOutMsg;
+	QString sysxInMsg;
+	bool multiple;
 };
 
 #endif // MIDIIO_H

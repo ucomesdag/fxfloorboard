@@ -45,6 +45,7 @@ public:
 signals:
 	void errorSignal(QString windowTitle, QString errorMsg);
 	void replyMsg(QString sysxInMsg);
+	void midiFinished();
 	void started();
 	void finished();
 	void terminated();

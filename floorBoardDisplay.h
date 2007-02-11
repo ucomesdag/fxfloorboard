@@ -48,6 +48,7 @@ public slots:
 	void writeSignal(bool value);
 	void connectionResult(QString);
 	void resetDevice(QString replyMsg);
+	void patchSelectSignal(int bank, int patch);
 
 signals:
 	void currentIndexChanged(int index);
@@ -76,6 +77,7 @@ private:
 	midiIO *midi;
 
 	bool connectButtonActive;
+	bool patchLoadError;
 };
 
 #endif // FLOORBOARDDISPLAY_H

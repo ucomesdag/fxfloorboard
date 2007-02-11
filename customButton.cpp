@@ -177,7 +177,7 @@ void customButton::setBlink(bool value)
 {
 	 if(value)
 	 {
-		timer->start(500);
+		timer->start(250);
 	 }
 	 else
 	 {

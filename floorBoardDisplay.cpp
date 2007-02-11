@@ -124,6 +124,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	QObject::connect(this->writeButton, SIGNAL(valueChanged(bool)), this, SLOT(writeSignal(bool)));
 
 	setInitPatchComboBox(QRect(405, 24, 168, 15));
+	this->patchLoadError = false;
 };
 
 QPoint floorBoardDisplay::getPos()
@@ -178,6 +179,22 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 		if(sysxIO->getFileName() == tr("GT-8 patch"))
 		{
 			sysxIO->setFileName("");
+			if(this->patchLoadError)
+			{
+				QString snork = sysxIO->getRequestName().trimmed();
+				QMessageBox *msgBox = new QMessageBox();
+				msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+				msgBox->setIcon(QMessageBox::Warning);
+				msgBox->setText(tr("Error while changing banks.\n\n"
+					"An incorrect patch has been loaded. Please try to load the patch again.\n"));
+				msgBox->setInformativeText(tr("This is a known bug, it occures when changing the bank 'LSB'.\n"
+					"For an unkown reason it didn't change.\n"));
+				msgBox->setStandardButtons(QMessageBox::Ok);
+				msgBox->exec();
+
+				sysxIO->setBank(0);
+				sysxIO->setPatch(0);
+			};
 		};
 		this->initPatchComboBox->setCurrentIndex(0);
 	};	
@@ -232,7 +249,16 @@ void floorBoardDisplay::updateDisplay()
 		patchName.append( midiTable->getMidiMap("Stucture", "12", "00", "00", nameArray.at(i)).name);
 	};	
 
-	patchName.trimmed();
+	patchName = patchName.trimmed();
+	if(sysxIO->getRequestName().trimmed() != patchName.trimmed())
+	{
+		this->patchLoadError = true;
+	}
+	else
+	{
+		this->patchLoadError = false;
+	};
+
 	patchName.replace("<", "&lt;");
 	patchName.replace(">", "&gt;");
 	int maxWidth = patchDisplay->width() - 2;
@@ -275,12 +301,22 @@ void floorBoardDisplay::updateDisplay()
 		};
 		int bank = sysxIO->getBank();
 		int patch = sysxIO->getPatch();
-		setPatchNumDisplay(bank, patch);
+		if(bank != 0)
+		{
+			setPatchNumDisplay(bank, patch);
+		}
+		else
+		{
+			patchNumDisplay->clear();
+		};
 	}
 	else if(sysxIO->getBank() != 0)
 	{
-		this->writeButton->setBlink(true);
-		this->writeButton->setValue(false);
+		if(sysxIO->getConnected())
+		{
+			this->writeButton->setBlink(true);
+			this->writeButton->setValue(false);
+		};
 		int bank = sysxIO->getBank();
 		int patch = sysxIO->getPatch();
 		setPatchNumDisplay(bank, patch);
@@ -411,6 +447,8 @@ void floorBoardDisplay::loadInitPatch(int index)
 				SysxIO *sysxIO = SysxIO::Instance();
 				sysxIO->setFileSource(file.getFileSource());
 				sysxIO->setFileName(tr("init patch"));
+				sysxIO->setSyncStatus(false);
+				sysxIO->setDevice(false);
 				emit updateSignal();
 			};
 		};
@@ -445,9 +483,12 @@ void floorBoardDisplay::connectSignal(bool value)
 	else
 	{
 		this->connectButton->setBlink(false);
-		this->connectButton->setValue(false);
+		this->connectButton->setValue(false);		
+		this->writeButton->setBlink(false);
+		this->writeButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true);
+		sysxIO->setDeviceStatus(true);		
+		sysxIO->setSyncStatus(false);
 	};
 };
 
@@ -461,6 +502,12 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		sysxIO->setConnected(true);
 		sysxIO->setDeviceStatus(true);
 		emit connectedSignal();
+
+		if(sysxIO->getBank() != 0)
+		{
+			this->writeButton->setBlink(true);
+			this->writeButton->setValue(false);
+		};
 	}
 	else if(!replyMsg.isEmpty())
 	{
@@ -488,108 +535,144 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 
 void floorBoardDisplay::writeSignal(bool value)
 {
+	this->writeButton->setBlink(true);
+	
 	SysxIO *sysxIO = SysxIO::Instance();
 	if(sysxIO->getConnected() && sysxIO->getDeviceStatus())
 	{
-		sysxIO->setDeviceStatus(false);
-
-		QString sysxOut; bool ok;
-		QList< QList<QString> > patchData = sysxIO->getFileSource().hex;
-		QList<QString> patchAddress = sysxIO->getFileSource().address;
-		if(!sysxIO->getSyncStatus())
+		if(sysxIO->getBank() == 0)
 		{
-			for(int i=0;i<patchData.size();++i)
-			{
-				QList<QString> data = patchData.at(i);
-				for(int x=0;x<data.size();++x)
-				{
-					sysxOut.append(data.at(x));
-				};
-			}; 
-			sysxIO->setSyncStatus(true);
+			QMessageBox *msgBox = new QMessageBox();
+			msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+			msgBox->setIcon(QMessageBox::Warning);
+			msgBox->setText(tr("You didn't select a bank to write to.\n"
+				"Please select a user bank to write this patch to and try again."));
+			msgBox->setStandardButtons(QMessageBox::Ok);
+			msgBox->exec();
 			this->writeButton->setBlink(false);
-			this->writeButton->setValue(true);
+			this->writeButton->setValue(false);
 		}
 		else
 		{
-			if(sysxIO->getBank() > 35)
+			sysxIO->setDeviceStatus(false);
+
+			QString sysxOut; bool ok;
+			QList< QList<QString> > patchData = sysxIO->getFileSource().hex;
+			QList<QString> patchAddress = sysxIO->getFileSource().address;
+			if(!sysxIO->getSyncStatus())
 			{
-				QMessageBox *msgBox = new QMessageBox();
-				msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
-				msgBox->setIcon(QMessageBox::Warning);
-				msgBox->setText(tr("You can't write to the preset banks.\n"
-					"Please select a user bank to write this patch to and try again."));
-				msgBox->setStandardButtons(QMessageBox::Ok);
-				msgBox->exec();
-				this->writeButton->setBlink(true);
+				for(int i=0;i<patchData.size();++i)
+				{
+					QList<QString> data = patchData.at(i);
+					for(int x=0;x<data.size();++x)
+					{
+						sysxOut.append(data.at(x));
+					};
+				}; 
+				sysxIO->setSyncStatus(true);
+				this->writeButton->setBlink(false);
 				this->writeButton->setValue(true);
 			}
 			else
 			{
-				QMessageBox *msgBox = new QMessageBox();
-				msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
-				msgBox->setIcon(QMessageBox::Warning);
-				msgBox->setText(tr("You have chosen to write the patch into memory.\n"
-					"This will overwrite the patch currently stored at this\n"
-					"location and can't be undone.\n\n"
-					"Are you sure you want to continue?\n"));
-				msgBox->setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-
-				if(msgBox->exec())
+				if(sysxIO->getBank() > 35)
 				{
-					/*int bank = sysxIO->getBank();
-					int patch = sysxIO->getPatch();
-					int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
-					int memmorySize = QString("7F").toInt(&ok, 16) + 1;
-					int emptyAddresses = (memmorySize) - ((bankTotalUser * patchPerBank) - (memmorySize));
-					if(bank > bankTotalUser) patchOffset += emptyAddresses; //System patches start at a new memmory range.
-					int addrMaxSize = QString("80").toInt(&ok, 16);
-					int n = (int)(patchOffset / addrMaxSize);
-					
-					QString addr1 = QString::number(8 + n, 16).toUpper();
-					QString addr2 = QString::number(patchOffset - (addrMaxSize * n), 16).toUpper();
-					
-					for(int i=0;i<patchData.size();++i)
-					{
-						QList<QString> data = patchData.at(i);
-						for(int x=0;x<data.size();++x)
-						{
-							QString hex;
-							if(x == sysxAddressOffset - 1)
-							{ 
-								hex = addr1;
-							}
-							else if(x == sysxAddressOffset)
-							{
-								hex = addr2;
-							}
-							else
-							{
-								hex = data.at(x);
-							};
-							sysxOut.append(hex);
-						};
-					};*/
+					QMessageBox *msgBox = new QMessageBox();
+					msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+					msgBox->setIcon(QMessageBox::Warning);
+					msgBox->setText(tr("You can't write to the preset banks.\n"
+						"Please select a user bank to write this patch to and try again."));
+					msgBox->setStandardButtons(QMessageBox::Ok);
+					msgBox->exec();
+					this->writeButton->setBlink(false);
+					this->writeButton->setValue(true);
+				}
+				else
+				{
+					QMessageBox *msgBox = new QMessageBox();
+					msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+					msgBox->setIcon(QMessageBox::Warning);
+					msgBox->setText(tr("You have chosen to write the patch permanently into memory.\n"
+						"This will overwrite the patch currently stored at this location\n"
+						"and can't be undone.\n\n"
+						"Are you sure you want to continue?\n"));
+					msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
+					if(msgBox->exec() == QMessageBox::Yes)
+					{
+						int bank = sysxIO->getBank();
+						int patch = sysxIO->getPatch();
+						int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
+						int memmorySize = QString("7F").toInt(&ok, 16) + 1;
+						int emptyAddresses = (memmorySize) - ((bankTotalUser * patchPerBank) - (memmorySize));
+						if(bank > bankTotalUser) patchOffset += emptyAddresses; //System patches start at a new memmory range.
+						int addrMaxSize = QString("80").toInt(&ok, 16);
+						int n = (int)(patchOffset / addrMaxSize);
+						
+						QString addr1 = QString::number(8 + n, 16).toUpper();
+						QString addr2 = QString::number(patchOffset - (addrMaxSize * n), 16).toUpper();
+						
+						for(int i=0;i<patchData.size();++i)
+						{
+							QList<QString> data = patchData.at(i);
+							for(int x=0;x<data.size();++x)
+							{
+								QString hex;
+								if(x == sysxAddressOffset - 1)
+								{ 
+									hex = addr1;
+								}
+								else if(x == sysxAddressOffset)
+								{
+									hex = addr2;
+								}
+								else
+								{
+									hex = data.at(x);
+								};
+								if (hex.length() < 2) hex.prepend("0");
+								sysxOut.append(hex);
+							};
+						};
+					};
 					sysxIO->setSyncStatus(true);
 					this->writeButton->setBlink(false);
 					this->writeButton->setValue(true);
 				};
 			};
+		
+			Preferences *preferences = Preferences::Instance();
+			int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
+			int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
+
+			midiIO *midi = new midiIO();
+
+			QObject::connect(midi, SIGNAL(replyMsg(QString)), 
+				this, SLOT(resetDevice(QString)));
+
+			midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+
+			/* DEBUGGING OUTPUT 
+			QString snork;
+			for(int i=0;i<sysxOut.size();++i)
+			{
+				snork.append(sysxOut.mid(i, 2));
+				snork.append(" ");
+				i++;
+			};
+			snork.replace("F7", "F7 }\n");
+			snork.replace("F0", "{ F0");
+			snork.append("\n{ size=");
+			snork.append(QString::number(sysxOut.size()/2, 10));
+			snork.append("}");		
+
+			QMessageBox *msgBox = new QMessageBox();
+			msgBox->setWindowTitle("dBug Result");
+			msgBox->setIcon(QMessageBox::Information);
+			msgBox->setText(snork);
+			msgBox->setStandardButtons(QMessageBox::Ok);
+			msgBox->exec();*/
 		};
-
-		Preferences *preferences = Preferences::Instance();
-		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
-		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
-
-		midiIO *midi = new midiIO();
-
-		QObject::connect(midi, SIGNAL(replyMsg(QString)), 
-			this, SLOT(resetDevice(QString)));
-
-		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
-
-		emit connectedSignal();
 	}
 	else
 	{
@@ -604,4 +687,10 @@ void floorBoardDisplay::resetDevice(QString replyMsg)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 	sysxIO->setDeviceStatus(true);
+	emit connectedSignal();
+};
+
+void floorBoardDisplay::patchSelectSignal(int bank, int patch)
+{
+
 };

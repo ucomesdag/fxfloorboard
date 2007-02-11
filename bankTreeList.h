@@ -50,6 +50,7 @@ signals:
 	void itemCollapsed(QTreeWidgetItem *item);
 	void itemClicked(QTreeWidgetItem *item, int column);
 	void itemDoubleClicked(QTreeWidgetItem *item, int column);
+	void patchSelectSignal(int bank, int patch);
 	void updateSignal();
 
 private:

@@ -30,7 +30,11 @@
 SysxIO::SysxIO() 
 {
 	setConnected(false);
+	setDevice(false);
 	setDeviceStatus(true);
+	setSyncStatus(false);
+	setBank(0);
+	setPatch(0);
 };
 
 SysxIO* SysxIO::_instance = 0;// initialize pointer
@@ -319,14 +323,24 @@ bool SysxIO::getDeviceStatus()
 	return this->deviceready;	
 };
 
-void SysxIO::setSource(QString source)
+void SysxIO::setDevice(bool isdevice)
 {
-	this->source = source;		
+	this->isdevice = isdevice;		
 };
 
-QString SysxIO::getSource()
+bool SysxIO::isDevice()
 {
-	return this->source;	
+	return this->isdevice;	
+};
+
+void SysxIO::setSyncStatus(bool syncStatus)
+{
+	this->syncStatus = syncStatus;		
+};
+
+bool SysxIO::getSyncStatus()
+{
+	return this->syncStatus;	
 };
 
 void SysxIO::setBank(int bank)
@@ -345,4 +359,13 @@ int SysxIO::getBank(){
 
 int SysxIO::getPatch(){
 	return this->patch;	
+};
+
+void SysxIO::setRequestName(QString requestName)
+{
+	this->requestName = requestName;	
+};
+
+QString SysxIO::getRequestName(){
+	return this->requestName;	
 };

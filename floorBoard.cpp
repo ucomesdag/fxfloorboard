@@ -111,6 +111,8 @@ floorBoard::floorBoard(QWidget *parent,
 		this, SIGNAL(updateSignal()));
 	QObject::connect(this, SIGNAL(updateSignal()), 
 		this, SLOT(updateStompBoxes()));
+	QObject::connect(bankList, SIGNAL(patchSelectSignal(int, int)), 
+		display, SLOT(patchSelectSignal(int, int)));
 
 	QObject::connect(panelBar, SIGNAL(showDragBar(QPoint)), 
 		this, SIGNAL(showDragBar(QPoint)));
