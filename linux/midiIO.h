@@ -60,9 +60,9 @@ private:
 	QList<QString> midiOutDevices;
 	QList<QString> midiInDevices;
 
-	static void CALLBACK midiCallback(HMIDIIN handle, 
+	/*static void CALLBACK midiCallback(HMIDIIN handle, 
 		UINT wMsg, DWORD dwInstance, 
-		DWORD dwParam1, DWORD dwParam2);
+		DWORD dwParam1, DWORD dwParam2);*/
 
 	static QString sysxBuffer;
 	static bool dataReceive;
