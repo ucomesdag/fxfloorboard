@@ -167,9 +167,9 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
  * receiving a reply on the MIDI In device midiIn. If so it will
  * receiving the received sysex message.
  *************************************************************************/
-void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
+/*void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
 {
-	/*LPMIDIHDR		lpMIDIHeader;
+	LPMIDIHDR		lpMIDIHeader;
 	unsigned char *	ptr;
 
 	/ Determine why Windows called me /
@@ -241,8 +241,8 @@ void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, 
         case MIM_ERROR:
         case MIM_LONGERROR:
         case MIM_MOREDATA: /
-  };*/
-};
+  };
+};*/
 
 /**************************** run() **************************************
  * New QThread that processes the sysex message and handles if yes or no 
