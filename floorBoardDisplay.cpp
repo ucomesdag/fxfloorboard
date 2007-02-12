@@ -2,7 +2,7 @@
 **
 ** Copyright (C) 2005, 2006, 2007 Uco Mesdag. All rights reserved.
 **
-** This file is part of "GT-8 FX FloorBoard".
+** This file is part of "GT-8 Fx FloorBoard".
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	str.append("<html><body>");
 	str.append("<table width='143' cellspacing='0' cellpadding='0' border='0'><tr><td align='center'>");
 	str.append("<table width='140' cellspacing='0' cellpadding='0' border='0'><tr><td colspan='2' align='left'>");
-	str.append("GT-8 FX FloorBoard");
+	str.append("GT-8 Fx FloorBoard");
 	str.append("</td></tr><tr><td align='left' valign='top'><font size='-1'>");
 	str.append(tr("version"));
 	str.append("</font></td><td align='right' valign='top'><font size='-1'>");
@@ -189,7 +189,7 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 			{
 				QString snork = sysxIO->getRequestName().trimmed();
 				QMessageBox *msgBox = new QMessageBox();
-				msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+				msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 				msgBox->setIcon(QMessageBox::Warning);
 				msgBox->setText(tr("Error while changing banks.\n\n"
 					"An incorrect patch has been loaded. Please try to load the patch again.\n"));
@@ -551,7 +551,7 @@ void floorBoardDisplay::writeSignal(bool value)
 		if(sysxIO->getBank() == 0)
 		{
 			QMessageBox *msgBox = new QMessageBox();
-			msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 			msgBox->setIcon(QMessageBox::Warning);
 			msgBox->setText(tr("You didn't select a bank to write to.\n"
 				"Please select a user bank to write this patch to and try again."));
@@ -586,7 +586,7 @@ void floorBoardDisplay::writeSignal(bool value)
 				if(sysxIO->getBank() > 35)
 				{
 					QMessageBox *msgBox = new QMessageBox();
-					msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+					msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 					msgBox->setIcon(QMessageBox::Warning);
 					msgBox->setText(tr("You can't write to the preset banks.\n"
 						"Please select a user bank to write this patch to and try again."));
@@ -598,7 +598,7 @@ void floorBoardDisplay::writeSignal(bool value)
 				else
 				{
 					QMessageBox *msgBox = new QMessageBox();
-					msgBox->setWindowTitle(tr("GT-8 FX FloorBoard"));
+					msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 					msgBox->setIcon(QMessageBox::Warning);
 					msgBox->setText(tr("You have chosen to write the patch permanently into memory.\n"
 						"This will overwrite the patch currently stored at this location\n"

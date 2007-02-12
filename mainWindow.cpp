@@ -2,7 +2,7 @@
 **
 ** Copyright (C) 2005, 2006, 2007 Uco Mesdag. All rights reserved.
 **
-** This file is part of "GT-8 FX FloorBoard".
+** This file is part of "GT-8 Fx FloorBoard".
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ mainWindow::mainWindow(QWidget *parent)
 {
 	fxsBoard = new floorBoard(this);
 	
-	this->setWindowTitle("GT-8 FX FloorBoard");
+	this->setWindowTitle("GT-8 Fx FloorBoard");
 	//this->setCentralWidget(fxsBoard);
 	
 	this->createActions();
@@ -126,12 +126,12 @@ void mainWindow::createActions()
 	settingsAct->setStatusTip(tr("...."));
 	connect(settingsAct, SIGNAL(triggered()), this, SLOT(settings()));
 
-	helpAct = new QAction(/*QIcon(":/images/help.png"),*/ tr("GT-8 FX FloorBoard &Help"), this);
+	helpAct = new QAction(/*QIcon(":/images/help.png"),*/ tr("GT-8 Fx FloorBoard &Help"), this);
 	helpAct->setShortcut(tr("Ctrl+F1"));
 	helpAct->setStatusTip(tr("....."));
 	connect(helpAct, SIGNAL(triggered()), this, SLOT(help()));
 
-	homepageAct = new QAction(/*QIcon(":/images/home.png"),*/ tr("GT-8 FX FloorBoard &Webpage"), this);
+	homepageAct = new QAction(/*QIcon(":/images/home.png"),*/ tr("GT-8 Fx FloorBoard &Webpage"), this);
 	homepageAct->setStatusTip(tr("........"));
 	connect(homepageAct, SIGNAL(triggered()), this, SLOT(homepage()));
 
@@ -348,7 +348,7 @@ void mainWindow::about()
 	if(file.open(QIODevice::ReadOnly))
 	{	
 		QMessageBox::about(this, tr("GT-8 Fx FloorBoard - About"), 
-			"GT-8 FX FloorBoard, " + tr("version") + " " + version + "\n" + file.readAll());
+			"GT-8 Fx FloorBoard, " + tr("version") + " " + version + "\n" + file.readAll());
 	};
 };
 
