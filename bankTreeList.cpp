@@ -521,7 +521,6 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 			sysxIO->setDeviceStatus(false);
 			sysxIO->setRequestName(item->text(0));
 
-
 			/* Set current patch */
 			
 			/*
@@ -542,8 +541,7 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 			int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
 			int patch = item->parent()->indexOfChild(item) + 1;
 
-			sysxIO->setBank(bank);
-			sysxIO->setPatch(patch);
+			emit patchLoadSignal(bank, patch);
 
 			int bankOffset = ((bank - 1) * patchPerBank) + (patch - 1);
 			int bankSize = 100;

@@ -25,6 +25,7 @@
 
 #include <QtGui>
 #include <QWidget>
+#include <QTimer>
 #include "customButton.h"
 #include "midiIO.h"
 
@@ -49,6 +50,8 @@ public slots:
 	void connectionResult(QString);
 	void resetDevice(QString replyMsg);
 	void patchSelectSignal(int bank, int patch);
+	void blinkSellectedPatch(bool active = true);
+	void patchLoadSignal(int bank, int patch);
 
 signals:
 	void currentIndexChanged(int index);
@@ -78,6 +81,10 @@ private:
 
 	bool connectButtonActive;
 	bool patchLoadError;
+	QTimer* timer;
+	int blinkCount;
+	int currentBank;
+	int currentPatch;
 };
 
 #endif // FLOORBOARDDISPLAY_H

@@ -125,6 +125,12 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 
 	setInitPatchComboBox(QRect(405, 24, 168, 15));
 	this->patchLoadError = false;
+
+	timer = new QTimer(this);
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	currentBank = sysxIO->getBank();
+	currentPatch = sysxIO->getPatch();
 };
 
 QPoint floorBoardDisplay::getPos()
@@ -202,39 +208,46 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 
 void floorBoardDisplay::setPatchNumDisplay(int bank, int patch)
 {
-	QString str, color;
-	str.append("<html><body>");
-	str.append("<font size='-1'>");
-	if(bank <= bankTotalUser)
+	if(bank > 0)
 	{
-		str.append("<font size='-1'>User</font>");
+		QString str, color;
+		str.append("<html><body>");
+		str.append("<font size='-1'>");
+		if(bank <= bankTotalUser)
+		{
+			str.append("<font size='-1'>User</font>");
+		}
+		else
+		{
+			color = "color='red' ";
+			str.append("<font "+color+"size='-1'>Preset</font>");
+		};
+		str.append("</font>");
+		str.append("<table cellspacing='0' cellpadding='0' border='0'><tr>");
+		str.append("<td align='right' valign='middle'>");
+		str.append("<font "+color+"size='+2'>");
+		if(bank < 10)
+		{
+			str.append("0");
+		};
+		str.append(QString::number(bank, 10));
+		str.append("</font>");
+		str.append("</td><td align='center' valign='middle'>");
+		str.append("<font "+color+"size='+1'>");
+		str.append(":");
+		str.append("</font>");
+		str.append("</td><td align='right' valign='middle'>");
+		str.append("<font "+color+"size='+2'>");
+		str.append(QString::number(patch, 10));
+		str.append("</font>");
+		str.append("</td></tr></table>");
+		str.append("</body></html>");
+		patchNumDisplay->setHtml(str);
 	}
 	else
 	{
-		color = "color='red' ";
-		str.append("<font "+color+"size='-1'>Preset</font>");
+		patchNumDisplay->clear();
 	};
-	str.append("</font>");
-	str.append("<table cellspacing='0' cellpadding='0' border='0'><tr>");
-	str.append("<td align='right' valign='middle'>");
-	str.append("<font "+color+"size='+2'>");
-	if(bank < 10)
-	{
-		str.append("0");
-	};
-	str.append(QString::number(bank, 10));
-	str.append("</font>");
-	str.append("</td><td align='center' valign='middle'>");
-	str.append("<font "+color+"size='+1'>");
-	str.append(":");
-	str.append("</font>");
-	str.append("</td><td align='right' valign='middle'>");
-	str.append("<font "+color+"size='+2'>");
-	str.append(QString::number(patch, 10));
-	str.append("</font>");
-	str.append("</td></tr></table>");
-	str.append("</body></html>");
-	patchNumDisplay->setHtml(str);
 };
 
 void floorBoardDisplay::updateDisplay()
@@ -279,6 +292,8 @@ void floorBoardDisplay::updateDisplay()
 	{
 		int bank = sysxIO->getBank();
 		int patch = sysxIO->getPatch();
+		currentBank = bank;
+		currentPatch = patch;
 		setPatchNumDisplay(bank, patch);
 	}
 	else
@@ -301,14 +316,7 @@ void floorBoardDisplay::updateDisplay()
 		};
 		int bank = sysxIO->getBank();
 		int patch = sysxIO->getPatch();
-		if(bank != 0)
-		{
-			setPatchNumDisplay(bank, patch);
-		}
-		else
-		{
-			patchNumDisplay->clear();
-		};
+		setPatchNumDisplay(bank, patch);
 	}
 	else if(sysxIO->getBank() != 0)
 	{
@@ -692,5 +700,55 @@ void floorBoardDisplay::resetDevice(QString replyMsg)
 
 void floorBoardDisplay::patchSelectSignal(int bank, int patch)
 {
+	blinkSellectedPatch(false);
+	
+	SysxIO *sysxIO = SysxIO::Instance();
+	currentBank = sysxIO->getBank();
+	currentPatch = sysxIO->getPatch();
+	if(currentBank != bank || currentPatch != patch)
+	{
+		sysxIO->setBank(bank);
+		sysxIO->setPatch(patch);
+		QObject::connect(timer, SIGNAL(timeout()), this, SLOT(blinkSellectedPatch()));
+		//setPatchNumDisplay(bank, patch);
+		timer->start(sellectionBlinkInterval);
+	};
+};
 
+void floorBoardDisplay::blinkSellectedPatch(bool active)
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	int bank = sysxIO->getBank();
+	int patch = sysxIO->getPatch();
+	
+	if(active && blinkCount <= (sellectionBlinks * 2) - 1)
+	{
+		if(blinkCount % 2 == 0)
+		{
+			patchNumDisplay->clear();
+		}
+		else
+		{
+			setPatchNumDisplay(bank, patch);
+		};
+		blinkCount++;
+	}
+	else
+	{
+		QObject::disconnect(timer, SIGNAL(timeout()), this, SLOT(blinkSellectedPatch()));
+		timer->stop();
+		blinkCount = 0;
+		sysxIO->setBank(currentBank);
+		sysxIO->setPatch(currentPatch);
+		setPatchNumDisplay(currentBank, currentPatch);
+	};
+};
+
+void floorBoardDisplay::patchLoadSignal(int bank, int patch)
+{
+	blinkSellectedPatch(false);
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setBank(bank);
+	sysxIO->setPatch(patch);
 };

@@ -24,17 +24,22 @@
 #define GLOBALVARIABLES_H
 
 /* Sysex Message Parameters */
-const int sysxAddressOffset = 8;
-const int sysxDataOffset = 12;
+const int sysxAddressOffset = 8;	// Offset where the address information starts in a sysx message.
+const int sysxDataOffset = 12;		// Offset where the data starts in a sysx message.
 
 /* Patches and Banks */
-const int bankTotalUser = 35;
-const int bankTotalAll = 85;
-const int patchPerBank = 4;
+const int bankTotalUser = 35;		// Number of user (editable) banks.
+const int bankTotalAll = 85;		// Number of total banks.
+const int patchPerBank = 4;			// Number of patches in a bank.
 
 /* Midi Send & Receive 
-const int timeout = 100;
-const int maxTimeoutCount = 4;*/
+const int processTimeout = 100;		// Time (ms) the device needs to process a message before sending the next.
+const int waitTimeout = 100;		// Time (ms) we wait between sysex messages for the next one to be received.
+const int maxTimeoutCount = 4;*/	// Maximum times we loop through the receive handel before we give up the waiting.
+
+/* Patch Sellection (Used when copying patches) */
+const int sellectionBlinks = 5;		// Times we blink to indicate we have sellected a patch before returning.
+const int sellectionBlinkInterval = 500;		// Interval (ms) the item blinks.
 
 #endif // GLOBALVARIABLES_H
 
