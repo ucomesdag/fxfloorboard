@@ -23,23 +23,41 @@
 #ifndef GLOBALVARIABLES_H
 #define GLOBALVARIABLES_H
 
+/****************************************************************************
+* These are general settings keep in mind that number of fx and fx setting 
+* are per item setting to change them you will need to modify the following 
+* files:
+*     -> floorBoard.cpp
+*     -> stompBox.cpp
+*     -> stompbox_{fx abbrv.}.cpp
+*
+****************************************************************************/
+
+/* General Parameters */
+const QString idRequestString = "F07E000601F7";		// Indentity Request (GT-8).
+const QString idReplyPatern = "F07E000602";			// Returned device id message must contain/match this (QRegExp or a string without spaces and all caps).
+const int buttonBlinkInterval = 250;				// The interval (ms) the led on buttons blink.
+
 /* Sysex Message Parameters */
-const int sysxAddressOffset = 8;	// Offset where the address information starts in a sysx message.
-const int sysxDataOffset = 12;		// Offset where the data starts in a sysx message.
+const int sysxAddressOffset = 7;	// Offset (starts at 0) where the address information starts in a sysx message.
+const int sysxDataOffset = 11;		// Offset (starts at 0) where the data starts in a sysx message.
+const int checksumStart = 7;		// Offset where we start calculating the checksum (Normally this is the address offset).
+const int checksumStop = -1;		// Offset where we stop calculating the checksum (negative numbers mean we count from the end).
 
 /* Patches and Banks */
 const int bankTotalUser = 35;		// Number of user (editable) banks.
 const int bankTotalAll = 85;		// Number of total banks.
 const int patchPerBank = 4;			// Number of patches in a bank.
 
-/* Midi Send & Receive 
-const int processTimeout = 100;		// Time (ms) the device needs to process a message before sending the next.
-const int waitTimeout = 100;		// Time (ms) we wait between sysex messages for the next one to be received.
-const int maxTimeoutCount = 4;*/	// Maximum times we loop through the receive handel before we give up the waiting.
+/* Midi Send & Receive */ /* COMMENTED OUT FOR THE MOMENT: BECAUSE OF INCLUDE PROBLEMS WITH QMAKE (NEED TO FIND A WORK AROUND) */
+//const int sendTimeout = 100;		// Time (ms) the device needs to process a message before sending the next.
+//const int receiveTimeout = 100;	// Time (ms) we wait between sysex messages for the next one to be received.
+//const int maxWait = 4;			// Maximum times we loop through the receive handel before we give up the waiting.
+const int maxRetry = 4;				// Maximum times we retry to load a patch in case of a transfer error .
 
 /* Patch Sellection (Used when copying patches) */
-const int sellectionBlinks = 5;		// Times we blink to indicate we have sellected a patch before returning.
-const int sellectionBlinkInterval = 500;		// Interval (ms) the item blinks.
+const int sellectionBlinks = 5;				// Times we blink to indicate we have sellected a patch before returning.
+const int sellectionBlinkInterval = 500;	// Interval (ms) the item blinks.
 
 #endif // GLOBALVARIABLES_H
 

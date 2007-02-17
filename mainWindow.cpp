@@ -364,6 +364,7 @@ void mainWindow::errorSignal(QString windowTitle, QString errorMsg)
 	QMessageBox *msgBox = new QMessageBox();
 	msgBox->setWindowTitle(windowTitle);
 	msgBox->setIcon(QMessageBox::Warning);
+	msgBox->setTextFormat(Qt::RichText);
 	msgBox->setText(errorMsg);
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->exec();

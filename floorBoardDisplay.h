@@ -85,6 +85,7 @@ private:
 	int blinkCount;
 	int currentBank;
 	int currentPatch;
+	bool currentSyncStatus;
 };
 
 #endif // FLOORBOARDDISPLAY_H

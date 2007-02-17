@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include "customButton.h"
+#include "globalVariables.h"
 
 customButton::customButton(bool active, QPoint buttonPos, QWidget *parent, QString hex1, QString hex2, QString hex3, 
 						   QString imagePath)
@@ -177,11 +178,19 @@ void customButton::setBlink(bool value)
 {
 	 if(value)
 	 {
-		timer->start(250);
+		timer->start(buttonBlinkInterval);
 	 }
 	 else
 	 {
 		timer->stop();
+		if(active)
+		{
+			setOffset(2);
+		}
+		else
+		{
+			setOffset(0);
+		};
 	 };
 };
 

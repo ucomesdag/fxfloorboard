@@ -190,7 +190,12 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 			err = midiOutLongMsg(outHandle, &midiHdr, sizeof(MIDIHDR));
 			if (err) 
 			{	
-				showErrorMsg(getMidiOutErrorMsg(err), "out");
+				QString errorMsg;
+				errorMsg.append("<font size='+1'><b>");
+				errorMsg.append(tr("Midi Output Error!"));
+				errorMsg.append("<b></font><br>");
+				errorMsg.append(getMidiOutErrorMsg(err));
+				showErrorMsg(errorMsg, "out");
 			};
 
 			Sleep(10); // Extra delay due to midiOutUnprepareHeader doesn't return MIDIERR_STILLPLAYING. 
@@ -205,7 +210,12 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 		}
 		else
 		{
-			showErrorMsg(getMidiOutErrorMsg(err), "out");
+			QString errorMsg;
+			errorMsg.append("<font size='+1'><b>");
+			errorMsg.append(tr("Midi Output Error!"));
+			errorMsg.append("<b></font><br>");
+			errorMsg.append(getMidiOutErrorMsg(err));
+			showErrorMsg(errorMsg, "out");
 		};
 
 		/* Close the MIDI device */
@@ -215,8 +225,10 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 	}
 	else
 	{
-		QString errorMsg = tr("Error opening default MIDI Out device!");
-		errorMsg.append("\r\n");
+		QString errorMsg;
+		errorMsg.append("<font size='+1'><b>");
+		errorMsg.append(tr("Error opening default MIDI Out device!"));
+		errorMsg.append("<b></font><br>");
 		errorMsg.append(getMidiOutErrorMsg(err));
 		showErrorMsg(errorMsg, "out");
 	};
@@ -396,7 +408,12 @@ void midiIO::run()
 			/* If there was an error above, then print a message */
 			if (err) 
 			{
-				showErrorMsg(getMidiInErrorMsg(err), "in");
+				QString errorMsg;
+				errorMsg.append("<font size='+1'><b>");
+				errorMsg.append(tr("Midi Input Error!"));
+				errorMsg.append("<b></font><br>");
+				errorMsg.append(getMidiInErrorMsg(err));
+				showErrorMsg(errorMsg, "in");
 			};
 			
 			/* Close the MIDI In device */
@@ -407,7 +424,12 @@ void midiIO::run()
 
 			if (err) 
 			{
-				showErrorMsg(getMidiInErrorMsg(err), "in");
+				QString errorMsg;
+				errorMsg.append("<font size='+1'><b>");
+				errorMsg.append(tr("Midi Input Error!"));
+				errorMsg.append("<b></font><br>");
+				errorMsg.append(getMidiInErrorMsg(err));
+				showErrorMsg(errorMsg, "in");
 			};
 			
 			/* Unprepare the buffer and MIDIHDR. Unpreparing a buffer that has not been prepared is ok */
@@ -415,8 +437,10 @@ void midiIO::run()
 		}
 		else
 		{
-			QString errorMsg = tr("Error opening default MIDI In device!");
-			errorMsg.append("\r\n");
+			QString errorMsg;
+			errorMsg.append("<font size='+1'><b>");
+			errorMsg.append(tr("Error opening default MIDI In device!"));
+			errorMsg.append("<b></font><br>");
 			errorMsg.append(getMidiInErrorMsg(err));
 			showErrorMsg(errorMsg, "in");
 		};
@@ -456,14 +480,15 @@ void midiIO::sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn)
 void midiIO::showErrorMsg(QString errorMsg, QString type)
 {
 	QString windowTitle;
-	if(type == "out")
+	/*if(type == "out")
 	{
 		windowTitle = tr("GT-8 Fx FloorBoard - Midi Output Error");
 	}
 	else if(type == "in")
 	{
 		windowTitle = tr("GT-8 Fx FloorBoard - Midi Input Error");
-	};
+	};*/
+	windowTitle = tr("GT-8 Fx FloorBoard");
 
 	emit errorSignal(windowTitle, errorMsg);
 };
@@ -520,8 +545,10 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 	}
 	else
 	{
-		QString errorMsg = tr("Error opening default MIDI Out device!");
-		errorMsg.append("\r\n");
+		QString errorMsg;
+		errorMsg.append("<font size='+1'><b>");
+		errorMsg.append(tr("Error opening default MIDI Out device!"));
+		errorMsg.append("<b></font><br>");
 		errorMsg.append(getMidiOutErrorMsg(err));
 		showErrorMsg(errorMsg, "out");
 	};

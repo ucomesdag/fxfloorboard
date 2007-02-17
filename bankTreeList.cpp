@@ -25,9 +25,10 @@
 #include "bankTreeList.h"
 #include "Preferences.h"
 #include "MidiTable.h"
-#include "midiIO.h"
 #include "SysxIO.h"
 #include "globalVariables.h"
+
+#include "midiIO.h"
 
 bankTreeList::bankTreeList(QWidget *parent)
     : QWidget(parent)
@@ -399,7 +400,7 @@ void bankTreeList::connectedSignal()
 	SysxIO *sysxIO = SysxIO::Instance();
 	if(!noItem && sysxIO->getDeviceStatus())
 	{
-		sysxIO->setDeviceStatus(false);
+		sysxIO->setDeviceStatus(false); // Reserve the device for interaction.
 		this->listIndex = 0;
 		this->itemIndex = 0;
 		this->currentPatchTreeItems.clear();
@@ -413,9 +414,9 @@ void bankTreeList::updateTree(QTreeWidgetItem *item)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 	this->noItem = false;
-	if(sysxIO->getConnected() && sysxIO->getDeviceStatus())
+	if(sysxIO->isConnected() && sysxIO->getDeviceStatus())
 	{
-		sysxIO->setDeviceStatus(false);
+		sysxIO->setDeviceStatus(false); // Reserve the device for interaction.
 		this->listIndex = 0;
 		this->itemIndex = 0;
 		this->currentPatchTreeItems.clear();
@@ -441,12 +442,12 @@ void bankTreeList::updatePatchNames(QString replyMsg)
 	{
 		QString patchName; 
 		int count = 0;
-		int dataStartOffset = sysxDataOffset - 1;
+		int dataStartOffset = sysxDataOffset;
 		QString hex1, hex2, hex3, hex4;
 		for(int i=dataStartOffset*2; i<replyMsg.size()-(2*2);++i)
 		{
-			hex1 = replyMsg.mid((sysxAddressOffset + 1)*2, 2);
-			hex2 = replyMsg.mid((sysxAddressOffset + 2)*2, 2);
+			hex1 = replyMsg.mid((sysxAddressOffset + 2)*2, 2);
+			hex2 = replyMsg.mid((sysxAddressOffset + 3)*2, 2);
 			hex3 = QString::number(count, 16).toUpper();
 			if (hex3.length() < 2) hex3.prepend("0");
 			hex4 = replyMsg.mid(i, 2);;
@@ -479,7 +480,7 @@ void bankTreeList::updatePatchNames(QString replyMsg)
 	else
 	{
 		SysxIO *sysxIO = SysxIO::Instance();
-		sysxIO->setDeviceStatus(true);
+		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
 	};
 };
 
@@ -499,7 +500,7 @@ void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
 	else if (item->childCount() == 0)
 	{
 		SysxIO *sysxIO = SysxIO::Instance();
-		if(sysxIO->getConnected() && sysxIO->getDeviceStatus())
+		if(sysxIO->isConnected() && sysxIO->getDeviceStatus())
 		{
 			bool ok;
 			int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
@@ -510,67 +511,65 @@ void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
 	};
 };
 
+/*********************** setItemDoubleClicked() *****************************
+ * Handels when a patch is double clicked in the tree list. Patch will be 
+ * loaded into the temp buffer and will tell to request the data afterwards.
+ ****************************************************************************/
 void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-	if(item->childCount() == 0)
+	if(item->childCount() == 0) // Make sure it's a patch (Patches are the last in line so no children).
 	{
 		SysxIO *sysxIO = SysxIO::Instance();
-		if(sysxIO->getConnected() && sysxIO->getDeviceStatus())
+		if(sysxIO->isConnected() && sysxIO->getDeviceStatus())
 		{
 			bool ok;
-			sysxIO->setDeviceStatus(false);
-			sysxIO->setRequestName(item->text(0));
+			sysxIO->setDeviceStatus(false);			// Reserve the device for interaction.
+			sysxIO->setRequestName(item->text(0));	// Set the name of the patch we are going to load, so we can check if we have loaded the correct patch at the end.
 
-			/* Set current patch */
-			
-			/*
-			QString addr1 = replyMsg.mid((sysxAddressOffset - 1) * 2, 2);
-			QString addr2 = replyMsg.mid((sysxAddressOffset) * 2, 2);
+			int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10); // Get the bank
+			int patch = item->parent()->indexOfChild(item) + 1;								// and the patch number.
 
-			int addrMaxSize = QString("80").toInt(&ok, 16);
-			int memmorySize = QString("7F").toInt(&ok, 16) + 1;
-			int emptyAddresses = (memmorySize) - ((bankTotalUser * patchPerBank) - (memmorySize));
-			int patchOffset = ((addr1.toInt(&ok, 16) - 8) * addrMaxSize) + addr2.toInt(&ok, 16);
-
-			if(patchOffset > bankTotalUser * 4) patchOffset -= emptyAddresses; //System patches start at a new memmory range.
-			
-			int bank = (patchOffset / patchPerBank) + 1;
-			int patch = patchOffset - ((bank -1) * patchPerBank) + 1;
-			*/
-
-			int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
-			int patch = item->parent()->indexOfChild(item) + 1;
-
-			emit patchLoadSignal(bank, patch);
-
-			int bankOffset = ((bank - 1) * patchPerBank) + (patch - 1);
-			int bankSize = 100;
-			int bankMsbNum = (int)(bankOffset / bankSize);
-			int programChangeNum = bankOffset - (bankSize * bankMsbNum);
-			QString bankMsb = QString::number(bankMsbNum, 16);
-			QString programChange = QString::number(programChangeNum, 16);
-			
-			if (bankMsb.length() < 2) bankMsb.prepend("0");
-			if (programChange.length() < 2) programChange.prepend("0");
-
-			QString midiMsg;
-			midiMsg.append("0x00"+bankMsb+"00B0"); // MSB		
-			midiMsg.append("0x000010B0"); // LSB -> not used!
-			midiMsg.append("0x0000"+programChange+"C0"); // Program Controle
+			emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
 
 			Preferences *preferences = Preferences::Instance(); 
-			int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10); 
+			int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10); // Get midi out device from preferences.
 			
 			midiIO *midi = new midiIO();
 
-			QObject::connect(midi, SIGNAL(midiFinished()), 
-				this, SLOT(requestPatch()));
+			QObject::connect(midi, SIGNAL(midiFinished()),	// Connect the finished changing banks message
+				this, SLOT(requestPatch()));				// to the request the data afterwards.
 
-			midi->sendMidi(midiMsg, midiOut);
+			midi->sendMidi(sysxIO->getPatchChangeMsg(bank, patch), midiOut);
 		};
 	};
 };
 
+/*********************** requestPatch() *******************************
+ * Does the actual requesting of the patch data and hands the 
+ * reception over to updatePatch function.
+ **********************************************************************/
+void bankTreeList::requestPatch() 
+{
+	bool ok;
+	midiIO *midi = new midiIO();
+
+	QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
+		this, SLOT(updatePatch(QString)));				// to updatePatch function.
+
+	MidiTable *midiTable = MidiTable::Instance();
+	QString sysxOut = midiTable->patchRequest(0, 0);
+
+	Preferences *preferences = Preferences::Instance(); 
+	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
+	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);	// Get midi in device from preferences.
+
+	midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+};
+
+/*********************** updatePatch() *******************************
+ * Updates the source of the currently handeled patch and set the 
+ * attributes accordingly.
+ *********************************************************************/
 void bankTreeList::updatePatch(QString replyMsg)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
@@ -578,19 +577,19 @@ void bankTreeList::updatePatch(QString replyMsg)
 	replyMsg = replyMsg.remove(" ").toUpper();
 	if(replyMsg != "" && replyMsg.size()/2 == 1010)
 	{
-		sysxIO->setFileSource(replyMsg);
-		sysxIO->setFileName(tr("GT-8 patch"));
-		sysxIO->setDevice(true);
-		sysxIO->setSyncStatus(true);
+		sysxIO->setFileSource(replyMsg);		// Set the source to the data received.
+		sysxIO->setFileName(tr("GT-8 patch"));	// Set the file name to GT-8 patch forthe display.
+		sysxIO->setDevice(true);				// Patch received from the device so this is set to true.
+		sysxIO->setSyncStatus(true);			// We can't be more in sync than right now! :)
 
 		emit updateSignal();
 	}
 	else
 	{
-		sysxIO->setConnected(false);
-		//emit notConnectedSignal;
+		sysxIO->setConnected(false);			// No message returned so connection must be lost.
+		//emit notConnectedSignal;				// Something that will be added later.
 	};
-	sysxIO->setDeviceStatus(true);
+	sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
 
 	/* DEBUGGING OUTPUT 
 	QString snork;
@@ -612,22 +611,4 @@ void bankTreeList::updatePatch(QString replyMsg)
 	msgBox->setText(snork);
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->exec();*/
-};
-
-void bankTreeList::requestPatch() 
-{
-	bool ok;
-	midiIO *midi = new midiIO();
-
-	QObject::connect(midi, SIGNAL(replyMsg(QString)), 
-		this, SLOT(updatePatch(QString)));
-
-	MidiTable *midiTable = MidiTable::Instance();
-	QString sysxOut = midiTable->patchRequest(0, 0);
-
-	Preferences *preferences = Preferences::Instance(); 
-	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
-	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
-
-	midi->sendSysxMsg(sysxOut, midiOut, midiIn);
 };

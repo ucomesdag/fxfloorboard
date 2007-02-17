@@ -23,6 +23,8 @@
 #include <QMessageBox>
 #include "SysxIO.h"
 #include "SysxIODestroyer.h"
+#include "midiIO.h"
+#include "Preferences.h"
 #include "sysxWriter.h"
 #include "MidiTable.h"
 #include "globalVariables.h"
@@ -112,7 +114,7 @@ void SysxIO::setFileSource(QByteArray data)
 
 		if(hex == "F7") 
 		{	
-			this->fileSource.address.append( sysxBuffer.at(sysxAddressOffset + 1) + sysxBuffer.at(sysxAddressOffset +2) );
+			this->fileSource.address.append( sysxBuffer.at(sysxAddressOffset + 2) + sysxBuffer.at(sysxAddressOffset +3) );
 			this->fileSource.hex.append(sysxBuffer);
 			sysxBuffer.clear();
 			dataSize = 0;
@@ -122,12 +124,18 @@ void SysxIO::setFileSource(QByteArray data)
 	if(!errorList.isEmpty())
 	{
 		QMessageBox *msgBox = new QMessageBox();
-		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Checksum Error"));
+		//msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Checksum Error"));
+		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 		msgBox->setIcon(QMessageBox::Warning);
-		msgBox->setText(tr("The file opened contains one or more incorrect checksums."));
-		msgBox->setInformativeText(tr("The incorrect values have been corrected if possible\n"
-			  "or otherwise they have been reset to zero.\n"
-			  "\nPlease verify the patch settings for consistency."));
+		msgBox->setTextFormat(Qt::RichText);
+		QString msgText;
+		msgText.append("<font size='+1'><b>");
+		msgText.append(tr("The file opened contains one or more incorrect checksums."));
+		msgText.append("<b></font><br>");
+		msgText.append(tr("The incorrect values have been corrected where possible.\n" 
+			"If correction was inpossible then some settings might have been reset to zero."));
+		msgBox->setText(msgText);
+		msgBox->setInformativeText(tr("Please verify the patch settings for consistency."));
 		msgBox->setDetailedText(errorList);
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();
@@ -148,7 +156,7 @@ void SysxIO::setFileSource(QString data)
 
 		if(hex == "F7") 
 		{	
-			this->fileSource.address.append( sysxBuffer.at(sysxAddressOffset + 1) + sysxBuffer.at(sysxAddressOffset + 2) );
+			this->fileSource.address.append( sysxBuffer.at(sysxAddressOffset + 2) + sysxBuffer.at(sysxAddressOffset + 3) );
 			this->fileSource.hex.append(sysxBuffer);
 			sysxBuffer.clear();
 		};
@@ -158,7 +166,7 @@ void SysxIO::setFileSource(QString data)
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4)
 {
 	bool ok;
-	int dataOffset = sysxDataOffset - 1;
+	int dataOffset = sysxDataOffset;
 	int index = hex3.toInt(&ok, 16) + dataOffset;
 	QString address;
 	address.append(hex1);
@@ -179,7 +187,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5)
 {
 	bool ok;
-	int dataOffset = sysxDataOffset - 1;
+	int dataOffset = sysxDataOffset;
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
@@ -244,17 +252,17 @@ QString SysxIO::getCheckSum(int dataSize)
 
 QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 {
-	QString address1 = sysxMsg.at(sysxAddressOffset + 1);
-	QString address2 = sysxMsg.at(sysxAddressOffset + 2); 
+	QString address1 = sysxMsg.at(sysxAddressOffset + 2);
+	QString address2 = sysxMsg.at(sysxAddressOffset + 3); 
 
 	bool ok;
 
 	MidiTable *midiTable = MidiTable::Instance();
-	for(int i=sysxDataOffset - 1;i<sysxMsg.size() - 3;i++)
+	for(int i=sysxDataOffset;i<sysxMsg.size() - 3;i++)
 	{
 		if(i==12) i++; // is reserved memmory address on the GT-8 so we skip it.
 		
-		QString address3 = QString::number(i - (sysxDataOffset - 1), 16).toUpper();
+		QString address3 = QString::number(i - sysxDataOffset, 16).toUpper();
 		if(address3.length()<2) address3.prepend("0");
 		
 		int range = midiTable->getRange("Stucture", address1, address2, address3);
@@ -294,7 +302,7 @@ QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 	};
 	
 	int dataSize = 0;
-	for(int i=sysxMsg.size() - 2; i>=sysxAddressOffset - 1;i--)
+	for(int i=sysxMsg.size() - 1; i>=sysxAddressOffset;i--)
 	{
 		dataSize += sysxMsg.at(i).toInt(&ok, 16);
 	};
@@ -308,7 +316,7 @@ void SysxIO::setConnected(bool connected)
 	this->connected = connected;	
 };
 
-bool SysxIO::getConnected()
+bool SysxIO::isConnected()
 {
 	return this->connected;	
 };
@@ -361,11 +369,130 @@ int SysxIO::getPatch(){
 	return this->patch;	
 };
 
+/*********************** getRequestName() ***********************************
+* Set the name for check of the patch that we are going to load.
+***************************************************************************/
 void SysxIO::setRequestName(QString requestName)
 {
 	this->requestName = requestName;	
 };
 
+/*********************** getRequestName() ***********************************
+* Return the name for check of the patch that should have been loaded.
+***************************************************************************/
 QString SysxIO::getRequestName(){
 	return this->requestName;	
+};
+
+/*********************** getPatchChangeMsg() *****************************
+* Formats the midi message for bank changing (temp buffer) and returns it.
+*************************************************************************/
+QString SysxIO::getPatchChangeMsg(int bank, int patch)
+{
+	int bankOffset = ((bank - 1) * patchPerBank) + (patch - 1);
+	int bankSize = 100;
+	int bankMsbNum = (int)(bankOffset / bankSize);
+	int programChangeNum = bankOffset - (bankSize * bankMsbNum);
+	QString bankMsb = QString::number(bankMsbNum, 16);
+	QString programChange = QString::number(programChangeNum, 16);
+	
+	if (bankMsb.length() < 2) bankMsb.prepend("0");
+	if (programChange.length() < 2) programChange.prepend("0");
+
+	QString midiMsg;
+	midiMsg.append("0x00"+bankMsb+"00B0");			// MSB		
+	midiMsg.append("0x000010B0");					// LSB -> not used!
+	midiMsg.append("0x0000"+programChange+"C0");	// Program Controle
+
+	return midiMsg;
+};
+
+/***************************** sendMidi() ***********************************
+* Sends a midi message over the midiOut device sellected in the preferences.
+****************************************************************************/
+void SysxIO::sendMidi(QString midiMsg)
+{
+	Preferences *preferences = Preferences::Instance(); bool ok;
+	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
+	
+	midiIO *midi = new midiIO();
+
+	QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
+		this, SLOT(receiveSysex(QString)));				// to finishedSending function.
+
+	midi->sendMidi(midiMsg, midiOut);
+};
+
+/***************************** finishedSending() *************************************
+* Signals that we are finished sending a midi message, so we can go one with our life.
+*************************************************************************************/
+void SysxIO::finishedSending()
+{
+	emit isFinished();
+};
+
+/***************************** sendSysex() ***********************************
+* Sends a sysex message over the midiOut device sellected in the preferences.
+****************************************************************************/
+void SysxIO::sendSysx(QString sysxMsg)
+{
+	if(getDeviceStatus() == true && isConnected())
+	{
+		setDeviceStatus(false);
+
+		Preferences *preferences = Preferences::Instance();  bool ok;
+		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
+		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);	// Get midi in device from preferences.
+		
+		midiIO *midi = new midiIO();
+
+		QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
+			this, SLOT(receiveSysex(QString)));				// to receiveSysex function.
+
+		midi->sendSysxMsg(sysxMsg, midiOut, midiIn);
+	};
+};
+
+/***************************** receiveSysex() *******************************
+* Receives possible replied sysex message on sendSysex.
+****************************************************************************/
+void SysxIO::receiveSysex(QString sysxMsg)
+{
+	setDeviceStatus(true);
+	emit sysxReply(sysxMsg);
+};
+
+/***************************** requestPatchName() ***************************
+* Send a patch name request. Result will be send with the returnPatchName 
+* function. 
+****************************************************************************/
+void SysxIO::requestPatchName(int bank, int patch)
+{
+	//emit sysxReply(sysxMsg);
+};
+
+/***************************** returnPatchName() ***************************
+* Emits a signal with the retrieved patch name.
+****************************************************************************/
+void SysxIO::returnPatchName(int bank, int patch)
+{
+	//emit sysexReply(sysxMsg);
+};
+
+/***************************** requestPatchChange() *************************
+* Send a patch change request. Result will be send with the checked with 
+* confirmPatchChange function.
+****************************************************************************/
+void SysxIO::requestPatchChange(int bank, int patch)
+{
+	//emit sysexReply(sysxMsg);
+};
+
+/***************************** confirmPatchChange() ***************************
+* Emits a signal if the patch change was confirmed alese it will retry until
+* the maximum retry's has been reached.
+****************************************************************************/
+void SysxIO::confirmPatchChange(int bank, int patch)
+{
+	//emit sysexReply(sysxMsg);
 };

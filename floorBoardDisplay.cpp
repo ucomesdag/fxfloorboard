@@ -131,6 +131,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	SysxIO *sysxIO = SysxIO::Instance();
 	currentBank = sysxIO->getBank();
 	currentPatch = sysxIO->getPatch();
+	this->blinkCount = 0;
 };
 
 QPoint floorBoardDisplay::getPos()
@@ -191,10 +192,15 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 				QMessageBox *msgBox = new QMessageBox();
 				msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 				msgBox->setIcon(QMessageBox::Warning);
-				msgBox->setText(tr("Error while changing banks.\n\n"
-					"An incorrect patch has been loaded. Please try to load the patch again.\n"));
+				msgBox->setTextFormat(Qt::RichText);
+				QString msgText;
+				msgText.append("<font size='+1'><b>");
+				msgText.append(tr("Error while changing banks."));
+				msgText.append("<b></font><br>");
+				msgText.append(tr("An incorrect patch has been loaded. Please try to load the patch again."));
+				msgBox->setText(msgText);
 				msgBox->setInformativeText(tr("This is a known bug, it occures when changing the bank 'LSB'.\n"
-					"For an unkown reason it didn't change.\n"));
+					"For an unkown reason it didn't change."));
 				msgBox->setStandardButtons(QMessageBox::Ok);
 				msgBox->exec();
 
@@ -320,7 +326,7 @@ void floorBoardDisplay::updateDisplay()
 	}
 	else if(sysxIO->getBank() != 0)
 	{
-		if(sysxIO->getConnected())
+		if(sysxIO->isConnected())
 		{
 			this->writeButton->setBlink(true);
 			this->writeButton->setValue(false);
@@ -470,7 +476,7 @@ void floorBoardDisplay::connectSignal(bool value)
 	this->connectButtonActive = value;
 	if(connectButtonActive == true && sysxIO->getDeviceStatus())
 	{
-		sysxIO->setDeviceStatus(false);
+		sysxIO->setDeviceStatus(false); // Reserve the device for interaction.
 
 		midi = new midiIO();
 
@@ -483,7 +489,7 @@ void floorBoardDisplay::connectSignal(bool value)
 		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
 		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
 
-		QString sysxOut = "F0 7E 00 06 01 F7"; // GT-8 Identity Request.
+		QString sysxOut = idRequestString; // GT-8 Identity Request.
 		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
 
 		this->connectButton->setBlink(true);
@@ -495,7 +501,7 @@ void floorBoardDisplay::connectSignal(bool value)
 		this->writeButton->setBlink(false);
 		this->writeButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true);		
+		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.		
 		sysxIO->setSyncStatus(false);
 	};
 };
@@ -503,12 +509,12 @@ void floorBoardDisplay::connectSignal(bool value)
 void floorBoardDisplay::connectionResult(QString replyMsg)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	if(replyMsg.contains("0006") && connectButtonActive == true)
+	if(replyMsg.contains(idReplyPatern) && connectButtonActive == true)
 	{
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(true);
 		sysxIO->setConnected(true);
-		sysxIO->setDeviceStatus(true);
+		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
 		emit connectedSignal();
 
 		if(sysxIO->getBank() != 0)
@@ -522,12 +528,17 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true);
+		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
 
 		QMessageBox *msgBox = new QMessageBox();
-		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard - Connection Error"));
+		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 		msgBox->setIcon(QMessageBox::Warning);
-		msgBox->setText(tr("The device connected is not a Boss GT-8 Guitar Effects Processor."));
+		msgBox->setTextFormat(Qt::RichText);
+		QString msgText;
+		msgText.append("<font size='+1'><b>");
+		msgText.append(tr("The device connected is not a Boss GT-8 Guitar Effects Processor."));
+		msgText.append("<b></font>");
+		msgBox->setText(msgText);
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();
 	}
@@ -536,7 +547,19 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true);
+		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
+
+		QMessageBox *msgBox = new QMessageBox();
+		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
+		msgBox->setIcon(QMessageBox::Warning);
+		msgBox->setTextFormat(Qt::RichText);
+		QString msgText;
+		msgText.append("<font size='+1'><b>");
+		msgText.append(tr("The Boss GT-8 Guitar Effects Processor was not found."));
+		msgText.append("<b></font>");
+		msgBox->setText(msgText);
+		msgBox->setStandardButtons(QMessageBox::Ok);
+		msgBox->exec();
 	};
 
 };
@@ -546,30 +569,36 @@ void floorBoardDisplay::writeSignal(bool value)
 	this->writeButton->setBlink(true);
 	
 	SysxIO *sysxIO = SysxIO::Instance();
-	if(sysxIO->getConnected() && sysxIO->getDeviceStatus())
+	if(sysxIO->isConnected() && sysxIO->getDeviceStatus()) /* Check if we are connected and if the device is free. */
 	{
-		if(sysxIO->getBank() == 0)
+		if(sysxIO->getBank() == 0) /* Check if a bank is sellected. */
 		{
 			QMessageBox *msgBox = new QMessageBox();
 			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 			msgBox->setIcon(QMessageBox::Warning);
-			msgBox->setText(tr("You didn't select a bank to write to.\n"
-				"Please select a user bank to write this patch to and try again."));
+			msgBox->setTextFormat(Qt::RichText);
+			QString msgText;
+			msgText.append("<font size='+1'><b>");
+			msgText.append(tr("You didn't select a bank to write to."));
+			msgText.append("<b></font><br>");
+			msgText.append(tr("Please select a user bank to write this patch to and try again."));
+			msgBox->setText(msgText);
 			msgBox->setStandardButtons(QMessageBox::Ok);
 			msgBox->exec();
 			this->writeButton->setBlink(false);
 			this->writeButton->setValue(false);
 		}
-		else
+		else /* Bank is sellected. */
 		{
-			sysxIO->setDeviceStatus(false);
+			sysxIO->setDeviceStatus(false);			// Reserve the device for interaction.
+			//sysxIO->setBuffer();
 
 			QString sysxOut; bool ok;
-			QList< QList<QString> > patchData = sysxIO->getFileSource().hex;
+			QList< QList<QString> > patchData = sysxIO->getFileSource().hex; // Get the loaded patch data.
 			QList<QString> patchAddress = sysxIO->getFileSource().address;
-			if(!sysxIO->getSyncStatus())
-			{
-				for(int i=0;i<patchData.size();++i)
+			if(!sysxIO->getSyncStatus())			// Check if the data is allready in sync. with the device.
+			{	/* If not we send the data to the (temp) buffer. So we don't change the patch default address "0D 00". */
+				for(int i=0;i<patchData.size();++i) // Prepare the data to be send at ones.
 				{
 					QList<QString> data = patchData.at(i);
 					for(int x=0;x<data.size();++x)
@@ -577,37 +606,47 @@ void floorBoardDisplay::writeSignal(bool value)
 						sysxOut.append(data.at(x));
 					};
 				}; 
-				sysxIO->setSyncStatus(true);
-				this->writeButton->setBlink(false);
-				this->writeButton->setValue(true);
+				sysxIO->setSyncStatus(true);		// Inadvance of the actuale data transfer we set it allready to sync.
+				this->writeButton->setBlink(false);	// Sync so we stop blinking the button
+				this->writeButton->setValue(true);	// and activate the write button.
 			}
-			else
+			else /* If sync we will write (save) the patch directly to sellected bank. So we will have to change the patch adsress */
 			{
-				if(sysxIO->getBank() > 35)
+				if(sysxIO->getBank() > bankTotalUser) // Preset banks are NOT writable so we check.
 				{
 					QMessageBox *msgBox = new QMessageBox();
 					msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 					msgBox->setIcon(QMessageBox::Warning);
-					msgBox->setText(tr("You can't write to the preset banks.\n"
-						"Please select a user bank to write this patch to and try again."));
+					msgBox->setTextFormat(Qt::RichText);
+					QString msgText;
+					msgText.append("<font size='+1'><b>");
+					msgText.append(tr("You can't write to the preset banks."));
+					msgText.append("<b></font><br>");
+					msgText.append(tr("Please select a user bank to write this patch to and try again."));
+					msgBox->setText(msgText);
 					msgBox->setStandardButtons(QMessageBox::Ok);
 					msgBox->exec();
-					this->writeButton->setBlink(false);
-					this->writeButton->setValue(true);
+					this->writeButton->setBlink(false); // Allready sync with the buffer so no blinking
+					this->writeButton->setValue(true);	// and so we will also leave the write button active.
 				}
-				else
+				else /* User bank so we can write to it after confirmation to overwrite stored data. */
 				{
 					QMessageBox *msgBox = new QMessageBox();
 					msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 					msgBox->setIcon(QMessageBox::Warning);
-					msgBox->setText(tr("You have chosen to write the patch permanently into memory.\n"
-						"This will overwrite the patch currently stored at this location\n"
-						"and can't be undone.\n\n"
-						"Are you sure you want to continue?\n"));
+					msgBox->setTextFormat(Qt::RichText);
+					QString msgText;
+					msgText.append("<font size='+1'><b>");
+					msgText.append(tr("You have chosen to write the patch permanently into memory."));
+					msgText.append("<b></font><br>");
+					msgText.append(tr("This will overwrite the patch currently stored at this location\n"
+						"and can't be undone."));
+					msgBox->setInformativeText(tr("Are you sure you want to continue?"));
+					msgBox->setText(msgText);
 					msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
 					if(msgBox->exec() == QMessageBox::Yes)
-					{
+					{	/* Accepted to overwrite data. So now we have to set destination address by replacing the default (buffer). */
 						int bank = sysxIO->getBank();
 						int patch = sysxIO->getPatch();
 						int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
@@ -626,11 +665,11 @@ void floorBoardDisplay::writeSignal(bool value)
 							for(int x=0;x<data.size();++x)
 							{
 								QString hex;
-								if(x == sysxAddressOffset - 1)
+								if(x == sysxAddressOffset)
 								{ 
 									hex = addr1;
 								}
-								else if(x == sysxAddressOffset)
+								else if(x == sysxAddressOffset - 1)
 								{
 									hex = addr2;
 								}
@@ -643,22 +682,22 @@ void floorBoardDisplay::writeSignal(bool value)
 							};
 						};
 					};
-					sysxIO->setSyncStatus(true);
-					this->writeButton->setBlink(false);
-					this->writeButton->setValue(true);
+					sysxIO->setSyncStatus(true);		// Still in sync
+					this->writeButton->setBlink(false); // so no blinking here either...
+					this->writeButton->setValue(true);	// ... and still the button will be active also ...
 				};
 			};
 		
-			Preferences *preferences = Preferences::Instance();
+			Preferences *preferences = Preferences::Instance(); // Get the midi in/out device from the prefs.
 			int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
 			int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
 
-			midiIO *midi = new midiIO();
+			midiIO *midi = new midiIO();						// Create new midiIO thread.
 
-			QObject::connect(midi, SIGNAL(replyMsg(QString)), 
-				this, SLOT(resetDevice(QString)));
+			QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result signal 
+				this, SLOT(resetDevice(QString)));				// to a slot that will reset the device after sending.
 
-			midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+			midi->sendSysxMsg(sysxOut, midiOut, midiIn);		// Send the data.
 
 			/* DEBUGGING OUTPUT 
 			QString snork;
@@ -682,11 +721,11 @@ void floorBoardDisplay::writeSignal(bool value)
 			msgBox->exec();*/
 		};
 	}
-	else
+	else /* We are NOT connected OR/AND the device was NOT free. */
 	{
-		sysxIO->setSyncStatus(false);
-		this->writeButton->setValue(false);
-		this->writeButton->setBlink(false);
+		sysxIO->setSyncStatus(false);		// So we are not sure anymore if the patch data is sync with the device.
+		this->writeButton->setValue(false);	// Inconsequence deactivate the write button 
+		this->writeButton->setBlink(false);	// and stop blinking.
 	};
 
 };
@@ -694,24 +733,40 @@ void floorBoardDisplay::writeSignal(bool value)
 void floorBoardDisplay::resetDevice(QString replyMsg) 
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	sysxIO->setDeviceStatus(true);
-	emit connectedSignal();
+	sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
+	emit connectedSignal();		   // Emit this signal to tell we are still connected and to update the patch names in case they have changed.
 };
 
 void floorBoardDisplay::patchSelectSignal(int bank, int patch)
 {
-	blinkSellectedPatch(false);
-	
 	SysxIO *sysxIO = SysxIO::Instance();
-	currentBank = sysxIO->getBank();
-	currentPatch = sysxIO->getPatch();
+	if(blinkCount == 0)
+	{
+		currentBank = sysxIO->getBank();
+		currentPatch = sysxIO->getPatch();
+		currentSyncStatus = sysxIO->getSyncStatus();
+		sysxIO->setSyncStatus(false);
+		writeButton->setBlink(true);
+	};
+
 	if(currentBank != bank || currentPatch != patch)
 	{
 		sysxIO->setBank(bank);
 		sysxIO->setPatch(patch);
-		QObject::connect(timer, SIGNAL(timeout()), this, SLOT(blinkSellectedPatch()));
-		//setPatchNumDisplay(bank, patch);
-		timer->start(sellectionBlinkInterval);
+		
+		if(blinkCount == 0)
+		{	
+			QObject::connect(timer, SIGNAL(timeout()), this, SLOT(blinkSellectedPatch()));
+			timer->start(sellectionBlinkInterval);
+		}
+		else
+		{
+			blinkCount = 0;
+		};
+	}
+	else
+	{
+		blinkSellectedPatch(false);
 	};
 };
 
@@ -740,6 +795,11 @@ void floorBoardDisplay::blinkSellectedPatch(bool active)
 		blinkCount = 0;
 		sysxIO->setBank(currentBank);
 		sysxIO->setPatch(currentPatch);
+		sysxIO->setSyncStatus(currentSyncStatus);
+		if(currentSyncStatus || currentBank == 0)
+		{
+			writeButton->setBlink(false);
+		};
 		setPatchNumDisplay(currentBank, currentPatch);
 	};
 };

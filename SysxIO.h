@@ -55,7 +55,7 @@ public:
 	QString getCheckSum(int dataSize);
 	QList<QString> correctSysxMsg(QList<QString> sysxMsg);
 	void setConnected(bool connected);
-	bool getConnected();
+	bool isConnected();
 	void setDeviceStatus(bool deviceready);
 	bool getDeviceStatus();
 	void setDevice(bool isdevice);
@@ -67,7 +67,17 @@ public:
 	int getBank();
 	int getPatch();
 	void setRequestName(QString requestName);
-	QString getRequestName();	
+	QString getRequestName();
+	QString getPatchChangeMsg(int bank, int patch);
+
+	void sendMidi(QString midiMsg);
+	void sendSysx(QString sysxMsg);
+	void requestPatchName(int bank, int patch);
+	void requestPatchChange(int bank, int patch);
+
+signals:
+	void sysxReply(QString sysxMsg);
+	void isFinished();
 
 protected :
 	SysxIO();
@@ -77,6 +87,11 @@ protected :
 private:
 	static SysxIO* _instance;
 	static SysxIODestroyer _destroyer;
+
+	void finishedSending();
+	void receiveSysex(QString sysxMsg);
+	void confirmPatchChange(int bank, int patch);
+	void returnPatchName(int bank, int patch);
 
 	SysxData fileSource;
 	QString fileName;
