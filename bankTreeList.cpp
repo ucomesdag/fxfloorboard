@@ -395,95 +395,6 @@ QTreeWidget* bankTreeList::newTreeList()
 	return newTreeList;
 };
 
-void bankTreeList::connectedSignal()
-{
-	SysxIO *sysxIO = SysxIO::Instance();
-	if(!noItem && sysxIO->getDeviceStatus())
-	{
-		sysxIO->setDeviceStatus(false); // Reserve the device for interaction.
-		this->listIndex = 0;
-		this->itemIndex = 0;
-		this->currentPatchTreeItems.clear();
-		this->currentPatchTreeItems = this->openPatchTreeItems;
-		qSort(this->currentPatchTreeItems);
-		updatePatchNames("");
-	};
-};
-
-void bankTreeList::updateTree(QTreeWidgetItem *item)
-{
-	SysxIO *sysxIO = SysxIO::Instance();
-	this->noItem = false;
-	if(sysxIO->isConnected() && sysxIO->getDeviceStatus())
-	{
-		sysxIO->setDeviceStatus(false); // Reserve the device for interaction.
-		this->listIndex = 0;
-		this->itemIndex = 0;
-		this->currentPatchTreeItems.clear();
-		this->currentPatchTreeItems.append(item);
-		updatePatchNames("");
-	};
-};
-
-void bankTreeList::updatePatchNames(QString replyMsg)
-{
-	MidiTable *midiTable = MidiTable::Instance();
-	Preferences *preferences = Preferences::Instance(); bool ok;
-	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
-	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
-
-	midiIO *midi = new midiIO();
-	QObject::connect(midi, SIGNAL(replyMsg(QString)), 
-			this, SLOT(updatePatchNames(QString)));
-
-	replyMsg = replyMsg.remove(" ").toUpper();
-	
-	if(replyMsg != "")
-	{
-		QString patchName; 
-		int count = 0;
-		int dataStartOffset = sysxDataOffset;
-		QString hex1, hex2, hex3, hex4;
-		for(int i=dataStartOffset*2; i<replyMsg.size()-(2*2);++i)
-		{
-			hex1 = replyMsg.mid((sysxAddressOffset + 2)*2, 2);
-			hex2 = replyMsg.mid((sysxAddressOffset + 3)*2, 2);
-			hex3 = QString::number(count, 16).toUpper();
-			if (hex3.length() < 2) hex3.prepend("0");
-			hex4 = replyMsg.mid(i, 2);;
-			patchName.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
-			i++;
-		};
-
-		this->currentPatchTreeItems.at(listIndex)->child(itemIndex)->setText(0, patchName.trimmed());
-		if(itemIndex >= patchPerBank - 1)
-		{
-			this->listIndex++;
-		};
-		itemIndex++;		
-	};
-
-	if(itemIndex >= patchPerBank)
-	{
-		this->itemIndex = 0;
-	};
-
-	if(listIndex < currentPatchTreeItems.size())
-	{		
-		int bank = this->currentPatchTreeItems.at(listIndex)->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
-		int patch = itemIndex + 1 ;
-		
-		/* Patch name request. */
-		QString sysxOut = midiTable->nameRequest(bank, patch);
-		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
-	}
-	else
-	{
-		SysxIO *sysxIO = SysxIO::Instance();
-		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
-	};
-};
-
 void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
 {
 	if(item->childCount() != 0)
@@ -541,6 +452,90 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 
 			midi->sendMidi(sysxIO->getPatchChangeMsg(bank, patch), midiOut);
 		};
+	};
+};
+
+/********************************** connectedSignal() ****************************
+* This slot reloads all patch names of expanded items, if any, on (re)connection to a
+* device.
+*********************************************************************************/
+void bankTreeList::connectedSignal()
+{
+	if(this->openPatchTreeItems.size() != 0)
+	{
+		this->listIndex = 0;
+		this->itemIndex = 0;
+		this->currentPatchTreeItems.clear();
+		this->currentPatchTreeItems = this->openPatchTreeItems;
+		qSort(this->currentPatchTreeItems);
+		updatePatchNames("");
+	};
+};
+
+/********************************** updateTree() ********************************
+* This handles whether we add the newly expanded item to the current job or 
+* start a new one.
+*********************************************************************************/
+void bankTreeList::updateTree(QTreeWidgetItem *item)
+{
+	if(currentPatchTreeItems.size() == 0)
+	{
+		this->listIndex = 0;
+		this->itemIndex = 0;
+
+		this->currentPatchTreeItems.append(item);
+		updatePatchNames("");
+	}
+	else
+	{
+		this->currentPatchTreeItems.append(item);
+		updatePatchNames("");
+	};
+};
+
+/***************************** updatePatchNames() ********************************
+* This updates the patch names in the treeList of all expanded items. this is 
+* done when a bank is expanded or when we (re)connect to a device.
+*********************************************************************************/
+void bankTreeList::updatePatchNames(QString name)
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+
+	if(name != "") // If not empty we can asume that we did receive a patch name.
+	{
+		this->currentPatchTreeItems.at(listIndex)->child(itemIndex)->setText(0, name); // Set the patch name of the item in the tree list.
+		if(itemIndex >= patchPerBank - 1) // If we reach the last patch in this bank we need to increment the bank and restart at patch 1.
+		{
+			this->listIndex++;
+			this->itemIndex = 0;
+		}
+		else
+		{
+			this->itemIndex++;
+		};
+	}
+	else
+	{
+		QObject::disconnect(sysxIO, SIGNAL(patchName(QString)),  // We disconnect before reconnecting to make sure that 
+			this, SLOT(updatePatchNames(QString)));				 // there are no signals left from previous operations.
+
+		QObject::connect(sysxIO, SIGNAL(patchName(QString)),
+			this, SLOT(updatePatchNames(QString)));
+	};
+
+	if(listIndex < currentPatchTreeItems.size()) // Aslong as we have items in the list we continue, duh! :)
+	{		
+		bool ok;
+		int bank = this->currentPatchTreeItems.at(listIndex)->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
+		int patch = itemIndex + 1 ;
+
+		sysxIO->requestPatchName(bank, patch); // The patch name request.
+	}
+	else
+	{
+		this->currentPatchTreeItems.clear(); // We are done so we can safely reset items taht need to be named.
+		QObject::disconnect(sysxIO, SIGNAL(patchName(QString)), // We disconnect to make sure we don't hit pending signals next time.
+			this, SLOT(updatePatchNames(QString)));
 	};
 };
 

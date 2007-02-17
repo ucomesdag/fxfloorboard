@@ -37,7 +37,7 @@ public:
 public slots:
 	void updateSize(QRect newrect);
 	void updatePatchNames(QString replyMsg);
-	void updatePatch(QString replyMsg);
+	void updatePatch(QString patchName);
 	void setClosedItems(QTreeWidgetItem *item);
 	void setOpenItems(QTreeWidgetItem *item);
 	void connectedSignal();
@@ -68,7 +68,6 @@ private:
 	QFont font;
 	int itemIndex;
 	int listIndex;
-	bool noItem;
 };
 
 #endif // BANKTREELIST_H

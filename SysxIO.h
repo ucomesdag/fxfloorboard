@@ -75,8 +75,15 @@ public:
 	void requestPatchName(int bank, int patch);
 	void requestPatchChange(int bank, int patch);
 
+private slots:
+	void returnPatchName(QString sysxMsg);
+	void receiveSysex(QString sysxMsg);
+	void finishedSending();
+	void confirmPatchChange(int bank, int patch);
+
 signals:
 	void sysxReply(QString sysxMsg);
+	void patchName(QString name);
 	void isFinished();
 
 protected :
@@ -87,11 +94,6 @@ protected :
 private:
 	static SysxIO* _instance;
 	static SysxIODestroyer _destroyer;
-
-	void finishedSending();
-	void receiveSysex(QString sysxMsg);
-	void confirmPatchChange(int bank, int patch);
-	void returnPatchName(int bank, int patch);
 
 	SysxData fileSource;
 	QString fileName;

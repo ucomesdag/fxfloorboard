@@ -433,7 +433,7 @@ void SysxIO::finishedSending()
 
 /***************************** sendSysex() ***********************************
 * Sends a sysex message over the midiOut device sellected in the preferences.
-****************************************************************************/
+*****************************************************************************/
 void SysxIO::sendSysx(QString sysxMsg)
 {
 	if(getDeviceStatus() == true && isConnected())
@@ -468,15 +468,43 @@ void SysxIO::receiveSysex(QString sysxMsg)
 ****************************************************************************/
 void SysxIO::requestPatchName(int bank, int patch)
 {
-	//emit sysxReply(sysxMsg);
+	QObject::connect(this, SIGNAL(sysxReply(QString)),	// Connect the result of the request
+	this, SLOT(returnPatchName(QString)));				// to returnPatchName function.
+	
+	/* Patch name request. */
+	MidiTable *midiTable = MidiTable::Instance();
+	QString sysxMsg = midiTable->nameRequest(bank, patch);
+	sendSysx(sysxMsg);
 };
 
 /***************************** returnPatchName() ***************************
 * Emits a signal with the retrieved patch name.
 ****************************************************************************/
-void SysxIO::returnPatchName(int bank, int patch)
+void SysxIO::returnPatchName(QString sysxMsg)
 {
-	//emit sysexReply(sysxMsg);
+	QObject::disconnect(this, SIGNAL(sysxReply(QString)),	
+		this, SLOT(returnPatchName(QString)));
+
+	if(sysxMsg != "")
+	{
+		MidiTable *midiTable = MidiTable::Instance();
+
+		QString name; 
+		int count = 0;
+		int dataStartOffset = sysxDataOffset;
+		QString hex1, hex2, hex3, hex4;
+		for(int i=dataStartOffset*2; i<sysxMsg.size()-(2*2);++i)
+		{
+			hex1 = sysxMsg.mid((sysxAddressOffset + 2)*2, 2);
+			hex2 = sysxMsg.mid((sysxAddressOffset + 3)*2, 2);
+			hex3 = QString::number(count, 16).toUpper();
+			if (hex3.length() < 2) hex3.prepend("0");
+			hex4 = sysxMsg.mid(i, 2);;
+			name.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
+			i++;
+		};
+		emit patchName(name.trimmed());
+	};
 };
 
 /***************************** requestPatchChange() *************************
