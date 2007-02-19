@@ -56,8 +56,8 @@ public:
 	QList<QString> correctSysxMsg(QList<QString> sysxMsg);
 	void setConnected(bool connected);
 	bool isConnected();
-	void setDeviceStatus(bool deviceready);
-	bool getDeviceStatus();
+	void setDeviceReady(bool status);
+	bool deviceReady();
 	void setDevice(bool isdevice);
 	bool isDevice();
 	void setSyncStatus(bool syncStatus);
@@ -73,18 +73,28 @@ public:
 	void sendMidi(QString midiMsg);
 	void sendSysx(QString sysxMsg);
 	void requestPatchName(int bank, int patch);
+	void requestPatch(int bank, int patch);
 	void requestPatchChange(int bank, int patch);
+
+public slots:
+	void errorSignal(QString windowTitle, QString errorMsg);
 
 private slots:
 	void returnPatchName(QString sysxMsg);
-	void receiveSysex(QString sysxMsg);
+	void receiveSysx(QString sysxMsg);
 	void finishedSending();
-	void confirmPatchChange(int bank, int patch);
+	void namePatchChange();
+	void checkPatchChange(QString name);
 
 signals:
 	void sysxReply(QString sysxMsg);
 	void patchName(QString name);
 	void isFinished();
+	void isChanged();
+
+	void setStatusSymbol(int value);
+	void setStatusProgress(int value);
+    void setStatusMessage(QString message);
 
 protected :
 	SysxIO();
@@ -99,12 +109,15 @@ private:
 	QString fileName;
 
 	bool connected;
-	bool deviceready;
+	bool status;
 
 	int bank;
 	int patch;
 	bool isdevice;
 	bool syncStatus;
+	int bankChange;
+	int patchChange;
+	int changeCount;
 
 	QString requestName;
 };

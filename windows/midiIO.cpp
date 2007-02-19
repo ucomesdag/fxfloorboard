@@ -21,6 +21,8 @@
 ****************************************************************************/
 
 #include "midiIO.h"
+#include "../SysxIO.h"
+#include "../globalVariables.h"
 
 unsigned char midiIO::SysXBuffer[256];
 unsigned char midiIO::SysXFlag = 0;
@@ -28,6 +30,19 @@ int midiIO::count = 0;
 bool midiIO::dataReceive = false;
 QString midiIO::sysxBuffer;
 
+midiIO::midiIO()
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	QObject::connect(this, SIGNAL(setStatusSymbol(int)),
+                sysxIO, SIGNAL(setStatusSymbol(int)));
+	QObject::connect(this, SIGNAL(setStatusProgress(int)),
+                sysxIO, SIGNAL(setStatusProgress(int)));
+	QObject::connect(this, SIGNAL(setStatusMessage(QString)),
+                sysxIO, SIGNAL(setStatusMessage(QString)));
+
+	QObject::connect(this, SIGNAL(errorSignal(QString, QString)),
+                sysxIO, SLOT(errorSignal(QString, QString)));
+};
 /*********************** queryMidiOutDevices() *****************************
  * Retrieves all MIDI Out devices installed on your system and stores them 
  * as a QList of QStrings and device id's. 
@@ -198,7 +213,7 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 				showErrorMsg(errorMsg, "out");
 			};
 
-			Sleep(10); // Extra delay due to midiOutUnprepareHeader doesn't return MIDIERR_STILLPLAYING. 
+			Sleep(sendTimeout); // Extra delay due to midiOutUnprepareHeader doesn't return MIDIERR_STILLPLAYING. 
 
 			/* Unprepare the buffer and MIDIHDR */
 			while (MIDIERR_STILLPLAYING == midiOutUnprepareHeader(outHandle, &midiHdr, sizeof(MIDIHDR))) 
@@ -371,10 +386,10 @@ void midiIO::run()
 						{
 							/* Make the loop wait a bit more for the rest
 							due to the crapy midi api of windows */
-							while(dataReceive || count < 4)
+							while(dataReceive || count < maxWait)
 							{
 								//printf("Waiting for data.... \r\n");
-								Sleep(100);
+								Sleep(receiveTimeout);
 								count++;
 							};
 						}
@@ -383,7 +398,7 @@ void midiIO::run()
 							while(dataReceive && count < 1) // count is in case we get stuck
 							{
 								//printf("Waiting for data.... \r\n");
-								Sleep(100);
+								Sleep(receiveTimeout);
 								count++;
 							};
 						};
@@ -521,7 +536,7 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 				/* Output the midi command */
 				midiOutShortMsg(outHandle, midi);
-				Sleep(25);
+				Sleep(sendTimeout);
 			};
 		}
 		else  
@@ -538,7 +553,7 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 		/* Give it some time to finish else there is a change that 
 		the device is closed before finishing the transmission */
-		Sleep(25);
+		Sleep(sendTimeout);
 
 		/* Close the MIDI device */
 		midiOutClose(outHandle);

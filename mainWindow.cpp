@@ -24,6 +24,7 @@
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"
+#include "statusBarWidget.h"
 #include "SysxIO.h"
 
 mainWindow::mainWindow(QWidget *parent)
@@ -185,9 +186,20 @@ void mainWindow::createMenus()
 
 void mainWindow::createStatusBar()
 {
+	SysxIO *sysxIO = SysxIO::Instance();
+
+	statusBarWidget *status = new statusBarWidget;
+
+	QObject::connect(sysxIO, SIGNAL(setStatusSymbol(int)),
+                status, SLOT(setStatusSymbol(int)));
+	QObject::connect(sysxIO, SIGNAL(setStatusProgress(int)),
+                status, SLOT(setStatusProgress(int)));;
+	QObject::connect(sysxIO, SIGNAL(setStatusMessage(QString)),
+                status, SLOT(setStatusMessage(QString)));
+
 	statusBar = new QStatusBar;
+	statusBar->addWidget(status);
 	statusBar->setSizeGripEnabled(false);
-	statusBar->showMessage(tr("Ready"));
 };
 
 /* FILE MENU */
@@ -357,15 +369,4 @@ void mainWindow::closeEvent(QCloseEvent* ce)
 	Preferences *preferences = Preferences::Instance();
 	preferences->savePreferences();
 	ce->accept();
-};
-
-void mainWindow::errorSignal(QString windowTitle, QString errorMsg)
-{
-	QMessageBox *msgBox = new QMessageBox();
-	msgBox->setWindowTitle(windowTitle);
-	msgBox->setIcon(QMessageBox::Warning);
-	msgBox->setTextFormat(Qt::RichText);
-	msgBox->setText(errorMsg);
-	msgBox->setStandardButtons(QMessageBox::Ok);
-	msgBox->exec();
 };

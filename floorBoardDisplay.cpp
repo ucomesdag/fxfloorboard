@@ -132,6 +132,13 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	currentBank = sysxIO->getBank();
 	currentPatch = sysxIO->getPatch();
 	this->blinkCount = 0;
+
+	QObject::connect(this, SIGNAL(setStatusSymbol(int)),
+                sysxIO, SIGNAL(setStatusSymbol(int)));
+	QObject::connect(this, SIGNAL(setStatusProgress(int)),
+                sysxIO, SIGNAL(setStatusProgress(int)));
+	QObject::connect(this, SIGNAL(setStatusMessage(QString)),
+                sysxIO, SIGNAL(setStatusMessage(QString)));
 };
 
 QPoint floorBoardDisplay::getPos()
@@ -474,23 +481,17 @@ void floorBoardDisplay::connectSignal(bool value)
 	QString replyMsg;
 	SysxIO *sysxIO = SysxIO::Instance();
 	this->connectButtonActive = value;
-	if(connectButtonActive == true && sysxIO->getDeviceStatus())
+	if(connectButtonActive == true && sysxIO->deviceReady())
 	{
-		sysxIO->setDeviceStatus(false); // Reserve the device for interaction.
+		emit setStatusSymbol(2);
+		emit setStatusMessage(tr("Connecting"));
+		
+		sysxIO->setDeviceReady(false); // Reserve the device for interaction.
 
-		midi = new midiIO();
-
-		QObject::connect(midi, SIGNAL(errorSignal(QString, QString)), 
-			this->parent()->parent(), SLOT(errorSignal(QString, QString)));
-		QObject::connect(midi, SIGNAL(replyMsg(QString)), 
+		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)), 
 			this, SLOT(connectionResult(QString)));
 
-		Preferences *preferences = Preferences::Instance(); bool ok;
-		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
-		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
-
-		QString sysxOut = idRequestString; // GT-8 Identity Request.
-		midi->sendSysxMsg(sysxOut, midiOut, midiIn);
+		sysxIO->sendSysx(idRequestString); // GT-8 Identity Request.
 
 		this->connectButton->setBlink(true);
 	}
@@ -501,21 +502,32 @@ void floorBoardDisplay::connectSignal(bool value)
 		this->writeButton->setBlink(false);
 		this->writeButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.		
+		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.		
 		sysxIO->setSyncStatus(false);
+
+		emit setStatusSymbol(0);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Not connected"));
 	};
 };
 
-void floorBoardDisplay::connectionResult(QString replyMsg)
+void floorBoardDisplay::connectionResult(QString sysxMsg)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	if(replyMsg.contains(idReplyPatern) && connectButtonActive == true)
+	QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)), 
+			this, SLOT(connectionResult(QString)));
+
+	if(sysxMsg.contains(idReplyPatern) && connectButtonActive == true)
 	{
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(true);
 		sysxIO->setConnected(true);
-		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
+		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
 		emit connectedSignal();
+
+		emit setStatusSymbol(1);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Ready"));
 
 		if(sysxIO->getBank() != 0)
 		{
@@ -523,12 +535,16 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 			this->writeButton->setValue(false);
 		};
 	}
-	else if(!replyMsg.isEmpty())
+	else if(!sysxMsg.isEmpty())
 	{
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
+		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
+
+		emit setStatusSymbol(0);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Not connected"));
 
 		QMessageBox *msgBox = new QMessageBox();
 		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
@@ -547,7 +563,11 @@ void floorBoardDisplay::connectionResult(QString replyMsg)
 		this->connectButton->setBlink(false);
 		this->connectButton->setValue(false);
 		sysxIO->setConnected(false);
-		sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
+		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
+
+		emit setStatusSymbol(0);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Not connected"));
 
 		QMessageBox *msgBox = new QMessageBox();
 		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
@@ -569,7 +589,7 @@ void floorBoardDisplay::writeSignal(bool value)
 	this->writeButton->setBlink(true);
 	
 	SysxIO *sysxIO = SysxIO::Instance();
-	if(sysxIO->isConnected() && sysxIO->getDeviceStatus()) /* Check if we are connected and if the device is free. */
+	if(sysxIO->isConnected() && sysxIO->deviceReady()) /* Check if we are connected and if the device is free. */
 	{
 		if(sysxIO->getBank() == 0) /* Check if a bank is sellected. */
 		{
@@ -590,7 +610,10 @@ void floorBoardDisplay::writeSignal(bool value)
 		}
 		else /* Bank is sellected. */
 		{
-			sysxIO->setDeviceStatus(false);			// Reserve the device for interaction.
+			emit setStatusSymbol(2);
+			emit setStatusMessage(tr("Sending"));
+
+			sysxIO->setDeviceReady(false);			// Reserve the device for interaction.
 			//sysxIO->setBuffer();
 
 			QString sysxOut; bool ok;
@@ -647,6 +670,10 @@ void floorBoardDisplay::writeSignal(bool value)
 
 					if(msgBox->exec() == QMessageBox::Yes)
 					{	/* Accepted to overwrite data. So now we have to set destination address by replacing the default (buffer). */
+						
+						emit setStatusSymbol(2);
+						emit setStatusMessage(tr("Sending"));
+
 						int bank = sysxIO->getBank();
 						int patch = sysxIO->getPatch();
 						int patchOffset = (((bank - 1 ) * patchPerBank) + patch) - 1;
@@ -733,8 +760,8 @@ void floorBoardDisplay::writeSignal(bool value)
 void floorBoardDisplay::resetDevice(QString replyMsg) 
 {
 	SysxIO *sysxIO = SysxIO::Instance();
-	sysxIO->setDeviceStatus(true); // Free the device after finishing interaction.
-	emit connectedSignal();		   // Emit this signal to tell we are still connected and to update the patch names in case they have changed.
+	sysxIO->setDeviceReady(true);	// Free the device after finishing interaction.
+	emit connectedSignal();			// Emit this signal to tell we are still connected and to update the patch names in case they have changed.
 };
 
 void floorBoardDisplay::patchSelectSignal(int bank, int patch)

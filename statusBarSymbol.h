@@ -20,63 +20,30 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef STATUSBARSYMBOL_H
+#define STATUSBARSYMBOL_H
 
-#include <QMainWindow>
-#include "floorBoard.h"
-#include "sysxWriter.h"
-#include "MidiTable.h"
+#include <QWidget>
 
-class mainWindow : public QWidget
-//class mainWindow : public QMainWindow
+class statusBarSymbol : public QWidget
 {
     Q_OBJECT
 
 public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void closeEvent(QCloseEvent* ce);
-
-signals:
-	void updateSignal();
+    statusBarSymbol(QWidget *parent = 0, QString imagePath = ":/images/statusbarsymbols.png");
 
 public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void open();
-	void save();
-	void saveAs();
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
+	void setValue(int value);
+
+protected:
+	void paintEvent(QPaintEvent *event);
 
 private:
-	void createActions();
-	void createMenus();
-	void createStatusBar();
+	void setOffset(signed int imageNr);
 
-	QMenuBar *menuBar;
-	QStatusBar *statusBar;
-	QMenu *fileMenu;
-	QMenu *toolsMenu;
-	QMenu *helpMenu;
-	QAction *openAct;
-	QAction *saveAct;
-	QAction *saveAsAct;
-	QAction *exitAct;
-	QAction *settingsAct;
-	QAction *helpAct;
-	QAction *homepageAct;
-	QAction *donationAct;
-	QAction *licenseAct;
-	QAction *aboutAct;
-	QAction *aboutQtAct;
-
-	sysxWriter file;
-	floorBoard *fxsBoard;
+	QString imagePath;
+	QSize symbolSize;
+	int xOffset;
 };
 
-#endif // MAINWINDOW_H
+#endif // STATUSSYMBOL_H

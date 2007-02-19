@@ -54,6 +54,10 @@ signals:
 	void patchLoadSignal(int bank, int patch);
 	void updateSignal();
 
+	void setStatusSymbol(int value);
+	void setStatusProgress(int value);
+    void setStatusMessage(QString message);
+
 private:
 	void updateTree(QTreeWidgetItem *item);
 	void closeChildren(QTreeWidgetItem *item);

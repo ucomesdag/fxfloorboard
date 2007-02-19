@@ -36,6 +36,7 @@ class midiIO: public QThread
 	Q_OBJECT
 
 public:
+	midiIO();
 	void run();
 	void sendSysxMsg(QString sysxOutMsg, int midiOut, int midiIn);
 	void sendMidi(QString midiMsg, int midiOut);
@@ -49,6 +50,10 @@ signals:
 	void started();
 	void finished();
 	void terminated();
+
+	void setStatusSymbol(int value);
+	void setStatusProgress(int value);
+    void setStatusMessage(QString message);
 
 private:
 	void queryMidiInDevices();

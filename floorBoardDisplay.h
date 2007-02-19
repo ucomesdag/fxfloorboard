@@ -58,6 +58,10 @@ signals:
 	void updateSignal();
 	void connectedSignal();
 
+	void setStatusSymbol(int value);
+	void setStatusProgress(int value);
+    void setStatusMessage(QString message);
+
 private:
 	QPoint pos;
 

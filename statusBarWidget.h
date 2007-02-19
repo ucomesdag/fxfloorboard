@@ -20,63 +20,30 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef STATUSBARWIDGET_H
+#define STATUSBARWIDGET_H
 
-#include <QMainWindow>
-#include "floorBoard.h"
-#include "sysxWriter.h"
-#include "MidiTable.h"
+#include <QWidget>
+#include <QLabel>
+#include <QProgressBar>
+#include "statusBarSymbol.h"
 
-class mainWindow : public QWidget
-//class mainWindow : public QMainWindow
+class statusBarWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void closeEvent(QCloseEvent* ce);
-
-signals:
-	void updateSignal();
+    statusBarWidget(QWidget *parent = 0);
 
 public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void open();
-	void save();
-	void saveAs();
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
+	void setStatusMessage(QString message);
+	void setStatusProgress(int value);
+	void setStatusSymbol(int value);
 
 private:
-	void createActions();
-	void createMenus();
-	void createStatusBar();
-
-	QMenuBar *menuBar;
-	QStatusBar *statusBar;
-	QMenu *fileMenu;
-	QMenu *toolsMenu;
-	QMenu *helpMenu;
-	QAction *openAct;
-	QAction *saveAct;
-	QAction *saveAsAct;
-	QAction *exitAct;
-	QAction *settingsAct;
-	QAction *helpAct;
-	QAction *homepageAct;
-	QAction *donationAct;
-	QAction *licenseAct;
-	QAction *aboutAct;
-	QAction *aboutQtAct;
-
-	sysxWriter file;
-	floorBoard *fxsBoard;
+	QProgressBar *progressBar;
+	statusBarSymbol *symbol;
+	QLabel *label;
 };
 
-#endif // MAINWINDOW_H
+#endif // STATUSBARWIDGET_H

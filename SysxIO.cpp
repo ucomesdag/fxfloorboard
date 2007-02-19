@@ -31,12 +31,13 @@
 
 SysxIO::SysxIO() 
 {
-	setConnected(false);
-	setDevice(false);
-	setDeviceStatus(true);
-	setSyncStatus(false);
-	setBank(0);
-	setPatch(0);
+	this->setConnected(false);
+	this->setDevice(false);
+	this->setDeviceReady(true);
+	this->setSyncStatus(false);
+	this->setBank(0);
+	this->setPatch(0);
+	this->changeCount = 0;
 };
 
 SysxIO* SysxIO::_instance = 0;// initialize pointer
@@ -321,14 +322,14 @@ bool SysxIO::isConnected()
 	return this->connected;	
 };
 
-void SysxIO::setDeviceStatus(bool deviceready)
+void SysxIO::setDeviceReady(bool status)
 {
-	this->deviceready = deviceready;	
+	this->status = status;	
 };
 
-bool SysxIO::getDeviceStatus()
+bool SysxIO::deviceReady()
 {
-	return this->deviceready;	
+	return this->status;	
 };
 
 void SysxIO::setDevice(bool isdevice)
@@ -412,15 +413,18 @@ QString SysxIO::getPatchChangeMsg(int bank, int patch)
 ****************************************************************************/
 void SysxIO::sendMidi(QString midiMsg)
 {
-	Preferences *preferences = Preferences::Instance(); bool ok;
-	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
-	
-	midiIO *midi = new midiIO();
+	if(isConnected())
+	{
+		Preferences *preferences = Preferences::Instance(); bool ok;
+		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
+		
+		midiIO *midi = new midiIO();
 
-	QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
-		this, SLOT(receiveSysex(QString)));				// to finishedSending function.
+		QObject::connect(midi, SIGNAL(midiFinished()),	// Connect the result of sendMidi
+			this, SLOT(finishedSending()));				// to finishedSending function.
 
-	midi->sendMidi(midiMsg, midiOut);
+		midi->sendMidi(midiMsg, midiOut);
+	};
 };
 
 /***************************** finishedSending() *************************************
@@ -428,37 +432,93 @@ void SysxIO::sendMidi(QString midiMsg)
 *************************************************************************************/
 void SysxIO::finishedSending()
 {
+	emit setStatusSymbol(1);
+	emit setStatusProgress(0);
+	emit setStatusMessage(tr("Ready"));
 	emit isFinished();
 };
 
-/***************************** sendSysex() ***********************************
+/***************************** requestPatchChange() *************************
+* Send a patch change request. Result will be checked with checkPatchChange.
+****************************************************************************/
+void SysxIO::requestPatchChange(int bank, int patch)
+{
+	this->bankChange = bank;
+	this->patchChange = patch;
+
+	QObject::connect(this, SIGNAL(isFinished()),	// Connect the result of the request
+	this, SLOT(namePatchChange()));					// to returnPatchName function.
+	
+	QString midiMsg = getPatchChangeMsg(bank, patch);
+	this->sendMidi(midiMsg);
+};
+  
+/***************************** namePatchChange() *************************
+* Get the name of the patch we are switching to and check it with the 
+* one requested.
+****************************************************************************/
+void SysxIO::namePatchChange()
+{	
+	QObject::disconnect(SIGNAL(patchName(QString)));
+	QObject::disconnect(this, SIGNAL(isFinished()),	
+		this, SLOT(namePatchChange()));	
+	
+	QObject::connect(this, SIGNAL(patchName(QString)),
+		this, SLOT(checkPatchChange(QString)));		
+	
+	requestPatchName(0, 0);
+};
+
+/***************************** checkPatchChange() *************************
+* Emits a signal if the patch change was confirmed else it will retry until
+* the maximum retry's has been reached.
+****************************************************************************/
+void SysxIO::checkPatchChange(QString name)
+{	
+	QObject::disconnect(this, SIGNAL(patchName(QString)),
+		this, SLOT(checkPatchChange(QString)));	
+
+	if(this->requestName  == name)
+	{
+		emit isChanged();
+		this->changeCount = 0;
+	}
+	else
+	{
+		if(changeCount < maxRetry)
+		{
+			this->changeCount++;
+			this->requestPatchChange(bankChange, patchChange);
+		}
+		else
+		{
+			this->changeCount = 0;
+		};
+	};
+};
+
+/***************************** sendSysx() ***********************************
 * Sends a sysex message over the midiOut device sellected in the preferences.
 *****************************************************************************/
 void SysxIO::sendSysx(QString sysxMsg)
 {
-	if(getDeviceStatus() == true && isConnected())
-	{
-		setDeviceStatus(false);
+	Preferences *preferences = Preferences::Instance();  bool ok;
+	int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
+	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);	// Get midi in device from preferences.
+	
+	midiIO *midi = new midiIO();
 
-		Preferences *preferences = Preferences::Instance();  bool ok;
-		int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);	// Get midi out device from preferences.
-		int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);	// Get midi in device from preferences.
-		
-		midiIO *midi = new midiIO();
+	QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
+		this, SLOT(receiveSysx(QString)));				// to receiveSysx function.
 
-		QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
-			this, SLOT(receiveSysex(QString)));				// to receiveSysex function.
-
-		midi->sendSysxMsg(sysxMsg, midiOut, midiIn);
-	};
+	midi->sendSysxMsg(sysxMsg, midiOut, midiIn);
 };
 
-/***************************** receiveSysex() *******************************
+/***************************** receiveSysx() *******************************
 * Receives possible replied sysex message on sendSysex.
 ****************************************************************************/
-void SysxIO::receiveSysex(QString sysxMsg)
+void SysxIO::receiveSysx(QString sysxMsg)
 {
-	setDeviceStatus(true);
 	emit sysxReply(sysxMsg);
 };
 
@@ -507,20 +567,27 @@ void SysxIO::returnPatchName(QString sysxMsg)
 	};
 };
 
-/***************************** requestPatchChange() *************************
-* Send a patch change request. Result will be send with the checked with 
-* confirmPatchChange function.
+/***************************** requestPatch() ******************************
+* Send a patch request. Result will be send directly with receiveSysx signal
 ****************************************************************************/
-void SysxIO::requestPatchChange(int bank, int patch)
+void SysxIO::requestPatch(int bank, int patch)
 {
-	//emit sysexReply(sysxMsg);
+	/* Patch request. */
+	MidiTable *midiTable = MidiTable::Instance();
+	QString sysxMsg = midiTable->patchRequest(bank, patch);
+	sendSysx(sysxMsg);
 };
 
-/***************************** confirmPatchChange() ***************************
-* Emits a signal if the patch change was confirmed alese it will retry until
-* the maximum retry's has been reached.
+/***************************** errorSignal() ******************************
+* Displays all midi related error messages.
 ****************************************************************************/
-void SysxIO::confirmPatchChange(int bank, int patch)
+void SysxIO::errorSignal(QString windowTitle, QString errorMsg)
 {
-	//emit sysexReply(sysxMsg);
+	QMessageBox *msgBox = new QMessageBox();
+	msgBox->setWindowTitle(windowTitle);
+	msgBox->setIcon(QMessageBox::Warning);
+	msgBox->setTextFormat(Qt::RichText);
+	msgBox->setText(errorMsg);
+	msgBox->setStandardButtons(QMessageBox::Ok);
+	msgBox->exec();
 };
