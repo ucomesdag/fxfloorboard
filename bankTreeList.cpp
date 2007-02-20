@@ -85,6 +85,9 @@ bankTreeList::bankTreeList(QWidget *parent)
                 sysxIO, SIGNAL(setStatusProgress(int)));
 	QObject::connect(this, SIGNAL(setStatusMessage(QString)),
                 sysxIO, SIGNAL(setStatusMessage(QString)));
+
+	QObject::connect(this, SIGNAL(notConnectedSignal()),
+                sysxIO, SIGNAL(notConnectedSignal()));
 };
 
 QPalette bankTreeList::getPal()
@@ -522,43 +525,45 @@ void bankTreeList::updateTree(QTreeWidgetItem *item)
 *********************************************************************************/
 void bankTreeList::updatePatchNames(QString name)
 {
-	emit setStatusSymbol(3);
-	emit setStatusMessage(tr("Receiving"));
-	
 	SysxIO *sysxIO = SysxIO::Instance();
-
-	if(name != "") // If not empty we can asume that we did receive a patch name.
+	if(sysxIO->isConnected())
 	{
-		this->currentPatchTreeItems.at(listIndex)->child(itemIndex)->setText(0, name); // Set the patch name of the item in the tree list.
-		if(itemIndex >= patchPerBank - 1) // If we reach the last patch in this bank we need to increment the bank and restart at patch 1.
+		emit setStatusSymbol(3);
+		emit setStatusMessage(tr("Receiving"));
+
+		if(name != "") // If not empty we can asume that we did receive a patch name.
 		{
-			this->listIndex++;
-			this->itemIndex = 0;
+			this->currentPatchTreeItems.at(listIndex)->child(itemIndex)->setText(0, name); // Set the patch name of the item in the tree list.
+			if(itemIndex >= patchPerBank - 1) // If we reach the last patch in this bank we need to increment the bank and restart at patch 1.
+			{
+				this->listIndex++;
+				this->itemIndex = 0;
+			}
+			else
+			{
+				this->itemIndex++;
+			};
+		};
+
+		if(listIndex < currentPatchTreeItems.size()) // Aslong as we have items in the list we continue, duh! :)
+		{		
+			bool ok;
+			int bank = this->currentPatchTreeItems.at(listIndex)->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
+			int patch = itemIndex + 1 ;
+
+			sysxIO->requestPatchName(bank, patch); // The patch name request.
 		}
 		else
 		{
-			this->itemIndex++;
+			sysxIO->setDeviceReady(true);
+			this->currentPatchTreeItems.clear(); // We are done so we can safely reset items taht need to be named.
+			this->listIndex = 0;
+			this->itemIndex = 0;
+
+			emit setStatusSymbol(1);
+			emit setStatusProgress(0);
+			emit setStatusMessage(tr("Ready"));
 		};
-	};
-
-	if(listIndex < currentPatchTreeItems.size()) // Aslong as we have items in the list we continue, duh! :)
-	{		
-		bool ok;
-		int bank = this->currentPatchTreeItems.at(listIndex)->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10);
-		int patch = itemIndex + 1 ;
-
-		sysxIO->requestPatchName(bank, patch); // The patch name request.
-	}
-	else
-	{
-		sysxIO->setDeviceReady(true);
-		this->currentPatchTreeItems.clear(); // We are done so we can safely reset items taht need to be named.
-		this->listIndex = 0;
-		this->itemIndex = 0;
-
-		emit setStatusSymbol(1);
-		emit setStatusProgress(0);
-		emit setStatusMessage(tr("Ready"));
 	};
 };
 
@@ -611,7 +616,7 @@ void bankTreeList::updatePatch(QString replyMsg)
 	}
 	else
 	{
-		//emit notConnectedSignal;			// No message returned so connection must be lost.
+		emit notConnectedSignal();				// No message returned so connection must be lost.
 	};
 
 	/* DEBUGGING OUTPUT 

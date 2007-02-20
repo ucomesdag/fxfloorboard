@@ -58,6 +58,8 @@ signals:
 	void setStatusProgress(int value);
     void setStatusMessage(QString message);
 
+	void notConnectedSignal();
+
 private:
 	void updateTree(QTreeWidgetItem *item);
 	void closeChildren(QTreeWidgetItem *item);

@@ -39,7 +39,6 @@ midiIO::midiIO()
                 sysxIO, SIGNAL(setStatusProgress(int)));
 	QObject::connect(this, SIGNAL(setStatusMessage(QString)),
                 sysxIO, SIGNAL(setStatusMessage(QString)));
-
 	QObject::connect(this, SIGNAL(errorSignal(QString, QString)),
                 sysxIO, SLOT(errorSignal(QString, QString)));
 };

@@ -52,11 +52,13 @@ public slots:
 	void patchSelectSignal(int bank, int patch);
 	void blinkSellectedPatch(bool active = true);
 	void patchLoadSignal(int bank, int patch);
+	void notConnected();
 
 signals:
 	void currentIndexChanged(int index);
 	void updateSignal();
 	void connectedSignal();
+	void notConnectedSignal();
 
 	void setStatusSymbol(int value);
 	void setStatusProgress(int value);

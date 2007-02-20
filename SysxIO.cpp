@@ -312,14 +312,26 @@ QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 	return sysxMsg;
 };
 
+/***************************** isConnected() ******************************
+* Connection status that's globaly accesible.
+****************************************************************************/
+bool SysxIO::isConnected()
+{
+	return this->connected;	
+};
+
 void SysxIO::setConnected(bool connected)
 {
 	this->connected = connected;	
 };
 
-bool SysxIO::isConnected()
+/***************************** deviceReady() ******************************
+* Midi busy or READY status that's globaly accesible. 
+* To prevent multiple messages sent at once.
+****************************************************************************/
+bool SysxIO::deviceReady()
 {
-	return this->connected;	
+	return this->status;	
 };
 
 void SysxIO::setDeviceReady(bool status)
@@ -327,9 +339,12 @@ void SysxIO::setDeviceReady(bool status)
 	this->status = status;	
 };
 
-bool SysxIO::deviceReady()
+/***************************** isDevice() **********************************
+* Flag that hold if the current sysex data we are editing is from file or DEVICE.
+****************************************************************************/
+bool SysxIO::isDevice()
 {
-	return this->status;	
+	return this->isdevice;	
 };
 
 void SysxIO::setDevice(bool isdevice)
@@ -337,19 +352,18 @@ void SysxIO::setDevice(bool isdevice)
 	this->isdevice = isdevice;		
 };
 
-bool SysxIO::isDevice()
+/***************************** getSyncStatus() **********************************
+* Flag that hold if the sysex data we are editing is synchronized with what's 
+* on the device.
+****************************************************************************/
+bool SysxIO::getSyncStatus()
 {
-	return this->isdevice;	
+	return this->syncStatus;	
 };
 
 void SysxIO::setSyncStatus(bool syncStatus)
 {
 	this->syncStatus = syncStatus;		
-};
-
-bool SysxIO::getSyncStatus()
-{
-	return this->syncStatus;	
 };
 
 void SysxIO::setBank(int bank)
@@ -381,7 +395,8 @@ void SysxIO::setRequestName(QString requestName)
 /*********************** getRequestName() ***********************************
 * Return the name for check of the patch that should have been loaded.
 ***************************************************************************/
-QString SysxIO::getRequestName(){
+QString SysxIO::getRequestName()
+{
 	return this->requestName;	
 };
 
@@ -545,11 +560,11 @@ void SysxIO::returnPatchName(QString sysxMsg)
 	QObject::disconnect(this, SIGNAL(sysxReply(QString)),	
 		this, SLOT(returnPatchName(QString)));
 
+	QString name;
 	if(sysxMsg != "")
 	{
 		MidiTable *midiTable = MidiTable::Instance();
-
-		QString name; 
+		 
 		int count = 0;
 		int dataStartOffset = sysxDataOffset;
 		QString hex1, hex2, hex3, hex4;
@@ -563,8 +578,8 @@ void SysxIO::returnPatchName(QString sysxMsg)
 			name.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
 			i++;
 		};
-		emit patchName(name.trimmed());
 	};
+	emit patchName(name.trimmed());
 };
 
 /***************************** requestPatch() ******************************
@@ -583,6 +598,10 @@ void SysxIO::requestPatch(int bank, int patch)
 ****************************************************************************/
 void SysxIO::errorSignal(QString windowTitle, QString errorMsg)
 {
+	setNoError(false);
+
+	emit notConnectedSignal();
+
 	QMessageBox *msgBox = new QMessageBox();
 	msgBox->setWindowTitle(windowTitle);
 	msgBox->setIcon(QMessageBox::Warning);
@@ -590,4 +609,18 @@ void SysxIO::errorSignal(QString windowTitle, QString errorMsg)
 	msgBox->setText(errorMsg);
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->exec();
+};
+
+/***************************** noError() ******************************
+* Error flag set on midi error to prevent (double) connexion faillure 
+* messages and a midi messages.
+****************************************************************************/
+bool SysxIO::noError()
+{
+	return this->noerror;	
+};
+
+void SysxIO::setNoError(bool status)
+{
+	this->noerror = status;
 };

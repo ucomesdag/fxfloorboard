@@ -139,6 +139,11 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
                 sysxIO, SIGNAL(setStatusProgress(int)));
 	QObject::connect(this, SIGNAL(setStatusMessage(QString)),
                 sysxIO, SIGNAL(setStatusMessage(QString)));
+
+	QObject::connect(sysxIO, SIGNAL(notConnectedSignal()),
+                this, SLOT(notConnected()));
+	QObject::connect(this, SIGNAL(notConnectedSignal()),
+                this, SLOT(notConnected()));
 };
 
 QPoint floorBoardDisplay::getPos()
@@ -485,29 +490,19 @@ void floorBoardDisplay::connectSignal(bool value)
 	{
 		emit setStatusSymbol(2);
 		emit setStatusMessage(tr("Connecting"));
-		
+
+		this->connectButton->setBlink(true);
 		sysxIO->setDeviceReady(false); // Reserve the device for interaction.
 
+		QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)));
 		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)), 
 			this, SLOT(connectionResult(QString)));
 
 		sysxIO->sendSysx(idRequestString); // GT-8 Identity Request.
-
-		this->connectButton->setBlink(true);
 	}
 	else
 	{
-		this->connectButton->setBlink(false);
-		this->connectButton->setValue(false);		
-		this->writeButton->setBlink(false);
-		this->writeButton->setValue(false);
-		sysxIO->setConnected(false);
-		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.		
-		sysxIO->setSyncStatus(false);
-
-		emit setStatusSymbol(0);
-		emit setStatusProgress(0);
-		emit setStatusMessage(tr("Not connected"));
+		emit notConnected();
 	};
 };
 
@@ -517,71 +512,76 @@ void floorBoardDisplay::connectionResult(QString sysxMsg)
 	QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)), 
 			this, SLOT(connectionResult(QString)));
 
-	if(sysxMsg.contains(idReplyPatern) && connectButtonActive == true)
+	sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
+
+	if(sysxIO->noError())
 	{
-		this->connectButton->setBlink(false);
-		this->connectButton->setValue(true);
-		sysxIO->setConnected(true);
-		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
-		emit connectedSignal();
-
-		emit setStatusSymbol(1);
-		emit setStatusProgress(0);
-		emit setStatusMessage(tr("Ready"));
-
-		if(sysxIO->getBank() != 0)
+		if(sysxMsg.contains(idReplyPatern) && connectButtonActive == true)
 		{
-			this->writeButton->setBlink(true);
-			this->writeButton->setValue(false);
+			this->connectButton->setBlink(false);
+			this->connectButton->setValue(true);
+			sysxIO->setConnected(true);
+			emit connectedSignal();
+
+			emit setStatusSymbol(1);
+			emit setStatusProgress(0);
+			emit setStatusMessage(tr("Ready"));
+
+			if(sysxIO->getBank() != 0)
+			{
+				this->writeButton->setBlink(true);
+				this->writeButton->setValue(false);
+			};
+		}
+		else if(!sysxMsg.isEmpty())
+		{
+			this->connectButton->setBlink(false);
+			this->connectButton->setValue(false);
+			sysxIO->setConnected(false);
+
+			emit setStatusSymbol(0);
+			emit setStatusProgress(0);
+			emit setStatusMessage(tr("Not connected"));
+
+			QMessageBox *msgBox = new QMessageBox();
+			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
+			msgBox->setIcon(QMessageBox::Warning);
+			msgBox->setTextFormat(Qt::RichText);
+			QString msgText;
+			msgText.append("<font size='+1'><b>");
+			msgText.append(tr("The device connected is not a Boss GT-8 Guitar Effects Processor."));
+			msgText.append("<b></font>");
+			msgBox->setText(msgText);
+			msgBox->setStandardButtons(QMessageBox::Ok);
+			msgBox->exec();
+		}
+		else
+		{
+			this->connectButton->setBlink(false);
+			this->connectButton->setValue(false);
+			sysxIO->setConnected(false);
+
+			emit setStatusSymbol(0);
+			emit setStatusProgress(0);
+			emit setStatusMessage(tr("Not connected"));
+
+			QMessageBox *msgBox = new QMessageBox();
+			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
+			msgBox->setIcon(QMessageBox::Warning);
+			msgBox->setTextFormat(Qt::RichText);
+			QString msgText;
+			msgText.append("<font size='+1'><b>");
+			msgText.append(tr("The Boss GT-8 Guitar Effects Processor was not found."));
+			msgText.append("<b></font>");
+			msgBox->setText(msgText);
+			msgBox->setStandardButtons(QMessageBox::Ok);
+			msgBox->exec();
 		};
-	}
-	else if(!sysxMsg.isEmpty())
-	{
-		this->connectButton->setBlink(false);
-		this->connectButton->setValue(false);
-		sysxIO->setConnected(false);
-		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
-
-		emit setStatusSymbol(0);
-		emit setStatusProgress(0);
-		emit setStatusMessage(tr("Not connected"));
-
-		QMessageBox *msgBox = new QMessageBox();
-		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
-		msgBox->setIcon(QMessageBox::Warning);
-		msgBox->setTextFormat(Qt::RichText);
-		QString msgText;
-		msgText.append("<font size='+1'><b>");
-		msgText.append(tr("The device connected is not a Boss GT-8 Guitar Effects Processor."));
-		msgText.append("<b></font>");
-		msgBox->setText(msgText);
-		msgBox->setStandardButtons(QMessageBox::Ok);
-		msgBox->exec();
 	}
 	else
 	{
-		this->connectButton->setBlink(false);
-		this->connectButton->setValue(false);
-		sysxIO->setConnected(false);
-		sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
-
-		emit setStatusSymbol(0);
-		emit setStatusProgress(0);
-		emit setStatusMessage(tr("Not connected"));
-
-		QMessageBox *msgBox = new QMessageBox();
-		msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
-		msgBox->setIcon(QMessageBox::Warning);
-		msgBox->setTextFormat(Qt::RichText);
-		QString msgText;
-		msgText.append("<font size='+1'><b>");
-		msgText.append(tr("The Boss GT-8 Guitar Effects Processor was not found."));
-		msgText.append("<b></font>");
-		msgBox->setText(msgText);
-		msgBox->setStandardButtons(QMessageBox::Ok);
-		msgBox->exec();
+		notConnected();
 	};
-
 };
 
 void floorBoardDisplay::writeSignal(bool value)
@@ -838,4 +838,22 @@ void floorBoardDisplay::patchLoadSignal(int bank, int patch)
 	SysxIO *sysxIO = SysxIO::Instance();
 	sysxIO->setBank(bank);
 	sysxIO->setPatch(patch);
+};
+
+void floorBoardDisplay::notConnected()
+{
+	emit setStatusSymbol(0);
+	emit setStatusProgress(0);
+	emit setStatusMessage(tr("Not connected"));
+
+	this->connectButton->setBlink(false);
+	this->connectButton->setValue(false);	
+	this->writeButton->setBlink(false);
+	this->writeButton->setValue(false);
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setConnected(false);
+	sysxIO->setSyncStatus(false);	
+	sysxIO->setDeviceReady(true);	// Free the device after finishing interaction.	
+	sysxIO->setNoError(true);		// Reset the error status (else we could never retry :) ).
 };

@@ -76,6 +76,9 @@ public:
 	void requestPatch(int bank, int patch);
 	void requestPatchChange(int bank, int patch);
 
+	bool noError();
+	void setNoError(bool status);
+
 public slots:
 	void errorSignal(QString windowTitle, QString errorMsg);
 
@@ -96,6 +99,8 @@ signals:
 	void setStatusProgress(int value);
     void setStatusMessage(QString message);
 
+	void notConnectedSignal();
+
 protected :
 	SysxIO();
 	friend class SysxIODestroyer;
@@ -115,6 +120,7 @@ private:
 	int patch;
 	bool isdevice;
 	bool syncStatus;
+	bool noerror;
 	int bankChange;
 	int patchChange;
 	int changeCount;
