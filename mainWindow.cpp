@@ -188,7 +188,7 @@ void mainWindow::createStatusBar()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 
-	statusBarWidget *status = new statusBarWidget;
+	statusBarWidget *status = new statusBarWidget(this);
 
 	QObject::connect(sysxIO, SIGNAL(setStatusSymbol(int)),
                 status, SLOT(setStatusSymbol(int)));

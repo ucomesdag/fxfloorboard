@@ -41,6 +41,11 @@ midiIO::midiIO()
                 sysxIO, SIGNAL(setStatusMessage(QString)));
 	QObject::connect(this, SIGNAL(errorSignal(QString, QString)),
                 sysxIO, SLOT(errorSignal(QString, QString)));
+
+	QObject::connect(this, SIGNAL(replyMsg(QString)),
+		sysxIO, SLOT(receiveSysx(QString)));
+	QObject::connect(this, SIGNAL(midiFinished()),	
+			sysxIO, SLOT(finishedSending()));
 };
 /*********************** queryMidiOutDevices() *****************************
  * Retrieves all MIDI Out devices installed on your system and stores them 
@@ -119,7 +124,6 @@ QString midiIO::getMidiOutErrorMsg(unsigned long err)
 
 	this->dataReceive = false;
 	return errorMsg;
-	exit();
 };
 
 /************************* getMidiInErrorMsg() ***************************
@@ -150,7 +154,6 @@ QString midiIO::getMidiInErrorMsg(unsigned long err)
 	};
 
 	return errorMsg;
-	exit();
 };
 
 /*********************** sendMsg() **********************************

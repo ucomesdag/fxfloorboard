@@ -435,9 +435,6 @@ void SysxIO::sendMidi(QString midiMsg)
 		
 		midiIO *midi = new midiIO();
 
-		QObject::connect(midi, SIGNAL(midiFinished()),	// Connect the result of sendMidi
-			this, SLOT(finishedSending()));				// to finishedSending function.
-
 		midi->sendMidi(midiMsg, midiOut);
 	};
 };
@@ -508,6 +505,11 @@ void SysxIO::checkPatchChange(QString name)
 		else
 		{
 			this->changeCount = 0;
+			this->setDeviceReady(true); // Free the device after finishing interaction.
+			
+			emit setStatusSymbol(1);
+			emit setStatusProgress(0);
+			emit setStatusMessage(tr("Ready"));	
 		};
 	};
 };
@@ -522,9 +524,6 @@ void SysxIO::sendSysx(QString sysxMsg)
 	int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);	// Get midi in device from preferences.
 	
 	midiIO *midi = new midiIO();
-
-	QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result of the request
-		this, SLOT(receiveSysx(QString)));				// to receiveSysx function.
 
 	midi->sendSysxMsg(sysxMsg, midiOut, midiIn);
 };
@@ -598,17 +597,20 @@ void SysxIO::requestPatch(int bank, int patch)
 ****************************************************************************/
 void SysxIO::errorSignal(QString windowTitle, QString errorMsg)
 {
-	setNoError(false);
+	if(noError())
+	{
+		setNoError(false);
 
-	emit notConnectedSignal();
+		emit notConnectedSignal();
 
-	QMessageBox *msgBox = new QMessageBox();
-	msgBox->setWindowTitle(windowTitle);
-	msgBox->setIcon(QMessageBox::Warning);
-	msgBox->setTextFormat(Qt::RichText);
-	msgBox->setText(errorMsg);
-	msgBox->setStandardButtons(QMessageBox::Ok);
-	msgBox->exec();
+		QMessageBox *msgBox = new QMessageBox();
+		msgBox->setWindowTitle(windowTitle);
+		msgBox->setIcon(QMessageBox::Warning);
+		msgBox->setTextFormat(Qt::RichText);
+		msgBox->setText(errorMsg);
+		msgBox->setStandardButtons(QMessageBox::Ok);
+		msgBox->exec();
+	};
 };
 
 /***************************** noError() ******************************

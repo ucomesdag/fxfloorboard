@@ -503,6 +503,7 @@ void floorBoardDisplay::connectSignal(bool value)
 	else
 	{
 		emit notConnected();
+		sysxIO->setNoError(true);		// Reset the error status (else we could never retry :) ).
 	};
 };
 
@@ -581,6 +582,7 @@ void floorBoardDisplay::connectionResult(QString sysxMsg)
 	else
 	{
 		notConnected();
+		sysxIO->setNoError(true);		// Reset the error status (else we could never retry :) ).
 	};
 };
 
@@ -750,9 +752,7 @@ void floorBoardDisplay::writeSignal(bool value)
 	}
 	else /* We are NOT connected OR/AND the device was NOT free. */
 	{
-		sysxIO->setSyncStatus(false);		// So we are not sure anymore if the patch data is sync with the device.
-		this->writeButton->setValue(false);	// Inconsequence deactivate the write button 
-		this->writeButton->setBlink(false);	// and stop blinking.
+		notConnected();
 	};
 
 };
@@ -855,5 +855,4 @@ void floorBoardDisplay::notConnected()
 	sysxIO->setConnected(false);
 	sysxIO->setSyncStatus(false);	
 	sysxIO->setDeviceReady(true);	// Free the device after finishing interaction.	
-	sysxIO->setNoError(true);		// Reset the error status (else we could never retry :) ).
 };

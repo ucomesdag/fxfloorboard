@@ -442,10 +442,9 @@ void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
  ****************************************************************************/
 void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-	/*SysxIO *sysxIO = SysxIO::Instance();
-	if(item->childCount() == 0 
-		&& sysxIO->deviceReady() 
-		&& sysxIO->isConnected()) // Make sure it's a patch (Patches are the last in line so no children).
+	SysxIO *sysxIO = SysxIO::Instance();
+	if(item->childCount() == 0 && sysxIO->deviceReady() && sysxIO->isConnected()) 
+		// Make sure it's a patch (Patches are the last in line so no children).
 	{
 		sysxIO->setDeviceReady(false);
 
@@ -455,13 +454,92 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 		int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10); // Get the bank
 		int patch = item->parent()->indexOfChild(item) + 1;								// and the patch number.
 
+		emit setStatusSymbol(2);
+		emit setStatusMessage(tr("Sending"));
 		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
 
 		QObject::connect(sysxIO, SIGNAL(isChanged()),	// Connect the isChanged message
 			this, SLOT(requestPatch()));				// to requestPatch.
 
 		sysxIO->requestPatchChange(bank, patch);
-	};*/
+	};
+};
+/*********************** requestPatch() *******************************
+ * Does the actual requesting of the patch data and hands the 
+ * reception over to updatePatch function.
+ **********************************************************************/
+void bankTreeList::requestPatch() 
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	
+	QObject::disconnect(sysxIO, SIGNAL(isChanged()),	
+			this, SLOT(requestPatch()));
+	
+	if(sysxIO->isConnected())
+	{
+		emit setStatusSymbol(3);
+		emit setStatusMessage(tr("Receiving"));
+
+		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result of the request
+			this, SLOT(updatePatch(QString)));					// to updatePatch function.
+
+		sysxIO->requestPatch(0, 0);
+	};
+};
+
+/*********************** updatePatch() *******************************
+ * Updates the source of the currently handeled patch and set the 
+ * attributes accordingly.
+ *********************************************************************/
+void bankTreeList::updatePatch(QString replyMsg)
+{
+	emit updateSignal();
+	emit setStatusSymbol(1);
+	emit setStatusProgress(0);
+	emit setStatusMessage(tr("Ready"));
+
+	SysxIO *sysxIO = SysxIO::Instance();
+
+	sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
+	
+	QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)),
+		this, SLOT(updatePatch(QString)));		
+	
+	replyMsg = replyMsg.remove(" ").toUpper();
+	if(replyMsg != "" && replyMsg.size()/2 == 1010)
+	{
+		sysxIO->setFileSource(replyMsg);		// Set the source to the data received.
+		sysxIO->setFileName(tr("GT-8 patch"));	// Set the file name to GT-8 patch forthe display.
+		sysxIO->setDevice(true);				// Patch received from the device so this is set to true.
+		sysxIO->setSyncStatus(true);			// We can't be more in sync than right now! :)
+
+		emit updateSignal();
+	}
+	else
+	{
+		emit notConnectedSignal();				// No message returned so connection must be lost.
+	};
+
+	/* DEBUGGING OUTPUT 
+	QString snork;
+	for(int i=0;i<replyMsg.size();++i)
+	{
+		snork.append(replyMsg.mid(i, 2));
+		snork.append(" ");
+		i++;
+	};
+	snork.replace("F7", "F7 }\n");
+	snork.replace("F0", "{ F0");
+	snork.append("\n{ size=");
+	snork.append(QString::number(replyMsg.size()/2, 10));
+	snork.append("}");		
+
+	QMessageBox *msgBox = new QMessageBox();
+	msgBox->setWindowTitle("dBug Result");
+	msgBox->setIcon(QMessageBox::Information);
+	msgBox->setText(snork);
+	msgBox->setStandardButtons(QMessageBox::Ok);
+	msgBox->exec();*/
 };
 
 /********************************** connectedSignal() ****************************
@@ -565,78 +643,4 @@ void bankTreeList::updatePatchNames(QString name)
 			emit setStatusMessage(tr("Ready"));
 		};
 	};
-};
-
-/*********************** requestPatch() *******************************
- * Does the actual requesting of the patch data and hands the 
- * reception over to updatePatch function.
- **********************************************************************/
-void bankTreeList::requestPatch() 
-{
-	SysxIO *sysxIO = SysxIO::Instance();
-	if(sysxIO->isConnected() && sysxIO->deviceReady())
-	{
-		sysxIO->setDeviceReady(false);
-
-		emit setStatusSymbol(3);
-		emit setStatusMessage(tr("Receiving"));
-
-		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result of the request
-			this, SLOT(updatePatch(QString)));					// to updatePatch function.
-
-		sysxIO->requestPatch(0, 0);
-	};
-};
-
-/*********************** updatePatch() *******************************
- * Updates the source of the currently handeled patch and set the 
- * attributes accordingly.
- *********************************************************************/
-void bankTreeList::updatePatch(QString replyMsg)
-{
-	emit updateSignal();
-	emit setStatusSymbol(1);
-	emit setStatusProgress(0);
-	emit setStatusMessage(tr("Ready"));
-
-	SysxIO *sysxIO = SysxIO::Instance();
-
-	sysxIO->setDeviceReady(true); // Free the device after finishing interaction.
-	
-	QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)),
-		this, SLOT(updatePatch(QString)));		
-	
-	replyMsg = replyMsg.remove(" ").toUpper();
-	if(replyMsg != "" && replyMsg.size()/2 == 1010)
-	{
-		sysxIO->setFileSource(replyMsg);		// Set the source to the data received.
-		sysxIO->setFileName(tr("GT-8 patch"));	// Set the file name to GT-8 patch forthe display.
-		sysxIO->setDevice(true);				// Patch received from the device so this is set to true.
-		sysxIO->setSyncStatus(true);			// We can't be more in sync than right now! :)
-	}
-	else
-	{
-		emit notConnectedSignal();				// No message returned so connection must be lost.
-	};
-
-	/* DEBUGGING OUTPUT 
-	QString snork;
-	for(int i=0;i<replyMsg.size();++i)
-	{
-		snork.append(replyMsg.mid(i, 2));
-		snork.append(" ");
-		i++;
-	};
-	snork.replace("F7", "F7 }\n");
-	snork.replace("F0", "{ F0");
-	snork.append("\n{ size=");
-	snork.append(QString::number(replyMsg.size()/2, 10));
-	snork.append("}");		
-
-	QMessageBox *msgBox = new QMessageBox();
-	msgBox->setWindowTitle("dBug Result");
-	msgBox->setIcon(QMessageBox::Information);
-	msgBox->setText(snork);
-	msgBox->setStandardButtons(QMessageBox::Ok);
-	msgBox->exec();*/
 };
