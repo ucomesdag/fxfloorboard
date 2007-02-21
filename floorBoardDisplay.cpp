@@ -618,7 +618,7 @@ void floorBoardDisplay::writeSignal(bool value)
 			sysxIO->setDeviceReady(false);			// Reserve the device for interaction.
 			//sysxIO->setBuffer();
 
-			QString sysxOut; bool ok;
+			QString sysxMsg; bool ok;
 			QList< QList<QString> > patchData = sysxIO->getFileSource().hex; // Get the loaded patch data.
 			QList<QString> patchAddress = sysxIO->getFileSource().address;
 			if(!sysxIO->getSyncStatus())			// Check if the data is allready in sync. with the device.
@@ -628,7 +628,7 @@ void floorBoardDisplay::writeSignal(bool value)
 					QList<QString> data = patchData.at(i);
 					for(int x=0;x<data.size();++x)
 					{
-						sysxOut.append(data.at(x));
+						sysxMsg.append(data.at(x));
 					};
 				}; 
 				sysxIO->setSyncStatus(true);		// Inadvance of the actuale data transfer we set it allready to sync.
@@ -707,7 +707,7 @@ void floorBoardDisplay::writeSignal(bool value)
 									hex = data.at(x);
 								};
 								if (hex.length() < 2) hex.prepend("0");
-								sysxOut.append(hex);
+								sysxMsg.append(hex);
 							};
 						};
 					};
@@ -715,18 +715,12 @@ void floorBoardDisplay::writeSignal(bool value)
 					this->writeButton->setBlink(false); // so no blinking here either...
 					this->writeButton->setValue(true);	// ... and still the button will be active also ...
 				};
-			};
-		
-			Preferences *preferences = Preferences::Instance(); // Get the midi in/out device from the prefs.
-			int midiOut = preferences->getPreferences("Midi", "MidiOut", "device").toInt(&ok, 10);
-			int midiIn = preferences->getPreferences("Midi", "MidiIn", "device").toInt(&ok, 10);
+			};						// Create new midiIO thread.
 
-			midiIO *midi = new midiIO();						// Create new midiIO thread.
+			QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result signal 
+				this, SLOT(resetDevice(QString)));					// to a slot that will reset the device after sending.
 
-			QObject::connect(midi, SIGNAL(replyMsg(QString)),	// Connect the result signal 
-				this, SLOT(resetDevice(QString)));				// to a slot that will reset the device after sending.
-
-			midi->sendSysxMsg(sysxOut, midiOut, midiIn);		// Send the data.
+			sysxIO->sendSysx(sysxMsg);		// Send the data.
 
 			/* DEBUGGING OUTPUT 
 			QString snork;
@@ -760,6 +754,8 @@ void floorBoardDisplay::writeSignal(bool value)
 void floorBoardDisplay::resetDevice(QString replyMsg) 
 {
 	SysxIO *sysxIO = SysxIO::Instance();
+	QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)),	
+				this, SLOT(resetDevice(QString)));
 	sysxIO->setDeviceReady(true);	// Free the device after finishing interaction.
 	emit connectedSignal();			// Emit this signal to tell we are still connected and to update the patch names in case they have changed.
 };

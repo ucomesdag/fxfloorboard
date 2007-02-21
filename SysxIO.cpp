@@ -444,10 +444,11 @@ void SysxIO::sendMidi(QString midiMsg)
 *************************************************************************************/
 void SysxIO::finishedSending()
 {
-	emit setStatusSymbol(1);
-	emit setStatusProgress(0);
-	emit setStatusMessage(tr("Ready"));
 	emit isFinished();
+	emit setStatusProgress(0);
+	emit setStatusMessage(tr("[Midi finished]"));
+
+	//this->namePatchChange();
 };
 
 /***************************** requestPatchChange() *************************
@@ -459,10 +460,12 @@ void SysxIO::requestPatchChange(int bank, int patch)
 	this->patchChange = patch;
 
 	QObject::connect(this, SIGNAL(isFinished()),	// Connect the result of the request
-	this, SLOT(namePatchChange()));					// to returnPatchName function.
+		this, SLOT(namePatchChange()));				// to returnPatchName function.
 	
 	QString midiMsg = getPatchChangeMsg(bank, patch);
 	this->sendMidi(midiMsg);
+
+	emit setStatusMessage(tr("Sending"));
 };
   
 /***************************** namePatchChange() *************************
@@ -471,14 +474,16 @@ void SysxIO::requestPatchChange(int bank, int patch)
 ****************************************************************************/
 void SysxIO::namePatchChange()
 {	
-	QObject::disconnect(SIGNAL(patchName(QString)));
 	QObject::disconnect(this, SIGNAL(isFinished()),	
-		this, SLOT(namePatchChange()));	
+		this, SLOT(namePatchChange()));
+	QObject::disconnect(SIGNAL(patchName(QString)));
 	
 	QObject::connect(this, SIGNAL(patchName(QString)),
 		this, SLOT(checkPatchChange(QString)));		
 	
-	requestPatchName(0, 0);
+	this->requestPatchName(0, 0);
+
+	emit setStatusMessage(tr("Receiving"));
 };
 
 /***************************** checkPatchChange() *************************
@@ -488,7 +493,7 @@ void SysxIO::namePatchChange()
 void SysxIO::checkPatchChange(QString name)
 {	
 	QObject::disconnect(this, SIGNAL(patchName(QString)),
-		this, SLOT(checkPatchChange(QString)));	
+		this, SLOT(checkPatchChange(QString)));
 
 	if(this->requestName  == name)
 	{
@@ -501,6 +506,10 @@ void SysxIO::checkPatchChange(QString name)
 		{
 			this->changeCount++;
 			this->requestPatchChange(bankChange, patchChange);
+
+			emit setStatusSymbol(2);
+			emit setStatusProgress(0);
+			emit setStatusMessage("Sending");
 		}
 		else
 		{
@@ -542,8 +551,11 @@ void SysxIO::receiveSysx(QString sysxMsg)
 ****************************************************************************/
 void SysxIO::requestPatchName(int bank, int patch)
 {
+	QObject::disconnect(this, SIGNAL(sysxReply(QString)),	
+			this, SLOT(returnPatchName(QString)));
+	
 	QObject::connect(this, SIGNAL(sysxReply(QString)),	// Connect the result of the request
-	this, SLOT(returnPatchName(QString)));				// to returnPatchName function.
+		this, SLOT(returnPatchName(QString)));			// to returnPatchName function.
 	
 	/* Patch name request. */
 	MidiTable *midiTable = MidiTable::Instance();
@@ -557,11 +569,11 @@ void SysxIO::requestPatchName(int bank, int patch)
 void SysxIO::returnPatchName(QString sysxMsg)
 {
 	QObject::disconnect(this, SIGNAL(sysxReply(QString)),	
-		this, SLOT(returnPatchName(QString)));
-
-	QString name;
+			this, SLOT(returnPatchName(QString)));
+	
+	QString name; 
 	if(sysxMsg != "")
-	{
+	{		
 		MidiTable *midiTable = MidiTable::Instance();
 		 
 		int count = 0;
@@ -579,6 +591,9 @@ void SysxIO::returnPatchName(QString sysxMsg)
 		};
 	};
 	emit patchName(name.trimmed());
+	/*emit setStatusSymbol(3);
+	emit setStatusProgress(0);
+	emit setStatusMessage("Receiving");*/
 };
 
 /***************************** requestPatch() ******************************

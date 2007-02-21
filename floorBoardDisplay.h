@@ -27,7 +27,6 @@
 #include <QWidget>
 #include <QTimer>
 #include "customButton.h"
-#include "midiIO.h"
 
 class floorBoardDisplay : public QWidget
 {
@@ -82,8 +81,6 @@ private:
 	customButton *assignButton;
 	customButton *masterButton;
 	customButton *systemButton;
-
-	midiIO *midi;
 
 	bool connectButtonActive;
 	bool patchLoadError;

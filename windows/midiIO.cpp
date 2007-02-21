@@ -397,7 +397,7 @@ void midiIO::run()
 						}
 						else
 						{
-							while(dataReceive && count < 1) // count is in case we get stuck
+							while(dataReceive && count < minWait) // count is in case we get stuck
 							{
 								//printf("Waiting for data.... \r\n");
 								Sleep(receiveTimeout);
@@ -538,7 +538,10 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 				/* Output the midi command */
 				midiOutShortMsg(outHandle, midi);
-				Sleep(sendTimeout);
+
+				/* Give it some time to finish else there is a change that 
+				the device is closed before finishing the transmission */
+				Sleep(midiTimeout);
 			};
 		}
 		else  
@@ -551,11 +554,11 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 			/* Output the midi command */
 			midiOutShortMsg(outHandle, midi);
-		};	
 
-		/* Give it some time to finish else there is a change that 
-		the device is closed before finishing the transmission */
-		Sleep(sendTimeout);
+			/* Give it some time to finish else there is a change that 
+			the device is closed before finishing the transmission */
+			Sleep(midiTimeout);
+		};	
 
 		/* Close the MIDI device */
 		midiOutClose(outHandle);

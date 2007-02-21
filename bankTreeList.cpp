@@ -28,8 +28,6 @@
 #include "SysxIO.h"
 #include "globalVariables.h"
 
-#include "midiIO.h"
-
 bankTreeList::bankTreeList(QWidget *parent)
     : QWidget(parent)
 {
@@ -441,7 +439,7 @@ void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
  * loaded into the temp buffer and will tell to request the data afterwards.
  ****************************************************************************/
 void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
-{
+{	
 	SysxIO *sysxIO = SysxIO::Instance();
 	if(item->childCount() == 0 && sysxIO->deviceReady() && sysxIO->isConnected()) 
 		// Make sure it's a patch (Patches are the last in line so no children).
@@ -454,14 +452,16 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 		int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10); // Get the bank
 		int patch = item->parent()->indexOfChild(item) + 1;								// and the patch number.
 
-		emit setStatusSymbol(2);
-		emit setStatusMessage(tr("Sending"));
-		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
-
+		QObject::disconnect(sysxIO, SIGNAL(isChanged()),	
+			this, SLOT(requestPatch()));
 		QObject::connect(sysxIO, SIGNAL(isChanged()),	// Connect the isChanged message
 			this, SLOT(requestPatch()));				// to requestPatch.
 
 		sysxIO->requestPatchChange(bank, patch);
+
+		emit setStatusSymbol(2);
+		emit setStatusMessage(tr("Sending"));
+		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
 	};
 };
 /*********************** requestPatch() *******************************
@@ -477,13 +477,14 @@ void bankTreeList::requestPatch()
 	
 	if(sysxIO->isConnected())
 	{
-		emit setStatusSymbol(3);
-		emit setStatusMessage(tr("Receiving"));
-
 		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result of the request
 			this, SLOT(updatePatch(QString)));					// to updatePatch function.
 
 		sysxIO->requestPatch(0, 0);
+
+		emit setStatusSymbol(3);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Receiving"));
 	};
 };
 
@@ -634,6 +635,7 @@ void bankTreeList::updatePatchNames(QString name)
 		else
 		{
 			sysxIO->setDeviceReady(true);
+
 			this->currentPatchTreeItems.clear(); // We are done so we can safely reset items taht need to be named.
 			this->listIndex = 0;
 			this->itemIndex = 0;
