@@ -27,6 +27,7 @@
 #include "floorBoard.h"
 #include "sysxWriter.h"
 #include "MidiTable.h"
+#include "statusBarWidget.h"
 
 class mainWindow : public QWidget
 //class mainWindow : public QMainWindow
@@ -74,6 +75,8 @@ private:
 	QAction *licenseAct;
 	QAction *aboutAct;
 	QAction *aboutQtAct;
+
+	statusBarWidget *statusInfo;
 
 	sysxWriter file;
 	floorBoard *fxsBoard;

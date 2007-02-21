@@ -612,9 +612,6 @@ void floorBoardDisplay::writeSignal(bool value)
 		}
 		else /* Bank is sellected. */
 		{
-			emit setStatusSymbol(2);
-			emit setStatusMessage(tr("Sending"));
-
 			sysxIO->setDeviceReady(false);			// Reserve the device for interaction.
 			//sysxIO->setBuffer();
 
@@ -623,6 +620,11 @@ void floorBoardDisplay::writeSignal(bool value)
 			QList<QString> patchAddress = sysxIO->getFileSource().address;
 			if(!sysxIO->getSyncStatus())			// Check if the data is allready in sync. with the device.
 			{	/* If not we send the data to the (temp) buffer. So we don't change the patch default address "0D 00". */
+
+				emit setStatusSymbol(2);
+				emit setStatusProgress(0);
+				emit setStatusMessage(tr("Sending"));
+
 				for(int i=0;i<patchData.size();++i) // Prepare the data to be send at ones.
 				{
 					QList<QString> data = patchData.at(i);
@@ -674,6 +676,7 @@ void floorBoardDisplay::writeSignal(bool value)
 					{	/* Accepted to overwrite data. So now we have to set destination address by replacing the default (buffer). */
 						
 						emit setStatusSymbol(2);
+						emit setStatusProgress(0);
 						emit setStatusMessage(tr("Sending"));
 
 						int bank = sysxIO->getBank();

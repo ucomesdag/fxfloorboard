@@ -24,7 +24,6 @@
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"
-#include "statusBarWidget.h"
 #include "SysxIO.h"
 
 mainWindow::mainWindow(QWidget *parent)
@@ -188,19 +187,19 @@ void mainWindow::createStatusBar()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 
-	statusBarWidget *status = new statusBarWidget(this);
-	status->setStatusSymbol(0);
-	status->setStatusMessage(tr("Not connected"));
+	statusInfo = new statusBarWidget(this);
+	statusInfo->setStatusSymbol(0);
+	statusInfo->setStatusMessage(tr("Not connected"));
 
 	QObject::connect(sysxIO, SIGNAL(setStatusSymbol(int)),
-                status, SLOT(setStatusSymbol(int)));
+                statusInfo, SLOT(setStatusSymbol(int)));
 	QObject::connect(sysxIO, SIGNAL(setStatusProgress(int)),
-                status, SLOT(setStatusProgress(int)));;
+                statusInfo, SLOT(setStatusProgress(int)));;
 	QObject::connect(sysxIO, SIGNAL(setStatusMessage(QString)),
-                status, SLOT(setStatusMessage(QString)));
+                statusInfo, SLOT(setStatusMessage(QString)));
 
 	statusBar = new QStatusBar;
-	statusBar->addWidget(status);
+	statusBar->addWidget(statusInfo);
 	statusBar->setSizeGripEnabled(false);
 };
 
