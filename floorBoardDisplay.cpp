@@ -200,7 +200,6 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 			sysxIO->setFileName("");
 			if(this->patchLoadError)
 			{
-				QString snork = sysxIO->getRequestName().trimmed();
 				QMessageBox *msgBox = new QMessageBox();
 				msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 				msgBox->setIcon(QMessageBox::Warning);
@@ -701,7 +700,7 @@ void floorBoardDisplay::writeSignal(bool value)
 								{ 
 									hex = addr1;
 								}
-								else if(x == sysxAddressOffset - 1)
+								else if(x == sysxAddressOffset + 1)
 								{
 									hex = addr2;
 								}

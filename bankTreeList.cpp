@@ -457,11 +457,11 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 		QObject::connect(sysxIO, SIGNAL(isChanged()),	// Connect the isChanged message
 			this, SLOT(requestPatch()));				// to requestPatch.
 
-		sysxIO->requestPatchChange(bank, patch);
-
 		emit setStatusSymbol(2);
 		emit setStatusMessage(tr("Sending"));
 		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
+
+		sysxIO->requestPatchChange(bank, patch);
 	};
 };
 /*********************** requestPatch() *******************************
@@ -480,11 +480,11 @@ void bankTreeList::requestPatch()
 		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result of the request
 			this, SLOT(updatePatch(QString)));					// to updatePatch function.
 
-		sysxIO->requestPatch(0, 0);
-
 		emit setStatusSymbol(3);
 		emit setStatusProgress(0);
 		emit setStatusMessage(tr("Receiving"));
+		
+		sysxIO->requestPatch(0, 0);
 	};
 };
 

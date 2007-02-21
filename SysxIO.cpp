@@ -519,6 +519,21 @@ void SysxIO::checkPatchChange(QString name)
 			emit setStatusSymbol(1);
 			emit setStatusProgress(0);
 			emit setStatusMessage(tr("Ready"));	
+
+			QMessageBox *msgBox = new QMessageBox();
+			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
+			msgBox->setIcon(QMessageBox::Warning);
+			msgBox->setTextFormat(Qt::RichText);
+			QString msgText;
+			msgText.append("<font size='+1'><b>");
+			msgText.append(tr("Error while changing banks."));
+			msgText.append("<b></font><br>");
+			msgText.append(tr("An incorrect patch has been loaded. Please try to load the patch again."));
+			msgBox->setText(msgText);
+			msgBox->setInformativeText(tr("This is a known bug, it occures when changing the bank 'LSB'.\n"
+				"For an unkown reason it didn't change."));
+			msgBox->setStandardButtons(QMessageBox::Ok);
+			msgBox->exec();
 		};
 	};
 };
