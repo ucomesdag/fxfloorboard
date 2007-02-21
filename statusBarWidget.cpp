@@ -21,7 +21,6 @@
 ****************************************************************************/
 
 #include "statusBarWidget.h"
-#include "globalVariables.h"
 
 statusBarWidget::statusBarWidget(QWidget *parent)
     : QWidget(parent)
@@ -46,7 +45,7 @@ statusBarWidget::statusBarWidget(QWidget *parent)
 
 	this->label = new QLabel(this);
 	this->label->setFixedWidth(100);
-	this->label->setText(tr("Not connected"));
+	this->label->setText("");
 	this->label->move(xOffset, 0);
 
 	xOffset += this->label->width() + spacing;

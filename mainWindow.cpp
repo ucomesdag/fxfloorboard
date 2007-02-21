@@ -189,6 +189,8 @@ void mainWindow::createStatusBar()
 	SysxIO *sysxIO = SysxIO::Instance();
 
 	statusBarWidget *status = new statusBarWidget(this);
+	status->setStatusSymbol(0);
+	status->setStatusMessage(tr("Not connected"));
 
 	QObject::connect(sysxIO, SIGNAL(setStatusSymbol(int)),
                 status, SLOT(setStatusSymbol(int)));
