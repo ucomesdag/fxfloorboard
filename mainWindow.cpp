@@ -24,6 +24,7 @@
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"
+#include "statusBarWidget.h"
 #include "SysxIO.h"
 
 mainWindow::mainWindow(QWidget *parent)
@@ -187,7 +188,7 @@ void mainWindow::createStatusBar()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 
-	statusInfo = new statusBarWidget(this);
+	statusBarWidget *statusInfo = new statusBarWidget(this);
 	statusInfo->setStatusSymbol(0);
 	statusInfo->setStatusMessage(tr("Not connected"));
 
