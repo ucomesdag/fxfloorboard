@@ -369,7 +369,7 @@ QString MidiTable::getHeader(bool receive)
 	for(int i=0;i<section.level.size();++i)
 	{
 		int offset = 0;
-		if(!receive) 
+		if(!receive && i == sysxAddressOffset - 1) 
 		{
 			offset = 1;
 		};
@@ -512,6 +512,31 @@ QString MidiTable::dataRequest(QString hex1, QString hex2, QString hex3)
 	return sysxMsg;
 };
 
+QString MidiTable::dataChange(QString hex1, QString hex2, QString hex3, QString hex4)
+{
+	QString sysxMsg;
+	sysxMsg.append(getHeader(false));
+	
+	sysxMsg.append("0D"); //hex1
+	sysxMsg.append("00"); //hex2
+
+	sysxMsg.append(hex1);
+	sysxMsg.append(hex2);
+
+	sysxMsg.append(hex4);
+
+	int dataSize = 0; bool ok;
+	for(int i=sysxAddressOffset;i<sysxMsg.size();++i)
+	{
+		dataSize += sysxMsg.mid(i, 2).toInt(&ok, 16);
+		i++;
+	};	
+	sysxMsg.append(getCheckSum(dataSize));
+
+	sysxMsg.append(getFooter());
+	return sysxMsg;
+};
+
 QString MidiTable::nameRequest(int bank, int patch)
 {
 	bool ok;
@@ -548,7 +573,7 @@ QString MidiTable::nameRequest(int bank, int patch)
 	sysxMsg.append(getSize(hex1, hex2));
 
 	int dataSize = 0;
-	for(int i=7;i<sysxMsg.size();++i)
+	for(int i=sysxAddressOffset;i<sysxMsg.size();++i)
 	{
 		dataSize += sysxMsg.mid(i, 2).toInt(&ok, 16);
 		i++;
@@ -595,7 +620,7 @@ QString MidiTable::patchRequest(int bank, int patch)
 	sysxMsg.append(getSize());
 
 	int dataSize = 0;
-	for(int i=7;i<sysxMsg.size();++i)
+	for(int i=sysxAddressOffset;i<sysxMsg.size();++i)
 	{
 		dataSize += sysxMsg.mid(i, 2).toInt(&ok, 16);
 		i++;

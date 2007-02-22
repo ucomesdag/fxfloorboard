@@ -87,6 +87,7 @@ private slots:
 	void receiveSysx(QString sysxMsg);
 	void finishedSending();
 	void namePatchChange();
+	void resetDevice(QString sysxMsg);
 	void checkPatchChange(QString name);
 
 signals:

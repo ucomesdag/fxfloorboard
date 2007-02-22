@@ -183,6 +183,38 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	sysxMsg.replace(sysxMsg.size() - 2, getCheckSum(dataSize));
 
 	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
+
+	if(this->isConnected() && this->deviceReady())
+	{
+		this->setDeviceReady(false);
+
+		emit setStatusSymbol(2);
+		emit setStatusProgress(0);
+		emit setStatusMessage("Sending");
+
+		MidiTable *midiTable = MidiTable::Instance();
+		QString sysxMsg = midiTable->dataChange(hex1, hex2, hex3, hex4);
+
+		QObject::connect(this, SIGNAL(sysxReply(QString)),	
+			this, SLOT(resetDevice(QString)));
+		
+		this->sendSysx(sysxMsg);
+	};
+};
+
+/************************ resetDevice() ******************************
+* Reset the device after sending a sysexmesage.
+**********************************************************************/
+void SysxIO::resetDevice(QString replyMsg) 
+{
+	QObject::disconnect(this, SIGNAL(sysxReply(QString)),	
+			this, SLOT(resetDevice(QString)));
+
+	this->setDeviceReady(true);	// Free the device after finishing interaction.
+
+	emit setStatusSymbol(1);
+	emit setStatusProgress(0);
+	emit setStatusMessage("Ready");
 };
 
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5)
