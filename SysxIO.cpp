@@ -85,7 +85,7 @@ void SysxIO::setFileSource(QByteArray data)
 		unsigned int nextn = (int)nextbyte;
 		QString nexthex = QString::number(nextn, 16).toUpper();
 		if (nexthex.length() < 2) nexthex.prepend("0");
-		if(offset > 6 && nexthex != "F7")
+		if(offset >= sysxAddressOffset && nexthex != "F7")
 		{		
 			dataSize += n;
 		};
@@ -176,7 +176,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	sysxMsg.replace(index, hex4);
 
 	int dataSize = 0;
-	for(int i=sysxMsg.size() - 3; i>6;i--)
+	for(int i=sysxMsg.size() - 3; i>=sysxAddressOffset;i--)
 	{
 		dataSize += sysxMsg.at(i).toInt(&ok, 16);
 	};
@@ -184,7 +184,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 
 	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
 
-	if(this->isConnected() && this->deviceReady())
+	if(this->isConnected() && this->deviceReady() && this->getSyncStatus())
 	{
 		this->setDeviceReady(false);
 
@@ -230,13 +230,30 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	sysxMsg.replace(index + 1, hex5);
 
 	int dataSize = 0;
-	for(int i=sysxMsg.size() - 2; i>6;i--)
+	for(int i=sysxMsg.size() - 2; i>=sysxAddressOffset;i--)
 	{
 		dataSize += sysxMsg.at(i).toInt(&ok, 16);
 	};
 	sysxMsg.replace(sysxMsg.size() - 2, getCheckSum(dataSize));
 
 	this->fileSource.hex.replace(this->fileSource.address.indexOf(address), sysxMsg);
+
+	if(this->isConnected() && this->deviceReady() && this->getSyncStatus())
+	{
+		this->setDeviceReady(false);
+
+		emit setStatusSymbol(2);
+		emit setStatusProgress(0);
+		emit setStatusMessage("Sending");
+
+		MidiTable *midiTable = MidiTable::Instance();
+		QString sysxMsg = midiTable->dataChange(hex1, hex2, hex3, hex4, hex5);
+
+		QObject::connect(this, SIGNAL(sysxReply(QString)),	
+			this, SLOT(resetDevice(QString)));
+		
+		this->sendSysx(sysxMsg);
+	};
 };
 
 void SysxIO::setFileName(QString fileName)
@@ -552,7 +569,7 @@ void SysxIO::checkPatchChange(QString name)
 			emit setStatusProgress(0);
 			emit setStatusMessage(tr("Ready"));	
 
-			QMessageBox *msgBox = new QMessageBox();
+			/*QMessageBox *msgBox = new QMessageBox();
 			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
 			msgBox->setIcon(QMessageBox::Warning);
 			msgBox->setTextFormat(Qt::RichText);
@@ -565,7 +582,7 @@ void SysxIO::checkPatchChange(QString name)
 			msgBox->setInformativeText(tr("This is a known bug, it occures when changing the bank 'LSB'.\n"
 				"For an unkown reason it didn't change."));
 			msgBox->setStandardButtons(QMessageBox::Ok);
-			msgBox->exec();
+			msgBox->exec();*/
 		};
 	};
 };
