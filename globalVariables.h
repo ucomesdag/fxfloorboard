@@ -41,8 +41,7 @@ const int buttonBlinkInterval = 250;				// The interval (ms) the led on buttons 
 /* Sysex Message Parameters */
 const int sysxAddressOffset = 7;	// Offset (starts at 0) where the address information starts in a sysx message.
 const int sysxDataOffset = 11;		// Offset (starts at 0) where the data starts in a sysx message.
-const int checksumStart = 7;		// Offset (starts at 0) where we start calculating the checksum (Normally this is the address offset).
-const int checksumStop = -1;		// Offset (starts at 0) where we stop calculating the checksum (negative numbers mean we count from the end).
+const int checksumOffset = 7;		// Offset (starts at 0) where we start calculating the checksum (Normally this is the address offset).
 
 /* Patches and Banks */
 const int bankTotalUser = 35;		// Number of user (editable) banks.

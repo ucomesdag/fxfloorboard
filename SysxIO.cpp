@@ -85,7 +85,7 @@ void SysxIO::setFileSource(QByteArray data)
 		unsigned int nextn = (int)nextbyte;
 		QString nexthex = QString::number(nextn, 16).toUpper();
 		if (nexthex.length() < 2) nexthex.prepend("0");
-		if(offset >= sysxAddressOffset && nexthex != "F7")
+		if(offset >= checksumOffset && nexthex != "F7")
 		{		
 			dataSize += n;
 		};
@@ -176,7 +176,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	sysxList.replace(index, hex4);
 
 	int dataSize = 0;
-	for(int i=sysxList.size() - 3; i>=sysxAddressOffset;i--)
+	for(int i=sysxList.size() - 3; i>=checksumOffset;i--)
 	{
 		dataSize += sysxList.at(i).toInt(&ok, 16);
 	};
@@ -220,7 +220,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 	sysxList.replace(index + 1, hex5);
 
 	int dataSize = 0;
-	for(int i=sysxList.size() - 3; i>=sysxAddressOffset;i--)
+	for(int i=sysxList.size() - 3; i>=checksumOffset;i--)
 	{
 		dataSize += sysxList.at(i).toInt(&ok, 16);
 	};
@@ -266,7 +266,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QList<QString> hexData)
 		};
 
 		int dataSize = 0;
-		for(int i=sysxList.size() - 3; i>=sysxAddressOffset;i--)
+		for(int i=sysxList.size() - 3; i>=checksumOffset;i--)
 		{
 			dataSize += sysxList.at(i).toInt(&ok, 16);
 		};
@@ -385,13 +385,15 @@ QList<QString> SysxIO::getFileSource(QString hex1, QString hex2)
 
 QString SysxIO::getCheckSum(int dataSize)
 {
-	bool ok;
+	/*bool ok;
 	QString base = "80";
 	int sum = dataSize % base.toInt(&ok, 16);
 	if(sum!=0) sum = base.toInt(&ok, 16) - sum;
 	QString checksum = QString::number(sum, 16).toUpper();
 	if(checksum.length()<2) checksum.prepend("0");
-	return checksum;
+	return checksum;*/
+	MidiTable *midiTable = MidiTable::Instance();
+	return midiTable->getCheckSum(dataSize);
 };
 
 QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
@@ -446,7 +448,7 @@ QList<QString> SysxIO::correctSysxMsg(QList<QString> sysxMsg)
 	};
 	
 	int dataSize = 0;
-	for(int i=sysxMsg.size() - 1; i>=sysxAddressOffset;i--)
+	for(int i=sysxMsg.size() - 1; i>=checksumOffset;i--)
 	{
 		dataSize += sysxMsg.at(i).toInt(&ok, 16);
 	};
