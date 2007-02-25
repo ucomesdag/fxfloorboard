@@ -41,8 +41,8 @@ const int buttonBlinkInterval = 250;				// The interval (ms) the led on buttons 
 /* Sysex Message Parameters */
 const int sysxAddressOffset = 7;	// Offset (starts at 0) where the address information starts in a sysx message.
 const int sysxDataOffset = 11;		// Offset (starts at 0) where the data starts in a sysx message.
-const int checksumStart = 7;		// Offset where we start calculating the checksum (Normally this is the address offset).
-const int checksumStop = -1;		// Offset where we stop calculating the checksum (negative numbers mean we count from the end).
+const int checksumStart = 7;		// Offset (starts at 0) where we start calculating the checksum (Normally this is the address offset).
+const int checksumStop = -1;		// Offset (starts at 0) where we stop calculating the checksum (negative numbers mean we count from the end).
 
 /* Patches and Banks */
 const int bankTotalUser = 35;		// Number of user (editable) banks.
@@ -50,9 +50,10 @@ const int bankTotalAll = 85;		// Number of total banks.
 const int patchPerBank = 4;			// Number of patches in a bank.
 
 /* Midi Send & Receive */
-const int midiTimeout = 250;		// Time (ms) the device needs to process a MIDI message before sending the next.
+const int midiTimeout = 2000;		// Time (ms) the device needs to process a MIDI message before sending the next.
+const int processTimeout = 25;		// Time (ms) the device needs to process a MIDI message before closing the device.
 const int sendTimeout = 25;			// Time (ms) the device needs to process a SYSEX message before sending the next.
-const int receiveTimeout = 100;		// Time (ms) we wait between sysex messages for the next one to be received.
+const int receiveTimeout = 100;		// Time (ms) we wait between SYSEX messages for the next one to be received.
 const int maxWait = 4;				// Maximum times we loop through the receive handel before we give up the waiting.
 const int minWait = 2;				// Minimum times we loop through the receive handel before we give up the waiting.
 const int maxRetry = 10;			// Maximum times we retry to load a patch in case of a transfer error .

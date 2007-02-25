@@ -305,7 +305,13 @@ QList<QString> stompBox::getSourceItems(QString hex1, QString hex2)
 
 void stompBox::updateComboBox(QString hex1, QString hex2, QString hex3)
 {	
+	QObject::disconnect(comboBox, SIGNAL(currentIndexChanged(int)), // To prevent sending a signal when loading a patch.
+                this, SLOT(valueChanged(int)));
+	
 	setComboBoxCurrentIndex(getSourceValue(hex1, hex2, hex3));
+
+	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)),
+                this, SLOT(valueChanged(int)));
 };
 
 void stompBox::updateKnob1(QString hex1, QString hex2, QString hex3)

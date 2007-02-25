@@ -48,6 +48,7 @@ public:
 	void setFileSource(QString data);
 	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4);
 	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5);
+	void setFileSource(QString hex1, QString hex2, QList<QString> hexData);
 	void setFileName(QString fileName);
 	QString getFileName();
 	SysxData getFileSource();
@@ -111,6 +112,8 @@ private:
 	static SysxIO* _instance;
 	static SysxIODestroyer _destroyer;
 
+	void processSpooler();
+
 	SysxData fileSource;
 	QString fileName;
 
@@ -127,6 +130,7 @@ private:
 	int changeCount;
 
 	QString requestName;
+	QList<QString> sendSpooler;
 };
 
 #endif // SYSXIO_H

@@ -444,22 +444,23 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 	if(item->childCount() == 0 && sysxIO->deviceReady() && sysxIO->isConnected()) 
 		// Make sure it's a patch (Patches are the last in line so no children).
 	{
+		emit setStatusSymbol(2);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Sending"));
+		
 		sysxIO->setDeviceReady(false);
-
-		bool ok;
 		sysxIO->setRequestName(item->text(0));	// Set the name of the patch we are going to load, so we can check if we have loaded the correct patch at the end.
 
+		bool ok;
 		int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10); // Get the bank
 		int patch = item->parent()->indexOfChild(item) + 1;								// and the patch number.
-
+		
+		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
+		
 		QObject::disconnect(sysxIO, SIGNAL(isChanged()),	
 			this, SLOT(requestPatch()));
 		QObject::connect(sysxIO, SIGNAL(isChanged()),	// Connect the isChanged message
 			this, SLOT(requestPatch()));				// to requestPatch.
-
-		emit setStatusSymbol(2);
-		emit setStatusMessage(tr("Sending"));
-		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
 
 		sysxIO->requestPatchChange(bank, patch);
 	};

@@ -330,16 +330,15 @@ void floorBoard::dropEvent(QDropEvent *event)
 			};
 
 			SysxIO *sysxIO = SysxIO::Instance();
+			QList<QString> hexData;
 			for(int index=0;index<fx.size();index++)
 			{
-				QString hexIndex = QString::number(fx.indexOf(index), 16).toUpper();
-				if(hexIndex.length() < 2) hexIndex.prepend("0");
-				
-				QString hexValue = QString::number(index, 16).toUpper();
-				if(hexValue.length() < 2) hexValue.prepend("0");
-		
-				sysxIO->setFileSource("11", "00", hexIndex, hexValue);
+				QString fxHexValue = QString::number(fx.at(index), 16).toUpper();
+				if(fxHexValue.length() < 2) fxHexValue.prepend("0");
+
+				hexData.append(fxHexValue);
 			};
+			sysxIO->setFileSource("11", "00", hexData);
 		}
 		else
 		{

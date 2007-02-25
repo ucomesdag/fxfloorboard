@@ -189,7 +189,7 @@ void floorBoardDisplay::setPatchDisplay(QString patchName)
 		str.append("</body></html>");
 		patchDisplay->setHtml(str);
 	};
-	if(sysxIO->getFileName() == tr("init patch"))
+	if(sysxIO->getFileName() == tr("init patch") || sysxIO->getFileName() == ":default.syx")
 	{
 		sysxIO->setFileName("");
 	}
@@ -612,7 +612,6 @@ void floorBoardDisplay::writeSignal(bool value)
 		else /* Bank is sellected. */
 		{
 			sysxIO->setDeviceReady(false);			// Reserve the device for interaction.
-			//sysxIO->setBuffer();
 
 			QString sysxMsg; bool ok;
 			QList< QList<QString> > patchData = sysxIO->getFileSource().hex; // Get the loaded patch data.
@@ -635,6 +634,11 @@ void floorBoardDisplay::writeSignal(bool value)
 				sysxIO->setSyncStatus(true);		// Inadvance of the actuale data transfer we set it allready to sync.
 				this->writeButton->setBlink(false);	// Sync so we stop blinking the button
 				this->writeButton->setValue(true);	// and activate the write button.
+
+				QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result signal 
+					this, SLOT(resetDevice(QString)));					// to a slot that will reset the device after sending.
+
+				sysxIO->sendSysx(sysxMsg);								// Send the data.
 			}
 			else /* If sync we will write (save) the patch directly to sellected bank. So we will have to change the patch adsress */
 			{
@@ -654,6 +658,7 @@ void floorBoardDisplay::writeSignal(bool value)
 					msgBox->exec();
 					this->writeButton->setBlink(false); // Allready sync with the buffer so no blinking
 					this->writeButton->setValue(true);	// and so we will also leave the write button active.
+					sysxIO->setDeviceReady(true);
 				}
 				else /* User bank so we can write to it after confirmation to overwrite stored data. */
 				{
@@ -712,17 +717,23 @@ void floorBoardDisplay::writeSignal(bool value)
 								sysxMsg.append(hex);
 							};
 						};
-					};
-					sysxIO->setSyncStatus(true);		// Still in sync
-					this->writeButton->setBlink(false); // so no blinking here either...
-					this->writeButton->setValue(true);	// ... and still the button will be active also ...
+						sysxIO->setSyncStatus(true);		// Still in sync
+						this->writeButton->setBlink(false); // so no blinking here either...
+						this->writeButton->setValue(true);	// ... and still the button will be active also ...
+
+						QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result signal 
+							this, SLOT(resetDevice(QString)));					// to a slot that will reset the device after sending.
+
+						sysxIO->sendSysx(sysxMsg);								// Send the data.
+					}
+					else
+					{
+						sysxIO->setDeviceReady(true);
+						this->writeButton->setBlink(false);
+						this->writeButton->setValue(true);
+					};					
 				};
-			};						// Create new midiIO thread.
-
-			QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result signal 
-				this, SLOT(resetDevice(QString)));					// to a slot that will reset the device after sending.
-
-			sysxIO->sendSysx(sysxMsg);		// Send the data.
+			};
 
 			/* DEBUGGING OUTPUT 
 			QString snork;

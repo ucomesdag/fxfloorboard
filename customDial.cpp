@@ -81,7 +81,6 @@ void customDial::setOffset(double _newValue)
 	this->value = _newValue;	
 	this->xOffset = imageNr*dialSize.width();	
 	this->update();
-	emitValue(_newValue);
 };
 
 void customDial::mousePressEvent(QMouseEvent *event)
@@ -124,6 +123,7 @@ void customDial::mouseMoveEvent(QMouseEvent *event)
 	
 	this->_lastpos = event->pos();
 	setOffset(_newValue);
+	emitValue(_newValue);
 };
 
 void customDial::wheelEvent(QWheelEvent *event)
@@ -145,7 +145,8 @@ void customDial::wheelEvent(QWheelEvent *event)
 		{
 			_newValue = max;
 		};
-		setOffset(_newValue);	
+		setOffset(_newValue);
+		emitValue(_newValue);
     };
 };
 
@@ -182,6 +183,7 @@ void customDial::keyPressEvent(QKeyEvent *event)
 			this->_lastValue = value;
 		};
 		setOffset(_newValue);
+		emitValue(_newValue);
 	};
 };
 

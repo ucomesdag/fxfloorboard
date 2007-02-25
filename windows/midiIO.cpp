@@ -539,9 +539,9 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 				/* Output the midi command */
 				midiOutShortMsg(outHandle, midi);
 
-				/* Give it some time to finish else there is a change that 
-				the device is closed before finishing the transmission */
-				Sleep(midiTimeout);
+				/* Give it some time to process the midi 
+				message before sending the next*/
+				Sleep(processTimeout);
 			};
 		}
 		else  
@@ -554,11 +554,10 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 
 			/* Output the midi command */
 			midiOutShortMsg(outHandle, midi);
-
-			/* Give it some time to finish else there is a change that 
-			the device is closed before finishing the transmission */
-			Sleep(midiTimeout);
 		};	
+		/* Give it some time to finish else there is a change that 
+		the device is closed before finishing the transmission */
+		Sleep(processTimeout);
 
 		/* Close the MIDI device */
 		midiOutClose(outHandle);

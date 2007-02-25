@@ -77,7 +77,6 @@ void customSlider::setOffset(double _newValue)
 	this->value = _newValue;	
 	this->yOffset = result;
 	this->update();
-	emitValue(_newValue);
 };
 
 void customSlider::mouseTrigger(QPoint mousePos)
@@ -104,6 +103,7 @@ void customSlider::mouseTrigger(QPoint mousePos)
 				
 	};
 	setOffset(_newValue);
+	emitValue(_newValue);
 };
 
 void customSlider::mousePressEvent(QMouseEvent *event)
@@ -139,7 +139,8 @@ void customSlider::wheelEvent(QWheelEvent *event)
 		{
 			_newValue = max;
 		};
-		setOffset(_newValue);	
+		setOffset(_newValue);
+		emitValue(_newValue);	
     };
 };
 
@@ -176,6 +177,7 @@ void customSlider::keyPressEvent(QKeyEvent *event)
 			this->_lastValue = value;
 		};
 		setOffset(_newValue);
+		emitValue(_newValue);
 	};
 };
 
