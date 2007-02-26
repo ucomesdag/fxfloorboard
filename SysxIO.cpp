@@ -167,8 +167,7 @@ void SysxIO::setFileSource(QString data)
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4)
 {
 	bool ok;
-	int dataOffset = sysxDataOffset;
-	int index = hex3.toInt(&ok, 16) + dataOffset;
+	int index = hex3.toInt(&ok, 16) + sysxDataOffset;
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
@@ -210,12 +209,11 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5)
 {
 	bool ok;
-	int dataOffset = sysxDataOffset;
 	QString address;
 	address.append(hex1);
 	address.append(hex2);
 	QList<QString> sysxList = this->fileSource.hex.at(this->fileSource.address.indexOf(address));
-	int index = hex3.toInt(&ok, 16) + dataOffset;
+	int index = hex3.toInt(&ok, 16) + sysxDataOffset;
 	sysxList.replace(index, hex4);
 	sysxList.replace(index + 1, hex5);
 

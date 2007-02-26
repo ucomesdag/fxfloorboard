@@ -444,19 +444,19 @@ int stompBox::getSourceValue(QString hex1, QString hex2, QString hex3)
 	MidiTable *midiTable = MidiTable::Instance();
 
 	bool ok;
-	int value; int dataOffset = 11;
+	int value;
 	QList<QString> items = getSourceItems(hex1, hex2);
 	if(midiTable->isData("Stucture", hex1, hex2, hex3))
 	{
 		int maxRange = QString("7F").toInt(&ok, 16) + 1;
-		int listindex = dataOffset + QString(hex3).toInt(&ok, 16);
+		int listindex = sysxDataOffset + QString(hex3).toInt(&ok, 16);
 		int valueData1 = items.at(listindex).toInt(&ok, 16);
 		int valueData2 = items.at(listindex + 1).toInt(&ok, 16);
 		value = (valueData1 * maxRange) + valueData2;
 	}
 	else
 	{
-		value = items.at(dataOffset + QString(hex3).toInt(&ok, 16)).toInt(&ok, 16);
+		value = items.at(sysxDataOffset + QString(hex3).toInt(&ok, 16)).toInt(&ok, 16);
 	};
 	return value;
 };
