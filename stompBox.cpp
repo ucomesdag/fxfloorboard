@@ -23,6 +23,7 @@
 #include "stompBox.h"
 #include "MidiTable.h"
 #include "SysxIO.h"
+#include "globalVariables.h"
 
 stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint stompPos)
     : QWidget(parent)
