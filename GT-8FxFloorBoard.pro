@@ -31,8 +31,8 @@ INCLUDEPATH += ./GeneratedFiles \
     ./GeneratedFiles/Release \
     .
 DEPENDPATH += .
-MOC_DIR += ./GeneratedFiles/release
-OBJECTS_DIR += release
+MOC_DIR += ./GeneratedFiles/Release
+OBJECTS_DIR += Release
 UI_DIR += ./GeneratedFiles
 
 #Platform dependent file(s)

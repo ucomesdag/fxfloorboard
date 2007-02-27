@@ -29,8 +29,8 @@ HEADERS += ./globalVariables.h \
     ./stompbox_dgt.h \
     ./stompbox_eq.h \
     ./stompbox_fv.h \
-    ./stompbox_Fx1.h \
-    ./stompbox_Fx2.h \
+    ./stompbox_fx1.h \
+    ./stompbox_fx2.h \
     ./stompbox_lp.h \
     ./stompbox_ns.h \
     ./stompbox_od.h \
@@ -72,8 +72,8 @@ SOURCES += ./main.cpp \
     ./stompbox_dgt.cpp \
     ./stompbox_eq.cpp \
     ./stompbox_fv.cpp \
-    ./stompbox_Fx1.cpp \
-    ./stompbox_Fx2.cpp \
+    ./stompbox_fx1.cpp \
+    ./stompbox_fx2.cpp \
     ./stompbox_lp.cpp \
     ./stompbox_ns.cpp \
     ./stompbox_od.cpp \
