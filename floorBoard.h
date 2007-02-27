@@ -46,7 +46,6 @@ public:
 	~floorBoard();
 	QPoint getStompPos(int id);
 
-
 public slots:
 	void setWidth(int dist);
 	void setCollapse();

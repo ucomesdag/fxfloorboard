@@ -430,6 +430,7 @@ void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
 			int patch = item->parent()->indexOfChild(item) + 1;
 
 			emit patchSelectSignal(bank, patch);
+			sysxIO->setRequestName(item->text(0));	// Set the name of the patch we have sellected in case we load it.
 		};
 	};
 };

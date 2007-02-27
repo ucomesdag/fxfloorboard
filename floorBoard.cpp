@@ -267,7 +267,7 @@ void floorBoard::dragMoveEvent(QDragMoveEvent *event)
             event->setDropAction(Qt::MoveAction);
 			event->accept();
         } else {
-            event->acceptProposedAction();
+            //event->acceptProposedAction();
         };
     } else {
         event->ignore();

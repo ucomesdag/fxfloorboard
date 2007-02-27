@@ -124,9 +124,15 @@ void stompBox::mouseMoveEvent(QMouseEvent *event)
 			
 			if (drag->start(Qt::MoveAction) != Qt::MoveAction)
 			{
+				event->ignore();
 				show();
 			};
 
+			if(drag->source() != drag->target())
+			{
+				event->ignore();
+				show();
+			};
 		};
 	};
 };

@@ -53,6 +53,9 @@ public slots:
 	void patchLoadSignal(int bank, int patch);
 	void notConnected();
 
+	void writeToBuffer();
+	void writeToMemory();
+
 signals:
 	void currentIndexChanged(int index);
 	void updateSignal();

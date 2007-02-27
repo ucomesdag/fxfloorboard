@@ -588,8 +588,9 @@ void SysxIO::sendMidi(QString midiMsg)
 void SysxIO::finishedSending()
 {
 	emit isFinished();
+	/*emit setStatusSymbol(1);
 	emit setStatusProgress(0);
-	emit setStatusMessage(tr("[Midi finished]"));
+	emit setStatusMessage(tr("Ready"));*/
 
 	//this->namePatchChange();
 };
@@ -599,6 +600,10 @@ void SysxIO::finishedSending()
 ****************************************************************************/
 void SysxIO::requestPatchChange(int bank, int patch)
 {
+	/*emit setStatusSymbol(2);
+	emit setStatusProgress(0);
+	emit setStatusMessage(tr("Sending"));*/
+	
 	this->bankChange = bank;
 	this->patchChange = patch;
 
@@ -607,8 +612,6 @@ void SysxIO::requestPatchChange(int bank, int patch)
 	
 	QString midiMsg = getPatchChangeMsg(bank, patch);
 	this->sendMidi(midiMsg);
-
-	emit setStatusMessage(tr("Sending"));
 };
   
 /***************************** namePatchChange() *************************
@@ -625,8 +628,6 @@ void SysxIO::namePatchChange()
 		this, SLOT(checkPatchChange(QString)));		
 	
 	this->requestPatchName(0, 0);
-
-	emit setStatusMessage(tr("Receiving"));
 };
 
 /***************************** checkPatchChange() *************************
@@ -656,6 +657,8 @@ void SysxIO::checkPatchChange(QString name)
 		}
 		else
 		{
+			QObject::disconnect(this, SIGNAL(isChanged()));
+			
 			this->changeCount = 0;
 			this->setDeviceReady(true); // Free the device after finishing interaction.
 			
