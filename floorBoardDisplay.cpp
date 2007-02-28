@@ -584,11 +584,11 @@ void floorBoardDisplay::connectionResult(QString sysxMsg)
 
 void floorBoardDisplay::writeSignal(bool value)
 {
-	this->writeButton->setBlink(true);
-	
 	SysxIO *sysxIO = SysxIO::Instance();
 	if(sysxIO->isConnected() && sysxIO->deviceReady()) /* Check if we are connected and if the device is free. */
 	{
+		this->writeButton->setBlink(true);
+
 		if(sysxIO->getBank() == 0) /* Check if a bank is sellected. */
 		{
 			QMessageBox *msgBox = new QMessageBox();
@@ -709,11 +709,14 @@ void floorBoardDisplay::writeSignal(bool value)
 			msgBox->exec();*/
 		};
 	}
-	else /* We are NOT connected OR/AND the device was NOT free. */
+	else if(sysxIO->isConnected() != true) /* We are NOT connected */
 	{
 		notConnected();
+	}
+	else /* The device was NOT free. */
+	{
+		//emit notConnected();
 	};
-
 };
 
 void floorBoardDisplay::writeToBuffer() 

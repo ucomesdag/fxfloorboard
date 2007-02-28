@@ -21,19 +21,36 @@
 #############################################################################
 
 TEMPLATE = app
-TARGET = GT-8FxFloorBoard
-DESTDIR = ./Release
-QT += xml
-CONFIG += release
+
 CONFIG += static
 CONFIG += embed_manifest_exe
-INCLUDEPATH += ./GeneratedFiles \
-    ./GeneratedFiles/Release \
-    .
+CONFIG += release
+
+	debug {
+        TARGET = "GT-8 Fx FloorBoard"
+        DESTDIR = ./debug
+        MOC_DIR += ./generatedfiles/debug
+		OBJECTS_DIR += debug
+		UI_DIR += ./generatedfiles
+        INCLUDEPATH += ./generatedfiles \
+			./generatedfiles/debug \
+			.
+	}	
+		
+    release {
+        TARGET = "GT-8 Fx FloorBoard"
+        DESTDIR = ./release
+        MOC_DIR += ./generatedfiles/release
+		OBJECTS_DIR += release
+		UI_DIR += ./generatedfiles
+        INCLUDEPATH += ./generatedfiles \
+			./generatedfiles/release \
+			.
+    }
+    
 DEPENDPATH += .
-MOC_DIR += ./GeneratedFiles/Release
-OBJECTS_DIR += Release
-UI_DIR += ./GeneratedFiles
+QT += xml
+
 
 #Platform dependent file(s)
 win32 {
