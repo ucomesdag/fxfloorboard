@@ -129,8 +129,7 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	timer = new QTimer(this);
 
 	SysxIO *sysxIO = SysxIO::Instance();
-	currentBank = sysxIO->getBank();
-	currentPatch = sysxIO->getPatch();
+
 	this->blinkCount = 0;
 
 	QObject::connect(this, SIGNAL(setStatusSymbol(int)),
@@ -274,7 +273,7 @@ void floorBoardDisplay::updateDisplay()
 
 	MidiTable *midiTable = MidiTable::Instance();
 	QString patchName;
-	for(int i=11;i<nameArray.size() - 2;i++ )
+	for(int i=sysxDataOffset;i<nameArray.size() - 2;i++ )
 	{
 		patchName.append( midiTable->getMidiMap("Stucture", "12", "00", "00", nameArray.at(i)).name);
 	};	
@@ -309,8 +308,6 @@ void floorBoardDisplay::updateDisplay()
 	{
 		int bank = sysxIO->getBank();
 		int patch = sysxIO->getPatch();
-		currentBank = bank;
-		currentPatch = patch;
 		setPatchNumDisplay(bank, patch);
 	}
 	else
@@ -617,7 +614,7 @@ void floorBoardDisplay::writeSignal(bool value)
 			{	/* If not we send the data to the (temp) buffer. So we don't change the patch default address "0D 00". */
 
 				
-				if(sysxIO->getBank() != this->currentBank || sysxIO->getPatch() != this->currentPatch)// Check if a different patch is sellected
+				if(sysxIO->getBank() != sysxIO->getLoadedBank() || sysxIO->getPatch() != sysxIO->getLoadedPatch())// Check if a different patch is sellected
 				{															// else load the selected one.
 					emit setStatusSymbol(2);
 					emit setStatusProgress(0);
@@ -807,6 +804,14 @@ void floorBoardDisplay::writeToMemory()
 	sysxIO->sendSysx(sysxMsg);								// Send the data.
 };
 
+void floorBoardDisplay::patchChangeFailed()
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setBank(sysxIO->getLoadedBank());
+	sysxIO->setPatch(sysxIO->getLoadedPatch());
+	setPatchNumDisplay(sysxIO->getLoadedBank(), sysxIO->getLoadedPatch());
+};
+
 void floorBoardDisplay::resetDevice(QString replyMsg) 
 {
 	SysxIO *sysxIO = SysxIO::Instance();
@@ -821,14 +826,12 @@ void floorBoardDisplay::patchSelectSignal(int bank, int patch)
 	SysxIO *sysxIO = SysxIO::Instance();
 	if(blinkCount == 0)
 	{
-		currentBank = sysxIO->getBank();
-		currentPatch = sysxIO->getPatch();
 		currentSyncStatus = sysxIO->getSyncStatus();
 		sysxIO->setSyncStatus(false);
 		writeButton->setBlink(true);
 	};
 
-	if(currentBank != bank || currentPatch != patch)
+	if( sysxIO->getLoadedBank() != bank ||  sysxIO->getLoadedPatch() != patch)
 	{
 		sysxIO->setBank(bank);
 		sysxIO->setPatch(patch);
@@ -872,14 +875,14 @@ void floorBoardDisplay::blinkSellectedPatch(bool active)
 		QObject::disconnect(timer, SIGNAL(timeout()), this, SLOT(blinkSellectedPatch()));
 		timer->stop();
 		blinkCount = 0;
-		sysxIO->setBank(currentBank);
-		sysxIO->setPatch(currentPatch);
+		sysxIO->setBank(sysxIO->getLoadedBank());
+		sysxIO->setPatch(sysxIO->getLoadedPatch());
 		sysxIO->setSyncStatus(currentSyncStatus);
-		if(currentSyncStatus || currentBank == 0)
+		if(currentSyncStatus || sysxIO->getLoadedBank() == 0)
 		{
 			writeButton->setBlink(false);
 		};
-		setPatchNumDisplay(currentBank, currentPatch);
+		setPatchNumDisplay(sysxIO->getLoadedBank(),  sysxIO->getLoadedPatch());
 	};
 };
 

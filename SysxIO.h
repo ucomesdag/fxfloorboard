@@ -67,6 +67,10 @@ public:
 	void setPatch(int patch);
 	int getBank();
 	int getPatch();
+	void setLoadedBank(int bank);
+	void setLoadedPatch(int patch);
+	int getLoadedBank();
+	int getLoadedPatch();
 	void setRequestName(QString requestName);
 	QString getRequestName();
 	QString getPatchChangeMsg(int bank, int patch);
@@ -101,6 +105,8 @@ signals:
 	void setStatusProgress(int value);
     void setStatusMessage(QString message);
 
+	void patchChangeFailed();
+
 	void notConnectedSignal();
 
 protected :
@@ -122,6 +128,8 @@ private:
 
 	int bank;
 	int patch;
+	int loadedBank;
+	int loadedPatch;
 	bool isdevice;
 	bool syncStatus;
 	bool noerror;

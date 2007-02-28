@@ -31,9 +31,6 @@
 stompbox_dd::stompbox_dd(QWidget *parent)
     : stompBox(parent)
 {
-	SysxIO *sysxIO = SysxIO::Instance();
-	MidiTable *midiTable = MidiTable::Instance();
-
 	/* DELAY */
 	setImage(":/images/dd.png");
 	setKnob1("0B", "00", "03");

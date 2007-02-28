@@ -53,6 +53,8 @@ public slots:
 	void patchLoadSignal(int bank, int patch);
 	void notConnected();
 
+	void patchChangeFailed();
+
 	void writeToBuffer();
 	void writeToMemory();
 
@@ -89,8 +91,6 @@ private:
 	bool patchLoadError;
 	QTimer* timer;
 	int blinkCount;
-	int currentBank;
-	int currentPatch;
 	bool currentSyncStatus;
 };
 

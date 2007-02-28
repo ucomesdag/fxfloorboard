@@ -32,6 +32,7 @@
 #include "MidiTable.h"
 #include "sysxWriter.h"
 #include "SysxIO.h"
+#include "globalVariables.h"
 
 #include "stompbox_fx1.h"
 #include "stompbox_cs.h"
@@ -658,7 +659,7 @@ void floorBoard::updateStompBoxes()
 
 	MidiTable *midiTable = MidiTable::Instance();
 	QList<QString> stompOrder;
-	for(int i=11;i<fxChain.size() - 2;i++ ) 
+	for(int i=sysxDataOffset;i<fxChain.size() - 2;i++ ) 
 	{
 		stompOrder.append( midiTable->getMidiMap("Stucture", "11", "00", "00", fxChain.at(i)).name );
 	};

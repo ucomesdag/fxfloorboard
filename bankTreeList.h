@@ -42,6 +42,7 @@ public slots:
 	void setOpenItems(QTreeWidgetItem *item);
 	void connectedSignal();
 	void requestPatch();
+	void requestPatch(int bank, int patch);
 	void setItemClicked(QTreeWidgetItem *item, int column);
 	void setItemDoubleClicked(QTreeWidgetItem *item, int column);
 

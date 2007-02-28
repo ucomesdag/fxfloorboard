@@ -404,8 +404,8 @@ QTreeWidget* bankTreeList::newTreeList()
 	return newTreeList;
 };
 
-/*********************** setItemClicked() *****************************
- * 
+/*********************** setItemClicked() ***********************************
+ * Expands and colapses on a single click and sets patch sellection.
  ****************************************************************************/
 void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
 {
@@ -456,14 +456,21 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 		int bank = item->parent()->text(0).section(" ", 1, 1).trimmed().toInt(&ok, 10); // Get the bank
 		int patch = item->parent()->indexOfChild(item) + 1;								// and the patch number.
 		
-		emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
-		
-		QObject::disconnect(sysxIO, SIGNAL(isChanged()),	
-			this, SLOT(requestPatch()));
-		QObject::connect(sysxIO, SIGNAL(isChanged()),	// Connect the isChanged message
-			this, SLOT(requestPatch()));				// to requestPatch.
+		if(bank == sysxIO->getLoadedBank() && patch == sysxIO->getLoadedPatch())
+		{
+			requestPatch(bank, patch);
+		}
+		else
+		{
+			emit patchLoadSignal(bank, patch); // Tell to stop blinking a sellected patch and prepare to load this one instead.
+			
+			QObject::disconnect(sysxIO, SIGNAL(isChanged()),	
+				this, SLOT(requestPatch()));
+			QObject::connect(sysxIO, SIGNAL(isChanged()),	// Connect the isChanged message
+				this, SLOT(requestPatch()));				// to requestPatch.
 
-		sysxIO->requestPatchChange(bank, patch);
+			sysxIO->requestPatchChange(bank, patch);
+		};
 	};
 };
 /*********************** requestPatch() *******************************
@@ -487,6 +494,22 @@ void bankTreeList::requestPatch()
 		emit setStatusMessage(tr("Receiving"));
 		
 		sysxIO->requestPatch(0, 0);
+	};
+};
+
+void bankTreeList::requestPatch(int bank, int patch) 
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	if(sysxIO->isConnected())
+	{
+		QObject::connect(sysxIO, SIGNAL(sysxReply(QString)),	// Connect the result of the request
+			this, SLOT(updatePatch(QString)));					// to updatePatch function.
+
+		emit setStatusSymbol(3);
+		emit setStatusProgress(0);
+		emit setStatusMessage(tr("Receiving"));
+		
+		sysxIO->requestPatch(bank, patch);
 	};
 };
 
@@ -515,6 +538,9 @@ void bankTreeList::updatePatch(QString replyMsg)
 		sysxIO->setFileName(tr("GT-8 patch"));	// Set the file name to GT-8 patch forthe display.
 		sysxIO->setDevice(true);				// Patch received from the device so this is set to true.
 		sysxIO->setSyncStatus(true);			// We can't be more in sync than right now! :)
+
+		sysxIO->setLoadedBank(sysxIO->getBank());
+		sysxIO->setLoadedPatch(sysxIO->getPatch());
 
 		emit updateSignal();
 	}

@@ -20,6 +20,7 @@
 **
 ****************************************************************************/
 
+#include <QApplication>
 #include <QMessageBox>
 #include "SysxIO.h"
 #include "SysxIODestroyer.h"
@@ -37,6 +38,8 @@ SysxIO::SysxIO()
 	this->setSyncStatus(false);
 	this->setBank(0);
 	this->setPatch(0);
+	this->setLoadedBank(0);
+	this->setLoadedPatch(0);
 	this->changeCount = 0;
 };
 
@@ -105,8 +108,6 @@ void SysxIO::setFileSource(QByteArray data)
 				errorString.append(tr("should have been") + " (" + getCheckSum(dataSize) + ")");
 				errorString.append("\n");
 				errorList.append(errorString);
-
-				int dataSize1 = dataSize;
 
 				sysxBuffer = correctSysxMsg(sysxBuffer);
 			};
@@ -204,7 +205,6 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 		this->sendSpooler.append(sysxMsg);
 	};
 };
-
 
 void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5)
 {
@@ -527,6 +527,24 @@ int SysxIO::getPatch(){
 	return this->patch;	
 };
 
+void SysxIO::setLoadedBank(int bank)
+{
+	this->loadedBank = bank;	
+};
+
+void SysxIO::setLoadedPatch(int patch)
+{
+	this->loadedPatch = patch;	
+};
+
+int SysxIO::getLoadedBank(){
+	return this->loadedBank;	
+};
+
+int SysxIO::getLoadedPatch(){
+	return this->loadedPatch;	
+};
+
 /*********************** getRequestName() ***********************************
 * Set the name for check of the patch that we are going to load.
 ***************************************************************************/
@@ -665,6 +683,10 @@ void SysxIO::checkPatchChange(QString name)
 			emit setStatusSymbol(1);
 			emit setStatusProgress(0);
 			emit setStatusMessage(tr("Ready"));	
+
+			emit patchChangeFailed();
+
+			QApplication::beep();
 
 			/*QMessageBox *msgBox = new QMessageBox();
 			msgBox->setWindowTitle(tr("GT-8 Fx FloorBoard"));
