@@ -25,29 +25,14 @@ TEMPLATE = app
 CONFIG += static
 CONFIG += embed_manifest_exe
 CONFIG += release
-
-	debug {
-        TARGET = "GT-8 Fx FloorBoard"
-        DESTDIR = ./debug
-        MOC_DIR += ./generatedfiles/debug
-		OBJECTS_DIR += debug
-		UI_DIR += ./generatedfiles
-        INCLUDEPATH += ./generatedfiles \
-			./generatedfiles/debug \
-			.
-	}	
-		
-    release {
-        TARGET = "GT-8 Fx FloorBoard"
-        DESTDIR = ./release
-        MOC_DIR += ./generatedfiles/release
-		OBJECTS_DIR += release
-		UI_DIR += ./generatedfiles
-        INCLUDEPATH += ./generatedfiles \
-			./generatedfiles/release \
-			.
-    }
-    
+TARGET = "GT-8 Fx FloorBoard"
+DESTDIR = ./release
+MOC_DIR += ./generatedfiles/release
+OBJECTS_DIR += release
+UI_DIR += ./generatedfiles
+INCLUDEPATH += ./generatedfiles \
+	./generatedfiles/release \
+	.
 DEPENDPATH += .
 QT += xml
 
