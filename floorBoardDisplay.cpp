@@ -820,6 +820,12 @@ void floorBoardDisplay::resetDevice(QString replyMsg)
 	SysxIO *sysxIO = SysxIO::Instance();
 	QObject::disconnect(sysxIO, SIGNAL(sysxReply(QString)),	
 				this, SLOT(resetDevice(QString)));
+
+	if(sysxIO->getBank() != sysxIO->getLoadedBank() || sysxIO->getPatch() != sysxIO->getLoadedPatch())
+	{
+		sysxIO->setLoadedBank(sysxIO->getBank());
+		sysxIO->setLoadedPatch(sysxIO->getPatch());
+	};
 	sysxIO->setDeviceReady(true);	// Free the device after finishing interaction.
 	emit connectedSignal();			// Emit this signal to tell we are still connected and to update the patch names in case they have changed.
 };
