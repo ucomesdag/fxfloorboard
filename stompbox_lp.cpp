@@ -27,6 +27,7 @@ stompbox_lp::stompbox_lp(QWidget *parent)
 {
 	/* LOOP */
 	setImage(":/images/lp.png");
+	setLSB("04", "00");
 	setKnob1("04", "00", "03");
 	setKnob2("04", "00", "04");
 	setComboBox("04", "00", "02");

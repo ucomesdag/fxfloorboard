@@ -33,6 +33,7 @@ stompbox_dd::stompbox_dd(QWidget *parent)
 {
 	/* DELAY */
 	setImage(":/images/dd.png");
+	setLSB("0B", "00");
 	setKnob1("0B", "00", "03");
 	setKnob2("0B", "00", "06");
 	setComboBox("0B", "00", "02");

@@ -27,6 +27,7 @@ stompbox_eq::stompbox_eq(QWidget *parent)
 {
 	/* EQ */
 	setImage(":/images/eq.png");
+	setLSB("08", "00");
 
 	/*int range1 = midiTable->getRange("Stucture", "08", "00", "03");
 	int range2 = midiTable->getRange("Stucture", "08", "00", "06");

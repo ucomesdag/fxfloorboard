@@ -27,6 +27,7 @@ stompbox_cs::stompbox_cs(QWidget *parent)
 {
 	/* COMP */
 	setImage(":/images/cs.png");
+	setLSB("02", "00");
 	setKnob1("02", "00", "03");
 	setKnob2("02", "00", "08");
 	setComboBox("02", "00", "02");

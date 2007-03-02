@@ -82,6 +82,7 @@ void stompBox::paintEvent(QPaintEvent *)
 void stompBox::mousePressEvent(QMouseEvent *event) 
 { 
 	if (event->button() == Qt::LeftButton) this->dragStartPosition = event->pos(); 
+	emitValueChanged(this->hex1, this->hex2, "00", "void");
 };
 
 void stompBox::mouseMoveEvent(QMouseEvent *event)
@@ -181,6 +182,12 @@ QPalette stompBox::getPal()
 QFont stompBox::getFont()
 {
 	return this->font;
+};
+
+void stompBox::setLSB(QString hex1, QString hex2)
+{
+	this->hex1 = hex1;
+	this->hex2 = hex2;
 };
 
 void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geometry)
@@ -377,22 +384,11 @@ void stompBox::updateSwitch(QString hex1, QString hex2, QString hex3)
 void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 {
 	MidiTable *midiTable = MidiTable::Instance();
-	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
-	QString fxName, valueName;
-	if(hex1 == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency.
-	{
-		fxName = "Noise Suppressor";
-		valueName = items.desc.remove("NS :");
-	}
-	else
-	{
-		fxName = midiTable->getMidiMap("Stucture", hex1).name;
-		valueName = items.desc;
-	};
+	
 	QString valueHex = QString::number(value, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
-	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
-	emit valueChanged(fxName, valueName, valueStr);
+
+	emitValueChanged(hex1, hex2, hex3, valueHex);
 
 	SysxIO *sysxIO = SysxIO::Instance(); bool ok;
 	if(midiTable->isData("Stucture", hex1, hex2, hex3))
@@ -419,6 +415,8 @@ void stompBox::valueChanged(bool value, QString hex1, QString hex2, QString hex3
 	(value)? valueInt=1: valueInt=0;
 	QString valueHex = QString::number(valueInt, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
+
+	emitValueChanged(hex1, hex2, hex3, valueHex);
 	
 	SysxIO *sysxIO = SysxIO::Instance();
 	sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
@@ -428,6 +426,8 @@ void stompBox::valueChanged(int index)
 {
 	QString valueHex = QString::number(index, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
+
+	emitValueChanged(this->hex1, this->hex2, this->hex3, valueHex);
 	
 	SysxIO *sysxIO = SysxIO::Instance();
 	sysxIO->setFileSource(this->hex1, this->hex2, this->hex3, valueHex);
@@ -466,4 +466,62 @@ int stompBox::getSourceValue(QString hex1, QString hex2, QString hex3)
 		value = items.at(sysxDataOffset + QString(hex3).toInt(&ok, 16)).toInt(&ok, 16);
 	};
 	return value;
+};
+
+void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QString valueHex)
+{
+	QString fxName, valueName, valueStr;
+	if(hex1 != "void" && hex2 != "void")
+	{
+		MidiTable *midiTable = MidiTable::Instance();
+		if(valueHex != "void")
+		{
+			Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+			if(hex1 == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency.
+			{
+				fxName = "Noise Suppressor";
+				if(items.desc == "NS :Effect")
+				{
+					valueName = "On/Off";
+				}
+				else
+				{
+					valueName = items.desc.remove("NS :");
+				};
+			}
+			else
+			{
+				fxName = midiTable->getMidiMap("Stucture", hex1).name;
+				if(items.desc.contains(":"))
+				{
+					valueName = items.desc.section(":", 1, 1);
+				}
+				else
+				{
+					valueName = items.desc;
+				};
+			};
+			valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+		}
+		else
+		{
+			if(hex1 == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency.
+			{
+				fxName = "Noise Suppressor";
+			}
+			else if(this->hex1 == "15") // Expression Pedal -> correcting the name for consistency.
+			{
+				fxName = "Foot Volume";
+			}
+			else
+			{
+				fxName = midiTable->getMidiMap("Stucture", hex1).name;
+			};
+		};
+	}
+	else
+	{
+		fxName = "Digital Out";
+	};
+	emit valueChanged(fxName, valueName, valueStr);
 };

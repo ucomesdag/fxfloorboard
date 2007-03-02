@@ -112,6 +112,7 @@ void customSlider::mousePressEvent(QMouseEvent *event)
 	{	
 		setFocus();
 		mouseTrigger(event->pos());
+		emitValue(value);
 	};
 };
 
@@ -185,8 +186,8 @@ void customSlider::emitValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
-		emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
     };
+	emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
 };
 
 void customSlider::setValue(int value)

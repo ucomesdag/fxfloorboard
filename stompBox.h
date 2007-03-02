@@ -59,6 +59,7 @@ public:
 	void setButton(QString hex1, QString hex2, QString hex3);
 	void setButton(QString hex1, QString hex2, QString hex3, QPoint pos, QString imagePath);
 	void setSwitch(QString hex1, QString hex2, QString hex3);
+	void setLSB(QString hex1, QString hex2);
 	void setLed();
 	void updateKnob1(QString hex1, QString hex2, QString hex3);
 	void updateKnob2(QString hex1, QString hex2, QString hex3);
@@ -94,6 +95,7 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 
 private:
+	void emitValueChanged(QString hex1, QString hex2, QString hex3, QString valueHex);
 	QList<QString> getSourceItems(QString hex1, QString hex2);
 	int getSourceValue(QString hex1, QString hex2, QString hex3);
 	QString imagePath;

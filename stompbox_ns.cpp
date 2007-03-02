@@ -27,6 +27,7 @@ stompbox_ns::stompbox_ns(QWidget *parent)
 {
 	/* NS */
 	setImage(":/images/ns.png");
+	setLSB("0E", "00");
 	setKnob1("0E", "00", "01");
 	setKnob2("0E", "00", "02");
 	setButton("0E", "00", "00");

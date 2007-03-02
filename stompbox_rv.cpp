@@ -27,6 +27,7 @@ stompbox_rv::stompbox_rv(QWidget *parent)
 {
 	/* REVERB */
 	setImage(":/images/rv.png");
+	setLSB("0D", "00");
 	setKnob1("0D", "00", "03");
 	setKnob2("0D", "00", "08");
 	setComboBox("0D", "00", "02");

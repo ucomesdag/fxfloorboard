@@ -91,6 +91,7 @@ void customDial::mousePressEvent(QMouseEvent *event)
 		this->_startpos = event->pos();
 		this->_lastValue = value;
 		setFocus();
+		emitValue(value);
 	};
 };
 
@@ -191,8 +192,8 @@ void customDial::emitValue(double value)
 {
     if (value != m_value) {
         this->m_value = value;
-		emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
     };
+	emit valueChanged((int)value, this->hex1, this->hex2, this->hex3);
 };
 
 void customDial::setValue(int value)
