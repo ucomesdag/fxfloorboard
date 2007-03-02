@@ -36,6 +36,7 @@ SysxIO::SysxIO()
 	this->setDevice(false);
 	this->setDeviceReady(true);
 	this->setSyncStatus(false);
+	this->setNoError(true);
 	this->setBank(0);
 	this->setPatch(0);
 	this->setLoadedBank(0);
