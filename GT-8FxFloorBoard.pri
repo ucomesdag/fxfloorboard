@@ -22,6 +22,23 @@
 
 #Header files
 HEADERS += ./globalVariables.h \
+    ./mainWindow.h \
+    ./renameDialog.h \
+    ./bankTreeList.h \
+    ./customButton.h \
+    ./customDial.h \
+    ./customLed.h \
+    ./customSlider.h \
+    ./customSplashScreen.h \
+    ./customSwitch.h \
+    ./dragBar.h \
+    ./floorBoard.h \
+    ./floorBoardDisplay.h \
+    ./floorPanelBar.h \
+    ./floorPanelBarButton.h \
+    ./renameWidget.h \
+    ./statusBarSymbol.h \
+    ./statusBarWidget.h \
     ./stompBox.h \
     ./stompbox_ce.h \
     ./stompbox_cs.h \
@@ -37,34 +54,36 @@ HEADERS += ./globalVariables.h \
     ./stompbox_pre.h \
     ./stompbox_rv.h \
     ./stompbox_wah.h \
-    ./Preferences.h \
-    ./PreferencesDestroyer.h \
-    ./preferencesDialog.h \
-    ./preferencesPages.h \
     ./MidiTable.h \
     ./MidiTableDestroyer.h \
     ./SysxIO.h \
     ./SysxIODestroyer.h \
     ./sysxWriter.h \
     ./XMLWriter.h \
-    ./bankTreeList.h \
-    ./customButton.h \
-    ./customDial.h \
-    ./customLed.h \
-    ./customSlider.h \
-    ./customSplashScreen.h \
-    ./customSwitch.h \
-    ./dragBar.h \
-    ./floorBoard.h \
-    ./floorBoardDisplay.h \
-    ./floorPanelBar.h \
-    ./floorPanelBarButton.h \
-    ./mainWindow.h \
-    ./statusBarSymbol.h \
-    ./statusBarWidget.h
+    ./Preferences.h \
+    ./PreferencesDestroyer.h \
+    ./preferencesDialog.h \
+    ./preferencesPages.h
 
 #Source files
 SOURCES += ./main.cpp \
+    ./mainWindow.cpp \
+    ./bankTreeList.cpp \
+    ./customButton.cpp \
+    ./customDial.cpp \
+    ./customLed.cpp \
+    ./customSlider.cpp \
+    ./customSplashScreen.cpp \
+    ./customSwitch.cpp \
+    ./dragBar.cpp \
+    ./floorBoard.cpp \
+    ./floorBoardDisplay.cpp \
+    ./floorPanelBar.cpp \
+    ./floorPanelBarButton.cpp \
+    ./renameDialog.cpp \
+    ./renameWidget.cpp \
+    ./statusBarSymbol.cpp \
+    ./statusBarWidget.cpp \
     ./stompBox.cpp \
     ./stompbox_ce.cpp \
     ./stompbox_cs.cpp \
@@ -80,31 +99,16 @@ SOURCES += ./main.cpp \
     ./stompbox_pre.cpp \
     ./stompbox_rv.cpp \
     ./stompbox_wah.cpp \
-    ./Preferences.cpp \
-    ./PreferencesDestroyer.cpp \
-    ./preferencesDialog.cpp \
-    ./preferencesPages.cpp \
     ./MidiTable.cpp \
     ./MidiTableDestroyer.cpp \
     ./SysxIO.cpp \
     ./SysxIODestroyer.cpp \
     ./sysxWriter.cpp \
     ./XMLWriter.cpp \
-    ./bankTreeList.cpp \
-    ./customButton.cpp \
-    ./customDial.cpp \
-    ./customLed.cpp \
-    ./customSlider.cpp \
-    ./customSplashScreen.cpp \
-    ./customSwitch.cpp \
-    ./dragBar.cpp \
-    ./floorBoard.cpp \
-    ./floorBoardDisplay.cpp \
-    ./floorPanelBar.cpp \
-    ./floorPanelBarButton.cpp \
-    ./mainWindow.cpp \
-    ./statusBarSymbol.cpp \
-    ./statusBarWidget.cpp
+    ./Preferences.cpp \
+    ./PreferencesDestroyer.cpp \
+    ./preferencesDialog.cpp \
+    ./preferencesPages.cpp
 
 #Resource file(s)
-RESOURCES += ./GT-8FxFloorBoard.qrc
+RESOURCES += GT-8FxFloorBoard.qrc
