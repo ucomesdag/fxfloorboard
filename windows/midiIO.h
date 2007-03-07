@@ -78,11 +78,11 @@ private:
 	static int count;
 	static unsigned char SysXBuffer[256];
 
+	bool multiple;
 	int midiOut;
 	int midiIn;
 	QString sysxOutMsg;
 	QString sysxInMsg;
-	bool multiple;
 };
 
 #endif // MIDIIO_H
