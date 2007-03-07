@@ -29,6 +29,7 @@
 #include "MidiTable.h"
 #include "SysxIO.h"
 #include "sysxWriter.h"
+#include "renameWidget.h"
 #include "globalVariables.h"
 
 floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
@@ -83,6 +84,9 @@ floorBoardDisplay::floorBoardDisplay(QWidget *parent, QPoint pos)
 	patchDisplay->setLineWidth(0);
 	patchDisplay->setContentsMargins(0, 0, 0, 0);
 	this->patchDisplay = patchDisplay;
+
+	renameWidget *nameEdit = new renameWidget(this);
+	nameEdit->setGeometry(85, 5, 150, 34);
 
 	QString str;
 	str.append("<html><body>");
