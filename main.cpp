@@ -88,7 +88,9 @@ int main(int argc, char *argv[])
 	app.processEvents(); 
 
 	splash->showStatusMessage(QObject::tr("Initializing main window..."));
-	window.setWindowFlags( Qt::WindowTitleHint |  Qt::WindowMinimizeButtonHint );
+	window.setWindowFlags( Qt::WindowTitleHint 
+		| Qt::WindowMinimizeButtonHint 
+		| Qt::MSWindowsFixedSizeDialogHint);
 	window.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
 
 	app.processEvents(); 

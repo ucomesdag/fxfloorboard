@@ -74,6 +74,8 @@ public:
 	void setRequestName(QString requestName);
 	QString getRequestName();
 	QString getPatchChangeMsg(int bank, int patch);
+	void setCurrentPatchName(QString patchName);
+	QString getCurrentPatchName();
 
 	void sendMidi(QString midiMsg);
 	void sendSysx(QString sysxMsg);
@@ -138,6 +140,7 @@ private:
 	int changeCount;
 
 	QString requestName;
+	QString currentName;
 	QList<QString> sendSpooler;
 };
 

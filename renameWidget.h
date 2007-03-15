@@ -34,11 +34,12 @@ public:
 	renameWidget(QWidget *parent = 0);
 
 public slots:
+	void updateName(QString name);
 
 signals:
+	void nameChanged(QString name);
 
 protected:
-	void mousePressEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 
 private:

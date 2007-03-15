@@ -138,7 +138,7 @@ void SysxIO::setFileSource(QByteArray data)
 		msgText.append(tr("The incorrect values have been corrected where possible.\n" 
 			"If correction was inpossible then some settings might have been reset to zero."));
 		msgBox->setText(msgText);
-		msgBox->setInformativeText(tr("Please verify the patch settings for consistency."));
+		msgBox->setInformativeText(tr("Be aware of possible inconsistencies in this patch!"));
 		msgBox->setDetailedText(errorList);
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->exec();
@@ -765,12 +765,29 @@ void SysxIO::returnPatchName(QString sysxMsg)
 		QString hex1, hex2, hex3, hex4;
 		for(int i=dataStartOffset*2; i<sysxMsg.size()-(2*2);++i)
 		{
-			hex1 = sysxMsg.mid((sysxAddressOffset + 2)*2, 2);
+			/*hex1 = sysxMsg.mid((sysxAddressOffset + 2)*2, 2);
 			hex2 = sysxMsg.mid((sysxAddressOffset + 3)*2, 2);
 			hex3 = QString::number(count, 16).toUpper();
 			if (hex3.length() < 2) hex3.prepend("0");
-			hex4 = sysxMsg.mid(i, 2);;
-			name.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );
+			hex4 = sysxMsg.mid(i, 2);
+			name.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );*/
+
+			QString hexStr = sysxMsg.mid(i, 2);
+			bool ok;
+			if(hexStr == "7E")
+			{
+				name.append((QChar)(0x2192));
+			}
+			else if (hexStr == "7F")
+			{
+				name.append((QChar)(0x2190));
+			}
+			else
+			{
+				bool ok;
+				name.append( (char)(hexStr.toInt(&ok, 16)) );
+			};
+
 			i++;
 		};
 	};
@@ -824,4 +841,15 @@ bool SysxIO::noError()
 void SysxIO::setNoError(bool status)
 {
 	this->noerror = status;
+};
+
+
+void SysxIO::setCurrentPatchName(QString patchName)
+{
+	this->currentName = patchName;	
+};
+
+QString SysxIO::getCurrentPatchName()
+{
+	return this->currentName;	
 };

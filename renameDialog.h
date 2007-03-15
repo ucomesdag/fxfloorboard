@@ -24,9 +24,8 @@
 #define RENAMEDIALOG_H
 
 #include <QtGui>
-#include <QWidget>
 
-class renameDialog : public QWidget
+class renameDialog : public QDialog
 {
 	Q_OBJECT
 
@@ -34,13 +33,19 @@ public:
 	renameDialog(QWidget *parent = 0);
 
 public slots:
+	void addRightArrow();
+	void addLeftArrow();
+	void emitValue();
 
 signals:
+	void nameChanged(QString name);
 
 protected:
 
 private:
-
+	QLabel *nameLabel;
+	QLabel *charLabel;
+	QLineEdit *nameEdit;
 };
 
 #endif // RENAMEDIALOG_H
