@@ -832,7 +832,7 @@ void SysxIO::errorSignal(QString windowTitle, QString errorMsg)
 /***************************** noError() ******************************
 * Error flag set on midi error to prevent (double) connexion faillure 
 * messages and a midi messages.
-****************************************************************************/
+************************************************************************/
 bool SysxIO::noError()
 {
 	return this->noerror;	
@@ -843,7 +843,11 @@ void SysxIO::setNoError(bool status)
 	this->noerror = status;
 };
 
-
+/***************************** CurrentPatchName() ******************************
+* This is to make it possible to verify the patch name that we are trying to receive 
+* corresponds in case we had a name change that was not yet written permanantly
+* to the device. (See floorBoardDisplay.cpp for more info)
+************************************************************************/
 void SysxIO::setCurrentPatchName(QString patchName)
 {
 	this->currentName = patchName;	
@@ -854,6 +858,10 @@ QString SysxIO::getCurrentPatchName()
 	return this->currentName;	
 };
 
+/***************************** emit() *********************************
+* Added to make status update possible from static methods and classes 
+* like the CALLBACK in midiIO.
+************************************************************************/
 void SysxIO::emitStatusSymbol(int value)
 {
 	emit setStatusSymbol(value);

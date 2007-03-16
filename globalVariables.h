@@ -50,7 +50,7 @@ const int patchPerBank = 4;			// Number of patches in a bank.
 
 /* Midi Send & Receive */
 const int midiSendTimeout = 25;	    // Time (ms) the device needs to process a MIDI message before sending the next.
-const int midiTimeout = 250;		// Time (ms) the device needs to process a MIDI message before closing the device.
+const int midiTimeout = 450;		// Time (ms) the device needs to process a MIDI message before closing the device.
 const int sendTimeout = 25;			// Time (ms) the device needs to process a SYSEX message before sending the next.
 const int receiveTimeout = 100;		// Time (ms) we wait between SYSEX messages for the next one to be received.
 const int maxWait = 4;				// Maximum times we loop through the receive handel before we give up the waiting.

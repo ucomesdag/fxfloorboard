@@ -85,6 +85,9 @@ private:
 	int midiIn;
 	QString sysxOutMsg;
 	QString sysxInMsg;
+
+	QString midiMsg;
+	bool midi;
 };
 
 #endif // MIDIIO_H
