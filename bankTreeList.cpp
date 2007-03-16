@@ -446,7 +446,7 @@ void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 		// Make sure it's a patch (Patches are the last in line so no children).
 	{
 		emit setStatusSymbol(2);
-		emit setStatusProgress(0);
+		//emit setStatusProgress(0);
 		emit setStatusMessage(tr("Sending"));
 		
 		sysxIO->setDeviceReady(false);
@@ -490,7 +490,7 @@ void bankTreeList::requestPatch()
 			this, SLOT(updatePatch(QString)));					// to updatePatch function.
 
 		emit setStatusSymbol(3);
-		emit setStatusProgress(0);
+		//emit setStatusProgress(0);
 		emit setStatusMessage(tr("Receiving"));
 		
 		sysxIO->requestPatch(0, 0);
@@ -506,7 +506,7 @@ void bankTreeList::requestPatch(int bank, int patch)
 			this, SLOT(updatePatch(QString)));					// to updatePatch function.
 
 		emit setStatusSymbol(3);
-		emit setStatusProgress(0);
+		//emit setStatusProgress(0);
 		emit setStatusMessage(tr("Receiving"));
 		
 		sysxIO->requestPatch(bank, patch);
@@ -519,9 +519,7 @@ void bankTreeList::requestPatch(int bank, int patch)
  *********************************************************************/
 void bankTreeList::updatePatch(QString replyMsg)
 {
-	emit updateSignal();
 	emit setStatusSymbol(1);
-	emit setStatusProgress(0);
 	emit setStatusMessage(tr("Ready"));
 
 	SysxIO *sysxIO = SysxIO::Instance();
@@ -543,6 +541,7 @@ void bankTreeList::updatePatch(QString replyMsg)
 		sysxIO->setLoadedPatch(sysxIO->getPatch());
 
 		emit updateSignal();
+		emit setStatusProgress(0);
 	}
 	else
 	{
@@ -669,8 +668,8 @@ void bankTreeList::updatePatchNames(QString name)
 			this->itemIndex = 0;
 
 			emit setStatusSymbol(1);
-			emit setStatusProgress(0);
 			emit setStatusMessage(tr("Ready"));
+			emit setStatusProgress(0);
 		};
 	};
 };

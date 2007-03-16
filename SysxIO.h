@@ -86,6 +86,10 @@ public:
 	bool noError();
 	void setNoError(bool status);
 
+	void emitStatusSymbol(int value);
+	void emitStatusProgress(int value);
+    void emitStatusMessage(QString message);
+
 public slots:
 	void errorSignal(QString windowTitle, QString errorMsg);
 

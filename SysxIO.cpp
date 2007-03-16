@@ -193,7 +193,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 		this->setDeviceReady(false);
 
 		emit setStatusSymbol(2);
-		emit setStatusProgress(0);
+		//emit setStatusProgress(0);
 		emit setStatusMessage("Sending");
 
 		QObject::connect(this, SIGNAL(sysxReply(QString)),	
@@ -235,7 +235,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QString hex3, QString hex
 		this->setDeviceReady(false);
 
 		emit setStatusSymbol(2);
-		emit setStatusProgress(0);
+		//emit setStatusProgress(0);
 		emit setStatusMessage("Sending");
 
 		QObject::connect(this, SIGNAL(sysxReply(QString)),	
@@ -284,7 +284,7 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QList<QString> hexData)
 			this->setDeviceReady(false);
 
 			emit setStatusSymbol(2);
-			emit setStatusProgress(0);
+			//emit setStatusProgress(0);
 			emit setStatusMessage("Sending");
 
 			QObject::connect(this, SIGNAL(sysxReply(QString)),	
@@ -313,8 +313,8 @@ void SysxIO::resetDevice(QString replyMsg)
 		this->setDeviceReady(true);	// Free the device after finishing interaction.
 
 		emit setStatusSymbol(1);
-		emit setStatusProgress(0);
 		emit setStatusMessage("Ready");
+		emit setStatusProgress(0);
 	}
 	else
 	{
@@ -671,7 +671,7 @@ void SysxIO::checkPatchChange(QString name)
 			this->requestPatchChange(bankChange, patchChange);
 
 			emit setStatusSymbol(2);
-			emit setStatusProgress(0);
+			//emit setStatusProgress(0);
 			emit setStatusMessage("Sending");
 		}
 		else
@@ -682,8 +682,8 @@ void SysxIO::checkPatchChange(QString name)
 			this->setDeviceReady(true); // Free the device after finishing interaction.
 			
 			emit setStatusSymbol(1);
-			emit setStatusProgress(0);
 			emit setStatusMessage(tr("Ready"));	
+			emit setStatusProgress(0);
 
 			emit patchChangeFailed();
 
@@ -852,4 +852,19 @@ void SysxIO::setCurrentPatchName(QString patchName)
 QString SysxIO::getCurrentPatchName()
 {
 	return this->currentName;	
+};
+
+void SysxIO::emitStatusSymbol(int value)
+{
+	emit setStatusSymbol(value);
+};
+
+void SysxIO::emitStatusProgress(int value)
+{
+	emit setStatusProgress(value);
+};
+
+void SysxIO::emitStatusMessage(QString message)
+{
+	emit setStatusMessage(message);
 };

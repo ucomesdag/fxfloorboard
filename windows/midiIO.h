@@ -71,12 +71,14 @@ private:
 	static void CALLBACK midiCallback(HMIDIIN handle, 
 		UINT wMsg, DWORD dwInstance, 
 		DWORD dwParam1, DWORD dwParam2);
+	static void emitProgress(int bytesReceived);
 
 	static QString sysxBuffer;
 	static bool dataReceive;
 	static unsigned char SysXFlag;
 	static int count;
 	static unsigned char SysXBuffer[256];
+	static int bytesTotal;
 
 	bool multiple;
 	int midiOut;

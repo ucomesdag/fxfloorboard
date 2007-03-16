@@ -26,6 +26,7 @@
 
 unsigned char midiIO::SysXBuffer[256];
 unsigned char midiIO::SysXFlag = 0;
+int midiIO::bytesTotal = 0;
 int midiIO::count = 0;
 bool midiIO::dataReceive = false;
 QString midiIO::sysxBuffer;
@@ -239,6 +240,7 @@ void midiIO::sendMsg(QString sysxOutMsg, int midiOut)
 		midiOutClose(outHandle); /*For some reason this does the same as midiOutReset()???. 
 								 Or are prepare and unprepareHeaders not doeing there job?*/
 		delete[] sysEx;
+		emit setStatusProgress(100);
 	}
 	else
 	{
@@ -297,7 +299,9 @@ void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, 
 					/* Indicate we're done handling this particular System Exclusive message */
 					SysXFlag &= (~0x01);
 				};
-				QString tmp;
+				QString tmp; int bytesReceived = 0;
+				emitProgress(bytesReceived);
+
 				while((lpMIDIHeader->dwBytesRecorded--))
 				{
 					//printf("%x ", *ptr);
@@ -307,8 +311,13 @@ void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, 
 					sysxBuffer.append(hex);
 					tmp.append(hex);
 					tmp.append(" ");
+					bytesReceived = sysxBuffer.size() / 2;
+					emitProgress(bytesReceived);
 					ptr++;
-				}
+				};
+
+				bytesReceived = sysxBuffer.size() / 2;
+				emitProgress(bytesReceived);
 
 				/* Was this the last block of System Exclusive bytes? */
 				if (!SysXFlag)
@@ -346,12 +355,19 @@ void midiIO::run()
     this->sysxBuffer = "";
 	this->sysxInMsg = "";
 
+	//emit setStatusProgress(0);
+
 	/* Check if we are going to receive something on sending */
 	bool receive;
 	(this->sysxOutMsg.mid(12, 2) != "12")? receive = true: receive = false;
 
 	if(receive==true)
 	{
+		
+		/* Get the size of data bytes returned to calculate the progress percentage */
+		bytesTotal = 1010;
+		
+		
 		HMIDIIN			inHandle;
 		MIDIHDR			midiHdr;
 		unsigned long	err;
@@ -469,7 +485,7 @@ void midiIO::run()
 	
 	this->sysxInMsg = sysxInMsg;
 	emit replyMsg(sysxInMsg);
-
+   
 	this->exec();
 };
 
@@ -520,6 +536,8 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 	UINT        err;
 	DWORD		midi;
 
+	emit setStatusProgress(0);
+
 	/* Open default MIDI Out device */
 	if (!(err = midiOutOpen(&outHandle, midiOut, 0, 0, CALLBACK_NULL)))
 	{
@@ -542,6 +560,8 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 				/* Give it some time to process the midi 
 				message before sending the next*/
 				Sleep(midiSendTimeout);
+				int percentage = (100 / (double)msgList.size()) * (double)(i + 1);
+				emit setStatusProgress(percentage);
 			};
 		}
 		else  
@@ -573,5 +593,21 @@ void midiIO::sendMidi(QString midiMsg, int midiOut)
 		showErrorMsg(errorMsg, "out");
 	};
 
+	emit setStatusProgress(100);
 	emit midiFinished();
+};
+
+void midiIO::emitProgress(int bytesReceived)
+{
+	if(bytesReceived != 0)
+	{
+		int percentage;
+		percentage = (100 / (double)bytesTotal) * (double)bytesReceived;
+
+		if(percentage != 0)
+		{
+			SysxIO *sysxIO = SysxIO::Instance();
+			sysxIO->emitStatusProgress(percentage);
+		};
+	};
 };
