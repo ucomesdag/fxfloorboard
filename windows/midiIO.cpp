@@ -267,6 +267,8 @@ void CALLBACK midiIO::midiCallback(HMIDIIN handle, UINT wMsg, DWORD dwInstance, 
 	LPMIDIHDR		lpMIDIHeader;
 	unsigned char *	ptr;
 
+	dwParam2; dwInstance; // not used;
+	
 	/* Determine why Windows called me */
 	switch (wMsg)
 	{
@@ -431,7 +433,18 @@ void midiIO::run()
 		{
 			
 			/* Get the size of data bytes returned to calculate the progress percentage */
-			bytesTotal = 1010;
+			bool ok;
+			QString sizeChunk = sysxOutMsg.mid(sysxDataOffset * 2, 4 * 2);
+			int dataLenght = sizeChunk.toInt(&ok, 16);
+			bytesTotal = (sysxDataOffset + 2) + dataLenght;
+			if(dataLenght == 0) // Id request>
+			{
+				bytesTotal += 2;
+			}
+			else if(sizeChunk == "00001F00") // Patch Request
+			{
+				bytesTotal = 1010;
+			};
 			
 			HMIDIIN			inHandle;
 			MIDIHDR			midiHdr;

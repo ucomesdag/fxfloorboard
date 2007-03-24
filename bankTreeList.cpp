@@ -409,6 +409,7 @@ QTreeWidget* bankTreeList::newTreeList()
  ****************************************************************************/
 void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
 {
+	column; // not used
 	if(item->childCount() != 0)
 	{
 		if(item->isExpanded())
@@ -441,6 +442,7 @@ void bankTreeList::setItemClicked(QTreeWidgetItem *item, int column)
  ****************************************************************************/
 void bankTreeList::setItemDoubleClicked(QTreeWidgetItem *item, int column)
 {	
+	column; // not used
 	SysxIO *sysxIO = SysxIO::Instance();
 	if(item->childCount() == 0 && sysxIO->deviceReady() && sysxIO->isConnected()) 
 		// Make sure it's a patch (Patches are the last in line so no children).

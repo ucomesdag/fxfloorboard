@@ -758,9 +758,9 @@ void SysxIO::returnPatchName(QString sysxMsg)
 	QString name; 
 	if(sysxMsg != "")
 	{		
-		MidiTable *midiTable = MidiTable::Instance();
+		//MidiTable *midiTable = MidiTable::Instance();
 		 
-		int count = 0;
+		//int count = 0;
 		int dataStartOffset = sysxDataOffset;
 		QString hex1, hex2, hex3, hex4;
 		for(int i=dataStartOffset*2; i<sysxMsg.size()-(2*2);++i)
@@ -773,7 +773,6 @@ void SysxIO::returnPatchName(QString sysxMsg)
 			name.append( midiTable->getValue("Stucture", hex1, hex2, hex3, hex4) );*/
 
 			QString hexStr = sysxMsg.mid(i, 2);
-			bool ok;
 			if(hexStr == "7E")
 			{
 				name.append((QChar)(0x2192));
