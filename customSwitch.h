@@ -37,7 +37,7 @@ public:
 		QString hex1 = "void",
 		QString hex2 = "void",
 		QString hex3 = "void",
-		QString imagePath = ":/images/ampswitch.png");
+		QString imagePath = ":/images/switch.png");
 	void setValue(bool value);
 
 signals:

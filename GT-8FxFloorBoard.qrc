@@ -3,12 +3,10 @@
         <file>about</file>
         <file>default.syx</file>
         <file>images/GT-8FxFloorBoard.png</file>
-        <file>images/ampswitch.png</file>
         <file>images/button.png</file>
         <file>images/ce.png</file>
         <file>images/cs.png</file>
         <file>images/dd.png</file>
-        <file>images/detailwindow.png</file>
         <file>images/dgt.png</file>
         <file>images/dragbar.png</file>
         <file>images/eq.png</file>
@@ -17,10 +15,8 @@
         <file>images/fx1.png</file>
         <file>images/fx2.png</file>
         <file>images/general.png</file>
-        <file>images/greenledbutton.png</file>
         <file>images/infobar.png</file>
         <file>images/knob.png</file>
-        <file>images/knobbg.png</file>
         <file>images/led.png</file>
         <file>images/ledbutton.png</file>
         <file>images/lp.png</file>
@@ -39,7 +35,6 @@
         <file>images/splashmask.png</file>
         <file>images/statusbarsymbols.png</file>
         <file>images/stompbg.png</file>
-        <file>images/stompknob.png</file>
         <file>images/switch.png</file>
         <file>images/wah.png</file>
         <file>images/window.png</file>

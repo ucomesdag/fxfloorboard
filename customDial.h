@@ -41,7 +41,7 @@ public:
 		QString hex1 = "void",
 		QString hex2 = "void",
 		QString hex3 = "void",
-		QString imagePath = ":/images/stompknob.png",
+		QString imagePath = ":/images/knob.png",
 		unsigned int imageRange = 62);
 	void setValue(int value);
 
