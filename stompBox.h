@@ -25,12 +25,13 @@
 
 #include <QtGui>
 #include "MidiTable.h"
-
+#include "editWindow.h"
 #include "customButton.h"
 #include "customLed.h"
 #include "customDial.h"
 #include "customSlider.h"
 #include "customSwitch.h"
+#include "editPage.h"
 
 class stompBox : public QWidget
 {
@@ -75,6 +76,10 @@ public:
 	void setComboBoxCurrentIndex(int index);
 	unsigned int getId();
 
+	virtual void setEditPages() {};
+	editWindow* editDetails();
+
+
 	QPalette getPal();
 	QFont getFont();
 
@@ -93,11 +98,14 @@ protected:
 	void paintEvent(QPaintEvent *event);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
+	void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
 	void emitValueChanged(QString hex1, QString hex2, QString hex3, QString valueHex);
-	QList<QString> getSourceItems(QString hex1, QString hex2);
 	int getSourceValue(QString hex1, QString hex2, QString hex3);
+	QList<QString> getSourceItems(QString hex1, QString hex2);
+	
+	editWindow *editDialog;
 	QString imagePath;
 	QSize stompSize;
 	QPoint stompPos; 
@@ -124,6 +132,8 @@ private:
 	QString hex1;
 	QString hex2;
 	QString hex3;
+
+	QString fxName;
 };
 
 #endif // STOMPBOX_H

@@ -31,7 +31,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
-	
+
 	/* Loading translation */
 	QTranslator translator;
 	translator.load("translation");
@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
 
 	splash->showStatusMessage(QObject::tr("Initializing..."));
 	mainWindow window;// = new mainWindow;
+
+	QObject::connect( &window, SIGNAL(closed()), &app, SLOT(quit()) );
 
 	app.processEvents(); 
 

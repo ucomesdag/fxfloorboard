@@ -20,64 +20,32 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef EDITPAGE_H
+#define EDITPAGE_H
 
-#include <QMainWindow>
-#include "floorBoard.h"
-#include "sysxWriter.h"
-#include "MidiTable.h"
+#include <QWidget>
+#include <QtGui>
 
-class mainWindow : public QWidget
-//class mainWindow : public QMainWindow
+class editPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    mainWindow(QWidget *parent = 0);
-	~mainWindow();
-	void closeEvent(QCloseEvent* ce);
+    editPage(QWidget *parent = 0);
+	
+	void addKnob();
+	void addSwitch();
+	void addComboBox();
+	void addLabel(QString text, QPoint pos);
+
+protected:
+	void paintEvent(QPaintEvent *event);
 
 signals:
 	void updateSignal();
-	void closed();
-
-public slots:
-	void updateSize(QSize floorSize, QSize oldFloorSize);
-	void open();
-	void save();
-	void saveAs();
-	void settings();
-	void help();
-	void homepage();
-	void donate();
-	void license();
-	void about();
 
 private:
-	void createActions();
-	void createMenus();
-	void createStatusBar();
-
-	QMenuBar *menuBar;
-	QStatusBar *statusBar;
-	QMenu *fileMenu;
-	QMenu *toolsMenu;
-	QMenu *helpMenu;
-	QAction *openAct;
-	QAction *saveAct;
-	QAction *saveAsAct;
-	QAction *exitAct;
-	QAction *settingsAct;
-	QAction *helpAct;
-	QAction *homepageAct;
-	QAction *donationAct;
-	QAction *licenseAct;
-	QAction *aboutAct;
-	QAction *aboutQtAct;
-
-	sysxWriter file;
-	floorBoard *fxsBoard;
+	int currentIndex;
 };
 
-#endif // MAINWINDOW_H
+#endif // EDITPAGE_H

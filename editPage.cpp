@@ -20,23 +20,58 @@
 **
 ****************************************************************************/
 
-#ifndef STOMPBOX_FX1_H
-#define STOMPBOX_FX1_H
+#include "editPage.h"
+#include <QLabel>
 
-#include <QtGui>
-#include <QWidget>
-#include "stompBox.h"
-
-class stompbox_fx1 : public stompBox
+editPage::editPage(QWidget *parent)
+    : QWidget(parent)
 {
-    Q_OBJECT
 
-public:
-	stompbox_fx1(QWidget *parent);
-	void setEditPages();
-
-public slots:
-	void updateSignal();
 };
 
-#endif // STOMPBOX_FX1_H
+void editPage::paintEvent(QPaintEvent *)
+{
+	QPixmap image(":images/dragbar.png");
+	
+	QRectF target(0.0, 0.0, this->width(), this->height());
+	QRectF source(0.0, 0.0, this->width(), this->height());
+
+	QPainter painter(this);
+	painter.drawPixmap(target, image, source);
+};
+
+void editPage::addKnob()
+{
+	
+};
+
+void editPage::addSwitch()
+{
+	
+};
+
+void editPage::addComboBox()
+{
+	
+};
+
+void editPage::addLabel(QString text, QPoint pos)
+{
+	QLabel *newLabel = new QLabel(this);
+
+	QFont labelFont;
+	labelFont.setFamily("Arial");
+	labelFont.setBold(true);
+	labelFont.setPixelSize(14);
+	labelFont.setStretch(140);
+
+	QPalette palette;
+	palette.setColor(newLabel->foregroundRole(), Qt::white);
+
+	newLabel->setPalette(palette);
+	newLabel->setFont(labelFont);
+
+	newLabel->setText(text);
+	newLabel->move(pos);
+	this->update();
+};

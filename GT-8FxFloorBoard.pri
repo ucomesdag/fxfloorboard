@@ -21,9 +21,10 @@
 #############################################################################
 
 #Header files
-HEADERS += ./globalVariables.h \
+HEADERS += ./editPage.h \
+    ./editWindow.h \
+    ./globalVariables.h \
     ./mainWindow.h \
-    ./renameDialog.h \
     ./bankTreeList.h \
     ./customButton.h \
     ./customDial.h \
@@ -36,6 +37,7 @@ HEADERS += ./globalVariables.h \
     ./floorBoardDisplay.h \
     ./floorPanelBar.h \
     ./floorPanelBarButton.h \
+    ./renameDialog.h \
     ./renameWidget.h \
     ./statusBarSymbol.h \
     ./statusBarWidget.h \
@@ -66,7 +68,9 @@ HEADERS += ./globalVariables.h \
     ./preferencesPages.h
 
 #Source files
-SOURCES += ./main.cpp \
+SOURCES += ./editPage.cpp \
+    ./editWindow.cpp \
+    ./main.cpp \
     ./mainWindow.cpp \
     ./bankTreeList.cpp \
     ./customButton.cpp \

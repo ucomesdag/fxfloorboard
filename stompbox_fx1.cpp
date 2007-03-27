@@ -30,10 +30,23 @@ stompbox_fx1::stompbox_fx1(QWidget *parent)
 	setLSB("00", "00");
 	setComboBox("00", "00", "02", QRect(8, 31, 79, 13));
 	setButton("00", "00", "00");
+	setEditPages();
 };
 
 void stompbox_fx1::updateSignal()
 {
 	updateComboBox("00", "00", "02");
 	updateButton("00", "00", "00");
+};
+
+void stompbox_fx1::setEditPages()
+{
+	editDetails()->page()->addLabel("PAGE 1", QPoint(0,0));
+	editDetails()->addPage();
+	editDetails()->page()->addLabel("PAGE 2", QPoint(0,0));
+	editDetails()->addPage();
+	editDetails()->page()->addLabel("PAGE 3", QPoint(0,0));
+	editDetails()->addPage();
+	editDetails()->page()->addLabel("PAGE 4", QPoint(0,0));
+	editDetails()->addPage();
 };
