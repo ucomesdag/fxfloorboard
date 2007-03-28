@@ -41,7 +41,13 @@ void stompbox_fx1::updateSignal()
 
 void stompbox_fx1::setEditPages()
 {
-	editDetails()->page()->addLabel("PAGE 1", QPoint(0,0));
+	editDetails()->page()->addLabel("Pre Amp/SP A", QPoint(0,0));
+	editDetails()->page()->addKnob(QPoint(0,20));
+	editDetails()->page()->addKnob(QPoint(45,20));
+	editDetails()->page()->addKnob(QPoint(90,20));
+	editDetails()->page()->addKnob(QPoint(135,20));
+	editDetails()->page()->addKnob(QPoint(180,20));
+	editDetails()->page()->addSwitch(QPoint(230,25));
 	editDetails()->addPage();
 	editDetails()->page()->addLabel("PAGE 2", QPoint(0,0));
 	editDetails()->addPage();

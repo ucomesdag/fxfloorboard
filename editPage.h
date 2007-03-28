@@ -25,6 +25,8 @@
 
 #include <QWidget>
 #include <QtGui>
+#include "customSwitch.h"
+#include "customDial.h"
 
 class editPage : public QWidget
 {
@@ -33,9 +35,9 @@ class editPage : public QWidget
 public:
     editPage(QWidget *parent = 0);
 	
-	void addKnob();
-	void addSwitch();
-	void addComboBox();
+	void addKnob(QPoint pos);
+	void addSwitch(QPoint pos);
+	void addComboBox(QPoint pos);
 	void addLabel(QString text, QPoint pos);
 
 protected:

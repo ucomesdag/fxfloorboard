@@ -31,26 +31,43 @@ editPage::editPage(QWidget *parent)
 
 void editPage::paintEvent(QPaintEvent *)
 {
-	QPixmap image(":images/dragbar.png");
+	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
 	QRectF source(0.0, 0.0, this->width(), this->height());
 
 	QPainter painter(this);
-	painter.drawPixmap(target, image, source);
+	painter.drawPixmap(target, image, source);*/
 };
 
-void editPage::addKnob()
+void editPage::addKnob(QPoint pos)
 {
+	QLabel *newBackGround = new QLabel(this);
+	newBackGround->setPixmap(QPixmap(":/images/knobbg.png"));
+	newBackGround->move(pos);
+
+	QPoint newPos(pos.x() + 2, pos.y() + 2);
 	
+	int range = 100;
+	QString hex1 = "00";
+	QString hex2 = "00";
+	QString hex3 = "00";
+	QString imagePath(":/images/knob.png");
+	unsigned int imageRange = 63;
+	customDial *newKnob = new customDial(0, 0, range, 1, 10, newPos, this, hex1, hex2, hex3, imagePath, imageRange);
 };
 
-void editPage::addSwitch()
+void editPage::addSwitch(QPoint pos)
 {
-	
+	bool on = true;
+	QString hex1 = "00";
+	QString hex2 = "00";
+	QString hex3 = "00";
+	QString imagePath(":/images/switch.png");
+	customSwitch *switchbutton = new customSwitch(on, pos, this, hex1, hex2, hex3, imagePath);	
 };
 
-void editPage::addComboBox()
+void editPage::addComboBox(QPoint pos)
 {
 	
 };
@@ -62,8 +79,8 @@ void editPage::addLabel(QString text, QPoint pos)
 	QFont labelFont;
 	labelFont.setFamily("Arial");
 	labelFont.setBold(true);
-	labelFont.setPixelSize(14);
-	labelFont.setStretch(140);
+	labelFont.setPixelSize(12);
+	labelFont.setStretch(105);
 
 	QPalette palette;
 	palette.setColor(newLabel->foregroundRole(), Qt::white);

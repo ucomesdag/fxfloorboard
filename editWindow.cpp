@@ -111,13 +111,11 @@ void editWindow::addPage()
 	item.append(QString::number(pages, 10));
 	this->pageComboBox->addItem(item);
 	this->tempPage = new editPage;
-	//this->tempPage->show();
 
 	if(pages > 1)
 	{
 		this->pageComboBox->setVisible(true);
 	};
-	//this->update();
 };
 
 editPage* editWindow::page()
