@@ -106,6 +106,9 @@ void stompBox::mouseDoubleClickEvent(QMouseEvent *event)
 	};
 	this->editDialog->setWindow(this->fxName);
 	this->editDialog->show();
+	this->editDialog->showNormal();
+	this->editDialog->raise();	
+	this->editDialog->activateWindow();
 };
 
 void stompBox::mouseMoveEvent(QMouseEvent *event)
