@@ -232,10 +232,10 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	{
 		QString item;
 		QString desc = items.level.at(itemsCount).desc;
-		QString longdesc = items.level.at(itemsCount).longdesc;
-		if(!longdesc.isEmpty())
+		QString customdesc = items.level.at(itemsCount).customdesc;
+		if(!customdesc.isEmpty())
 		{
-			item = longdesc;
+			item = customdesc;
 		}
 		else
 		{
@@ -460,10 +460,10 @@ void stompBox::valueChanged(int index)
 	Midi items = midiTable->getMidiMap("Stucture", this->hex1, this->hex2, this->hex3);
 
 	QString desc = items.level.at(index).desc;
-	QString longdesc = items.level.at(index).longdesc;
-	if(longdesc.isEmpty())
+	QString customdesc = items.level.at(index).customdesc;
+	if(customdesc.isEmpty())
 	{
-		longdesc = desc;
+		customdesc = desc;
 	};
 
 	this->comboBox->setCurrentIndex(index);
@@ -501,6 +501,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 		if(valueHex != "void")
 		{
 			Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+			valueName = items.desc;
 			if(hex1 == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency.
 			{
 				this->fxName = "Noise Suppressor";

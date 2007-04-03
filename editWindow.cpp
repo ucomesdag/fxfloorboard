@@ -28,8 +28,8 @@ editWindow::editWindow(QWidget *parent)
 	this->image = QPixmap(":images/editwindow.png");
 	this->setFixedSize(450, 350);
 	this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-	this->setWindowFlags(Qt::WindowStaysOnTopHint 
-		| Qt::WindowTitleHint 
+	this->setWindowFlags(/*Qt::WindowStaysOnTopHint 
+		| */Qt::WindowTitleHint 
 		| Qt::WindowMinimizeButtonHint 
 		| Qt::MSWindowsFixedSizeDialogHint);
 

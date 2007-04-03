@@ -31,8 +31,9 @@ class stompbox_eq : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_eq(QWidget *parent);
+public:
+	stompbox_eq(QWidget *parent);
+	void setEditPages();
 
 public slots:
 	void updateSignal();

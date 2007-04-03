@@ -22,6 +22,7 @@
 
 #include "editPage.h"
 #include <QLabel>
+#include "customControlKnob.h"
 
 editPage::editPage(QWidget *parent)
     : QWidget(parent)
@@ -40,21 +41,11 @@ void editPage::paintEvent(QPaintEvent *)
 	painter.drawPixmap(target, image, source);*/
 };
 
-void editPage::addKnob(QPoint pos)
+void editPage::addKnob(QPoint pos, QString hex1, QString hex2, QString hex3, 
+					   QString background, QString direction, int lenght)
 {
-	QLabel *newBackGround = new QLabel(this);
-	newBackGround->setPixmap(QPixmap(":/images/knobbg.png"));
-	newBackGround->move(pos);
-
-	QPoint newPos(pos.x() + 2, pos.y() + 2);
-	
-	int range = 100;
-	QString hex1 = "00";
-	QString hex2 = "00";
-	QString hex3 = "00";
-	QString imagePath(":/images/knob.png");
-	unsigned int imageRange = 63;
-	customDial *newKnob = new customDial(0, 0, range, 1, 10, newPos, this, hex1, hex2, hex3, imagePath, imageRange);
+	customControlKnob *knob = new customControlKnob(this, hex1, hex2, hex3, background, direction, lenght);
+	knob->move(pos);
 };
 
 void editPage::addSwitch(QPoint pos)
@@ -90,5 +81,4 @@ void editPage::addLabel(QString text, QPoint pos)
 
 	newLabel->setText(text);
 	newLabel->move(pos);
-	this->update();
 };

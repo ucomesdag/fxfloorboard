@@ -77,7 +77,7 @@ void MidiTable::loadMidiMap()
             level1.value = level1Node.attributes().namedItem("value").nodeValue();             
             level1.abbr = level1Node.attributes().namedItem("abbr").nodeValue(); 
             level1.desc = level1Node.attributes().namedItem("desc").nodeValue(); 
-			level1.longdesc = level1Node.attributes().namedItem("longdesc").nodeValue(); 
+			level1.customdesc = level1Node.attributes().namedItem("customdesc").nodeValue(); 
          
             QDomNode level2Node = level1Node.firstChild(); 
 
@@ -89,7 +89,7 @@ void MidiTable::loadMidiMap()
 				level2.value = level2Node.attributes().namedItem("value").nodeValue();             
 				level2.abbr = level2Node.attributes().namedItem("abbr").nodeValue(); 
 				level2.desc = level2Node.attributes().namedItem("desc").nodeValue(); 
-				level2.longdesc = level2Node.attributes().namedItem("longdesc").nodeValue();
+				level2.customdesc = level2Node.attributes().namedItem("customdesc").nodeValue();
 
 				QDomNode level3Node = level2Node.firstChild(); 
                 
@@ -101,7 +101,7 @@ void MidiTable::loadMidiMap()
 					level3.value = level3Node.attributes().namedItem("value").nodeValue();             
 					level3.abbr = level3Node.attributes().namedItem("abbr").nodeValue(); 
 					level3.desc = level3Node.attributes().namedItem("desc").nodeValue(); 
-					level3.longdesc = level3Node.attributes().namedItem("longdesc").nodeValue();
+					level3.customdesc = level3Node.attributes().namedItem("customdesc").nodeValue();
 
 					QDomNode  level4Node = level3Node.firstChild();
                     
@@ -113,7 +113,7 @@ void MidiTable::loadMidiMap()
 						level4.value = level4Node.attributes().namedItem("value").nodeValue();             
 						level4.abbr = level4Node.attributes().namedItem("abbr").nodeValue(); 
 						level4.desc = level4Node.attributes().namedItem("desc").nodeValue();
-						level4.longdesc = level4Node.attributes().namedItem("longdesc").nodeValue();
+						level4.customdesc = level4Node.attributes().namedItem("customdesc").nodeValue();
 	 
 						QDomNode level5Node = level4Node.firstChild();
 
@@ -124,7 +124,7 @@ void MidiTable::loadMidiMap()
 							level5.name = level5Node.attributes().namedItem("name").nodeValue(); 
 							level5.value = level5Node.attributes().namedItem("value").nodeValue();             
 							level5.desc = level5Node.attributes().namedItem("desc").nodeValue();
-							level5.longdesc = level5Node.attributes().namedItem("longdesc").nodeValue();
+							level5.customdesc = level5Node.attributes().namedItem("customdesc").nodeValue();
 
 							level4.id.append(level5.value); 
 							level4.level.append(level5); 

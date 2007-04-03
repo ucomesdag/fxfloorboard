@@ -20,39 +20,39 @@
 **
 ****************************************************************************/
 
-#ifndef EDITPAGE_H
-#define EDITPAGE_H
+#ifndef CUSTOMCONTROLKNOB_H
+#define CUSTOMCONTROLKNOB_H
 
 #include <QWidget>
 #include <QtGui>
-#include "customSwitch.h"
+#include "customDial.h"
 
-class editPage : public QWidget
+class customControlKnob : public QWidget
 {
     Q_OBJECT
 
 public:
-    editPage(QWidget *parent = 0);
-	
-	void addKnob(QPoint pos, 
+    customControlKnob(QWidget *parent = 0, 
 		QString hex1 = "void",
 		QString hex2 = "void",
 		QString hex3 = "void",
 		QString background = "normal", 
 		QString direction = "bottom", 
 		int lenght = 34);
-	void addSwitch(QPoint pos);
-	void addComboBox(QPoint pos);
-	void addLabel(QString text, QPoint pos);
 
 protected:
 	void paintEvent(QPaintEvent *event);
+
+public slots:
+	void valueChanged(int, QString, QString, QString);
 
 signals:
 	void updateSignal();
 
 private:
-	int currentIndex;
+	QLabel* label;
+	QLineEdit* display;
+	customDial* knob;
 };
 
-#endif // EDITPAGE_H
+#endif // CUSTOMCONTROLKNOB_H

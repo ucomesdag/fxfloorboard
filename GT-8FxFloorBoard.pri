@@ -65,7 +65,11 @@ HEADERS += ./editPage.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
     ./preferencesDialog.h \
-    ./preferencesPages.h
+    ./preferencesPages.h \
+    ./customControlKnob.h \
+    ./customControlButton.h \
+    ./customControlListMenu.h \
+    ./customControlLabel.h
 
 #Source files
 SOURCES += ./editPage.cpp \
@@ -112,7 +116,11 @@ SOURCES += ./editPage.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
     ./preferencesDialog.cpp \
-    ./preferencesPages.cpp
+    ./preferencesPages.cpp \
+    ./customControlKnob.cpp \
+    ./customControlButton.cpp \
+    ./customControlListMenu.cpp \
+    ./customControlLabel.cpp
 
 #Resource file(s)
 RESOURCES += GT-8FxFloorBoard.qrc
