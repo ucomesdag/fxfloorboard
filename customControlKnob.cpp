@@ -124,12 +124,11 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->display->setDisabled(true);
 	this->display->move(displayPos);
 
-	valueChanged(0, hex1, hex2, hex3);
-
 	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
                 this, SLOT( dialogUpdateSignal() ));
-	/*QObject::connect(this, SIGNAL( updateSignal() ),
-                this->parent(), SIGNAL( updateSignal() ));*/
+
+	QObject::connect(this, SIGNAL( updateSignal() ),
+                this->parent(), SIGNAL( updateSignal() ));
 };
 
 void customControlKnob::paintEvent(QPaintEvent *)
@@ -148,10 +147,15 @@ void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QStr
 	QString valueHex = QString::number(value, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
 
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
+
 	MidiTable *midiTable = MidiTable::Instance();
 	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
 	
 	this->display->setText(valueStr);
+
+	emit updateSignal();
 };
 
 void customControlKnob::dialogUpdateSignal()

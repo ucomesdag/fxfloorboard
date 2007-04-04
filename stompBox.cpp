@@ -73,6 +73,12 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 
 	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
                 this->editDialog, SIGNAL( dialogUpdateSignal() ));
+
+	QObject::connect(this->editDialog, SIGNAL( updateSignal() ),
+                this, SLOT( updateSignal() ));
+
+	QObject::connect(this->editDialog, SIGNAL( updateSignal() ),
+                this, SLOT( setDisplayToFxName() ));
 };
 
 void stompBox::paintEvent(QPaintEvent *)
@@ -542,4 +548,9 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 
 	emit dialogUpdateSignal();
 	emit valueChanged(this->fxName, valueName, valueStr);
+};
+
+void stompBox::setDisplayToFxName()
+{
+	emit valueChanged(this->fxName, "", "");
 };

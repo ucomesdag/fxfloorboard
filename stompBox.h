@@ -89,6 +89,7 @@ public slots:
 	void valueChanged(bool value, QString hex1, QString hex2, QString hex3);
 	void valueChanged(int index);
 	virtual void updateSignal() {};
+	void setDisplayToFxName();
 	
 signals:
 	void valueChanged(QString fxName, QString valueName, QString valueStr);

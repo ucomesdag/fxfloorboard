@@ -123,6 +123,8 @@ void editWindow::addPage()
 
 	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
 		editPages.last(), SIGNAL( dialogUpdateSignal() ));
+	QObject::connect(editPages.last(), SIGNAL( updateSignal() ),
+		this, SIGNAL( updateSignal() ));
 };
 
 editPage* editWindow::page()
