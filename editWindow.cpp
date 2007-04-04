@@ -68,6 +68,9 @@ editWindow::editWindow(QWidget *parent)
 
 	QObject::connect(this->pageComboBox, SIGNAL(activated(int)),
              this->pagesWidget, SLOT(setCurrentIndex(int)));
+
+	/*QObject::connect(this, SIGNAL( updateSignal() ),
+            this->parent(), SIGNAL( updateSignal() ));*/
 };
 
 void editWindow::paintEvent(QPaintEvent *)
@@ -104,7 +107,8 @@ QString editWindow::getTitle()
 
 void editWindow::addPage()
 {
-	this->pagesWidget->addWidget(this->tempPage);
+	this->editPages.append(this->tempPage);
+	this->pagesWidget->addWidget(editPages.last());
 	int pages = this->pagesWidget->count();
 	QString item;
 	item.append("Page ");
@@ -116,6 +120,9 @@ void editWindow::addPage()
 	{
 		this->pageComboBox->setVisible(true);
 	};
+
+	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
+		editPages.last(), SIGNAL( dialogUpdateSignal() ));
 };
 
 editPage* editWindow::page()

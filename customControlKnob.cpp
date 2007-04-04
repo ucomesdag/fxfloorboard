@@ -22,6 +22,7 @@
 
 #include "customControlKnob.h"
 #include "MidiTable.h"
+#include "SysxIO.h"
 
 customControlKnob::customControlKnob(QWidget *parent, 
 									 QString hex1, QString hex2, QString hex3, 
@@ -30,6 +31,9 @@ customControlKnob::customControlKnob(QWidget *parent,
 {
 	this->display = new QLineEdit(this);
 	this->label = new QLabel(this);
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;
 
 	QFont labelFont;
 	labelFont.setFamily("Arial");
@@ -121,6 +125,11 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->display->move(displayPos);
 
 	valueChanged(0, hex1, hex2, hex3);
+
+	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
+                this, SLOT( dialogUpdateSignal() ));
+	/*QObject::connect(this, SIGNAL( updateSignal() ),
+                this->parent(), SIGNAL( updateSignal() ));*/
 };
 
 void customControlKnob::paintEvent(QPaintEvent *)
@@ -143,4 +152,12 @@ void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QStr
 	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
 	
 	this->display->setText(valueStr);
+};
+
+void customControlKnob::dialogUpdateSignal()
+{
+	SysxIO *sysxIO = SysxIO::Instance();
+	int value = sysxIO->getSourceValue(this->hex1, this->hex2, this->hex3);
+	this->knob->setValue(value);
+	this->valueChanged(value, this->hex1, this->hex2, this->hex3);
 };

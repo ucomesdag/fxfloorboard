@@ -67,6 +67,12 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 
 	QObject::connect(this->parent(), SIGNAL( updateSignal() ),
                 this, SLOT( updateSignal() ));
+
+	QObject::connect(this->parent(), SIGNAL( updateSignal() ),
+                this->editDialog, SIGNAL( dialogUpdateSignal() ));
+
+	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
+                this->editDialog, SIGNAL( dialogUpdateSignal() ));
 };
 
 void stompBox::paintEvent(QPaintEvent *)
@@ -337,19 +343,13 @@ void stompBox::setSwitch(QString hex1, QString hex2, QString hex3)
 	switchbutton = new customSwitch(false, QPoint::QPoint(5, 41), this, hex1, hex2, hex3);	
 };
 
-QList<QString> stompBox::getSourceItems(QString hex1, QString hex2)
-{
-	SysxIO *sysxIO = SysxIO::Instance();
-	QList<QString> items = sysxIO->getFileSource(hex1, hex2);	
-	return items; 
-};
-
 void stompBox::updateComboBox(QString hex1, QString hex2, QString hex3)
 {	
 	QObject::disconnect(comboBox, SIGNAL(currentIndexChanged(int)), // To prevent sending a signal when loading a patch.
                 this, SLOT(valueChanged(int)));
 	
-	setComboBoxCurrentIndex(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	setComboBoxCurrentIndex(sysxIO->getSourceValue(hex1, hex2, hex3));
 
 	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
@@ -357,42 +357,50 @@ void stompBox::updateComboBox(QString hex1, QString hex2, QString hex3)
 
 void stompBox::updateKnob1(QString hex1, QString hex2, QString hex3)
 {	
-	knob1->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	knob1->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateKnob2(QString hex1, QString hex2, QString hex3)
 {	
-	knob2->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	knob2->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateSlider1(QString hex1, QString hex2, QString hex3)
 {	
-	slider1->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	slider1->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateSlider2(QString hex1, QString hex2, QString hex3)
 {	
-	slider2->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	slider2->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateSlider3(QString hex1, QString hex2, QString hex3)
 {	
-	slider3->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	slider3->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateSlider4(QString hex1, QString hex2, QString hex3)
 {	
-	slider4->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	slider4->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateSlider5(QString hex1, QString hex2, QString hex3)
 {	
-	slider5->setValue(getSourceValue(hex1, hex2, hex3));
+	SysxIO *sysxIO = SysxIO::Instance();
+	slider5->setValue(sysxIO->getSourceValue(hex1, hex2, hex3));
 };
 
 void stompBox::updateButton(QString hex1, QString hex2, QString hex3)
 {
-	int value = getSourceValue(hex1, hex2, hex3);
+	SysxIO *sysxIO = SysxIO::Instance();
+	int value = sysxIO->getSourceValue(hex1, hex2, hex3);
 	if(hex1 == "15")
 	{
 		//Exception for the Foot Volume -> it's on when Expresion switch is off.
@@ -404,7 +412,8 @@ void stompBox::updateButton(QString hex1, QString hex2, QString hex3)
 
 void stompBox::updateSwitch(QString hex1, QString hex2, QString hex3)
 {
-	int value = getSourceValue(hex1, hex2, hex3);
+	SysxIO *sysxIO = SysxIO::Instance();
+	int value = sysxIO->getSourceValue(hex1, hex2, hex3);
 	switchbutton->setValue((value==1)?true:false);
 };
 
@@ -414,8 +423,6 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	
 	QString valueHex = QString::number(value, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
-
-	emitValueChanged(hex1, hex2, hex3, valueHex);
 
 	SysxIO *sysxIO = SysxIO::Instance(); bool ok;
 	if(midiTable->isData("Stucture", hex1, hex2, hex3))
@@ -434,6 +441,9 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	{
 		sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
 	};
+
+	emitValueChanged(hex1, hex2, hex3, valueHex);
+
 };
 
 void stompBox::valueChanged(bool value, QString hex1, QString hex2, QString hex3)
@@ -442,22 +452,22 @@ void stompBox::valueChanged(bool value, QString hex1, QString hex2, QString hex3
 	(value)? valueInt=1: valueInt=0;
 	QString valueHex = QString::number(valueInt, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
-
-	emitValueChanged(hex1, hex2, hex3, valueHex);
 	
 	SysxIO *sysxIO = SysxIO::Instance();
 	sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
+
+	emitValueChanged(hex1, hex2, hex3, valueHex);
 };
 
 void stompBox::valueChanged(int index)
 {
 	QString valueHex = QString::number(index, 16).toUpper();
 	if(valueHex.length() < 2) valueHex.prepend("0");
-
-	emitValueChanged(this->hex1, this->hex2, this->hex3, valueHex);
 	
 	SysxIO *sysxIO = SysxIO::Instance();
 	sysxIO->setFileSource(this->hex1, this->hex2, this->hex3, valueHex);
+
+	emitValueChanged(this->hex1, this->hex2, this->hex3, valueHex);
 
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Stucture", this->hex1, this->hex2, this->hex3);
@@ -471,28 +481,6 @@ void stompBox::valueChanged(int index)
 
 	this->comboBox->setCurrentIndex(index);
 	this->comboBox->setEditText(desc);
-};
-
-int stompBox::getSourceValue(QString hex1, QString hex2, QString hex3)
-{
-	MidiTable *midiTable = MidiTable::Instance();
-
-	bool ok;
-	int value;
-	QList<QString> items = getSourceItems(hex1, hex2);
-	if(midiTable->isData("Stucture", hex1, hex2, hex3))
-	{
-		int maxRange = QString("7F").toInt(&ok, 16) + 1;
-		int listindex = sysxDataOffset + QString(hex3).toInt(&ok, 16);
-		int valueData1 = items.at(listindex).toInt(&ok, 16);
-		int valueData2 = items.at(listindex + 1).toInt(&ok, 16);
-		value = (valueData1 * maxRange) + valueData2;
-	}
-	else
-	{
-		value = items.at(sysxDataOffset + QString(hex3).toInt(&ok, 16)).toInt(&ok, 16);
-	};
-	return value;
 };
 
 void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QString valueHex)
@@ -552,5 +540,6 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 		this->fxName = "Digital Out";
 	};
 
+	emit dialogUpdateSignal();
 	emit valueChanged(this->fxName, valueName, valueStr);
 };

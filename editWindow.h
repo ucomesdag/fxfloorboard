@@ -25,6 +25,7 @@
 
 #include <QMainWindow>
 #include <QtGui>
+#include <QList>
 #include "editPage.h"
 
 class editWindow : public QWidget
@@ -43,6 +44,7 @@ public:
 	editPage* page();
 
 signals:
+	void dialogUpdateSignal();
 	void updateSignal();
 
 public slots:
@@ -58,6 +60,7 @@ private:
 	QStackedWidget* pagesWidget;
 	QComboBox* pageComboBox;
 	editPage* tempPage;
+	QList<editPage*> editPages;
 };
 
 #endif // EDITWINDOW_H

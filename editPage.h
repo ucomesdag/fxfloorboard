@@ -40,7 +40,7 @@ public:
 		QString hex3 = "void",
 		QString background = "normal", 
 		QString direction = "bottom", 
-		int lenght = 34);
+		int lenght = 45);
 	void addSwitch(QPoint pos);
 	void addComboBox(QPoint pos);
 	void addLabel(QString text, QPoint pos);
@@ -48,7 +48,11 @@ public:
 protected:
 	void paintEvent(QPaintEvent *event);
 
+public slots:
+		void valueChanged(bool value, QString hex1, QString hex2, QString hex3); // Not used.
+
 signals:
+	void dialogUpdateSignal();
 	void updateSignal();
 
 private:

@@ -299,6 +299,34 @@ void SysxIO::setFileSource(QString hex1, QString hex2, QList<QString> hexData)
 	};
 };
 
+QList<QString> SysxIO::getSourceItems(QString hex1, QString hex2)
+{
+	QList<QString> items = this->getFileSource(hex1, hex2);	
+	return items; 
+};
+
+int SysxIO::getSourceValue(QString hex1, QString hex2, QString hex3)
+{
+	MidiTable *midiTable = MidiTable::Instance();
+
+	bool ok;
+	int value;
+	QList<QString> items = this->getSourceItems(hex1, hex2);
+	if(midiTable->isData("Stucture", hex1, hex2, hex3))
+	{
+		int maxRange = QString("7F").toInt(&ok, 16) + 1;
+		int listindex = sysxDataOffset + QString(hex3).toInt(&ok, 16);
+		int valueData1 = items.at(listindex).toInt(&ok, 16);
+		int valueData2 = items.at(listindex + 1).toInt(&ok, 16);
+		value = (valueData1 * maxRange) + valueData2;
+	}
+	else
+	{
+		value = items.at(sysxDataOffset + QString(hex3).toInt(&ok, 16)).toInt(&ok, 16);
+	};
+	return value;
+};
+
 /************************ resetDevice() ******************************
 * Reset the device after sending a sysexmesage.
 * And starts to processes the spooler if the device is free.

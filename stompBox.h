@@ -93,6 +93,7 @@ public slots:
 signals:
 	void valueChanged(QString fxName, QString valueName, QString valueStr);
 	void currentIndexChanged(int index);
+	void dialogUpdateSignal();
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -102,8 +103,6 @@ protected:
 
 private:
 	void emitValueChanged(QString hex1, QString hex2, QString hex3, QString valueHex);
-	int getSourceValue(QString hex1, QString hex2, QString hex3);
-	QList<QString> getSourceItems(QString hex1, QString hex2);
 	
 	editWindow *editDialog;
 	QString imagePath;

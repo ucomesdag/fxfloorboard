@@ -50,6 +50,8 @@ public:
 	void setFileSource(QString hex1, QString hex2, QString hex3, QString hex4, QString hex5);
 	void setFileSource(QString hex1, QString hex2, QList<QString> hexData);
 	void setFileName(QString fileName);
+	QList<QString> getSourceItems(QString hex1, QString hex2);
+	int getSourceValue(QString hex1, QString hex2, QString hex3);
 	QString getFileName();
 	SysxData getFileSource();
 	QList<QString> getFileSource(QString hex1, QString hex2);

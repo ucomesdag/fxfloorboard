@@ -45,6 +45,7 @@ protected:
 
 public slots:
 	void valueChanged(int, QString, QString, QString);
+	void dialogUpdateSignal();
 
 signals:
 	void updateSignal();
@@ -53,6 +54,9 @@ private:
 	QLabel* label;
 	QLineEdit* display;
 	customDial* knob;
+	QString hex1;
+	QString hex2;
+	QString hex3;
 };
 
 #endif // CUSTOMCONTROLKNOB_H

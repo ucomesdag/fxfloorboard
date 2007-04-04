@@ -27,7 +27,11 @@
 editPage::editPage(QWidget *parent)
     : QWidget(parent)
 {
+	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
+                this, SIGNAL( dialogUpdateSignal() ));*/
 
+	/*QObject::connect(this, SIGNAL( updateSignal() ),
+                this->parent(), SIGNAL( updateSignal() ));*/
 };
 
 void editPage::paintEvent(QPaintEvent *)
@@ -82,3 +86,12 @@ void editPage::addLabel(QString text, QPoint pos)
 	newLabel->setText(text);
 	newLabel->move(pos);
 };
+
+void editPage::valueChanged(bool value, QString hex1, QString hex2, QString hex3)
+{
+	value;
+	hex1;
+	hex2;
+	hex3;
+}; 
+
