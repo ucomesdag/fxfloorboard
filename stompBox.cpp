@@ -97,29 +97,24 @@ editWindow* stompBox::editDetails()
 
 void stompBox::mousePressEvent(QMouseEvent *event) 
 { 
-	if (event->button() == Qt::LeftButton) this->dragStartPosition = event->pos(); 
 	emitValueChanged(this->hex1, this->hex2, "00", "void");
+
+	if (event->button() == Qt::LeftButton) 
+	{
+		this->dragStartPosition = event->pos(); 
+	}
+	else if (event->button() == Qt::RightButton)
+	{
+		this->editDialog->setWindow(this->fxName);
+		emit setEditDialog(this->editDialog);
+	};
 };
 
 void stompBox::mouseDoubleClickEvent(QMouseEvent *event)
 {
 	event;
-	/*if(this->editDialog->getTitle().isEmpty())
-	{
-		QRect windowRect = this->parentWidget()->parentWidget()->frameGeometry();
-
-		int x = (windowRect.x() + (windowRect.width() / 2)) - (this->editDialog->width() / 2);
-		int y = (windowRect.y() + (windowRect.height() / 2)) - (this->editDialog->height() / 2);
-
-		this->editDialog->move(x, y);
-	};*/
-
 	this->editDialog->setWindow(this->fxName);
 	emit setEditDialog(this->editDialog);
-	//this->editDialog->show();
-	//this->editDialog->showNormal();
-	//this->editDialog->raise();	
-	//this->editDialog->activateWindow();
 };
 
 void stompBox::mouseMoveEvent(QMouseEvent *event)
