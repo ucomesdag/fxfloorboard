@@ -30,28 +30,20 @@ customControlKnob::customControlKnob(QWidget *parent,
 	: QWidget(parent)
 {
 	this->display = new QLineEdit(this);
-	this->label = new QLabel(this);
+	this->label = new customControlLabel(this);
 	this->hex1 = hex1;
 	this->hex2 = hex2;
 	this->hex3 = hex3;
 
-	QFont labelFont;
-	labelFont.setFamily("Arial");
-	labelFont.setBold(true);
-	labelFont.setPixelSize(9);
-	labelFont.setStretch(100);
-
-	QPalette labelPal;
-	labelPal.setColor(this->label->foregroundRole(), Qt::white);
-
+	
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
 	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
 	QString labeltxt = items.customdesc;
-
-	this->label->setPalette(labelPal);
-	this->label->setFont(labelFont);
-	this->label->setText(labeltxt.toUpper());
+	this->label->setPixelSize(9);
+	this->label->setStretch(100);
+	this->label->setUpperCase(true);
+	this->label->setText(labeltxt);
 	
 	QPoint labelPos, displayPos, knobPos, bgPos;
 	if(direction == "left")
@@ -68,15 +60,13 @@ customControlKnob::customControlKnob(QWidget *parent,
 	}
 	else if(direction == "bottom")
 	{
-		int labellenght = 50;
+		this->label->setFixedWidth(this->width());
+		this->label->setAlignment(Qt::AlignCenter);
 		
 		bgPos = QPoint(0, 0 + 9);
 		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
-		labelPos = QPoint(knobPos.x()  + ((37 - labellenght) / 2), 0);
+		labelPos = QPoint(knobPos.x()  + ((37 - this->label->width()) / 2), 0);
 		displayPos = QPoint(knobPos.x() + ((37 - lenght) / 2), knobPos.y() + 37 + 7);
-
-		this->label->setFixedWidth(labellenght);
-		this->label->setAlignment(Qt::AlignCenter);
 	};
 
 	this->label->move(labelPos);
@@ -124,11 +114,14 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->display->setDisabled(true);
 	this->display->move(displayPos);
 
-	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
-                this, SLOT( dialogUpdateSignal() ));
+	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
+                this, SLOT( dialogUpdateSignal() ));*/
 
-	QObject::connect(this, SIGNAL( updateSignal() ),
-                this->parent(), SIGNAL( updateSignal() ));
+	/*QObject::connect(this, SIGNAL( updateSignal() ),
+                this->parent(), SIGNAL( updateSignal() ));*/
+
+	QObject::connect(this, SIGNAL( updateDisplay(QString) ),
+                this->display, SLOT( setText(QString) ));
 };
 
 void customControlKnob::paintEvent(QPaintEvent *)
@@ -153,9 +146,10 @@ void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QStr
 	MidiTable *midiTable = MidiTable::Instance();
 	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
 	
-	this->display->setText(valueStr);
+	//this->display->setText(valueStr);
+	emit updateDisplay(valueStr);
 
-	emit updateSignal();
+	//emit updateSignal();
 };
 
 void customControlKnob::dialogUpdateSignal()

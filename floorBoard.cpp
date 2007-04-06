@@ -89,6 +89,9 @@ floorBoard::floorBoard(QWidget *parent,
 	bar->setDragBarMinOffset(2, 8);
 	bar->setDragBarMaxOffset(offset - panelBarOffset + 5);
 
+	this->editDialog = new editWindow(this);
+	this->editDialog->hide();
+
 	/*floorBoardDisplay *display2 = new floorBoardDisplay(this);
 	display2->setPos(liberainPos);*/
 
@@ -479,6 +482,7 @@ void floorBoard::setSize(QSize newSize)
 	emit resizeSignal(newBankListRect);
 	
 	emit sizeChanged(floorSize, oldFloorSize);
+	this->centerEditDialog();
 };
 
 void floorBoard::setWidth(int dist)
@@ -504,7 +508,7 @@ void floorBoard::setWidth(int dist)
 		this->colapseState = true;
 		emit setCollapseState(true);
 	};
-	setSize(newSize);
+	this->setSize(newSize);
 };
 
 void floorBoard::initStomps()
@@ -665,3 +669,19 @@ void floorBoard::updateStompBoxes()
 	};
 	setStomps(stompOrder);
 };
+
+void floorBoard::setEditDialog(editWindow* editDialog)
+{
+	this->editDialog = editDialog;
+	this->editDialog->setParent(this);
+	this->centerEditDialog();
+	this->editDialog->show();
+};
+
+void floorBoard::centerEditDialog()
+{
+	int x = this->displayPos.x() + (((this->floorSize.width() - this->displayPos.x()) - this->editDialog->width()) / 2);
+	int y = this->pos.y() + ((this->floorSize.height() - this->editDialog->height()) / 2);
+	this->editDialog->move(x, y);
+};
+

@@ -27,6 +27,7 @@
 #include <QtGui>
 #include <QList>
 #include "editPage.h"
+#include "customControlLabel.h"
 
 class editWindow : public QWidget
 {
@@ -59,6 +60,7 @@ private:
 	QLabel* title;
 	QStackedWidget* pagesWidget;
 	QComboBox* pageComboBox;
+	customControlLabel* closeButton;
 	editPage* tempPage;
 	QList<editPage*> editPages;
 };

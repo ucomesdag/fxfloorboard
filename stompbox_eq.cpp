@@ -65,7 +65,9 @@ void stompbox_eq::updateSignal()
 
 void stompbox_eq::setEditPages()
 {
-    /*editDetails()->page()->addLabel("High _______", QPoint(120,15));
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
+	/*editDetails()->page()->addLabel("High _______", QPoint(120,15));
 	editDetails()->page()->addKnob(QPoint(195,15));
 	editDetails()->page()->addLabel("Level", QPoint(203,0));
 

@@ -26,42 +26,60 @@ editWindow::editWindow(QWidget *parent)
     : QWidget(parent)
 {
 	this->image = QPixmap(":images/editwindow.png");
-	this->setFixedSize(450, 350);
-	this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-	this->setWindowFlags(/*Qt::WindowStaysOnTopHint 
-		| */Qt::WindowTitleHint 
+	this->setFixedSize(image.width(), image.height());
+	/*this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	this->setWindowFlags(Qt::WindowStaysOnTopHint 
+		| Qt::WindowTitleHint 
 		| Qt::WindowMinimizeButtonHint 
-		| Qt::MSWindowsFixedSizeDialogHint);
+		| Qt::MSWindowsFixedSizeDialogHint);*/
 
 	this->title = new QLabel;
 
 	QFont titleFont;
 	titleFont.setFamily("Arial");
 	titleFont.setBold(true);
-	titleFont.setPixelSize(14);
+	titleFont.setPixelSize(16);
 	titleFont.setStretch(140);
 
-	QPalette palette;
-	palette.setColor(this->title->foregroundRole(), Qt::white);
-	this->title->setPalette(palette);
+	QPalette titlePalette;
+	titlePalette.setColor(this->title->foregroundRole(), Qt::white);
+	this->title->setPalette(titlePalette);
 	this->title->setFont(titleFont);
 
 	this->pageComboBox = new QComboBox;
 	this->pageComboBox->setVisible(false);
 
+	this->closeButton = new customControlLabel;
+	this->closeButton->setButton(true);
+	this->closeButton->setImage(":/images/closebutton.png");
+
 	QHBoxLayout *headerLayout = new QHBoxLayout;
 	headerLayout->addWidget(this->title);
+	headerLayout->addStretch();
 	headerLayout->addWidget(this->pageComboBox);
+	headerLayout->addStretch();
+	headerLayout->addWidget(this->closeButton);
+	headerLayout->addSpacing(5);
+
+	/*QHBoxLayout *sellectLayout = new QHBoxLayout;
+	sellectLayout->addStretch();
+	sellectLayout->addWidget(this->pageComboBox);
+	sellectLayout->addStretch();*/	
 
 	this->pagesWidget = new QStackedWidget;
 
-	QVBoxLayout *pagesLayout = new QVBoxLayout;
+	QHBoxLayout *pagesLayout = new QHBoxLayout;
+	//pagesLayout->addStretch();
 	pagesLayout->addWidget(this->pagesWidget);
+	//pagesLayout->addStretch();
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(headerLayout);
-	mainLayout->addSpacing(5);
+	mainLayout->addStretch();
+	//mainLayout->addLayout(sellectLayout);
 	mainLayout->addLayout(pagesLayout);
+	mainLayout->addStretch();
+	mainLayout->addSpacing(16);
 	setLayout(mainLayout);
 
 	this->tempPage = new editPage;
@@ -69,14 +87,17 @@ editWindow::editWindow(QWidget *parent)
 	QObject::connect(this->pageComboBox, SIGNAL(activated(int)),
              this->pagesWidget, SLOT(setCurrentIndex(int)));
 
+	QObject::connect(this->closeButton, SIGNAL(mouseReleased()),
+             this, SLOT(hide()));
+
 	/*QObject::connect(this, SIGNAL( updateSignal() ),
             this->parent(), SIGNAL( updateSignal() ));*/
 };
 
 void editWindow::paintEvent(QPaintEvent *)
 {
-	QRectF target(0.0, 0.0, this->width(), this->height());
-	QRectF source(0.0, 0.0, this->width(), this->height());
+	QRectF target(0.0, 0.0, image.width(), image.height());
+	QRectF source(0.0, 0.0, image.width(), image.height());
 
 	QPainter painter(this);
 	painter.drawPixmap(target, image, source);
@@ -95,7 +116,6 @@ void editWindow::setLSB(QString hex1, QString hex2)
 
 void editWindow::setWindow(QString title)
 {
-	this->setWindowTitle(title);
 	this->title->setText(title);
 	this->pagesWidget->setCurrentIndex(0);
 };
@@ -121,10 +141,10 @@ void editWindow::addPage()
 		this->pageComboBox->setVisible(true);
 	};
 
-	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
+	/*QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
 		editPages.last(), SIGNAL( dialogUpdateSignal() ));
 	QObject::connect(editPages.last(), SIGNAL( updateSignal() ),
-		this, SIGNAL( updateSignal() ));
+		this, SIGNAL( updateSignal() ));*/
 };
 
 editPage* editWindow::page()

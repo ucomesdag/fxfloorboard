@@ -31,8 +31,9 @@ class stompbox_dgt : public stompBox
 {
     Q_OBJECT
 
-	public:
-		stompbox_dgt(QWidget *parent);
+public:
+	stompbox_dgt(QWidget *parent);
+	void setEditPages();
 };
 
 #endif // STOMPBOX_DGT_H

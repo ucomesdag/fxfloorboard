@@ -31,6 +31,7 @@ stompbox_ns::stompbox_ns(QWidget *parent)
 	setKnob1("0E", "00", "01");
 	setKnob2("0E", "00", "02");
 	setButton("0E", "00", "00");
+	setEditPages();
 };
 
 void stompbox_ns::updateSignal()
@@ -38,4 +39,10 @@ void stompbox_ns::updateSignal()
 	updateKnob1("0E", "00", "01");
 	updateKnob2("0E", "00", "02");
 	updateButton("0E", "00", "00");
+};
+
+void stompbox_ns::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };

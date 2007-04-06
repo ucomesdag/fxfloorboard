@@ -32,6 +32,7 @@ stompbox_ce::stompbox_ce(QWidget *parent)
 	setKnob2("0C", "00", "04");
 	setComboBox("0C", "00", "02");
 	setButton("0C", "00", "00");
+	setEditPages();
 };
 
 void stompbox_ce::updateSignal()
@@ -40,4 +41,10 @@ void stompbox_ce::updateSignal()
 	updateKnob2("0C", "00", "04");
 	updateComboBox("0C", "00", "02");
 	updateButton("0C", "00", "00");
+};
+
+void stompbox_ce::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };

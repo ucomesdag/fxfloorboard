@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QPixmap>
 #include "stompBox.h"
+#include "editWindow.h"
 
 class floorBoard : public QWidget
 {
@@ -50,6 +51,7 @@ public slots:
 	void setWidth(int dist);
 	void setCollapse();
 	void updateStompBoxes();
+	void setEditDialog(editWindow* editDialog);
 
 signals:
 	void valueChanged(QString fxName, QString valueName, QString value);
@@ -77,6 +79,7 @@ private:
 	void setStomps(QList<QString> stompOrder);
 	void setStompPos(QString name, int order);
 	void setStompPos(int index, int order);
+	void centerEditDialog();
 
 	QString imagePathFloor;
 	QString imagePathStompBG;
@@ -111,6 +114,7 @@ private:
 
 	QList<stompBox*> stompBoxes;
 	QList<QString> stompNames;
+	editWindow* editDialog;
 };
 
 #endif // FLOORBOARD_H

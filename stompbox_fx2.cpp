@@ -30,10 +30,17 @@ stompbox_fx2::stompbox_fx2(QWidget *parent)
 	setLSB("09", "00");
 	setComboBox("09", "00", "02", QRect(8, 31, 79, 13));
 	setButton("09", "00", "00");
+	setEditPages();
 };
 
 void stompbox_fx2::updateSignal()
 {
 	updateComboBox("09", "00", "02");
 	updateButton("09", "00", "00");
+};
+
+void stompbox_fx2::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };

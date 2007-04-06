@@ -57,7 +57,7 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 
 	this->setFixedSize(stompSize);
 
-	this->editDialog = new editWindow;
+	this->editDialog = new editWindow();
 
 	QObject::connect(this, SIGNAL( valueChanged(QString, QString, QString) ),
                 this->parent(), SIGNAL( valueChanged(QString, QString, QString) ));
@@ -68,17 +68,14 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 	QObject::connect(this->parent(), SIGNAL( updateSignal() ),
                 this, SLOT( updateSignal() ));
 
-	QObject::connect(this->parent(), SIGNAL( updateSignal() ),
-                this->editDialog, SIGNAL( dialogUpdateSignal() ));
-
-	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
-                this->editDialog, SIGNAL( dialogUpdateSignal() ));
-
 	QObject::connect(this->editDialog, SIGNAL( updateSignal() ),
                 this, SLOT( updateSignal() ));
 
 	QObject::connect(this->editDialog, SIGNAL( updateSignal() ),
                 this, SLOT( setDisplayToFxName() ));
+
+	QObject::connect(this, SIGNAL( setEditDialog(editWindow*) ),
+                this->parent(), SLOT( setEditDialog(editWindow*) ));
 };
 
 void stompBox::paintEvent(QPaintEvent *)
@@ -107,7 +104,7 @@ void stompBox::mousePressEvent(QMouseEvent *event)
 void stompBox::mouseDoubleClickEvent(QMouseEvent *event)
 {
 	event;
-	if(this->editDialog->getTitle().isEmpty())
+	/*if(this->editDialog->getTitle().isEmpty())
 	{
 		QRect windowRect = this->parentWidget()->parentWidget()->frameGeometry();
 
@@ -115,12 +112,14 @@ void stompBox::mouseDoubleClickEvent(QMouseEvent *event)
 		int y = (windowRect.y() + (windowRect.height() / 2)) - (this->editDialog->height() / 2);
 
 		this->editDialog->move(x, y);
-	};
+	};*/
+
 	this->editDialog->setWindow(this->fxName);
-	this->editDialog->show();
-	this->editDialog->showNormal();
-	this->editDialog->raise();	
-	this->editDialog->activateWindow();
+	emit setEditDialog(this->editDialog);
+	//this->editDialog->show();
+	//this->editDialog->showNormal();
+	//this->editDialog->raise();	
+	//this->editDialog->activateWindow();
 };
 
 void stompBox::mouseMoveEvent(QMouseEvent *event)
@@ -449,7 +448,6 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	};
 
 	emitValueChanged(hex1, hex2, hex3, valueHex);
-
 };
 
 void stompBox::valueChanged(bool value, QString hex1, QString hex2, QString hex3)
@@ -546,7 +544,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 		this->fxName = "Digital Out";
 	};
 
-	emit dialogUpdateSignal();
+	//emit dialogUpdateSignal();
 	emit valueChanged(this->fxName, valueName, valueStr);
 };
 

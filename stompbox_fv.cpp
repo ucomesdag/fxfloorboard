@@ -29,9 +29,16 @@ stompbox_fv::stompbox_fv(QWidget *parent)
 	setImage(":/images/fv.png");
 	setLSB("15", "00");
 	//setButton("15", "00", "00", QPoint::QPoint(0, 109), ":/images/pedal.png");
+	setEditPages();
 };
 
 void stompbox_fv::updateSignal()
 {
 	//updateButton("15", "00", "00");
+};
+
+void stompbox_fv::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };

@@ -30,10 +30,17 @@ stompbox_wah::stompbox_wah(QWidget *parent)
 	setLSB("03", "00");
 	setComboBox("03", "00", "02");
 	setButton("03", "00", "00", QPoint::QPoint(0, 109), ":/images/pedal.png");
+	setEditPages();
 };
 
 void stompbox_wah::updateSignal()
 {
 	updateComboBox("03", "00", "02");
 	updateButton("03", "00", "00");
+};
+
+void stompbox_wah::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };

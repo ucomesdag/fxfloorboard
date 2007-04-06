@@ -28,4 +28,11 @@ stompbox_dgt::stompbox_dgt(QWidget *parent)
 	/* D-OUT */
 	this->setImage(":/images/dgt.png");
 	setLSB("void", "void");
+	setEditPages();
+};
+
+void stompbox_dgt::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };

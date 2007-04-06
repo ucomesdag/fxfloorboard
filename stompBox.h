@@ -95,6 +95,7 @@ signals:
 	void valueChanged(QString fxName, QString valueName, QString valueStr);
 	void currentIndexChanged(int index);
 	void dialogUpdateSignal();
+	void setEditDialog(editWindow* editDialog);
 
 protected:
 	void paintEvent(QPaintEvent *event);

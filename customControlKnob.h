@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QtGui>
 #include "customDial.h"
+#include "customControlLabel.h"
 
 class customControlKnob : public QWidget
 {
@@ -49,9 +50,10 @@ public slots:
 
 signals:
 	void updateSignal();
+	void updateDisplay(QString text);
 
 private:
-	QLabel* label;
+	customControlLabel* label;
 	QLineEdit* display;
 	customDial* knob;
 	QString hex1;

@@ -33,6 +33,7 @@ class stompbox_cs : public stompBox
 
 public:
 	stompbox_cs(QWidget *parent);
+	void setEditPages();
 
 public slots:
 	void updateSignal();

@@ -28,10 +28,17 @@ stompbox_pre::stompbox_pre(QWidget *parent)
 	/* PRE */
 	setImage(":/images/pre.png");
 	setLSB("07", "00");
-	setSwitch("07", "00", "00"); 
+	setSwitch("07", "00", "00");
+	setEditPages();
 };
 
 void stompbox_pre::updateSignal()
 {
 	updateSwitch("07", "00", "00");
+};
+
+void stompbox_pre::setEditPages()
+{
+    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
+	editDetails()->addPage();
 };
