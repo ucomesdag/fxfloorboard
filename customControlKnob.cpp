@@ -63,12 +63,12 @@ customControlKnob::customControlKnob(QWidget *parent,
 		this->label->setFixedWidth(this->width());
 		this->label->setAlignment(Qt::AlignCenter);
 		
-		bgPos = QPoint(0, 0 + 9);
+		bgPos = QPoint(1, 0 + 9);
 		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
 		labelPos = QPoint(knobPos.x()  + ((37 - this->label->width()) / 2), 0);
 		displayPos = QPoint(knobPos.x() + ((37 - lenght) / 2), knobPos.y() + 37 + 7);
 
-		this->setFixedSize(50, displayPos.y() + this->display->height());
+		this->setFixedSize(50, displayPos.y() + 13 + 2);
 	};
 	this->label->move(labelPos);
 

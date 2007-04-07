@@ -66,6 +66,9 @@ private:
 	QGridLayout* groupBoxLayout;
 	QGroupBox* groupBox;
 	bool groupBoxMode;
+	int groupBoxLevel;
+	int groupBoxIndex;
+	int parentBoxDif;
 };
 
 #endif // EDITPAGE_H

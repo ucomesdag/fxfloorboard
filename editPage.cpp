@@ -31,11 +31,6 @@ editPage::editPage(QWidget *parent)
 	this->layout = new QGridLayout;
 	this->layout->setMargin(0);
 
-	this->groupBox = new QGroupBox;
-
-	this->groupBoxLayout = new QGridLayout;
-	this->groupBoxLayout->setMargin(0);
-
 	this->groupBoxMode = false;
 
 	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
@@ -117,6 +112,29 @@ void editPage::valueChanged(bool value, QString hex1, QString hex2, QString hex3
 
 void editPage::newGroupBox(QString title)
 {
+	if(this->groupBoxMode)
+	{
+		if(this->groupBoxIndex == 0 && this->groupBoxLevel != 0)
+		{
+			this->parentBoxDif++;
+		};
+		this->groupBoxLevel++;
+		this->groupBoxIndex++;
+	}
+	else
+	{
+		this->groupBoxLevel = 0;
+		this->groupBoxIndex = 0;
+		this->parentBoxDif = 0;
+	};
+
+	this->groupBox = new QGroupBox;
+	this->groupBoxes.append(this->groupBox);
+
+	this->groupBoxLayout = new QGridLayout;
+	this->groupBoxLayout->setMargin(5);
+	this->groupBoxLayouts.append(this->groupBoxLayout);
+	
 	QFont groupBoxFont;
 	groupBoxFont.setFamily("Arial");
 	groupBoxFont.setBold(true);
@@ -134,18 +152,48 @@ void editPage::newGroupBox(QString title)
 
 void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
 {
-	this->groupBoxLayouts.append(this->groupBoxLayout);
-	this->groupBox->setLayout(this->groupBoxLayouts.last());
-	this->groupBoxes.append(this->groupBox);
-	this->layout->addWidget(this->groupBoxes.last(), row, column, rowSpan, columnSpan);
-	this->groupBoxMode = false;
+	/*if(this->groupBoxIndex == 0 && this->groupBoxLevel != 0)
+	{
+		this->groupBoxIndex = this->groupBoxLevel;
+	};*/
+	
+	int layoutIndex = this->groupBoxLayouts.size() - (this->groupBoxLevel - this->groupBoxIndex) - 1;
+	int boxesIndex = this->groupBoxes.size() - (this->groupBoxLevel - this->groupBoxIndex) - 1;
+	int parentIndex = this->groupBoxes.size() - this->groupBoxLevel - 1;
 
-	this->groupBox = new QGroupBox;
-	this->groupBoxLayout = new QGridLayout;
-	this->groupBoxLayout->setMargin(0);
+	if(layoutIndex >0 && this->parentBoxDif > 0)
+	{
+		layoutIndex += this->parentBoxDif;
+		boxesIndex += this->parentBoxDif;
+	};
+
+	this->groupBoxes.at(boxesIndex)->setLayout(this->groupBoxLayouts.at(layoutIndex));
+	
+	if(this->groupBoxIndex == 0)
+	{
+		this->layout->addWidget(this->groupBoxes.at(parentIndex), row, column, rowSpan, columnSpan);
+		this->groupBoxLevel = 0;
+		this->parentBoxDif = 0;
+		this->groupBoxMode = false;
+	}
+	else
+	{
+		this->groupBoxLayouts.at(layoutIndex - 1 - this->parentBoxDif)->addWidget(this->groupBoxes.at(boxesIndex), row, column, rowSpan, columnSpan);
+		this->groupBoxIndex--;
+	};
 };
 
 void editPage::setGridLayout()
 {
-	this->setLayout(this->layout);
+	QHBoxLayout *strechedLayout = new QHBoxLayout;
+	strechedLayout->addStretch();
+	strechedLayout->addLayout(this->layout);
+	strechedLayout->addStretch();
+
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addStretch();
+	mainLayout->addLayout(strechedLayout);
+	mainLayout->addStretch();
+	
+	this->setLayout(mainLayout);
 };
