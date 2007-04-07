@@ -59,7 +59,6 @@ editWindow::editWindow(QWidget *parent)
 	headerLayout->addWidget(this->pageComboBox);
 	headerLayout->addStretch();
 	headerLayout->addWidget(this->closeButton);
-	headerLayout->addSpacing(5);
 
 	/*QHBoxLayout *sellectLayout = new QHBoxLayout;
 	sellectLayout->addStretch();
@@ -69,9 +68,9 @@ editWindow::editWindow(QWidget *parent)
 	this->pagesWidget = new QStackedWidget;
 
 	QHBoxLayout *pagesLayout = new QHBoxLayout;
-	//pagesLayout->addStretch();
+	pagesLayout->addStretch();
 	pagesLayout->addWidget(this->pagesWidget);
-	//pagesLayout->addStretch();
+	pagesLayout->addStretch();
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(headerLayout);
@@ -127,14 +126,15 @@ QString editWindow::getTitle()
 
 void editWindow::addPage()
 {
-	this->editPages.append(this->tempPage);
-	this->pagesWidget->addWidget(editPages.last());
-	int pages = this->pagesWidget->count();
-	QString item;
-	item.append("Page ");
-	item.append(QString::number(pages, 10));
-	this->pageComboBox->addItem(item);
-	this->tempPage = new editPage;
+	this->tempPage->setGridLayout();
+	this->editPages.append(this->tempPage); 
+    this->pagesWidget->addWidget(editPages.last()); 
+    int pages = this->pagesWidget->count(); 
+    QString item; 
+    item.append("Page "); 
+    item.append(QString::number(pages, 10)); 
+    this->pageComboBox->addItem(item); 
+    this->tempPage = new editPage; 
 
 	if(pages > 1)
 	{

@@ -33,6 +33,6 @@ stompbox_dgt::stompbox_dgt(QWidget *parent)
 
 void stompbox_dgt::setEditPages()
 {
-    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
-	editDetails()->addPage();
+    
+	
 };

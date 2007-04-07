@@ -39,6 +39,6 @@ void stompbox_pre::updateSignal()
 
 void stompbox_pre::setEditPages()
 {
-    editDetails()->page()->addLabel("Work in progress...", QPoint(0,0));
-	editDetails()->addPage();
+    
+	
 };

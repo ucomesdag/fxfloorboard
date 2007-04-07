@@ -22,11 +22,22 @@
 
 #include "editPage.h"
 #include <QLabel>
+#include "customSwitch.h"
 #include "customControlKnob.h"
 
 editPage::editPage(QWidget *parent)
     : QWidget(parent)
 {
+	this->layout = new QGridLayout;
+	this->layout->setMargin(0);
+
+	this->groupBox = new QGroupBox;
+
+	this->groupBoxLayout = new QGridLayout;
+	this->groupBoxLayout->setMargin(0);
+
+	this->groupBoxMode = false;
+
 	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
                 this, SIGNAL( dialogUpdateSignal() ));*/
 
@@ -45,11 +56,20 @@ void editPage::paintEvent(QPaintEvent *)
 	painter.drawPixmap(target, image, source);*/
 };
 
-void editPage::addKnob(QPoint pos, QString hex1, QString hex2, QString hex3, 
-					   QString background, QString direction, int lenght)
+void editPage::addKnob(int row, int column, int rowSpan, int columnSpan,
+					   QString hex1, QString hex2, QString hex3, 
+					   QString background, QString direction, int lenght, 
+					   Qt::Alignment alignment)
 {
 	customControlKnob *knob = new customControlKnob(this, hex1, hex2, hex3, background, direction, lenght);
-	knob->move(pos);
+	if(this->groupBoxMode)
+	{
+		this->groupBoxLayout->addWidget(knob, row, column, rowSpan, columnSpan, alignment);
+	}
+	else
+	{
+		this->layout->addWidget(knob, row, column, rowSpan, columnSpan, alignment);
+	};
 };
 
 void editPage::addSwitch(QPoint pos)
@@ -95,3 +115,37 @@ void editPage::valueChanged(bool value, QString hex1, QString hex2, QString hex3
 	hex3;
 }; 
 
+void editPage::newGroupBox(QString title)
+{
+	QFont groupBoxFont;
+	groupBoxFont.setFamily("Arial");
+	groupBoxFont.setBold(true);
+	groupBoxFont.setPixelSize(12);
+	groupBoxFont.setStretch(105);
+
+	QPalette groupBoxPal;
+	groupBoxPal.setColor(this->groupBox->foregroundRole(), Qt::white);
+
+	this->groupBox->setPalette(groupBoxPal);
+	this->groupBox->setFont(groupBoxFont);
+	this->groupBox->setTitle(title);
+	this->groupBoxMode = true;
+};
+
+void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
+{
+	this->groupBoxLayouts.append(this->groupBoxLayout);
+	this->groupBox->setLayout(this->groupBoxLayouts.last());
+	this->groupBoxes.append(this->groupBox);
+	this->layout->addWidget(this->groupBoxes.last(), row, column, rowSpan, columnSpan);
+	this->groupBoxMode = false;
+
+	this->groupBox = new QGroupBox;
+	this->groupBoxLayout = new QGridLayout;
+	this->groupBoxLayout->setMargin(0);
+};
+
+void editPage::setGridLayout()
+{
+	this->setLayout(this->layout);
+};

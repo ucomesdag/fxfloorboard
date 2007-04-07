@@ -41,18 +41,37 @@ void stompbox_fx1::updateSignal()
 
 void stompbox_fx1::setEditPages()
 {
-	editDetails()->page()->addLabel("Pre Amp/SP A", QPoint(0,0));
-	editDetails()->page()->addKnob(QPoint(0,20), "07", "00", "07", "turbo");
-	editDetails()->page()->addKnob(QPoint(55,20), "07", "00", "08");
-	editDetails()->page()->addKnob(QPoint(110,20), "07", "00", "09");
-	editDetails()->page()->addKnob(QPoint(165,20), "07", "00", "0A");
-	editDetails()->page()->addKnob(QPoint(220,20), "07", "00", "0B", "none");
-	editDetails()->page()->addSwitch(QPoint(275,50));
+	editDetails()->page()->newGroupBox("Pre Amp/SP A");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "07", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "08");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "09");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "0A");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "0B");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Pre Amp/SP B");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "18", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "19");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "1A");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
 	editDetails()->addPage();
-	editDetails()->page()->addLabel("PAGE 2", QPoint(0,0));
-	editDetails()->addPage();
-	editDetails()->page()->addLabel("PAGE 3", QPoint(0,0));
-	editDetails()->addPage();
-	editDetails()->page()->addLabel("PAGE 4", QPoint(0,0));
+
+	editDetails()->page()->newGroupBox("Pre Amp/SP A");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "07", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "08");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "09");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "0A");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "0B");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Pre Amp/SP B");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "18", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "19");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "1A");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
 	editDetails()->addPage();
 };

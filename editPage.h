@@ -25,7 +25,6 @@
 
 #include <QWidget>
 #include <QtGui>
-#include "customSwitch.h"
 
 class editPage : public QWidget
 {
@@ -34,16 +33,20 @@ class editPage : public QWidget
 public:
     editPage(QWidget *parent = 0);
 	
-	void addKnob(QPoint pos, 
+	void addKnob(int row, int column, int rowSpan, int columnSpan,
 		QString hex1 = "void",
 		QString hex2 = "void",
 		QString hex3 = "void",
 		QString background = "normal", 
 		QString direction = "bottom", 
-		int lenght = 45);
+		int lenght = 45,
+		Qt::Alignment alignment = 0);
 	void addSwitch(QPoint pos);
 	void addComboBox(QPoint pos);
 	void addLabel(QString text, QPoint pos);
+	void newGroupBox(QString title);
+	void addGroupBox(int row, int column, int rowSpan, int columnSpan);
+	void setGridLayout();
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -57,6 +60,12 @@ signals:
 
 private:
 	int currentIndex;
+	QGridLayout* layout;
+	QList<QGridLayout*> groupBoxLayouts;
+	QList<QGroupBox*> groupBoxes;
+	QGridLayout* groupBoxLayout;
+	QGroupBox* groupBox;
+	bool groupBoxMode;
 };
 
 #endif // EDITPAGE_H

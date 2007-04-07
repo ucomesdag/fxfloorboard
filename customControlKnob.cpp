@@ -35,11 +35,11 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->hex2 = hex2;
 	this->hex3 = hex3;
 
-	
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
 	QString labeltxt = items.customdesc;
+	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	
 	this->label->setPixelSize(9);
 	this->label->setStretch(100);
 	this->label->setUpperCase(true);
@@ -67,8 +67,9 @@ customControlKnob::customControlKnob(QWidget *parent,
 		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
 		labelPos = QPoint(knobPos.x()  + ((37 - this->label->width()) / 2), 0);
 		displayPos = QPoint(knobPos.x() + ((37 - lenght) / 2), knobPos.y() + 37 + 7);
-	};
 
+		this->setFixedSize(50, displayPos.y() + this->display->height());
+	};
 	this->label->move(labelPos);
 
 	QLabel *newBackGround = new QLabel(this);
@@ -90,6 +91,12 @@ customControlKnob::customControlKnob(QWidget *parent,
 	unsigned int imageRange = 63;
 	this->knob = new customDial(0, 0, range, 1, 10, knobPos, this, hex1, hex2, hex3, imagePath, imageRange);
 
+	QFont displayFont;
+	displayFont.setFamily("Arial");
+	displayFont.setBold(false);
+	displayFont.setPixelSize(10);
+	displayFont.setStretch(110);	
+	
 	QPalette displayPal;
 	displayPal.setColor(QPalette::Base,QColor(0,1,62));
     displayPal.setColor(QPalette::Text,QColor(0,255,204));
@@ -107,6 +114,7 @@ customControlKnob::customControlKnob(QWidget *parent,
 	displayPal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
 	displayPal.setColor(QPalette::Shadow,QColor(0,1,62));
 
+	this->display->setFont(displayFont);
 	this->display->setPalette(displayPal);
 	this->display->setFixedWidth(lenght);
 	this->display->setFixedHeight(13);
