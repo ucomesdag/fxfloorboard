@@ -49,6 +49,37 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "09");
 	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "0A");
 	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "0B");
+
+	editDetails()->page()->newGroupBox("Pre Amp/SP B");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "18", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "19");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "1A");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
+	editDetails()->page()->addGroupBox(1, 0, 1, 5);
+
+	editDetails()->page()->newGroupBox("Pre Amp/SP C");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "18", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "19");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "1A");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
+	editDetails()->page()->addGroupBox(2, 0, 1, 5);
+
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+	editDetails()->addPage();
+	
+	
+	editDetails()->page()->newGroupBox("GROUP A");
+
+	editDetails()->page()->newGroupBox("Pre Amp/SP A");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "07", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "08");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "09");
+	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "0A");
+	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "0B");
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	editDetails()->page()->newGroupBox("Pre Amp/SP B");
@@ -111,36 +142,6 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 	editDetails()->addPage();
 
-
-	editDetails()->page()->newGroupBox("GROUP A");
-
-	editDetails()->page()->newGroupBox("Pre Amp/SP A");
-	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "07", "turbo");
-	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "08");
-	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "09");
-	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "0A");
-	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "0B");
-
-	editDetails()->page()->newGroupBox("Pre Amp/SP B");
-	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "18", "turbo");
-	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "19");
-	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "1A");
-	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
-	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
-	editDetails()->page()->addGroupBox(1, 0, 1, 5);
-
-	editDetails()->page()->newGroupBox("Pre Amp/SP C");
-	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "18", "turbo");
-	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "19");
-	editDetails()->page()->addKnob(0, 2, 1, 1, "07", "00", "1A");
-	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
-	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
-	editDetails()->page()->addGroupBox(2, 0, 1, 5);
-
-	editDetails()->page()->addGroupBox(0, 0, 1, 1);
-
-	editDetails()->page()->addGroupBox(0, 0, 1, 1);
-	editDetails()->addPage();
 
 	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "07", "turbo");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "07", "00", "08");

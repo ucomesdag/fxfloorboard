@@ -29,7 +29,8 @@ editPage::editPage(QWidget *parent)
     : QWidget(parent)
 {
 	this->layout = new QGridLayout;
-	this->layout->setMargin(0);
+	this->layout->setMargin(0);	
+	this->layout->setSpacing(0);
 
 	this->groupBoxMode = false;
 
@@ -117,6 +118,10 @@ void editPage::newGroupBox(QString title)
 		if(this->groupBoxIndex == 0 && this->groupBoxLevel != 0)
 		{
 			this->parentBoxDif++;
+		}
+		else if(this->groupBoxLevel == this->groupBoxIndex)
+		{
+			//this->parentBoxDif++;
 		};
 		this->groupBoxLevel++;
 		this->groupBoxIndex++;
@@ -133,6 +138,8 @@ void editPage::newGroupBox(QString title)
 
 	this->groupBoxLayout = new QGridLayout;
 	this->groupBoxLayout->setMargin(5);
+	this->groupBoxLayout->setSpacing(0);
+	this->groupBoxLayout->setAlignment(Qt::AlignCenter);
 	this->groupBoxLayouts.append(this->groupBoxLayout);
 	
 	QFont groupBoxFont;
@@ -161,13 +168,25 @@ void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
 	int boxesIndex = this->groupBoxes.size() - (this->groupBoxLevel - this->groupBoxIndex) - 1;
 	int parentIndex = this->groupBoxes.size() - this->groupBoxLevel - 1;
 
-	if(layoutIndex >0 && this->parentBoxDif > 0)
+	if(layoutIndex > 0 && this->parentBoxDif > 0)
 	{
 		layoutIndex += this->parentBoxDif;
 		boxesIndex += this->parentBoxDif;
 	};
+	
+	if(this->lastBoxIndex == this->groupBoxIndex && this->parentBoxDif == 0)
+	{
+		layoutIndex += 1;
+		boxesIndex += 1;
+	};
 
+	QString snork = this->groupBoxes.at(boxesIndex)->title();
 	this->groupBoxes.at(boxesIndex)->setLayout(this->groupBoxLayouts.at(layoutIndex));
+
+	if(this->lastBoxIndex == this->groupBoxIndex && this->parentBoxDif == 0)
+	{
+		layoutIndex -= 1;
+	};
 	
 	if(this->groupBoxIndex == 0)
 	{
@@ -179,6 +198,7 @@ void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
 	else
 	{
 		this->groupBoxLayouts.at(layoutIndex - 1 - this->parentBoxDif)->addWidget(this->groupBoxes.at(boxesIndex), row, column, rowSpan, columnSpan);
+		this->lastBoxIndex = this->groupBoxIndex;
 		this->groupBoxIndex--;
 	};
 };

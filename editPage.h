@@ -68,6 +68,7 @@ private:
 	bool groupBoxMode;
 	int groupBoxLevel;
 	int groupBoxIndex;
+	int lastBoxIndex;
 	int parentBoxDif;
 };
 
