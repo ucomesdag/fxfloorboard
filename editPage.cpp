@@ -118,10 +118,6 @@ void editPage::newGroupBox(QString title)
 		if(this->groupBoxIndex == 0 && this->groupBoxLevel != 0)
 		{
 			this->parentBoxDif++;
-		}
-		else if(this->groupBoxLevel == this->groupBoxIndex)
-		{
-			//this->parentBoxDif++;
 		};
 		this->groupBoxLevel++;
 		this->groupBoxIndex++;
@@ -132,6 +128,7 @@ void editPage::newGroupBox(QString title)
 		this->groupBoxIndex = 0;
 		this->parentBoxDif = 0;
 	};
+	this->groupBoxIndexList.append(this->groupBoxLevel);
 
 	this->groupBox = new QGroupBox;
 	this->groupBoxes.append(this->groupBox);
@@ -159,46 +156,32 @@ void editPage::newGroupBox(QString title)
 
 void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
 {
-	/*if(this->groupBoxIndex == 0 && this->groupBoxLevel != 0)
-	{
-		this->groupBoxIndex = this->groupBoxLevel;
-	};*/
+	int currentIndex = this->groupBoxIndexList.at(this->groupBoxIndex);
 	
-	int layoutIndex = this->groupBoxLayouts.size() - (this->groupBoxLevel - this->groupBoxIndex) - 1;
-	int boxesIndex = this->groupBoxes.size() - (this->groupBoxLevel - this->groupBoxIndex) - 1;
+	int layoutIndex = this->groupBoxLayouts.size() - (this->groupBoxLevel - currentIndex) - 1;
+	int boxesIndex = this->groupBoxes.size() - (this->groupBoxLevel - currentIndex) - 1;
 	int parentIndex = this->groupBoxes.size() - this->groupBoxLevel - 1;
 
-	if(layoutIndex > 0 && this->parentBoxDif > 0)
+	int removeIndex = this->groupBoxIndexList.indexOf(currentIndex);
+	this->groupBoxIndexList.removeAt(removeIndex);
+	for(int i = removeIndex; i < this->groupBoxIndexList.size() - 1; ++i)
 	{
-		layoutIndex += this->parentBoxDif;
-		boxesIndex += this->parentBoxDif;
-	};
-	
-	if(this->lastBoxIndex == this->groupBoxIndex && this->parentBoxDif == 0)
-	{
-		layoutIndex += 1;
-		boxesIndex += 1;
+		this->groupBoxIndexList.move(i + 1, i);
 	};
 
 	QString snork = this->groupBoxes.at(boxesIndex)->title();
 	this->groupBoxes.at(boxesIndex)->setLayout(this->groupBoxLayouts.at(layoutIndex));
-
-	if(this->lastBoxIndex == this->groupBoxIndex && this->parentBoxDif == 0)
-	{
-		layoutIndex -= 1;
-	};
 	
 	if(this->groupBoxIndex == 0)
 	{
 		this->layout->addWidget(this->groupBoxes.at(parentIndex), row, column, rowSpan, columnSpan);
 		this->groupBoxLevel = 0;
-		this->parentBoxDif = 0;
+		this->groupBoxIndexList.clear();
 		this->groupBoxMode = false;
 	}
 	else
 	{
 		this->groupBoxLayouts.at(layoutIndex - 1 - this->parentBoxDif)->addWidget(this->groupBoxes.at(boxesIndex), row, column, rowSpan, columnSpan);
-		this->lastBoxIndex = this->groupBoxIndex;
 		this->groupBoxIndex--;
 	};
 };

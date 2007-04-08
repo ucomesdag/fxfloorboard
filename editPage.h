@@ -68,8 +68,8 @@ private:
 	bool groupBoxMode;
 	int groupBoxLevel;
 	int groupBoxIndex;
-	int lastBoxIndex;
 	int parentBoxDif;
+	QList<int> groupBoxIndexList;
 };
 
 #endif // EDITPAGE_H
