@@ -69,7 +69,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
-	editDetails()->addPage();
+	editDetails()->addPage("00", "00", "02");
 	
 	
 	editDetails()->page()->newGroupBox("GROUP A");
@@ -99,7 +99,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addGroupBox(2, 0, 1, 1);
 
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
-	editDetails()->addPage();
+	editDetails()->addPage("00", "00", "02");
 
 
 	editDetails()->page()->newGroupBox("Pre Amp/SP A");
@@ -117,7 +117,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 3, 1, 1, "07", "00", "1B");
 	editDetails()->page()->addKnob(0, 4, 1, 1, "07", "00", "1C");
 	editDetails()->page()->addGroupBox(1, 0, 1, 1);
-	editDetails()->addPage();
+	editDetails()->addPage("00", "00", "02");
 
 
 	editDetails()->page()->newGroupBox("GROUP A");
@@ -140,7 +140,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
-	editDetails()->addPage();
+	editDetails()->addPage("00", "00", "02");
 
 
 	editDetails()->page()->addKnob(0, 0, 1, 1, "07", "00", "07", "turbo");
@@ -155,5 +155,5 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(1, 3, 1, 1, "07", "00", "1B");
 	editDetails()->page()->addKnob(1, 4, 1, 1, "07", "00", "1C");
 
-	editDetails()->addPage();
+	editDetails()->addPage("00", "00", "02");
 };

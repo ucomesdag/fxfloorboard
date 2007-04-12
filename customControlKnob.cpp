@@ -122,11 +122,11 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->display->setDisabled(true);
 	this->display->move(displayPos);
 
-	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
-                this, SLOT( dialogUpdateSignal() ));*/
+	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
+                this, SLOT( dialogUpdateSignal() ));
 
-	/*QObject::connect(this, SIGNAL( updateSignal() ),
-                this->parent(), SIGNAL( updateSignal() ));*/
+	QObject::connect(this, SIGNAL( updateSignal() ),
+                this->parent(), SIGNAL( updateSignal() ));
 
 	QObject::connect(this, SIGNAL( updateDisplay(QString) ),
                 this->display, SLOT( setText(QString) ));
@@ -156,8 +156,7 @@ void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QStr
 	
 	//this->display->setText(valueStr);
 	emit updateDisplay(valueStr);
-
-	//emit updateSignal();
+	emit updateSignal();
 };
 
 void customControlKnob::dialogUpdateSignal()

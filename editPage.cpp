@@ -35,9 +35,9 @@ editPage::editPage(QWidget *parent)
 	this->groupBoxMode = false;
 
 	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
-                this, SIGNAL( dialogUpdateSignal() ));*/
+                this, SIGNAL( dialogUpdateSignal() ));
 
-	/*QObject::connect(this, SIGNAL( updateSignal() ),
+	QObject::connect(this, SIGNAL( updateSignal() ),
                 this->parent(), SIGNAL( updateSignal() ));*/
 };
 

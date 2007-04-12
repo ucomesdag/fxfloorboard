@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "editWindow.h"
+#include "MidiTable.h"
 
 editWindow::editWindow(QWidget *parent)
     : QWidget(parent)
@@ -47,6 +48,29 @@ editWindow::editWindow(QWidget *parent)
 	this->title->setFont(titleFont);
 
 	this->pageComboBox = new QComboBox;
+
+	QPalette comboPalette;
+	comboPalette.setColor(QPalette::Base,Qt::black);
+    comboPalette.setColor(QPalette::Text,Qt::white);
+	comboPalette.setColor(QPalette::Highlight,Qt::black);
+	comboPalette.setColor(QPalette::HighlightedText,Qt::white);
+
+	comboPalette.setColor(QPalette::Light,Qt::black);				//Lighter than Button color.
+	comboPalette.setColor(QPalette::Midlight,Qt::black);			//Between Button and Light.
+	comboPalette.setColor(QPalette::Dark,Qt::black);				//Darker than Button.
+	comboPalette.setColor(QPalette::Mid,Qt::black);				//Between Button and Dark.
+	comboPalette.setColor(QPalette::Shadow,Qt::black);
+
+	QFont comboFont;
+	comboFont.setFamily("Arial");
+	//comboFont.setBold(true);
+	comboFont.setPixelSize(12);
+	comboFont.setStretch(110);
+
+	this->pageComboBox->setEditable(false);
+	this->pageComboBox->setFont(comboFont);
+	this->pageComboBox->setPalette(comboPalette);
+	this->pageComboBox->setFrame(false);
 	this->pageComboBox->setVisible(false);
 
 	this->closeButton = new customControlLabel;
@@ -124,27 +148,57 @@ QString editWindow::getTitle()
 	return this->title->text();
 };
 
-void editWindow::addPage()
+void editWindow::addPage(QString hex1, QString hex2, QString hex3, QString hex4)
 {
 	this->tempPage->setGridLayout();
 	this->editPages.append(this->tempPage); 
-    this->pagesWidget->addWidget(editPages.last()); 
-    int pages = this->pagesWidget->count(); 
-    QString item; 
-    item.append("Page "); 
-    item.append(QString::number(pages, 10)); 
-    this->pageComboBox->addItem(item); 
-    this->tempPage = new editPage; 
+	this->pagesWidget->addWidget(editPages.last()); 
+	int pages = this->pagesWidget->count(); 
 
-	if(pages > 1)
-	{
-		this->pageComboBox->setVisible(true);
-	};
+	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
+			editPages.last(), SIGNAL( dialogUpdateSignal() ));
 
-	/*QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
-		editPages.last(), SIGNAL( dialogUpdateSignal() ));
 	QObject::connect(editPages.last(), SIGNAL( updateSignal() ),
-		this, SIGNAL( updateSignal() ));*/
+		this, SIGNAL( updateSignal() ));
+	
+	if(hex1 != "void" && hex2 != "void" && hex3 != "void")
+	{
+		MidiTable *midiTable = MidiTable::Instance();
+		Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+		
+		int itemsCount;
+		if(hex4 == "void")
+		{
+			itemsCount = this->pagesWidget->count() - 1;
+		}
+		else
+		{
+			bool ok;
+			itemsCount = hex4.toInt(&ok, 16);
+		};
+
+		QString item;
+		QString desc = items.level.at(itemsCount).desc;
+		QString customdesc = items.level.at(itemsCount).customdesc;
+		if(!customdesc.isEmpty())
+		{
+			item = customdesc;
+		}
+		else
+		{
+			item = desc;
+		};
+		//int pixelWidth = QFontMetrics(this->getFont()).width(item);
+		//if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+
+		this->pageComboBox->addItem(item); 
+		this->tempPage = new editPage; 
+
+		if(pages > 1)
+		{
+			this->pageComboBox->setVisible(true);
+		};
+	};
 };
 
 editPage* editWindow::page()
