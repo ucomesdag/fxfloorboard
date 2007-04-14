@@ -39,6 +39,7 @@ public:
 	void setButton(bool button);
 	void setImage(QString imagePath);
 	void setOffset(int imageNr);
+	int getLabelWidth();
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -66,6 +67,7 @@ private:
 	int lenght;
 	int offset;
 	int imageHeight;
+	int labelWidth;
 };
 
 #endif // CUSTOMCONTROLLABEL_H

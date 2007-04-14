@@ -45,6 +45,25 @@ void stompbox_ce::updateSignal()
 
 void stompbox_ce::setEditPages()
 {
-    
-	
+    editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "0C", "00", "00");
+	editDetails()->page()->addComboBox(1, 0, 1, 1, "0C", "00", "02");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Settings");
+	editDetails()->page()->addKnob(0, 0, 1, 3, "0C", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(1, 0, 1, 1, "0C", "00", "04");
+	editDetails()->page()->addKnob(1, 2, 1, 1, "0C", "00", "05");
+	editDetails()->page()->addGroupBox(0, 1, 2, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0C", "00", "06");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0C", "00", "07");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0C", "00", "08");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
+
+	editDetails()->addPage();	
 };

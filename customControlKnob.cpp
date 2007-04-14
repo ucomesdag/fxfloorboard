@@ -52,7 +52,22 @@ customControlKnob::customControlKnob(QWidget *parent,
 	}
 	else if(direction == "right")
 	{
+		//this->label->setFixedWidth(this->width());
+		this->label->setAlignment(Qt::AlignLeft);
 		
+		/*bgPos = QPoint(1, 0 + 9);
+		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
+		labelPos = QPoint(knobPos.x()  + ((37 - this->label->width()) / 2), 0);
+		displayPos = QPoint(50, knobPos.y() + ((37 - 13) / 2));
+
+		this->setFixedSize(50 + lenght, bgPos.y() + 50);*/
+
+		bgPos = QPoint(1, 0);
+		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
+		labelPos = QPoint(50, knobPos.y());
+		displayPos = QPoint(50, knobPos.y() + ((37 - 13) / 2));
+
+		this->setFixedSize(50 + lenght, 50);
 	}
 	else if(direction == "top")
 	{
@@ -134,13 +149,13 @@ customControlKnob::customControlKnob(QWidget *parent,
 
 void customControlKnob::paintEvent(QPaintEvent *)
 {
-	/*QPixmap image(":images/dragbar.png");
+	QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
 	QRectF source(0.0, 0.0, this->width(), this->height());
 
 	QPainter painter(this);
-	painter.drawPixmap(target, image, source);*/
+	painter.drawPixmap(target, image, source);
 };
 
 void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QString hex3)
@@ -164,5 +179,14 @@ void customControlKnob::dialogUpdateSignal()
 	SysxIO *sysxIO = SysxIO::Instance();
 	int value = sysxIO->getSourceValue(this->hex1, this->hex2, this->hex3);
 	this->knob->setValue(value);
-	this->valueChanged(value, this->hex1, this->hex2, this->hex3);
+
+	QString valueHex = QString::number(value, 16).toUpper();
+	if(valueHex.length() < 2) valueHex.prepend("0");
+
+	MidiTable *midiTable = MidiTable::Instance();
+	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+	
+	//this->display->setText(valueStr);
+	emit updateDisplay(valueStr);
+	//this->valueChanged(value, this->hex1, this->hex2, this->hex3);
 };

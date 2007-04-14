@@ -333,16 +333,19 @@ void floorBoard::dropEvent(QDropEvent *event)
 				setStompPos(stompId, destIndex);
 			};
 
-			SysxIO *sysxIO = SysxIO::Instance();
-			QList<QString> hexData;
-			for(int index=0;index<fx.size();index++)
+			if(orgIndex != destIndex) // Prevent sending data when stomp was dropped in the same place.
 			{
-				QString fxHexValue = QString::number(fx.at(index), 16).toUpper();
-				if(fxHexValue.length() < 2) fxHexValue.prepend("0");
+				SysxIO *sysxIO = SysxIO::Instance();
+				QList<QString> hexData;
+				for(int index=0;index<fx.size();index++)
+				{
+					QString fxHexValue = QString::number(fx.at(index), 16).toUpper();
+					if(fxHexValue.length() < 2) fxHexValue.prepend("0");
 
-				hexData.append(fxHexValue);
+					hexData.append(fxHexValue);
+				};
+				sysxIO->setFileSource("11", "00", hexData);
 			};
-			sysxIO->setFileSource("11", "00", hexData);
 		}
 		else
 		{

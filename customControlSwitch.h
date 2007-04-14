@@ -20,19 +20,20 @@
 **
 ****************************************************************************/
 
-#ifndef CUSTOMCONTROLLISTMENU_H
-#define CUSTOMCONTROLLISTMENU_H
+#ifndef CUSTOMCONTROLSWITCH_H
+#define CUSTOMCONTROLSWITCH_H
 
 #include <QWidget>
 #include <QtGui>
+#include "customSwitch.h"
 #include "customControlLabel.h"
 
-class customControlListMenu : public QWidget
+class customControlSwitch : public QWidget
 {
     Q_OBJECT
 
 public:
-    customControlListMenu(QWidget *parent = 0, 
+    customControlSwitch(QWidget *parent = 0, 
 		QString hex1 = "void",
 		QString hex2 = "void",
 		QString hex3 = "void",
@@ -42,7 +43,7 @@ protected:
 	void paintEvent(QPaintEvent *event);
 
 public slots:
-	void valueChanged(int index);
+	void valueChanged(bool, QString, QString, QString);
 	void dialogUpdateSignal();
 
 signals:
@@ -50,15 +51,11 @@ signals:
 	void updateDisplay(QString text);
 
 private:
-	void setComboBox();
 	customControlLabel* label;
-	QComboBox* combobox;
+	customSwitch* switchbutton;
 	QString hex1;
 	QString hex2;
 	QString hex3;
-	QFont comboFont;
-	QPalette comboPalette;
-	int comboWidth;
 };
 
-#endif // CUSTOMCONTROLLISTMENU_H
+#endif // CUSTOMCONTROLSWITCH_H

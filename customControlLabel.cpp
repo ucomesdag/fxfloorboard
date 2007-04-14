@@ -58,7 +58,7 @@ void customControlLabel::paintEvent(QPaintEvent *)
 		QPainter painter(this);
 		painter.drawPixmap(target, this->image, source);
 	}
-	/*else
+	else
 	{
 		QPixmap image(":images/dragbar.png");
 	
@@ -67,7 +67,7 @@ void customControlLabel::paintEvent(QPaintEvent *)
 
 		QPainter painter(this);
 		painter.drawPixmap(target, image, source);
-	};*/
+	};
 };
 
 void customControlLabel::setOffset(int imageNr)
@@ -103,8 +103,13 @@ void customControlLabel::setText(QString text)
 
 void customControlLabel::setSize()
 {
-	/*int pixelWidth = QFontMetrics(this->labelFont).width(this->label->text());
-	this->setFixedWidth(pixelWidth);*/
+	int pixelWidth = QFontMetrics(this->labelFont).width(this->label->text());
+	this->labelWidth = pixelWidth;
+};
+
+int customControlLabel::getLabelWidth()
+{
+	return this->labelWidth;
 };
 
 void customControlLabel::setStretch(int stretch)

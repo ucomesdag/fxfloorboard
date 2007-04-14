@@ -67,7 +67,7 @@ HEADERS += ./editPage.h \
     ./preferencesDialog.h \
     ./preferencesPages.h \
     ./customControlKnob.h \
-    ./customControlButton.h \
+    ./customControlSwitch.h \
     ./customControlListMenu.h \
     ./customControlLabel.h
 
@@ -118,7 +118,7 @@ SOURCES += ./editPage.cpp \
     ./preferencesDialog.cpp \
     ./preferencesPages.cpp \
     ./customControlKnob.cpp \
-    ./customControlButton.cpp \
+    ./customControlSwitch.cpp \
     ./customControlListMenu.cpp \
     ./customControlLabel.cpp
 

@@ -41,9 +41,19 @@ public:
 		QString direction = "bottom", 
 		int lenght = 45,
 		Qt::Alignment alignment = 0);
-	void addSwitch(QPoint pos);
-	void addComboBox(QPoint pos);
-	void addLabel(QString text, QPoint pos);
+	void addSwitch(int row, int column, int rowSpan, int columnSpan,
+		QString hex1 = "void",
+		QString hex2 = "void",
+		QString hex3 = "void",
+		QString direction = "bottom",
+		Qt::Alignment alignment = 0);
+	void addComboBox(int row, int column, int rowSpan, int columnSpan,
+		QString hex1 = "void",
+		QString hex2 = "void",
+		QString hex3 = "void",
+		QString direction = "bottom",
+		Qt::Alignment alignment = 0);
+	void addLabel(int row, int column, int rowSpan, int columnSpan, QString text, Qt::Alignment alignment = 0);
 	void newGroupBox(QString title);
 	void addGroupBox(int row, int column, int rowSpan, int columnSpan);
 	void setGridLayout();

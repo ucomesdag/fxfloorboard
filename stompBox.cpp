@@ -74,6 +74,9 @@ stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint s
 	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
                 this->editDialog, SIGNAL( dialogUpdateSignal() ));	
 
+	QObject::connect(this->parent(), SIGNAL( updateSignal() ),
+                this->editDialog, SIGNAL( dialogUpdateSignal() ));
+
 	QObject::connect(this->editDialog, SIGNAL( updateSignal() ),
                 this, SLOT( setDisplayToFxName() ));
 
@@ -520,6 +523,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 				};
 			};
 			valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+			emit dialogUpdateSignal();
 		}
 		else
 		{
@@ -542,7 +546,6 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 		this->fxName = "Digital Out";
 	};
 
-	emit dialogUpdateSignal();
 	emit valueChanged(this->fxName, valueName, valueStr);
 };
 
