@@ -37,6 +37,8 @@ editPage::editPage(QWidget *parent)
 	this->layout->setSpacing(5);
 
 	this->groupBoxMode = false;
+	this->stackControlMode = false;
+	this->stackFieldMode = false;
 
 	/*QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
                 this, SIGNAL( dialogUpdateSignal() ));
@@ -66,6 +68,10 @@ void editPage::addKnob(int row, int column, int rowSpan, int columnSpan,
 	{
 		this->groupBoxLayout->addWidget(knob, row, column, rowSpan, columnSpan, alignment);
 	}
+	else if(this->stackFieldMode)
+	{
+		this->stackField->addWidget(knob, row, column, rowSpan, columnSpan, alignment);
+	}
 	else
 	{
 		this->layout->addWidget(knob, row, column, rowSpan, columnSpan, alignment);
@@ -84,6 +90,10 @@ void editPage::addSwitch(int row, int column, int rowSpan, int columnSpan,
 	{
 		this->groupBoxLayout->addWidget(switchbutton, row, column, rowSpan, columnSpan, alignment);
 	}
+	else if(this->stackFieldMode)
+	{
+		this->stackField->addWidget(switchbutton, row, column, rowSpan, columnSpan, alignment);
+	}
 	else
 	{
 		this->layout->addWidget(switchbutton, row, column, rowSpan, columnSpan, alignment);
@@ -99,9 +109,18 @@ void editPage::addComboBox(int row, int column, int rowSpan, int columnSpan,
 {
 	
 	customControlListMenu *combobox = new customControlListMenu(this, hex1, hex2, hex3);
+	if(this->stackControlMode)
+	{
+		QObject::connect(combobox, SIGNAL( currentIndexChanged(int) ),
+                this->stackedFields.at(this->stackFieldId), SLOT( setCurrentIndex(int) ));
+	};
 	if(this->groupBoxMode)
 	{
 		this->groupBoxLayout->addWidget(combobox, row, column, rowSpan, columnSpan, alignment);
+	}
+	else if(this->stackFieldMode)
+	{
+		this->stackField->addWidget(combobox, row, column, rowSpan, columnSpan, alignment);
 	}
 	else
 	{
@@ -117,6 +136,10 @@ void editPage::addLabel(int row, int column, int rowSpan, int columnSpan, QStrin
 	if(this->groupBoxMode)
 	{
 		this->groupBoxLayout->addWidget(label, row, column, rowSpan, columnSpan, alignment);
+	}
+	else if(this->stackFieldMode)
+	{
+		this->stackField->addWidget(label, row, column, rowSpan, columnSpan, alignment);
 	}
 	else
 	{
@@ -195,7 +218,14 @@ void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
 	
 	if(this->groupBoxIndex == 0)
 	{
-		this->layout->addWidget(this->groupBoxes.at(parentIndex), row, column, rowSpan, columnSpan);
+		if(this->stackFieldMode)
+		{
+			this->stackField->addWidget(this->groupBoxes.at(parentIndex), row, column, rowSpan, columnSpan);
+		}
+		else
+		{
+			this->layout->addWidget(this->groupBoxes.at(parentIndex), row, column, rowSpan, columnSpan);
+		};
 		this->groupBoxLevel = 0;
 		this->groupBoxIndexList.clear();
 		this->groupBoxMode = false;
@@ -220,4 +250,38 @@ void editPage::setGridLayout()
 	mainLayout->addStretch();
 	
 	this->setLayout(mainLayout);
+};
+
+void editPage::newStackControl(int id,
+	int row, int column, int rowSpan, int columnSpan,
+	Qt::Alignment alignment)
+{
+	this->stackControlMode = true;
+	this->stackFieldId = id;
+	QStackedWidget *newStackField = new QStackedWidget;
+	this->stackedFields.insert(this->stackFieldId, newStackField);
+	
+	this->layout->addWidget(this->stackedFields.at(this->stackFieldId), row, column, rowSpan, columnSpan);
+};
+
+void editPage::addStackControl()
+{
+	this->stackControlMode = false;
+};
+	
+void editPage::newStackField(int id)
+{
+	this->stackFieldMode = true;
+	this->stackField = new QGridLayout;
+	this->stackField->setMargin(5);
+	this->stackField->setSpacing(5);
+	this->stackField->setAlignment(Qt::AlignCenter);
+};
+
+void editPage::addStackField()
+{
+	this->stackFieldMode = false;
+	QWidget *tmpWidget = new QWidget;
+	tmpWidget->setLayout(this->stackField);
+	this->stackedFields.at(this->stackFieldId)->addWidget(tmpWidget);
 };

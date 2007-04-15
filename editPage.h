@@ -57,6 +57,12 @@ public:
 	void newGroupBox(QString title);
 	void addGroupBox(int row, int column, int rowSpan, int columnSpan);
 	void setGridLayout();
+	void newStackControl(int id, 
+		int row, int column, int rowSpan, int columnSpan,
+		Qt::Alignment alignment = 0);
+	void addStackControl();
+	void newStackField(int id);
+	void addStackField();
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -75,11 +81,16 @@ private:
 	QList<QGroupBox*> groupBoxes;
 	QGridLayout* groupBoxLayout;
 	QGroupBox* groupBox;
+	QList<int> groupBoxIndexList;
 	bool groupBoxMode;
 	int groupBoxLevel;
 	int groupBoxIndex;
-	int parentBoxDif;
-	QList<int> groupBoxIndexList;
+	int parentBoxDif;	
+	QList<QStackedWidget*> stackedFields;
+	QGridLayout* stackField;
+	bool stackControlMode;
+	bool stackFieldMode;
+	int stackFieldId;
 };
 
 #endif // EDITPAGE_H

@@ -53,46 +53,58 @@ void stompbox_dd::setEditPages()
 {
     editDetails()->page()->newGroupBox("Effect");
 	editDetails()->page()->addSwitch(0, 0, 1, 1, "0B", "00", "00");
+	editDetails()->page()->newStackControl(0, 0, 1, 2, 1);
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "0B", "00", "02");
+	editDetails()->page()->addStackControl();
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
-	editDetails()->page()->newGroupBox("Settings");
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("0");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 1, 2, 1);
+	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->addStackField();
 
-	editDetails()->page()->newGroupBox("Delay 1");
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("1");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 1, 2, 1);
+	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->addStackField();
 
-	editDetails()->page()->newGroupBox("Delay 2");
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("2");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 1, 2, 1);
+	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->addStackField();
 
-	editDetails()->page()->newGroupBox("Warp");
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("3");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 1, 2, 1);
+	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->addStackField();
 
-	editDetails()->page()->newGroupBox("Modulate");
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("4");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 1, 2, 1);
+	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->addStackField();
 
-	editDetails()->page()->newGroupBox("Hold");
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("5");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 1, 2, 1);
-
-
+	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->addStackField();
 
 	/*editDetails()->page()->newGroupBox("Filter");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "06");

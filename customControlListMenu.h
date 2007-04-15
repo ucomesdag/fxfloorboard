@@ -48,6 +48,7 @@ public slots:
 signals:
 	void updateSignal();
 	void updateDisplay(QString text);
+	void currentIndexChanged(int index);
 
 private:
 	void setComboBox();

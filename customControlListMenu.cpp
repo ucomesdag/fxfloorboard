@@ -103,6 +103,9 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 
 	QObject::connect(this->combobox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
+
+	QObject::connect(this->combobox, SIGNAL(currentIndexChanged(int)),
+                this, SIGNAL(currentIndexChanged(int)));
 };
 
 void customControlListMenu::paintEvent(QPaintEvent *)
