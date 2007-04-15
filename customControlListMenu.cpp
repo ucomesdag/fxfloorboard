@@ -61,7 +61,7 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	this->comboPalette.setColor(QPalette::Shadow,QColor(0,1,62));
 
 	this->comboFont.setFamily("Arial");
-	this->comboFont.setBold(false);
+	this->comboFont.setBold(true);
 	this->comboFont.setPixelSize(10);
 	this->comboFont.setStretch(110);
 

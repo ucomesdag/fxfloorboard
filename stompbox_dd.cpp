@@ -58,62 +58,268 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addStackControl();
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
+	/* SINGLE */
 	editDetails()->page()->newStackField(0);
-	editDetails()->page()->newGroupBox("0");
-	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
-	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
-	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
 	editDetails()->page()->addStackField();
 
+	/* PAN */
 	editDetails()->page()->newStackField(0);
-	editDetails()->page()->newGroupBox("1");
-	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
-	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
-	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "05");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
 	editDetails()->page()->addStackField();
 
+	/* STEREO */
 	editDetails()->page()->newStackField(0);
-	editDetails()->page()->newGroupBox("2");
-	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
-	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
-	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
 	editDetails()->page()->addStackField();
 
+	/* DUAL SERIES */
 	editDetails()->page()->newStackField(0);
-	editDetails()->page()->newGroupBox("3");
-	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
-	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
-	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->newGroupBox("Delay 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0A");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Delay 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0D", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0F");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0B");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "10");
+	editDetails()->page()->addGroupBox(1, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0C");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "11");
+	editDetails()->page()->addGroupBox(1, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 1 + 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
 	editDetails()->page()->addStackField();
 
+	/* DUAL PARALLEL */
 	editDetails()->page()->newStackField(0);
-	editDetails()->page()->newGroupBox("4");
-	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
-	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
-	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->newGroupBox("Delay 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0A");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Delay 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0D", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0F");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0B");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "10");
+	editDetails()->page()->addGroupBox(1, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0C");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "11");
+	editDetails()->page()->addGroupBox(1, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 1 + 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
 	editDetails()->page()->addStackField();
 
+	/* DUAL L/R */
 	editDetails()->page()->newStackField(0);
-	editDetails()->page()->newGroupBox("5");
-	editDetails()->page()->addKnob(0, 0, 1, 3, "0B", "00", "03", "normal","right", 105);
-	editDetails()->page()->addKnob(1, 0, 1, 1, "0B", "00", "05");
-	editDetails()->page()->addKnob(1, 2, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addGroupBox(0, 0, 0, 1);
+	editDetails()->page()->newGroupBox("Delay 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0A");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Delay 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0D", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0F");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0B");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "10");
+	editDetails()->page()->addGroupBox(1, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 1");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "0C");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "11");
+	editDetails()->page()->addGroupBox(1, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level 1 + 2");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
 	editDetails()->page()->addStackField();
 
-	/*editDetails()->page()->newGroupBox("Filter");
-	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "06");
-	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "07");
+	/* REVERSE */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+	editDetails()->page()->addStackField();
+
+	/* ANALOG */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+	editDetails()->page()->addStackField();
+
+	/* TAPE */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+	editDetails()->page()->addStackField();
+
+	/* WARP */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 3);
+
+	editDetails()->page()->newGroupBox("Warp", Qt::AlignTop | Qt::AlignHCenter);
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "0B", "00", "14");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "15");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Depth");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "16");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "17");
+	editDetails()->page()->addGroupBox(1, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 4, 1, 1);
+	editDetails()->page()->addStackField();
+
+	/* MODULATE */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Delay");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
+	editDetails()->page()->addGroupBox(0, 0, 1, 2);
+
+	editDetails()->page()->newGroupBox("Modulate");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "12");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "13");
+	editDetails()->page()->addGroupBox(1, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
 
 	editDetails()->page()->newGroupBox("Level");
-	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08");
-	editDetails()->page()->addGroupBox(0, 3, 1, 1);*/
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
+	editDetails()->page()->addStackField();
+
+	/* HOLD */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Filter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+	editDetails()->page()->addStackField();
 
 	editDetails()->addPage();	
 };

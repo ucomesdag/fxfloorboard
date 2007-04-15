@@ -50,7 +50,7 @@ void stompbox_ce::setEditPages()
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "0C", "00", "02");
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
-	editDetails()->page()->newGroupBox("Settings");
+	editDetails()->page()->newGroupBox("Chorus");
 	editDetails()->page()->addKnob(0, 0, 1, 3, "0C", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 0, 1, 1, "0C", "00", "04");
 	editDetails()->page()->addKnob(1, 2, 1, 1, "0C", "00", "05");

@@ -50,7 +50,7 @@ void stompbox_rv::setEditPages()
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "0D", "00", "02");
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
-	editDetails()->page()->newGroupBox("Settings");
+	editDetails()->page()->newGroupBox("Reverb");
 	editDetails()->page()->addKnob(0, 2, 1, 1, "0D", "00", "03");
 	editDetails()->page()->addKnob(0, 3, 1, 1, "0D", "00", "04");
 	editDetails()->page()->addKnob(0, 5, 1, 1, "0D", "00", "07");

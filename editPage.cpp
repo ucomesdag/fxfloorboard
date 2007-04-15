@@ -113,6 +113,8 @@ void editPage::addComboBox(int row, int column, int rowSpan, int columnSpan,
 	{
 		QObject::connect(combobox, SIGNAL( currentIndexChanged(int) ),
                 this->stackedFields.at(this->stackFieldId), SLOT( setCurrentIndex(int) ));
+		QObject::connect(combobox, SIGNAL( currentIndexChanged(int) ),
+                this, SLOT( updateDialog(int) ));
 	};
 	if(this->groupBoxMode)
 	{
@@ -155,7 +157,7 @@ void editPage::valueChanged(bool value, QString hex1, QString hex2, QString hex3
 	hex3;
 }; 
 
-void editPage::newGroupBox(QString title)
+void editPage::newGroupBox(QString title, Qt::Alignment alignment)
 {
 	if(this->groupBoxMode)
 	{
@@ -180,7 +182,7 @@ void editPage::newGroupBox(QString title)
 	this->groupBoxLayout = new QGridLayout;
 	this->groupBoxLayout->setMargin(5);
 	this->groupBoxLayout->setSpacing(5);
-	this->groupBoxLayout->setAlignment(Qt::AlignCenter);
+	this->groupBoxLayout->setAlignment(alignment);
 	this->groupBoxLayouts.append(this->groupBoxLayout);
 	
 	QFont groupBoxFont;
@@ -273,9 +275,9 @@ void editPage::newStackField(int id)
 {
 	this->stackFieldMode = true;
 	this->stackField = new QGridLayout;
-	this->stackField->setMargin(5);
+	this->stackField->setMargin(0);
 	this->stackField->setSpacing(5);
-	this->stackField->setAlignment(Qt::AlignCenter);
+	this->stackField->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 };
 
 void editPage::addStackField()
@@ -284,4 +286,9 @@ void editPage::addStackField()
 	QWidget *tmpWidget = new QWidget;
 	tmpWidget->setLayout(this->stackField);
 	this->stackedFields.at(this->stackFieldId)->addWidget(tmpWidget);
+};
+
+void editPage::updateDialog(int index)
+{
+	emit dialogUpdateSignal();
 };

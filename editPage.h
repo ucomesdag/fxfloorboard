@@ -54,7 +54,7 @@ public:
 		QString direction = "bottom",
 		Qt::Alignment alignment = 0);
 	void addLabel(int row, int column, int rowSpan, int columnSpan, QString text, Qt::Alignment alignment = 0);
-	void newGroupBox(QString title);
+	void newGroupBox(QString title, Qt::Alignment alignment = Qt::AlignCenter);
 	void addGroupBox(int row, int column, int rowSpan, int columnSpan);
 	void setGridLayout();
 	void newStackControl(int id, 
@@ -68,7 +68,8 @@ protected:
 	void paintEvent(QPaintEvent *event);
 
 public slots:
-		void valueChanged(bool value, QString hex1, QString hex2, QString hex3); // Not used.
+	void valueChanged(bool value, QString hex1, QString hex2, QString hex3); // Not used.
+	void updateDialog(int index);
 
 signals:
 	void dialogUpdateSignal();
