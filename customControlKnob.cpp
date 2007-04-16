@@ -149,13 +149,13 @@ customControlKnob::customControlKnob(QWidget *parent,
 
 void customControlKnob::paintEvent(QPaintEvent *)
 {
-	QPixmap image(":images/dragbar.png");
+	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
 	QRectF source(0.0, 0.0, this->width(), this->height());
 
 	QPainter painter(this);
-	painter.drawPixmap(target, image, source);
+	painter.drawPixmap(target, image, source);*/
 };
 
 void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QString hex3)

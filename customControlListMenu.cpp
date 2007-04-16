@@ -110,13 +110,13 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 
 void customControlListMenu::paintEvent(QPaintEvent *)
 {
-	QPixmap image(":images/dragbar.png");
+	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
 	QRectF source(0.0, 0.0, this->width(), this->height());
 
 	QPainter painter(this);
-	painter.drawPixmap(target, image, source);
+	painter.drawPixmap(target, image, source);*/
 };
 
 void customControlListMenu::setComboBox()
@@ -158,6 +158,7 @@ void customControlListMenu::setComboBox()
 	this->combobox->setFrame(false);
 	this->combobox->setMaxVisibleItems(itemsCount);
 	this->combobox->view()->setMinimumWidth( this->comboWidth );
+	//this->combobox->setMaximumWidth(120);
 };
 
 void customControlListMenu::valueChanged(int index)

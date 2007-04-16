@@ -45,6 +45,21 @@ void stompbox_od::updateSignal()
 
 void stompbox_od::setEditPages()
 {
-    
-	
+    editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "06", "00", "00");
+	editDetails()->page()->addComboBox(1, 0, 1, 1, "06", "00", "02");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Overdrive");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "06", "00", "03", "turbo");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "06", "00", "04");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "06", "00", "05");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "06", "00", "06");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "06", "00", "07");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->addPage();	
 };

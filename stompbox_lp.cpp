@@ -45,6 +45,15 @@ void stompbox_lp::updateSignal()
 
 void stompbox_lp::setEditPages()
 {
-    
-	
+    editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "04", "00", "00");
+	editDetails()->page()->addComboBox(1, 0, 1, 1, "04", "00", "02");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "04", "00", "03");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "04", "00", "04");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->addPage();	
 };

@@ -58,7 +58,7 @@ void customControlLabel::paintEvent(QPaintEvent *)
 		QPainter painter(this);
 		painter.drawPixmap(target, this->image, source);
 	}
-	else
+	/*else
 	{
 		QPixmap image(":images/dragbar.png");
 	
@@ -67,7 +67,7 @@ void customControlLabel::paintEvent(QPaintEvent *)
 
 		QPainter painter(this);
 		painter.drawPixmap(target, image, source);
-	};
+	}*/;
 };
 
 void customControlLabel::setOffset(int imageNr)

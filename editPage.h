@@ -61,7 +61,7 @@ public:
 		int row, int column, int rowSpan, int columnSpan,
 		Qt::Alignment alignment = 0);
 	void addStackControl();
-	void newStackField(int id);
+	void newStackField(int id, Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft);
 	void addStackField();
 
 protected:

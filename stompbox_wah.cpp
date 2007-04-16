@@ -41,6 +41,18 @@ void stompbox_wah::updateSignal()
 
 void stompbox_wah::setEditPages()
 {
-    
-	
+    editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "03", "00", "00");
+	editDetails()->page()->addComboBox(1, 0, 1, 1, "03", "00", "02");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Wah");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "03", "00", "03");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "03", "00", "04");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->addPage();	
 };

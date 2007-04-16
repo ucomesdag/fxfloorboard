@@ -412,34 +412,35 @@ void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
 		initPatchesDir = defaultInitPatchesDir;
 	};
 
-	QPalette pal;
-	pal.setColor(QPalette::Base,QColor(0,1,62));
-	pal.setColor(QPalette::Text,QColor(0,255,204));
-	pal.setColor(QPalette::Highlight,QColor(0,1,62));
-	pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	pal.setColor(QPalette::Window,QColor(0,1,62));
-	pal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
-	pal.setColor(QPalette::Button,QColor(0,1,62));
-	pal.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	pal.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
-	pal.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
-	pal.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
-	pal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
-	pal.setColor(QPalette::Shadow,QColor(0,1,62));
-	
-	QFont font;
-	font.setFamily("Arial");
-	font.setBold(true);
-	font.setPixelSize(10);
-	font.setStretch(110);
-
-	this->initPatchComboBox = new QComboBox(this);
-	initPatchComboBox->addItem(tr("[ INIT Patches ]"));
-
 	if(initPatchesDir.exists())
 	{		
+		QPalette pal;
+		pal.setColor(QPalette::Base,QColor(0,1,62));
+		pal.setColor(QPalette::Text,QColor(0,255,204));
+		pal.setColor(QPalette::Highlight,QColor(0,1,62));
+		pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
+
+		pal.setColor(QPalette::Window,QColor(0,1,62));
+		pal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
+		pal.setColor(QPalette::Button,QColor(0,1,62));
+		pal.setColor(QPalette::ButtonText,QColor(0,255,204));
+
+		pal.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
+		pal.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
+		pal.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
+		pal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
+		pal.setColor(QPalette::Shadow,QColor(0,1,62));
+		
+		QFont font;
+		font.setFamily("Arial");
+		font.setBold(true);
+		font.setPixelSize(10);
+		font.setStretch(110);
+
+		this->initPatchComboBox = new QComboBox(this);
+		initPatchComboBox->addItem(tr("[ INIT Patches ]"));
+
+		
 		QStringList filters;
 		filters << "*.syx" << "*.syx2";
 		QStringList initPatchesList = initPatchesDir.entryList(filters);
@@ -472,13 +473,13 @@ void floorBoardDisplay::setInitPatchComboBox(QRect geometry)
                 this, SLOT(loadInitPatch(int)));
 		QObject::connect(this, SIGNAL(updateSignal()),
 			this->parent(), SIGNAL(updateSignal()));
+	
+		initPatchComboBox->setGeometry(geometry);
+		initPatchComboBox->setEditable(false);
+		initPatchComboBox->setFont(font);
+		initPatchComboBox->setPalette(pal);
+		initPatchComboBox->setFrame(false);
 	};
-
-	initPatchComboBox->setGeometry(geometry);
-	initPatchComboBox->setEditable(false);
-	initPatchComboBox->setFont(font);
-	initPatchComboBox->setPalette(pal);
-	initPatchComboBox->setFrame(false);
 };
 
 void floorBoardDisplay::loadInitPatch(int index)

@@ -271,13 +271,14 @@ void editPage::addStackControl()
 	this->stackControlMode = false;
 };
 	
-void editPage::newStackField(int id)
+void editPage::newStackField(int id, Qt::Alignment alignment)
 {
 	this->stackFieldMode = true;
+	this->stackFieldId = id;
 	this->stackField = new QGridLayout;
 	this->stackField->setMargin(0);
 	this->stackField->setSpacing(5);
-	this->stackField->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+	this->stackField->setAlignment(alignment);
 };
 
 void editPage::addStackField()

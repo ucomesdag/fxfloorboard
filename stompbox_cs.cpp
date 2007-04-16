@@ -45,6 +45,38 @@ void stompbox_cs::updateSignal()
 
 void stompbox_cs::setEditPages()
 {
-    
-	
+	editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "02", "00", "00");
+	editDetails()->page()->newStackControl(0, 0, 1, 1, 1);
+	editDetails()->page()->addComboBox(1, 0, 1, 1, "02", "00", "02");
+	editDetails()->page()->addStackControl();
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	/* COMPRESSOR */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Compressor");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "02", "00", "03");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "02", "00", "04");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "02", "00", "07");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "02", "00", "08");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+	editDetails()->page()->addStackField();
+
+	/* LIMITER */
+	editDetails()->page()->newStackField(0);
+	editDetails()->page()->newGroupBox("Limiter");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "02", "00", "05");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "02", "00", "06");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "02", "00", "07");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "02", "00", "08");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+	editDetails()->page()->addStackField();
+
+	editDetails()->addPage();
 };

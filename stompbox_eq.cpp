@@ -65,37 +65,35 @@ void stompbox_eq::updateSignal()
 
 void stompbox_eq::setEditPages()
 {
-    
-	
-	/*editDetails()->page()->addLabel("High _______", QPoint(120,15));
-	editDetails()->page()->addKnob(QPoint(195,15));
-	editDetails()->page()->addLabel("Level", QPoint(203,0));
+    editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "08", "00", "00");
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
-	editDetails()->page()->addLabel("_______ High-Mid ________", QPoint(20,60));
-	editDetails()->page()->addKnob(QPoint(0,90));
-	editDetails()->page()->addLabel("Q", QPoint(17,75));
-	editDetails()->page()->addKnob(QPoint(80,90));
-	editDetails()->page()->addLabel("Freq", QPoint(88,75));
-	editDetails()->page()->addKnob(QPoint(160,90));
-	editDetails()->page()->addLabel("Level", QPoint(164,75));
-	
-	editDetails()->page()->addLabel("_______ Low-Mid ________", QPoint(20,150));
-	editDetails()->page()->addKnob(QPoint(0,180));
-	editDetails()->page()->addLabel("Q", QPoint(17,165));
-	editDetails()->page()->addKnob(QPoint(80,180));
-	editDetails()->page()->addLabel("Freq", QPoint(88,165));
-	editDetails()->page()->addKnob(QPoint(160,180));
-	editDetails()->page()->addLabel("Level", QPoint(164,165));
-	
-    editDetails()->page()->addLabel("Low _______", QPoint(120,255));
-	editDetails()->page()->addKnob(QPoint(195,250));
-	editDetails()->page()->addLabel("Level", QPoint(202,235));
-	
-    editDetails()->page()->addLabel("__ EQ __", QPoint(300,130));
-	editDetails()->page()->addKnob(QPoint(260,125));
-	editDetails()->page()->addLabel("Level", QPoint(266,110));
+	editDetails()->page()->newGroupBox("Low");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "02");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "03");
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
 
-	editDetails()->page()->addSwitch(QPoint(350,135));
-	editDetails()->page()->addLabel("On/Off", QPoint(350,120));
-	*/
+	editDetails()->page()->newGroupBox("Low-Middle");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "04");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "05");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "08", "00", "06");
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("High-Middle");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "07");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "08");
+	editDetails()->page()->addKnob(0, 2, 1, 1, "08", "00", "09");
+	editDetails()->page()->addGroupBox(1, 2, 1, 1);
+
+	editDetails()->page()->newGroupBox("High");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "0A");
+	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "0B");
+	editDetails()->page()->addGroupBox(0, 3, 1, 1);
+
+	editDetails()->page()->newGroupBox("Level");
+	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "0C");
+	editDetails()->page()->addGroupBox(0, 4, 1, 1);
+
+	editDetails()->addPage();	
 };

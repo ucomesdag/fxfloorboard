@@ -65,6 +65,15 @@ customControlSwitch::customControlSwitch(QWidget *parent,
 		labelPos = QPoint(0, 0);
 
 		this->setFixedSize(this->label->getLabelWidth(), 12 + 17);
+	}
+	else if(direction == "middle")
+	{
+		this->label->setAlignment(Qt::AlignLeft);
+		
+		switchPos = QPoint((this->label->getLabelWidth() - 23) / 2, 12);//QPoint((50 - 23) / 2, 12);
+		labelPos = QPoint(0, 0);
+
+		this->setFixedSize(this->label->getLabelWidth(), 12 + 17);
 	};
 
 	QString imagePath(":/images/switch.png");
@@ -79,13 +88,13 @@ customControlSwitch::customControlSwitch(QWidget *parent,
 
 void customControlSwitch::paintEvent(QPaintEvent *)
 {
-	QPixmap image(":images/dragbar.png");
+	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
 	QRectF source(0.0, 0.0, this->width(), this->height());
 
 	QPainter painter(this);
-	painter.drawPixmap(target, image, source);
+	painter.drawPixmap(target, image, source);*/
 };
 
 void customControlSwitch::valueChanged(bool value, QString hex1, QString hex2, QString hex3)
