@@ -29,11 +29,11 @@ stompbox_eq::stompbox_eq(QWidget *parent)
 	setImage(":/images/eq.png");
 	setLSB("08", "00");
 
-	/*int range1 = midiTable->getRange("Stucture", "08", "00", "03");
-	int range2 = midiTable->getRange("Stucture", "08", "00", "06");
-	int range3 = midiTable->getRange("Stucture", "08", "00", "09");
-	int range4 = midiTable->getRange("Stucture", "08", "00", "0A");
-	int range5 = midiTable->getRange("Stucture", "08", "00", "0C");
+	/*int range1 = midiTable->getRange("Structure", "08", "00", "03");
+	int range2 = midiTable->getRange("Structure", "08", "00", "06");
+	int range3 = midiTable->getRange("Structure", "08", "00", "09");
+	int range4 = midiTable->getRange("Structure", "08", "00", "0A");
+	int range5 = midiTable->getRange("Structure", "08", "00", "0C");
 
 	customSlider *slider1 = new customSlider(0, 0, range1, 1, 10, QPoint::QPoint(8, 17), this, "08", "00", "03");
 	customSlider *slider2 = new customSlider(0, 0, range2, 1, 10, QPoint::QPoint(24, 17), this, "08", "00", "06");
@@ -65,35 +65,37 @@ void stompbox_eq::updateSignal()
 
 void stompbox_eq::setEditPages()
 {
-    editDetails()->page()->newGroupBox("Effect");
+    editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
 	editDetails()->page()->addSwitch(0, 0, 1, 1, "08", "00", "00");
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
+	editDetails()->page()->newGroupBox("Equalizer");
 	editDetails()->page()->newGroupBox("Low");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "02");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "03");
-	editDetails()->page()->addGroupBox(0, 1, 1, 1);
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	editDetails()->page()->newGroupBox("Low-Middle");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "04");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "05");
 	editDetails()->page()->addKnob(0, 2, 1, 1, "08", "00", "06");
-	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+	editDetails()->page()->addGroupBox(0, 1, 1, 1);
 
 	editDetails()->page()->newGroupBox("High-Middle");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "07");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "08");
 	editDetails()->page()->addKnob(0, 2, 1, 1, "08", "00", "09");
-	editDetails()->page()->addGroupBox(1, 2, 1, 1);
+	editDetails()->page()->addGroupBox(1, 1, 1, 1);
 
 	editDetails()->page()->newGroupBox("High");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "0A");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "08", "00", "0B");
-	editDetails()->page()->addGroupBox(0, 3, 1, 1);
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+	editDetails()->page()->addGroupBox(0, 1, 2, 1);
 
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "08", "00", "0C");
-	editDetails()->page()->addGroupBox(0, 4, 1, 1);
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
 
 	editDetails()->addPage();	
 };

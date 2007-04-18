@@ -49,6 +49,8 @@ signals:
 	void updateSignal();
 
 public slots:
+	void valueChanged(int index);
+	void pageUpdateSignal();
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -57,7 +59,10 @@ private:
 	QPixmap image;
 	QString hex1;
 	QString hex2;
+	QString hex3;
+	int pages;
 	QLabel* title;
+	QLabel* comboBoxLabel;
 	QStackedWidget* pagesWidget;
 	QComboBox* pageComboBox;
 	customControlLabel* closeButton;

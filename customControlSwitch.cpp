@@ -35,7 +35,7 @@ customControlSwitch::customControlSwitch(QWidget *parent,
 	this->hex3 = hex3;
 
 	MidiTable *midiTable = MidiTable::Instance();
-	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 	QString labeltxt = items.customdesc;
 	
 	this->label->setPixelSize(9);

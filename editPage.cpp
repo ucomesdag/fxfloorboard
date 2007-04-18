@@ -235,6 +235,7 @@ void editPage::addGroupBox(int row, int column, int rowSpan, int columnSpan)
 	else
 	{
 		this->groupBoxLayouts.at(layoutIndex - 1 - this->parentBoxDif)->addWidget(this->groupBoxes.at(boxesIndex), row, column, rowSpan, columnSpan);
+		this->groupBoxLayout = this->groupBoxLayouts.at(layoutIndex - 1 - this->parentBoxDif);
 		this->groupBoxIndex--;
 	};
 };

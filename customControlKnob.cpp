@@ -36,9 +36,9 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->hex3 = hex3;
 
 	MidiTable *midiTable = MidiTable::Instance();
-	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 	QString labeltxt = items.customdesc;
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	
 	this->label->setPixelSize(9);
 	this->label->setStretch(100);
@@ -166,7 +166,7 @@ void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QStr
 	if(valueHex.length() < 2) valueHex.prepend("0");
 
 	SysxIO *sysxIO = SysxIO::Instance(); bool ok;
-	if(midiTable->isData("Stucture", hex1, hex2, hex3))
+	if(midiTable->isData("Structure", hex1, hex2, hex3))
 	{	
 		int maxRange = QString("7F").toInt(&ok, 16) + 1;
 		int value = valueHex.toInt(&ok, 16);
@@ -183,7 +183,7 @@ void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QStr
 		sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
 	};
 
-	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+	QString valueStr = midiTable->getValue("Structure", hex1, hex2, hex3, valueHex);
 	
 	//this->display->setText(valueStr);
 	emit updateDisplay(valueStr);
@@ -200,7 +200,7 @@ void customControlKnob::dialogUpdateSignal()
 	if(valueHex.length() < 2) valueHex.prepend("0");
 
 	MidiTable *midiTable = MidiTable::Instance();
-	QString valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+	QString valueStr = midiTable->getValue("Structure", hex1, hex2, hex3, valueHex);
 	
 	//this->display->setText(valueStr);
 	emit updateDisplay(valueStr);

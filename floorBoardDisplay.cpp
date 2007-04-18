@@ -280,7 +280,7 @@ void floorBoardDisplay::updateDisplay()
 	QString name;
 	for(int i=sysxDataOffset;i<nameArray.size() - 2;i++ )
 	{
-		//name.append( midiTable->getMidiMap("Stucture", "12", "00", "00", nameArray.at(i)).name );
+		//name.append( midiTable->getMidiMap("Structure", "12", "00", "00", nameArray.at(i)).name );
 
 		QString hexStr = nameArray.at(i);
 		if(hexStr == "7E")

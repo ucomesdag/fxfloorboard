@@ -22,6 +22,7 @@
 
 #include "editWindow.h"
 #include "MidiTable.h"
+#include "SysxIO.h"
 
 editWindow::editWindow(QWidget *parent)
     : QWidget(parent)
@@ -47,24 +48,43 @@ editWindow::editWindow(QWidget *parent)
 	this->title->setPalette(titlePalette);
 	this->title->setFont(titleFont);
 
+	this->comboBoxLabel = new QLabel(tr("Select"));
+
+	QFont comboBoxLabelFont;
+	comboBoxLabelFont.setFamily("Arial");
+	comboBoxLabelFont.setBold(true);
+	comboBoxLabelFont.setPixelSize(12);
+	comboBoxLabelFont.setStretch(105);
+
+	QPalette comboBoxLabelPalette;
+	comboBoxLabelPalette.setColor(this->comboBoxLabel->foregroundRole(), Qt::white);
+	this->comboBoxLabel->setPalette(comboBoxLabelPalette);
+	this->comboBoxLabel->setFont(comboBoxLabelFont);
+	this->comboBoxLabel->setVisible(false);
+
 	this->pageComboBox = new QComboBox;
 
 	QPalette comboPalette;
-	comboPalette.setColor(QPalette::Base,Qt::black);
-    comboPalette.setColor(QPalette::Text,Qt::white);
-	comboPalette.setColor(QPalette::Highlight,Qt::black);
-	comboPalette.setColor(QPalette::HighlightedText,Qt::white);
+	comboPalette.setColor(QPalette::Base,QColor(0,1,62));
+    comboPalette.setColor(QPalette::Text,QColor(0,255,204));
+	comboPalette.setColor(QPalette::Highlight,QColor(0,1,62));
+	comboPalette.setColor(QPalette::HighlightedText,QColor(0,255,204));
 
-	comboPalette.setColor(QPalette::Light,Qt::black);				//Lighter than Button color.
-	comboPalette.setColor(QPalette::Midlight,Qt::black);			//Between Button and Light.
-	comboPalette.setColor(QPalette::Dark,Qt::black);				//Darker than Button.
-	comboPalette.setColor(QPalette::Mid,Qt::black);				//Between Button and Dark.
-	comboPalette.setColor(QPalette::Shadow,Qt::black);
+	comboPalette.setColor(QPalette::Window,QColor(0,1,62));
+	comboPalette.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
+	comboPalette.setColor(QPalette::Button,QColor(0,1,62));
+	comboPalette.setColor(QPalette::ButtonText,QColor(0,255,204));
+
+	comboPalette.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
+	comboPalette.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
+	comboPalette.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
+	comboPalette.setColor(QPalette::Mid,QColor(0,1,62));			//Between Button and Dark.
+	comboPalette.setColor(QPalette::Shadow,QColor(0,1,62));
 
 	QFont comboFont;
 	comboFont.setFamily("Arial");
-	//comboFont.setBold(true);
-	comboFont.setPixelSize(12);
+	comboFont.setBold(true);
+	comboFont.setPixelSize(10);
 	comboFont.setStretch(110);
 
 	this->pageComboBox->setEditable(false);
@@ -80,6 +100,7 @@ editWindow::editWindow(QWidget *parent)
 	QHBoxLayout *headerLayout = new QHBoxLayout;
 	headerLayout->addWidget(this->title);
 	headerLayout->addStretch();
+	headerLayout->addWidget(this->comboBoxLabel);
 	headerLayout->addWidget(this->pageComboBox);
 	headerLayout->addStretch();
 	headerLayout->addWidget(this->closeButton);
@@ -115,6 +136,12 @@ editWindow::editWindow(QWidget *parent)
 
 	/*QObject::connect(this, SIGNAL( updateSignal() ),
             this->parent(), SIGNAL( updateSignal() ));*/
+
+	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
+                this, SLOT( pageUpdateSignal() ));
+
+	QObject::connect(this->pageComboBox, SIGNAL(activated(int)),
+                this, SLOT(valueChanged(int)));
 };
 
 void editWindow::paintEvent(QPaintEvent *)
@@ -150,10 +177,14 @@ QString editWindow::getTitle()
 
 void editWindow::addPage(QString hex1, QString hex2, QString hex3, QString hex4)
 {
+	this->hex1 = hex1;
+	this->hex2 = hex2;
+	this->hex3 = hex3;	
+	
 	this->tempPage->setGridLayout();
 	this->editPages.append(this->tempPage); 
 	this->pagesWidget->addWidget(editPages.last()); 
-	int pages = this->pagesWidget->count(); 
+	this->pages = this->pagesWidget->count(); 
 
 	QObject::connect(this, SIGNAL( dialogUpdateSignal() ),
 			editPages.last(), SIGNAL( dialogUpdateSignal() ));
@@ -164,7 +195,7 @@ void editWindow::addPage(QString hex1, QString hex2, QString hex3, QString hex4)
 	if(hex1 != "void" && hex2 != "void" && hex3 != "void")
 	{
 		MidiTable *midiTable = MidiTable::Instance();
-		Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+		Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 		
 		int itemsCount;
 		if(hex4 == "void")
@@ -194,10 +225,38 @@ void editWindow::addPage(QString hex1, QString hex2, QString hex3, QString hex4)
 		this->pageComboBox->addItem(item); 
 		this->tempPage = new editPage; 
 
-		if(pages > 1)
+		this->pageComboBox->setMaxVisibleItems(this->pages);
+		//this->pageComboBox->view()->setMinimumWidth( this->comboWidth );
+
+		if(this->pages > 1)
 		{
 			this->pageComboBox->setVisible(true);
+			this->comboBoxLabel->setVisible(true);
 		};
+	};
+};
+
+void editWindow::valueChanged(int index)
+{
+	QString valueHex = QString::number(index, 16).toUpper();
+	if(valueHex.length() < 2) valueHex.prepend("0");
+
+	SysxIO *sysxIO = SysxIO::Instance();
+	sysxIO->setFileSource(this->hex1, this->hex2, this->hex3, valueHex);
+
+	//emit updateDisplay(valueStr);
+	emit updateSignal();
+};
+
+void editWindow::pageUpdateSignal()
+{
+	if(this->pages > 1)
+	{
+		SysxIO *sysxIO = SysxIO::Instance();
+		int index = sysxIO->getSourceValue(this->hex1, this->hex2, this->hex3);
+		this->pageComboBox->setCurrentIndex(index);
+		this->pagesWidget->setCurrentIndex(index);
+		//this->valueChanged(index);
 	};
 };
 

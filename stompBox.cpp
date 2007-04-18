@@ -239,7 +239,7 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	int itemsCount;
 
 	MidiTable *midiTable = MidiTable::Instance();
-	Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 
 	comboBox = new QComboBox(this);
 	
@@ -280,49 +280,49 @@ void stompBox::setComboBoxCurrentIndex(int index)
 void stompBox::setKnob1(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	knob1 = new customDial(0, 0, range, 1, 10, QPoint::QPoint(6, 9), this, hex1, hex2, hex3);
 };
 
 void stompBox::setKnob2(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	knob2 = new customDial(0, 0, range, 1, 10, QPoint::QPoint(53, 9), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider1(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	slider1 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(8, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider2(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	slider2 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(24, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider3(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	slider3 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(40, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider4(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	slider4 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(56, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider5(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
-	int range = midiTable->getRange("Stucture", hex1, hex2, hex3);
+	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	slider5 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(79, 17), this, hex1, hex2, hex3);
 };
 
@@ -431,7 +431,7 @@ void stompBox::valueChanged(int value, QString hex1, QString hex2, QString hex3)
 	if(valueHex.length() < 2) valueHex.prepend("0");
 
 	SysxIO *sysxIO = SysxIO::Instance(); bool ok;
-	if(midiTable->isData("Stucture", hex1, hex2, hex3))
+	if(midiTable->isData("Structure", hex1, hex2, hex3))
 	{	
 		int maxRange = QString("7F").toInt(&ok, 16) + 1;
 		int value = valueHex.toInt(&ok, 16);
@@ -475,7 +475,7 @@ void stompBox::valueChanged(int index)
 	emitValueChanged(this->hex1, this->hex2, this->hex3, valueHex);
 
 	MidiTable *midiTable = MidiTable::Instance();
-	Midi items = midiTable->getMidiMap("Stucture", this->hex1, this->hex2, this->hex3);
+	Midi items = midiTable->getMidiMap("Structure", this->hex1, this->hex2, this->hex3);
 
 	QString desc = items.level.at(index).desc;
 	QString customdesc = items.level.at(index).customdesc;
@@ -496,7 +496,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 		MidiTable *midiTable = MidiTable::Instance();
 		if(valueHex != "void")
 		{
-			Midi items = midiTable->getMidiMap("Stucture", hex1, hex2, hex3);
+			Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 			valueName = items.desc;
 			if(hex1 == "0E") // NoiseSuppressor is part of MASTER -> correcting the name for consistency.
 			{
@@ -512,7 +512,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 			}
 			else
 			{
-				this->fxName = midiTable->getMidiMap("Stucture", hex1).name;
+				this->fxName = midiTable->getMidiMap("Structure", hex1).name;
 				if(items.desc.contains(":"))
 				{
 					valueName = items.desc.section(":", 1, 1);
@@ -522,7 +522,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 					valueName = items.desc;
 				};
 			};
-			valueStr = midiTable->getValue("Stucture", hex1, hex2, hex3, valueHex);
+			valueStr = midiTable->getValue("Structure", hex1, hex2, hex3, valueHex);
 			emit dialogUpdateSignal();
 		}
 		else
@@ -537,7 +537,7 @@ void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QStrin
 			}
 			else
 			{
-				this->fxName = midiTable->getMidiMap("Stucture", hex1).name;
+				this->fxName = midiTable->getMidiMap("Structure", hex1).name;
 			};
 		};
 	}

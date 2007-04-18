@@ -158,6 +158,12 @@ void MidiTable::loadMidiMap()
     }; 
 }; 
 
+Midi MidiTable::getMidiMap(QString root)
+{
+	Midi section = midiMap.level.at( midiMap.id.indexOf(root) );
+	return section;
+};
+
 Midi MidiTable::getMidiMap(QString root, QString hex1)
 { 
 	Midi section = midiMap.level.at( midiMap.id.indexOf(root) );
@@ -338,7 +344,7 @@ QString MidiTable::rangeToValue(Midi range, QString hex)
 				double max = rangeList.at(3).toDouble(&ok);
 				double dataRange = max - min;
 				double range = end - start;
-				double result = ((double)valueInt * (dataRange / range)) + min;
+				double result = ((double)valueInt * (dataRange / range)) + (min - start);
 				int precision;
 				if(rangeList.at(3).contains("."))
 				{
@@ -395,7 +401,7 @@ QString MidiTable::getFooter()
 
 QString MidiTable::getSize(QString hex1, QString hex2, QString hex3)
 {
-	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Structure") );
 	Midi level1 = section.level.at( section.id.indexOf(hex1) );
 	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
 	QString currenFxName = level2.level.at( level2.id.indexOf(hex3) ).name;
@@ -418,7 +424,7 @@ QString MidiTable::getSize(QString hex1, QString hex2, QString hex3)
 
 QString MidiTable::getSize(QString hex1, QString hex2)
 {
-	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Structure") );
 	Midi level1 = section.level.at( section.id.indexOf(hex1) );
 	Midi level2 = level1.level.at( level1.id.indexOf(hex2) );
 
@@ -471,7 +477,7 @@ QString MidiTable::getSize(QString hex1, QString hex2)
 
 QString MidiTable::getSize()
 {
-	Midi section = midiMap.level.at( midiMap.id.indexOf("Stucture") );
+	Midi section = midiMap.level.at( midiMap.id.indexOf("Structure") );
 
 	QString size;
 	bool ok;

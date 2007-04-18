@@ -44,6 +44,7 @@ public:
 	static MidiTable* Instance(); //Singleton patern design
 
 	void loadMidiMap();
+	Midi getMidiMap(QString root);
 	Midi getMidiMap(QString root, QString hex1);
 	//Midi getMidiMap(QString root, QString hex1, QString hex2);
 	Midi getMidiMap(QString root, QString hex1, QString hex2, QString hex3);
