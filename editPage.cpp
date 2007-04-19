@@ -313,14 +313,13 @@ void editPage::addStackField()
 {
 	this->stackFieldMode = false;
 
-	
+	QWidget *tmpWidget = new QWidget;
+		tmpWidget->setLayout(this->stackField);
 	if(!this->fieldIndexes.isEmpty())
 	{
 		for(int i=0;i<this->fieldIndexes.size();++i)
 		{
 
-			QWidget *tmpWidget = new QWidget;
-			tmpWidget->setLayout(this->stackField);
 			this->stackedFields.at(this->stackFieldId)->insertWidget(this->fieldIndexes.at(i), tmpWidget);
 
 			if((i + 1) < this->fieldIndexes.size())
@@ -346,8 +345,6 @@ void editPage::addStackField()
 	}
 	else
 	{
-		QWidget *tmpWidget = new QWidget;
-		tmpWidget->setLayout(this->stackField);
 		this->stackedFields.at(this->stackFieldId)->addWidget(tmpWidget);
 	};
 };
