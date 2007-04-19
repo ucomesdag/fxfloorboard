@@ -57,11 +57,13 @@ public:
 	void newGroupBox(QString title, Qt::Alignment alignment = Qt::AlignCenter);
 	void addGroupBox(int row, int column, int rowSpan, int columnSpan);
 	void setGridLayout();
-	void newStackControl(int id, 
-		int row, int column, int rowSpan, int columnSpan,
-		Qt::Alignment alignment = 0);
+	void newStackControl(int id);
 	void addStackControl();
+	void insertStackField(int id,
+		int row, int column, int rowSpan, int columnSpan,
+		Qt::Alignment alignment = Qt::AlignCenter);
 	void newStackField(int id, Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft);
+	void newStackField(int id, QList<int> fieldIndexes, int items, Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft);
 	void addStackField();
 
 protected:
@@ -92,6 +94,9 @@ private:
 	bool stackControlMode;
 	bool stackFieldMode;
 	int stackFieldId;
+	int stackControlId;
+	QList<int> fieldIndexes;
+	int fieldItems;
 };
 
 #endif // EDITPAGE_H

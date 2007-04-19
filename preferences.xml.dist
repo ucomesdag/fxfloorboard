@@ -2,7 +2,7 @@
 <!-- Preferences of the GT-8 Fx FloorBoard application. -->
 <Preferences>
 	<General>
-		<Application version="0.0a"/>
+		<Application version="0.1b"/>
 		<Donate url="http://sourceforge.net/donate/index.php?group_id=171049"/>
 		<Files dir=""/>
 		<Help url="http://sourceforge.net/forum/forum.php?forum_id=585786"/>

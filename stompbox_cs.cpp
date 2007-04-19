@@ -47,12 +47,13 @@ void stompbox_cs::setEditPages()
 {
 	editDetails()->page()->newGroupBox("Effect");
 	editDetails()->page()->addSwitch(0, 0, 1, 1, "02", "00", "00");
-	editDetails()->page()->newStackControl(0, 0, 1, 1, 1);
+	editDetails()->page()->newStackControl(0);
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "02", "00", "02");
 	editDetails()->page()->addStackControl();
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	/* COMPRESSOR */
+	editDetails()->page()->insertStackField(0, 0, 1, 1, 1);
 	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Compressor");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "02", "00", "03");

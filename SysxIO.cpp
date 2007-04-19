@@ -455,7 +455,6 @@ QList<QString> SysxIO::getFileSource(QString hex1, QString hex2)
 			setFileSource(file.getFileSource());
 		};
 	};
-	int snork = this->fileSource.address.indexOf(address);
 	QList<QString> sysxMsg = this->fileSource.hex.at( this->fileSource.address.indexOf(address) );
 	return sysxMsg;
 };

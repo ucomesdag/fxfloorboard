@@ -42,16 +42,18 @@ void stompbox_pre::setEditPages()
 	editDetails()->page()->newGroupBox("Effect");
 	editDetails()->page()->addSwitch(0, 0, 1, 1, "07", "00", "00");
 
-	editDetails()->page()->newStackControl(0, 0, 1, 2, 1);
+	editDetails()->page()->newStackControl(0);
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "07", "00", "03");
 	editDetails()->page()->addStackControl();
 
-	editDetails()->page()->newStackControl(1, 1, 0, 1, 1);
+	editDetails()->page()->newStackControl(1);
 	editDetails()->page()->addComboBox(2, 0, 1, 1, "07", "00", "02");
 	editDetails()->page()->addStackControl();
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	/* TYPE SETTINGS */
+	editDetails()->page()->insertStackField(1, 1, 0, 1, 1);
+
 	editDetails()->page()->newStackField(1);
 	editDetails()->page()->addStackField();
 	
@@ -74,11 +76,14 @@ void stompbox_pre::setEditPages()
 	editDetails()->page()->addStackField();
 
 	/* CHANNEL A */
+	editDetails()->page()->insertStackField(0, 0, 1, 2, 1);
 	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Channel A");
 
 	editDetails()->page()->newGroupBox("Pre Amp");
+	editDetails()->page()->newStackControl(2);
 	editDetails()->page()->addComboBox(0, 0, 1, 5, "07", "00", "06");
+	editDetails()->page()->addStackControl();
 	editDetails()->page()->addComboBox(0, 5, 1, 1, "07", "00", "0E", "bottom", Qt::AlignHCenter);
 	
 	editDetails()->page()->addKnob(2, 0, 1, 1, "07", "00", "07", "turbo");
@@ -86,7 +91,9 @@ void stompbox_pre::setEditPages()
 	editDetails()->page()->addKnob(2, 2, 1, 1, "07", "00", "09");
 	editDetails()->page()->addKnob(2, 3, 1, 1, "07", "00", "0A");
 	editDetails()->page()->addKnob(2, 4, 1, 1, "07", "00", "0B");
-	editDetails()->page()->addSwitch(2, 5, 1, 1, "07", "00", "0D", "middle", Qt::AlignCenter);
+
+	editDetails()->page()->insertStackField(2, 2, 5, 1, 1);
+
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	editDetails()->page()->newGroupBox("Level");
@@ -115,7 +122,10 @@ void stompbox_pre::setEditPages()
 	editDetails()->page()->newGroupBox("Channel B");
 
 	editDetails()->page()->newGroupBox("Pre Amp");
+	editDetails()->page()->newStackControl(3);
 	editDetails()->page()->addComboBox(0, 0, 1, 5, "07", "00", "17");
+	editDetails()->page()->addStackControl();
+
 	editDetails()->page()->addComboBox(0, 5, 1, 1, "07", "00", "1F", "bottom", Qt::AlignHCenter);
 	
 	editDetails()->page()->addKnob(2, 0, 1, 1, "07", "00", "18", "turbo");
@@ -123,7 +133,9 @@ void stompbox_pre::setEditPages()
 	editDetails()->page()->addKnob(2, 2, 1, 1, "07", "00", "1A");
 	editDetails()->page()->addKnob(2, 3, 1, 1, "07", "00", "1B");
 	editDetails()->page()->addKnob(2, 4, 1, 1, "07", "00", "1C");
-	editDetails()->page()->addSwitch(2, 5, 1, 1, "07", "00", "1E", "middle", Qt::AlignCenter);
+
+	editDetails()->page()->insertStackField(3, 2, 5, 1, 1);
+
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
 	editDetails()->page()->newGroupBox("Level");
@@ -145,6 +157,16 @@ void stompbox_pre::setEditPages()
 	editDetails()->page()->addGroupBox(1, 1, 1, 1);
 
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
+	editDetails()->page()->addStackField();
+
+	QList<int> indexes;
+	indexes << 0 << 1 << 2 << 5 << 6 << 7 << 8 << 9 << 10 << 12 << 19 << 20 << 21 << 46 << 47 << 48;
+	editDetails()->page()->newStackField(2, indexes, 49);
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "07", "00", "0D", "middle", Qt::AlignCenter);
+	editDetails()->page()->addStackField();
+
+	editDetails()->page()->newStackField(3, indexes, 49);
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "07", "00", "1E", "middle", Qt::AlignCenter);
 	editDetails()->page()->addStackField();
 
 	editDetails()->addPage();	

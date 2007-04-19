@@ -107,14 +107,13 @@ void editPage::addComboBox(int row, int column, int rowSpan, int columnSpan,
 		QString direction,
 		Qt::Alignment alignment)
 {
-	
 	customControlListMenu *combobox = new customControlListMenu(this, hex1, hex2, hex3);
 	if(this->stackControlMode)
 	{
 		QObject::connect(combobox, SIGNAL( currentIndexChanged(int) ),
-                this->stackedFields.at(this->stackFieldId), SLOT( setCurrentIndex(int) ));
+					this->stackedFields.at(this->stackControlId), SLOT( setCurrentIndex(int) ));
 		QObject::connect(combobox, SIGNAL( currentIndexChanged(int) ),
-                this, SLOT( updateDialog(int) ));
+					this, SLOT( updateDialog(int) ));
 	};
 	if(this->groupBoxMode)
 	{
@@ -255,25 +254,40 @@ void editPage::setGridLayout()
 	this->setLayout(mainLayout);
 };
 
-void editPage::newStackControl(int id,
-	int row, int column, int rowSpan, int columnSpan,
-	Qt::Alignment alignment)
+void editPage::newStackControl(int id)
 {
 	this->stackControlMode = true;
-	this->stackFieldId = id;
+	this->stackControlId = id;
 	QStackedWidget *newStackField = new QStackedWidget;
-	this->stackedFields.insert(this->stackFieldId, newStackField);
-	
-	this->layout->addWidget(this->stackedFields.at(this->stackFieldId), row, column, rowSpan, columnSpan);
+	this->stackedFields.insert(id, newStackField);
 };
 
 void editPage::addStackControl()
 {
 	this->stackControlMode = false;
 };
+
+void editPage::insertStackField(int id,
+	int row, int column, int rowSpan, int columnSpan,
+	Qt::Alignment alignment)
+{
+	if(this->groupBoxMode)
+	{
+		this->groupBoxLayout->addWidget(this->stackedFields.at(id), row, column, rowSpan, columnSpan, alignment);
+	}
+	else if(this->stackFieldMode)
+	{
+		this->stackField->addWidget(this->stackedFields.at(id), row, column, rowSpan, columnSpan, alignment);
+	}
+	else
+	{
+		this->layout->addWidget(this->stackedFields.at(id), row, column, rowSpan, columnSpan, alignment);
+	};
+};
 	
 void editPage::newStackField(int id, Qt::Alignment alignment)
 {
+	this->fieldIndexes.clear();
 	this->stackFieldMode = true;
 	this->stackFieldId = id;
 	this->stackField = new QGridLayout;
@@ -282,12 +296,60 @@ void editPage::newStackField(int id, Qt::Alignment alignment)
 	this->stackField->setAlignment(alignment);
 };
 
+void editPage::newStackField(int id, QList<int> fieldIndexes, int items, Qt::Alignment alignment)
+{
+	this->fieldIndexes.clear();
+	this->fieldIndexes = fieldIndexes;
+	this->fieldItems = items;
+	this->stackFieldMode = true;
+	this->stackFieldId = id;
+	this->stackField = new QGridLayout;
+	this->stackField->setMargin(0);
+	this->stackField->setSpacing(0);
+	this->stackField->setAlignment(alignment);
+};
+
 void editPage::addStackField()
 {
 	this->stackFieldMode = false;
-	QWidget *tmpWidget = new QWidget;
-	tmpWidget->setLayout(this->stackField);
-	this->stackedFields.at(this->stackFieldId)->addWidget(tmpWidget);
+
+	
+	if(!this->fieldIndexes.isEmpty())
+	{
+		for(int i=0;i<this->fieldIndexes.size();++i)
+		{
+
+			QWidget *tmpWidget = new QWidget;
+			tmpWidget->setLayout(this->stackField);
+			this->stackedFields.at(this->stackFieldId)->insertWidget(this->fieldIndexes.at(i), tmpWidget);
+
+			if((i + 1) < this->fieldIndexes.size())
+			{
+				if((this->fieldIndexes.at(i) + 1) < this->fieldIndexes.at(i + 1))
+				{
+					for(int n=(this->fieldIndexes.at(i) + 1);n<this->fieldIndexes.at(i + 1);++n)
+					{
+						QWidget *emptyWidget = new QWidget;
+						this->stackedFields.at(this->stackFieldId)->insertWidget(n, emptyWidget);
+					};
+				};
+			};
+		};
+		if(this->fieldItems > (this->fieldIndexes.last() + 1))
+		{
+			for(int n=(this->fieldIndexes.last() + 1);n<this->fieldItems;++n)
+			{
+				QWidget *emptyWidget = new QWidget;
+				this->stackedFields.at(this->stackFieldId)->insertWidget(n, emptyWidget);
+			};
+		};
+	}
+	else
+	{
+		QWidget *tmpWidget = new QWidget;
+		tmpWidget->setLayout(this->stackField);
+		this->stackedFields.at(this->stackFieldId)->addWidget(tmpWidget);
+	};
 };
 
 void editPage::updateDialog(int index)
