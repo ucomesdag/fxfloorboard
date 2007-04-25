@@ -63,7 +63,6 @@ public:
 		int row, int column, int rowSpan, int columnSpan,
 		Qt::Alignment alignment = Qt::AlignCenter);
 	void newStackField(int id, Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft);
-	void newStackField(int id, QList<int> fieldIndexes, int items, Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft);
 	void addStackField();
 
 protected:

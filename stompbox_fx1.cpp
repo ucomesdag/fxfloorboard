@@ -313,17 +313,18 @@ void stompbox_fx1::setEditPages()
 	editDetails()->addPage("00", "00", "02", "0F");
 
 	/* FB */
-	/*editDetails()->page()->newGroupBox("Effect");
+	editDetails()->page()->newGroupBox("Effect");
 	editDetails()->page()->addSwitch(0, 0, 1, 1, "00", "00", "00");	
 
-	editDetails()->page()->newStackControl(0, 0, 1, 2, 1);
+	editDetails()->page()->newStackControl(0);
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "00", "00", "57");
 	editDetails()->page()->addStackControl();
 
-	editDetails()->page()->addGroupBox(0, 0, 1, 1);*/
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
+	editDetails()->page()->insertStackField(0, 0, 1, 2, 1);
 	/* OSC */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Feedbacker");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "58");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "5A");
@@ -336,14 +337,14 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 2, 1, 1, "00", "00", "5C", "normal","right", 105);
 	editDetails()->page()->addKnob(1, 2, 1, 1, "00", "00", "5D");
 	editDetails()->page()->addGroupBox(0, 0, 0, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* NATURAL */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Feedbacker");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "5A");
 	editDetails()->page()->addGroupBox(0, 0, 0, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	editDetails()->addPage("00", "00", "02", "10");
 

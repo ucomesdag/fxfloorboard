@@ -51,15 +51,17 @@ void stompbox_dd::updateSignal()
 
 void stompbox_dd::setEditPages()
 {
-    /*editDetails()->page()->newGroupBox("Effect");
+    editDetails()->page()->newGroupBox("Effect");
 	editDetails()->page()->addSwitch(0, 0, 1, 1, "0B", "00", "00");
-	editDetails()->page()->newStackControl(0, 0, 1, 2, 1);
+	editDetails()->page()->newStackControl(0);
 	editDetails()->page()->addComboBox(1, 0, 1, 1, "0B", "00", "02");
 	editDetails()->page()->addStackControl();
-	editDetails()->page()->addGroupBox(0, 0, 1, 1);*/
+	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 
+	
+	editDetails()->page()->insertStackField(0, 0, 1, 2, 1);
 	/* SINGLE */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -73,10 +75,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* PAN */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "05");
@@ -91,10 +93,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* STEREO */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -108,10 +110,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* DUAL SERIES */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay 1");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0A");
@@ -141,10 +143,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->newGroupBox("Level 1 + 2");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 3, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* DUAL PARALLEL */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay 1");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0A");
@@ -174,10 +176,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->newGroupBox("Level 1 + 2");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 3, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* DUAL L/R */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay 1");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "08", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "0A");
@@ -207,10 +209,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->newGroupBox("Level 1 + 2");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 3, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* REVERSE */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -224,10 +226,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* ANALOG */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -241,10 +243,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* TAPE */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -258,10 +260,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* WARP */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -285,10 +287,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 4, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* MODULATE */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Delay");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "03", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "06");
@@ -307,10 +309,10 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "18");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "0B", "00", "19");
 	editDetails()->page()->addGroupBox(0, 3, 1, 1);
-	editDetails()->page()->addStackField();*/
+	editDetails()->page()->addStackField();
 
 	/* HOLD */
-	/*editDetails()->page()->newStackField(0);
+	editDetails()->page()->newStackField(0);
 	editDetails()->page()->newGroupBox("Filter");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "0B", "00", "07");
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
@@ -321,5 +323,5 @@ void stompbox_dd::setEditPages()
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
 	editDetails()->page()->addStackField();
 
-	editDetails()->addPage();	*/
+	editDetails()->addPage();
 };
