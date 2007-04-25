@@ -308,5 +308,6 @@ void editPage::addStackField()
 
 void editPage::updateDialog(int index)
 {
+	index;
 	emit dialogUpdateSignal();
 };
