@@ -98,7 +98,7 @@ void customDial::mousePressEvent(QMouseEvent *event)
 void customDial::mouseMoveEvent(QMouseEvent *event)
 {
 	double dataRange = max - min;
-	double range = imageRange - 0;
+	//double range = imageRange - 0;
 	double distY = (double)event->pos().y() - (double)_startpos.y();
 	double numSteps = (int)((distY/1.5) + 0.5);
 	//double numSteps = (int)((distY/2) + 0.5) * (dataRange / range); //Same distance for all.

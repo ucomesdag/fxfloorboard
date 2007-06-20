@@ -27,6 +27,8 @@
 #include <QWidget>
 #include <QTimer>
 #include "customButton.h"
+#include "customDisplay.h"
+#include "initPatchListMenu.h"
 
 class floorBoardDisplay : public QWidget
 {
@@ -43,7 +45,6 @@ public slots:
 	void setPatchNumDisplay(int bank, int patch);
 	void setPos(QPoint newPos);
 	void updateDisplay();
-	void loadInitPatch(int index);
 	void connectSignal(bool value);
 	void writeSignal(bool value);
 	void connectionResult(QString);
@@ -61,7 +62,6 @@ public slots:
 	void valueChanged(bool value, QString hex1, QString hex2, QString hex3); // Not used.
 
 signals:
-	void currentIndexChanged(int index);
 	void updateSignal();
 	void connectedSignal();
 	void notConnectedSignal();
@@ -73,14 +73,9 @@ signals:
 private:
 	QPoint pos;
 
-	QFont fontDisplay;
-	QTextEdit *valueDisplay;
-	QTextEdit *patchDisplay;
-	QTextEdit *patchNumDisplay;
-	QComboBox *initPatchComboBox;
-
-	void setInitPatchComboBox(QRect geometry);
-	QList<QString> initPatches;
+	customDisplay *valueDisplay;
+	customDisplay *patchDisplay;
+	customDisplay *patchNumDisplay;
 
 	customButton *connectButton;
 	customButton *writeButton;
@@ -94,6 +89,8 @@ private:
 	QTimer* timer;
 	int blinkCount;
 	bool currentSyncStatus;
+
+	initPatchListMenu *initPatch;
 };
 
 #endif // FLOORBOARDDISPLAY_H

@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
 	QObject::connect( &window, SIGNAL(closed()), &app, SLOT(quit()) );
 
-	app.processEvents(); 
+	app.processEvents();
 
 	splash->showStatusMessage(QObject::tr("Checking license file..."));
 	if(!QFile("license.txt").exists())
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 		file.copy("license.txt");
 		file.close();
 	};
-
+	
 	app.processEvents();
 
 	splash->showStatusMessage(QObject::tr("Loading midi mapping..."));
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 	splash->showStatusMessage(QObject::tr("Initializing main window..."));
 	window.setWindowFlags( Qt::WindowTitleHint 
 		| Qt::WindowMinimizeButtonHint 
-		| Qt::MSWindowsFixedSizeDialogHint);
+		| Qt::MSWindowsFixedSizeDialogHint );
 	window.setWindowIcon(QIcon::QIcon(":/images/windowicon.png"));
 
 	app.processEvents(); 
@@ -168,6 +168,17 @@ int main(int argc, char *argv[])
 		int y = (screenHeight - windowHeight) / 2;
 		window.setGeometry(x, y, window.width(), window.height());
 	};
+	
+	app.processEvents(); 
+
+	if(QFile(":windows.qss").exists())
+	{
+		splash->showStatusMessage(QObject::tr("Loading Stylesheet..."));
+		QFile file(":windows.qss");
+		file.open(QFile::ReadOnly);
+		QString styleSheet = QLatin1String(file.readAll());
+		app.setStyleSheet(styleSheet);
+	}; 
 
 	app.processEvents(); 
 

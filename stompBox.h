@@ -79,10 +79,6 @@ public:
 	virtual void setEditPages() {};
 	editWindow* editDetails();
 
-
-	QPalette getPal();
-	QFont getFont();
-
 public slots:
 	void updatePos(signed int offsetDif);
 	void valueChanged(int value, QString hex1, QString hex2, QString hex3);
@@ -115,9 +111,6 @@ private:
 	QPoint dragStartPosition;
 	QPixmap image;
 
-	QPalette pal;
-	QFont font;
-
 	customDial *knob1;
 	customDial *knob2;
 	customSlider *slider1;
@@ -128,7 +121,7 @@ private:
 	customButton *button;
 	customLed *led;
 	customSwitch *switchbutton;
-	QComboBox *comboBox;
+	QComboBox *stompComboBox;
 
 	QString hex1;
 	QString hex2;

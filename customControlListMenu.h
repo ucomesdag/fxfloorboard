@@ -53,12 +53,10 @@ signals:
 private:
 	void setComboBox();
 	customControlLabel* label;
-	QComboBox* combobox;
+	QComboBox* controlListComboBox;
 	QString hex1;
 	QString hex2;
 	QString hex3;
-	QFont comboFont;
-	QPalette comboPalette;
 	int comboWidth;
 };
 

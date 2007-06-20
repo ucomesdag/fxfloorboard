@@ -20,34 +20,38 @@
 **
 ****************************************************************************/
 
-#include "customSplashScreen.h"
+#ifndef CUSTOMDISPLAY_H
+#define CUSTOMDISPLAY_H
 
-customSplashScreen::customSplashScreen(const QPixmap& pixmap)
+#include <QtGui>
+#include <QWidget>
+
+class customDisplay : public QWidget
 {
-	QSplashScreen::setPixmap(pixmap);
+	Q_OBJECT
+
+public:
+	customDisplay(QRect geometry, QWidget *parent = 0);
+	void setLabelPosition(bool invert = false);
+	void setMainText(QString mainText, Qt::Alignment alignment = Qt::AlignLeft);
+	void setSubText(QString subTextLeft, QString subTextRight = "");
+	void clearAll();
+	void setMainObjectName(QString name);
+	void setSubObjectName(QString name);
+
+protected:
+	void paintEvent(QPaintEvent *event);
+
+public slots:
+
+signals:
+
+private:
+	QRect geometry;
+	QFont font;
+	QLabel *mainLabel;
+	QLabel *subLabelLeft;
+	QLabel *subLabelRight;
 };
 
-customSplashScreen::~customSplashScreen()
-{
-};
-
-void customSplashScreen::drawContents(QPainter *painter)
-{	
-	QPixmap textPix = QSplashScreen::pixmap();
-	painter->setPen(this->color);
-	//painter->drawText(r, this->alignement, this->message);
-	painter->drawText(this->rect, this->message);
-};
-
-void customSplashScreen::showStatusMessage(const QString &message, int alignement, const QColor &color)
-{
-    this->message = message;
-	this->alignement = alignement;
-	this->color = color;
-	this->showMessage(this->message, this->alignement, this->color);
-};
-
-void customSplashScreen::setMessageRect(QRect rect)
-{
-	this->rect = rect;
-};
+#endif // CUSTOMDISPLAY_H

@@ -30,7 +30,8 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	: QWidget(parent)
 {
 	this->label = new customControlLabel(this);
-	this->combobox = new QComboBox(this);
+	this->controlListComboBox = new QComboBox(this);
+	this->controlListComboBox->setObjectName("smallcombo");
 	this->hex1 = hex1;
 	this->hex2 = hex2;
 	this->hex3 = hex3;
@@ -43,27 +44,6 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	this->label->setStretch(100);
 	this->label->setUpperCase(true);
 	this->label->setText(labeltxt);
-
-	this->comboPalette.setColor(QPalette::Base,QColor(0,1,62));
-    this->comboPalette.setColor(QPalette::Text,QColor(0,255,204));
-	this->comboPalette.setColor(QPalette::Highlight,QColor(0,1,62));
-	this->comboPalette.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	this->comboPalette.setColor(QPalette::Window,QColor(0,1,62));
-	this->comboPalette.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
-	this->comboPalette.setColor(QPalette::Button,QColor(0,1,62));
-	this->comboPalette.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	this->comboPalette.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
-	this->comboPalette.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
-	this->comboPalette.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
-	this->comboPalette.setColor(QPalette::Mid,QColor(0,1,62));			//Between Button and Dark.
-	this->comboPalette.setColor(QPalette::Shadow,QColor(0,1,62));
-
-	this->comboFont.setFamily("Arial");
-	this->comboFont.setBold(true);
-	this->comboFont.setPixelSize(10);
-	this->comboFont.setStretch(110);
 
 	setComboBox();
 	
@@ -82,7 +62,7 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	}
 	else if(direction == "bottom")
 	{
-		//this->label->setFixedWidth(this->combobox->width());
+		//this->label->setFixedWidth(this->controlListComboBox->width());
 		this->label->setAlignment(Qt::AlignLeft);
 		
 		labelPos = QPoint(0, 0);
@@ -92,7 +72,7 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	};
 
 	this->label->move(labelPos);
-	this->combobox->move(comboboxPos);
+	this->controlListComboBox->move(comboboxPos);
 	
 
 	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
@@ -101,10 +81,10 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	QObject::connect(this, SIGNAL( updateSignal() ),
                 this->parent(), SIGNAL( updateSignal() ));
 
-	QObject::connect(this->combobox, SIGNAL(currentIndexChanged(int)),
+	QObject::connect(this->controlListComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
 
-	QObject::connect(this->combobox, SIGNAL(currentIndexChanged(int)),
+	QObject::connect(this->controlListComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SIGNAL(currentIndexChanged(int)));
 };
 
@@ -144,21 +124,19 @@ void customControlListMenu::setComboBox()
 		{
 			item = desc;
 		};
-		this->combobox->addItem(item);
-		int pixelWidth = QFontMetrics(this->comboFont).width(item);
+		this->controlListComboBox->addItem(item);
+		int pixelWidth = QFontMetrics(controlListComboBox->font()).width(item);
 		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
 	};
 
 	this->comboWidth = maxLenght + 10;
 
-	//this->combobox->setGeometry(geometry);
-	this->combobox->setEditable(false);
-	this->combobox->setFont(this->comboFont);
-	this->combobox->setPalette(this->comboPalette);
-	this->combobox->setFrame(false);
-	this->combobox->setMaxVisibleItems(itemsCount);
-	this->combobox->view()->setMinimumWidth( this->comboWidth );
-	//this->combobox->setMaximumWidth(120);
+	//this->controlListComboBox->setGeometry(geometry);
+	this->controlListComboBox->setEditable(false);
+	this->controlListComboBox->setFrame(false);
+	this->controlListComboBox->setMaxVisibleItems(itemsCount);
+	this->controlListComboBox->view()->setMinimumWidth( this->comboWidth );
+	//this->controlListComboBox->setMaximumWidth(120);
 };
 
 void customControlListMenu::valueChanged(int index)
@@ -177,6 +155,6 @@ void customControlListMenu::dialogUpdateSignal()
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 	int index = sysxIO->getSourceValue(this->hex1, this->hex2, this->hex3);
-	this->combobox->setCurrentIndex(index);
+	this->controlListComboBox->setCurrentIndex(index);
 	//this->valueChanged(index);
 };

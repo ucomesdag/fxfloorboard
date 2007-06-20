@@ -63,33 +63,9 @@ editWindow::editWindow(QWidget *parent)
 	this->comboBoxLabel->setVisible(false);
 
 	this->pageComboBox = new QComboBox;
-
-	QPalette comboPalette;
-	comboPalette.setColor(QPalette::Base,QColor(0,1,62));
-    comboPalette.setColor(QPalette::Text,QColor(0,255,204));
-	comboPalette.setColor(QPalette::Highlight,QColor(0,1,62));
-	comboPalette.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	comboPalette.setColor(QPalette::Window,QColor(0,1,62));
-	comboPalette.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
-	comboPalette.setColor(QPalette::Button,QColor(0,1,62));
-	comboPalette.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	comboPalette.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
-	comboPalette.setColor(QPalette::Midlight,QColor(0,1,62));		//Between Button and Light.
-	comboPalette.setColor(QPalette::Dark,QColor(0,1,62));			//Darker than Button.
-	comboPalette.setColor(QPalette::Mid,QColor(0,1,62));			//Between Button and Dark.
-	comboPalette.setColor(QPalette::Shadow,QColor(0,1,62));
-
-	QFont comboFont;
-	comboFont.setFamily("Arial");
-	comboFont.setBold(true);
-	comboFont.setPixelSize(10);
-	comboFont.setStretch(110);
+	this->pageComboBox->setObjectName("smallcombo");
 
 	this->pageComboBox->setEditable(false);
-	this->pageComboBox->setFont(comboFont);
-	this->pageComboBox->setPalette(comboPalette);
 	this->pageComboBox->setFrame(false);
 	this->pageComboBox->setVisible(false);
 

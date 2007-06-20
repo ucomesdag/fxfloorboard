@@ -107,13 +107,13 @@ customControlKnob::customControlKnob(QWidget *parent,
 	this->knob = new customDial(0, 0, range, 1, 10, knobPos, this, hex1, hex2, hex3, imagePath, imageRange);
 
 	QFont displayFont;
-	displayFont.setFamily("Arial");
+	/*displayFont.setFamily("Arial");
 	displayFont.setBold(false);
 	displayFont.setPixelSize(10);
-	displayFont.setStretch(110);	
+	displayFont.setStretch(110);*/	
 	
 	QPalette displayPal;
-	displayPal.setColor(QPalette::Base,QColor(0,1,62));
+	/*displayPal.setColor(QPalette::Base,QColor(0,1,62));
     displayPal.setColor(QPalette::Text,QColor(0,255,204));
 	displayPal.setColor(QPalette::Highlight,QColor(0,1,62));
 	displayPal.setColor(QPalette::HighlightedText,QColor(0,255,204));
@@ -127,7 +127,7 @@ customControlKnob::customControlKnob(QWidget *parent,
 	displayPal.setColor(QPalette::Midlight,QColor(0,1,62));			//Between Button and Light.
 	displayPal.setColor(QPalette::Dark,QColor(0,1,62));				//Darker than Button.
 	displayPal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
-	displayPal.setColor(QPalette::Shadow,QColor(0,1,62));
+	displayPal.setColor(QPalette::Shadow,QColor(0,1,62));*/
 
 	this->display->setFont(displayFont);
 	this->display->setPalette(displayPal);

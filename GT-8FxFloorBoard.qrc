@@ -7,12 +7,16 @@
         <file>images/button.png</file>
         <file>images/ce.png</file>
         <file>images/closebutton.png</file>
+        <file>images/collapse.png</file>
         <file>images/cs.png</file>
         <file>images/dd.png</file>
         <file>images/dgt.png</file>
+        <file>images/downarrow.png</file>
         <file>images/dragbar.png</file>
+        <file>images/dropdown.png</file>
         <file>images/editwindow.png</file>
         <file>images/eq.png</file>
+        <file>images/expand.png</file>
         <file>images/floor.png</file>
         <file>images/fv.png</file>
         <file>images/fx1.png</file>
@@ -44,11 +48,13 @@
         <file>images/stompbg.png</file>
         <file>images/stompknob.png</file>
         <file>images/switch.png</file>
+        <file>images/uparrow.png</file>
         <file>images/wah.png</file>
         <file>images/window.png</file>
         <file>images/windowicon.png</file>
         <file>license.txt</file>
         <file>midi.xml</file>
         <file>preferences.xml.dist</file>
+        <file>windows.qss</file>
     </qresource>
 </RCC>

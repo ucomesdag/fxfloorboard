@@ -28,28 +28,6 @@
 stompBox::stompBox(QWidget *parent, unsigned int id, QString imagePath, QPoint stompPos)
     : QWidget(parent)
 {
-    this->pal.setColor(QPalette::Base,QColor(0,1,62));
-    this->pal.setColor(QPalette::Text,QColor(0,255,204));
-	this->pal.setColor(QPalette::Highlight,QColor(0,1,62));
-	this->pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	this->pal.setColor(QPalette::Window,QColor(0,1,62));
-	this->pal.setColor(QPalette::WindowText,QColor(0,255,204));		//List Border
-	this->pal.setColor(QPalette::Button,QColor(0,1,62));
-	this->pal.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	this->pal.setColor(QPalette::Light,QColor(0,1,62));				//Lighter than Button color.
-	this->pal.setColor(QPalette::Midlight,QColor(0,1,62));			//Between Button and Light.
-	this->pal.setColor(QPalette::Dark,QColor(0,1,62));				//Darker than Button.
-	this->pal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
-	this->pal.setColor(QPalette::Shadow,QColor(0,1,62));
-
-	QFont font;
-	this->font.setFamily("Arial");
-	this->font.setBold(true);
-	this->font.setPixelSize(10);
-	this->font.setStretch(110);
-	
 	this->id = id;
 	this->imagePath = imagePath;
 	this->stompSize = QPixmap(imagePath).size();
@@ -212,16 +190,6 @@ unsigned int stompBox::getId()
 	return this->id;
 };
 
-QPalette stompBox::getPal()
-{
-	return this->pal;
-};
-
-QFont stompBox::getFont()
-{
-	return this->font;
-};
-
 void stompBox::setLSB(QString hex1, QString hex2)
 {
 	this->hex1 = hex1;
@@ -241,7 +209,8 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 
-	comboBox = new QComboBox(this);
+	this->stompComboBox = new QComboBox(this);
+	this->stompComboBox->setObjectName("smallcombo");
 	
 	for(itemsCount=0;itemsCount<items.level.size();itemsCount++ )
 	{
@@ -256,25 +225,23 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 		{
 			item = desc;
 		};
-		comboBox->addItem(item);
-		int pixelWidth = QFontMetrics(this->getFont()).width(item);
+		this->stompComboBox->addItem(item);
+		int pixelWidth = QFontMetrics(this->stompComboBox->font()).width(item);
 		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
 	};
-	comboBox->setGeometry(geometry);
-	comboBox->setEditable(false);
-	comboBox->setFont(this->getFont());
-	comboBox->setPalette(this->getPal());
-	comboBox->setFrame(false);
-	comboBox->setMaxVisibleItems(itemsCount);
-	comboBox->view()->setMinimumWidth( maxLenght + 10 );
+	this->stompComboBox->setGeometry(geometry);
+	this->stompComboBox->setEditable(false);
+	this->stompComboBox->setFrame(false);
+	this->stompComboBox->setMaxVisibleItems(itemsCount);
+	this->stompComboBox->view()->setMinimumWidth( maxLenght + 10 ); // Used to be 35 (scrollbar correction).
 	
-	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)),
+	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
 };
 
 void stompBox::setComboBoxCurrentIndex(int index)
 {
-	comboBox->setCurrentIndex(index);
+	this->stompComboBox->setCurrentIndex(index);
 };
 
 void stompBox::setKnob1(QString hex1, QString hex2, QString hex3)
@@ -351,13 +318,13 @@ void stompBox::setSwitch(QString hex1, QString hex2, QString hex3)
 
 void stompBox::updateComboBox(QString hex1, QString hex2, QString hex3)
 {	
-	QObject::disconnect(comboBox, SIGNAL(currentIndexChanged(int)), // To prevent sending a signal when loading a patch.
+	QObject::disconnect(this->stompComboBox, SIGNAL(currentIndexChanged(int)), // To prevent sending a signal when loading a patch.
                 this, SLOT(valueChanged(int)));
 	
 	SysxIO *sysxIO = SysxIO::Instance();
 	setComboBoxCurrentIndex(sysxIO->getSourceValue(hex1, hex2, hex3));
 
-	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)),
+	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
 };
 
@@ -484,8 +451,8 @@ void stompBox::valueChanged(int index)
 		customdesc = desc;
 	};
 
-	this->comboBox->setCurrentIndex(index);
-	this->comboBox->setEditText(desc);
+	this->stompComboBox->setCurrentIndex(index);
+	this->stompComboBox->setEditText(desc);
 };
 
 void stompBox::emitValueChanged(QString hex1, QString hex2, QString hex3, QString valueHex)

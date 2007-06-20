@@ -27,7 +27,12 @@ HEADERS += ./editPage.h \
     ./mainWindow.h \
     ./bankTreeList.h \
     ./customButton.h \
+    ./customControlKnob.h \
+    ./customControlLabel.h \
+    ./customControlListMenu.h \
+    ./customControlSwitch.h \
     ./customDial.h \
+    ./customDisplay.h \
     ./customLed.h \
     ./customSlider.h \
     ./customSplashScreen.h \
@@ -37,6 +42,7 @@ HEADERS += ./editPage.h \
     ./floorBoardDisplay.h \
     ./floorPanelBar.h \
     ./floorPanelBarButton.h \
+    ./initPatchListMenu.h \
     ./renameDialog.h \
     ./renameWidget.h \
     ./statusBarSymbol.h \
@@ -65,11 +71,7 @@ HEADERS += ./editPage.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
     ./preferencesDialog.h \
-    ./preferencesPages.h \
-    ./customControlKnob.h \
-    ./customControlSwitch.h \
-    ./customControlListMenu.h \
-    ./customControlLabel.h
+    ./preferencesPages.h
 
 #Source files
 SOURCES += ./editPage.cpp \
@@ -78,7 +80,12 @@ SOURCES += ./editPage.cpp \
     ./mainWindow.cpp \
     ./bankTreeList.cpp \
     ./customButton.cpp \
+    ./customControlKnob.cpp \
+    ./customControlLabel.cpp \
+    ./customControlListMenu.cpp \
+    ./customControlSwitch.cpp \
     ./customDial.cpp \
+    ./customDisplay.cpp \
     ./customLed.cpp \
     ./customSlider.cpp \
     ./customSplashScreen.cpp \
@@ -88,6 +95,7 @@ SOURCES += ./editPage.cpp \
     ./floorBoardDisplay.cpp \
     ./floorPanelBar.cpp \
     ./floorPanelBarButton.cpp \
+    ./initPatchListMenu.cpp \
     ./renameDialog.cpp \
     ./renameWidget.cpp \
     ./statusBarSymbol.cpp \
@@ -116,11 +124,7 @@ SOURCES += ./editPage.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
     ./preferencesDialog.cpp \
-    ./preferencesPages.cpp \
-    ./customControlKnob.cpp \
-    ./customControlSwitch.cpp \
-    ./customControlListMenu.cpp \
-    ./customControlLabel.cpp
+    ./preferencesPages.cpp
 
 #Resource file(s)
 RESOURCES += GT-8FxFloorBoard.qrc

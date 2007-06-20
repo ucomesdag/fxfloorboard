@@ -31,32 +31,11 @@
 bankTreeList::bankTreeList(QWidget *parent)
     : QWidget(parent)
 {
-	QPalette pal;
-    pal.setColor(QPalette::Base,QColor(0,1,62));
-    pal.setColor(QPalette::Text,QColor(0,255,204));
-	pal.setColor(QPalette::Highlight,QColor(0,1,62));
-	pal.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	//pal.setColor(QPalette::Window,QColor(Qt::red));
-	//pal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
-	//pal.setColor(QPalette::Button,QColor(0,1,62));
-	//pal.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	//pal.setColor(QPalette::Light,QColor(Qt::red));				//Lighter than Button color.
-	//pal.setColor(QPalette::Midlight,QColor(Qt::red));				//Between Button and Light.
-	//pal.setColor(QPalette::Dark,QColor(Qt::gray));				//Darker than Button. (Dots)
-	//pal.setColor(QPalette::Mid,QColor(0,1,62));					//Between Button and Dark.
-	//pal.setColor(QPalette::Shadow,QColor(Qt::red));
-	this->pal = pal;
-
 	QFont font;
-	font.setFamily("Verdana");
-	font.setBold(true);
-	font.setPixelSize(10);
 	font.setStretch(85);
-	this->font = font;
 
 	this->treeList = newTreeList();
+	this->treeList->setObjectName("banklist");
 
 	QObject::connect(treeList, SIGNAL(itemExpanded(QTreeWidgetItem*)), 
 			this, SLOT(setOpenItems(QTreeWidgetItem*)));
@@ -86,16 +65,6 @@ bankTreeList::bankTreeList(QWidget *parent)
 
 	QObject::connect(this, SIGNAL(notConnectedSignal()),
                 sysxIO, SIGNAL(notConnectedSignal()));
-};
-
-QPalette bankTreeList::getPal()
-{
-	return this->pal;
-};
-
-QFont bankTreeList::getFont()
-{
-	return this->font;
 };
 
 void bankTreeList::updateSize(QRect newrect)
@@ -325,8 +294,6 @@ QTreeWidget* bankTreeList::newTreeList()
 	newTreeList->setColumnCount(1);
 	newTreeList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	newTreeList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Qt::ScrollBarAsNeeded
-	newTreeList->setPalette(getPal());
-	newTreeList->setFont(getFont());
 	
 	QStringList headers;
 	headers << "Boss GT-8";

@@ -46,7 +46,7 @@ void renameWidget::updateName(QString name)
 {
 	SysxIO *sysxIO = SysxIO::Instance();
 
-	QList<QString> hexData; bool ok;
+	QList<QString> hexData;
 	for(int i=0; i<16; ++i)
 	{
 		if(i<name.size())

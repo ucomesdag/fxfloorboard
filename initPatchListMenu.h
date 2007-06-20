@@ -20,34 +20,36 @@
 **
 ****************************************************************************/
 
-#include "customSplashScreen.h"
+#ifndef INITPATCHLISTMENU_H 
+#define INITPATCHLISTMENU_H
 
-customSplashScreen::customSplashScreen(const QPixmap& pixmap)
+#include <QtGui>
+#include <QWidget>
+#include <QTimer>
+#include "customButton.h"
+
+class initPatchListMenu : public QWidget
 {
-	QSplashScreen::setPixmap(pixmap);
+	Q_OBJECT
+
+public:
+	initPatchListMenu(QRect geometry, QWidget *parent = 0);
+
+public slots:
+	void loadInitPatch(int index);
+	void setIndex(int index);
+
+signals:
+	void currentIndexChanged(int index);
+	void updateSignal();
+
+
+private:
+	QComboBox *initPatchComboBox;
+
+	void setInitPatchComboBox(QRect geometry);
+	QList<QString> initPatches;
+
 };
 
-customSplashScreen::~customSplashScreen()
-{
-};
-
-void customSplashScreen::drawContents(QPainter *painter)
-{	
-	QPixmap textPix = QSplashScreen::pixmap();
-	painter->setPen(this->color);
-	//painter->drawText(r, this->alignement, this->message);
-	painter->drawText(this->rect, this->message);
-};
-
-void customSplashScreen::showStatusMessage(const QString &message, int alignement, const QColor &color)
-{
-    this->message = message;
-	this->alignement = alignement;
-	this->color = color;
-	this->showMessage(this->message, this->alignement, this->color);
-};
-
-void customSplashScreen::setMessageRect(QRect rect)
-{
-	this->rect = rect;
-};
+#endif // INITPATCHLISTMENU_H

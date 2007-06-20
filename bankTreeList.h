@@ -68,11 +68,7 @@ private:
 	QList<QTreeWidgetItem*> openBankTreeItems;
 	QList<QTreeWidgetItem*> openPatchTreeItems;
 	QList<QTreeWidgetItem*> currentPatchTreeItems;
-	QPalette getPal();
-	QFont getFont();
 	QTreeWidget* treeList;
-	QPalette pal;
-	QFont font;
 	int itemIndex;
 	int listIndex;
 };

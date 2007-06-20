@@ -472,9 +472,9 @@ void floorBoard::setSize(QSize newSize)
 	painter.drawPixmap(target, baseImage, source);
 
 	// Redraw clipped border
-	QRectF sourceBorder(0.0, 0.0, borderWidth, floorSize.height());
+	/*QRectF sourceBorder(0.0, 0.0, borderWidth, floorSize.height());
 	QRectF targetBorder(0.0, 0.0, borderWidth, floorSize.height());
-	painter.drawPixmap(sourceBorder, baseImage, targetBorder);
+	painter.drawPixmap(sourceBorder, baseImage, targetBorder);*/
 
 	painter.end();
 
