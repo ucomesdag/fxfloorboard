@@ -56,7 +56,7 @@ customControlKnob::customControlKnob(QWidget *parent,
 	else if(direction == "right")
 	{
 		this->label->setAlignment(Qt::AlignLeft);
-		this->label->setFixedWidth(lenght);
+		this->display->setFixedWidth(lenght);
 		
 		QVBoxLayout *displayLayout = new QVBoxLayout;
 		displayLayout->setMargin(0);
@@ -83,7 +83,7 @@ customControlKnob::customControlKnob(QWidget *parent,
 	else if(direction == "bottom")
 	{
 		this->label->setAlignment(Qt::AlignCenter);
-		//this->label->setFixedWidth(lenght);
+		this->display->setFixedWidth(lenght);
 		
 		QVBoxLayout *mainLayout = new QVBoxLayout;
 		mainLayout->setMargin(0);

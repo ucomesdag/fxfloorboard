@@ -36,8 +36,7 @@ public:
 		QString hex1 = "void",
 		QString hex2 = "void",
 		QString hex3 = "void",
-		QString background = "normal",
-		int lenght = 63);
+		QString background = "normal");
 	void setValue(int value);
 
 public slots:

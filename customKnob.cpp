@@ -26,7 +26,7 @@
 
 customKnob::customKnob(QWidget *parent, 
 						 QString hex1, QString hex2, QString hex3, 
-						 QString background, int lenght)
+						 QString background)
 	: QWidget(parent)
 {
 	this->hex1 = hex1;

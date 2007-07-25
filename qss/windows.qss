@@ -195,13 +195,13 @@ color: rgb(255,255,255);
 }
 QLabel#title {
 font-family: Arial;
-font-size: 16px;
+font-size: 20px;
 font-weight: bold;
 color: rgb(255,255,255);
 }
 QLabel#selectlabel {
 font-family: Arial;
-font-size: 10px;
+font-size: 11px;
 font-weight: bold;
 color: rgb(255,255,255);
 }

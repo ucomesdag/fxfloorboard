@@ -35,6 +35,10 @@ editPage::editPage(QWidget *parent)
 	//this->layout->setAlignment(Qt::AlignCenter);
 	this->layout->setMargin(5);	
 	this->layout->setSpacing(5);
+	this->layout->setRowStretch(0, 0);
+	this->layout->setRowStretch(1, 1);
+	this->layout->setRowStretch(2, 2);
+	this->layout->setRowStretch(3, 3);
 
 	this->groupBoxMode = false;
 	this->stackControlMode = false;
@@ -108,7 +112,7 @@ void editPage::addComboBox(int row, int column, int rowSpan, int columnSpan,
 		QString direction,
 		Qt::Alignment alignment)
 {
-	customControlListMenu *combobox = new customControlListMenu(this, hex1, hex2, hex3);
+	customControlListMenu *combobox = new customControlListMenu(this, hex1, hex2, hex3, direction);
 	if(this->stackControlMode)
 	{
 		QObject::connect(combobox, SIGNAL( currentIndexChanged(int) ),
@@ -182,6 +186,10 @@ void editPage::newGroupBox(QString title, Qt::Alignment alignment)
 	this->groupBoxLayout = new QGridLayout;
 	this->groupBoxLayout->setMargin(5);
 	this->groupBoxLayout->setSpacing(5);
+	this->groupBoxLayout->setRowStretch(0, 0);
+	this->groupBoxLayout->setRowStretch(1, 1);
+	this->groupBoxLayout->setRowStretch(2, 2);
+	this->groupBoxLayout->setRowStretch(3, 3);
 	this->groupBoxLayout->setAlignment(alignment);
 	this->groupBoxLayouts.append(this->groupBoxLayout);
 	
@@ -282,6 +290,10 @@ void editPage::newStackField(int id, Qt::Alignment alignment)
 	this->stackFieldMode = true;
 	this->stackFieldId = id;
 	this->stackField = new QGridLayout;
+	this->stackField->setRowStretch(0, 0);
+	this->stackField->setRowStretch(1, 1);
+	this->stackField->setRowStretch(2, 2);
+	this->stackField->setRowStretch(3, 3);
 	this->stackField->setMargin(0);
 	this->stackField->setSpacing(5);
 	this->stackField->setAlignment(alignment);
