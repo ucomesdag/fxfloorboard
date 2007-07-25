@@ -34,8 +34,8 @@ public:
 	customSplashScreen(const QPixmap& pixmap);
 	~customSplashScreen();
 	virtual void drawContents(QPainter *painter);
-	void showStatusMessage(const QString &message, int alignment = Qt::AlignLeft, const QColor &color = Qt::black);
-	void setMessageRect(QRect rect);
+	void showStatusMessage(const QString &message, const QColor &color = Qt::black);
+	void setMessageRect(QRect rect, int alignment = Qt::AlignLeft);
 
 private:
 	QString message;

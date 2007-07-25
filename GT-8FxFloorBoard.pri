@@ -33,6 +33,7 @@ HEADERS += ./editPage.h \
     ./customControlSwitch.h \
     ./customDial.h \
     ./customDisplay.h \
+    ./customKnob.h \
     ./customLed.h \
     ./customSlider.h \
     ./customSplashScreen.h \
@@ -86,6 +87,7 @@ SOURCES += ./editPage.cpp \
     ./customControlSwitch.cpp \
     ./customDial.cpp \
     ./customDisplay.cpp \
+    ./customKnob.cpp \
     ./customLed.cpp \
     ./customSlider.cpp \
     ./customSplashScreen.cpp \

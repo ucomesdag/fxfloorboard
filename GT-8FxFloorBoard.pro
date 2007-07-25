@@ -21,32 +21,48 @@
 #############################################################################
 
 TEMPLATE = app
-
 CONFIG += static
 CONFIG += embed_manifest_exe
-CONFIG += release
-TARGET = "GT-8 Fx FloorBoard"
-DESTDIR = ./release
-MOC_DIR += ./generatedfiles/release
-OBJECTS_DIR += release
-UI_DIR += ./generatedfiles
-INCLUDEPATH += ./generatedfiles \
-	./generatedfiles/release \
-	.
+CONFIG += debug_and_release
+
+CONFIG(debug, debug|release) {
+	TARGET = "GT-8FxFloorBoard[DEBUG]"
+	DESTDIR = ./debug
+	OBJECTS_DIR += debug
+	UI_DIR += ./generatedfiles
+	MOC_DIR += ./generatedfiles/debug
+	INCLUDEPATH += ./generatedfiles \
+    ./generatedfiles/debug \
+    .
+ } else {
+	TARGET = "GT-8FxFloorBoard"
+	DESTDIR = ./release
+	OBJECTS_DIR += release
+	UI_DIR += ./generatedfiles
+	MOC_DIR += ./generatedfiles/release
+	INCLUDEPATH += ./generatedfiles \
+    ./generatedfiles/release \
+    .
+ }
+
 DEPENDPATH += .
 QT += xml
 
-
 #Platform dependent file(s)
 win32 {
-	exists("c:/Progra~1/Micros~2/Lib/WinMM.Lib") {		# <-- Change the path to WinMM.Lib here!
-		LIBS +=  c:/Progra~1/Micros~2/Lib/WinMM.Lib		# <-- Change the path here also!
-	} else {
-		LIBS +=  WinMM.Lib
-		message("WINMM.LIB IS REQUIRED. IF NOT INSTALLED")
-		message("PLEASE DOWNLOAD AND INSTALL PLATFORM SDK FROM:")
-		message("http://www.microsoft.com/downloads/details.aspx?familyid=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=en")
-		message("AFTER INSTALLATION CHANGE THE CORRECT (DOS) PATH IN THE "GT-8FxFloorBoard.pro" FILE")
+	exists("c:/Progra~1/Micros~2/Lib/WinMM.Lib") {	# <-- Change the path to WinMM.Lib here!
+		LIBS += c:/Progra~1/Micros~2/Lib/WinMM.Lib	# <-- Change the path here also!
+    } else { 
+        exists("c:/PROGRA~1/MICROS~3/VC/PLATFO~1/Lib/WinMM.Lib") { # Path vs2005 (Vista)
+        	LIBS += c:/PROGRA~1/MICROS~3/VC/PLATFO~1/Lib/WinMM.Lib
+        } else { 
+            LIBS += .\WinMM.Lib
+            message("WINMM.LIB IS REQUIRED. IF NOT INSTALLED THEN")
+            message("PLEASE DOWNLOAD AND INSTALL THE LATEST PLATFORM SDK")
+            message("FROM MICROSOFT.COM AND AFTER INSTALLATION")
+            message("CHANGE THE CORRECT (DOS) PATH TO WinMM.lib")
+            message("IN THIS (GT-8FxFloorBoard.pro) FILE WHERE INDICATED")
+        }
 	}
 	HEADERS += ./windows/midiIO.h
 	SOURCES += ./windows/midiIO.cpp

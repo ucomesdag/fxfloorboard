@@ -57,15 +57,9 @@ customButton::customButton(QString text, bool active, QPoint buttonPos, QWidget 
 	setOffset(0);
     setGeometry(buttonPos.x(), buttonPos.y(), buttonSize.width(), buttonSize.height());
 
-	QFont fontLabel;
-	fontLabel.setFamily("Arial");
-	fontLabel.setBold(true);
-	fontLabel.setPixelSize(9);
-	fontLabel.setStretch(100);
-	
 	QLabel *textLabel = new QLabel(this);
+	textLabel->setObjectName("button");
 	textLabel->setText(this->text);
-	textLabel->setFont(fontLabel);
 	textLabel->setAlignment(Qt::AlignCenter);
 	textLabel->setGeometry(0, (buttonSize.height() - textLabel->height())/2, buttonSize.width(), textLabel->height());
 

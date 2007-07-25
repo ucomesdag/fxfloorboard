@@ -143,12 +143,13 @@ void floorBoardDisplay::setPatchNumDisplay(int bank, int patch)
 	{
 		if(bank <= bankTotalUser)
 		{
+			this->patchNumDisplay->resetAllColor();
 			this->patchNumDisplay->setSubText("User");
 		}
 		else
 		{
+			this->patchNumDisplay->setAllColor(QColor(255,0,0));
 			this->patchNumDisplay->setSubText("Preset");
-
 		};
 
 		QString str;
@@ -205,27 +206,6 @@ void floorBoardDisplay::updateDisplay()
 	{
 		this->patchLoadError = false;
 	};
-
-	//patchName.replace("<", "&lt;");
-	//patchName.replace(">", "&gt;");
-	//int maxWidth = patchDisplay->width() - 2;
-	//int nameWidth = QFontMetrics(patchDisplay->font()).width(patchName);
-
-	/*QString replace1 = (QChar)(0x2192);
-	replace1.prepend("<font face='Lucida Console,Arial, Verdana'>");
-	replace1.append("</font>");
-	QString replace2 = (QChar)(0x2190);
-	replace2.prepend("<font face='Lucida Console,Arial, Verdana'>");
-	replace2.append("</font>");
-	patchName.replace((QChar)(0x2192), replace1);
-	patchName.replace((QChar)(0x2190), replace2);
-	patchName.replace("-", "<font face='Verdana'>-</font>");*/
-
-	/*if(nameWidth > maxWidth)
-	{
-		patchName.prepend("<small>");
-		patchName.append("</small>&nbsp;");
-	};*/
 
 	this->setPatchDisplay(patchName);
 	if(sysxIO->isDevice())

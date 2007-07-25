@@ -32,7 +32,6 @@ class customSwitch : public QWidget
 public:
     customSwitch(
 		bool active = false,
-		QPoint switchPos = QPoint::QPoint(0, 0),
 		QWidget *parent = 0,
 		QString hex1 = "void",
 		QString hex2 = "void",

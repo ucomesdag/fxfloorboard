@@ -38,12 +38,12 @@ customControlSwitch::customControlSwitch(QWidget *parent,
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 	QString labeltxt = items.customdesc;
 	
-	this->label->setPixelSize(9);
-	this->label->setStretch(100);
 	this->label->setUpperCase(true);
 	this->label->setText(labeltxt);
 	
-	QPoint labelPos, switchPos;
+	QString imagePath(":/images/switch.png");
+	this->switchbutton = new customSwitch(false, this, hex1, hex2, hex3, imagePath);	
+
 	if(direction == "left")
 	{
 		
@@ -58,26 +58,32 @@ customControlSwitch::customControlSwitch(QWidget *parent,
 	}
 	else if(direction == "bottom")
 	{
-		//this->label->setFixedWidth(30);
 		this->label->setAlignment(Qt::AlignLeft);
 		
-		switchPos = QPoint(0, 12);//QPoint((50 - 23) / 2, 12);
-		labelPos = QPoint(0, 0);
+		QVBoxLayout *mainLayout = new QVBoxLayout;
+		mainLayout->setMargin(0);
+		mainLayout->setSpacing(0);
+		mainLayout->addWidget(this->label, 0, Qt::AlignLeft);
+		mainLayout->addWidget(this->switchbutton, 0, Qt::AlignLeft);
+		mainLayout->addStretch(0);
 
-		this->setFixedSize(this->label->getLabelWidth(), 12 + 17);
+		this->setLayout(mainLayout);
+		this->setFixedHeight(12 + 15);
 	}
 	else if(direction == "middle")
 	{
 		this->label->setAlignment(Qt::AlignLeft);
-		
-		switchPos = QPoint((this->label->getLabelWidth() - 23) / 2, 12);//QPoint((50 - 23) / 2, 12);
-		labelPos = QPoint(0, 0);
 
-		this->setFixedSize(this->label->getLabelWidth(), 12 + 17);
+		QVBoxLayout *mainLayout = new QVBoxLayout;
+		mainLayout->setMargin(0);
+		mainLayout->setSpacing(0);
+		mainLayout->addStretch(0);
+		mainLayout->addWidget(this->label, 0, Qt::AlignLeft);
+		mainLayout->addWidget(this->switchbutton, 0, Qt::AlignCenter);
+
+		this->setLayout(mainLayout);
+		this->setFixedHeight(12 + 15);
 	};
-
-	QString imagePath(":/images/switch.png");
-	this->switchbutton = new customSwitch(false, switchPos, this, hex1, hex2, hex3, imagePath);		
 
 	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
                 this, SLOT( dialogUpdateSignal() ));
@@ -88,6 +94,7 @@ customControlSwitch::customControlSwitch(QWidget *parent,
 
 void customControlSwitch::paintEvent(QPaintEvent *)
 {
+	/*DRAWS RED BACKGROUND FOR DEBUGGING PURPOSE */
 	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());

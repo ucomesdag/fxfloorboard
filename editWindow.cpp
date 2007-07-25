@@ -36,35 +36,14 @@ editWindow::editWindow(QWidget *parent)
 		| Qt::MSWindowsFixedSizeDialogHint);*/
 
 	this->title = new QLabel;
-
-	QFont titleFont;
-	titleFont.setFamily("Arial");
-	titleFont.setBold(true);
-	titleFont.setPixelSize(16);
-	titleFont.setStretch(140);
-
-	QPalette titlePalette;
-	titlePalette.setColor(this->title->foregroundRole(), Qt::white);
-	this->title->setPalette(titlePalette);
-	this->title->setFont(titleFont);
+	this->title->setObjectName("title");
 
 	this->comboBoxLabel = new QLabel(tr("Select"));
-
-	QFont comboBoxLabelFont;
-	comboBoxLabelFont.setFamily("Arial");
-	comboBoxLabelFont.setBold(true);
-	comboBoxLabelFont.setPixelSize(12);
-	comboBoxLabelFont.setStretch(105);
-
-	QPalette comboBoxLabelPalette;
-	comboBoxLabelPalette.setColor(this->comboBoxLabel->foregroundRole(), Qt::white);
-	this->comboBoxLabel->setPalette(comboBoxLabelPalette);
-	this->comboBoxLabel->setFont(comboBoxLabelFont);
+	this->comboBoxLabel->setObjectName("selectlabel");
 	this->comboBoxLabel->setVisible(false);
 
 	this->pageComboBox = new QComboBox;
 	this->pageComboBox->setObjectName("smallcombo");
-
 	this->pageComboBox->setEditable(false);
 	this->pageComboBox->setFrame(false);
 	this->pageComboBox->setVisible(false);

@@ -40,8 +40,6 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 	QString labeltxt = items.customdesc;
 	
-	this->label->setPixelSize(9);
-	this->label->setStretch(100);
 	this->label->setUpperCase(true);
 	this->label->setText(labeltxt);
 
@@ -62,18 +60,18 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	}
 	else if(direction == "bottom")
 	{
-		//this->label->setFixedWidth(this->controlListComboBox->width());
 		this->label->setAlignment(Qt::AlignLeft);
-		
-		labelPos = QPoint(0, 0);
-		comboboxPos = QPoint(0, 12);
 
-		this->setFixedSize(this->comboWidth + 15, 12 + 17);
+		QVBoxLayout *mainLayout = new QVBoxLayout;
+		mainLayout->setMargin(0);
+		mainLayout->setSpacing(0);
+		mainLayout->addStretch(0);
+		mainLayout->addWidget(this->label, 0, Qt::AlignLeft);
+		mainLayout->addWidget(this->controlListComboBox, 0, Qt::AlignLeft);
+
+		this->setLayout(mainLayout);
+		this->setFixedHeight(12 + 15);
 	};
-
-	this->label->move(labelPos);
-	this->controlListComboBox->move(comboboxPos);
-	
 
 	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
                 this, SLOT( dialogUpdateSignal() ));
@@ -90,6 +88,7 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 
 void customControlListMenu::paintEvent(QPaintEvent *)
 {
+	/*DRAWS RED BACKGROUND FOR DEBUGGING PURPOSE */
 	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
@@ -131,12 +130,11 @@ void customControlListMenu::setComboBox()
 
 	this->comboWidth = maxLenght + 10;
 
-	//this->controlListComboBox->setGeometry(geometry);
+	this->controlListComboBox->setMaximumHeight(15);
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
 	this->controlListComboBox->setMaxVisibleItems(itemsCount);
 	this->controlListComboBox->view()->setMinimumWidth( this->comboWidth );
-	//this->controlListComboBox->setMaximumWidth(120);
 };
 
 void customControlListMenu::valueChanged(int index)

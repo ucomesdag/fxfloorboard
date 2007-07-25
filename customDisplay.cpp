@@ -34,10 +34,12 @@ customDisplay::customDisplay(QRect geometry, QWidget *parent)
 
 void customDisplay::paintEvent(QPaintEvent *)
 {
-	/* Resize the main text if needed. */
+	/* Set the default font. */
 	if(this->font.family() == "void")
 	{
 		this->font = this->mainLabel->font();
+		this->mainPal = this->mainLabel->palette();
+		this->subPal = this->subLabelLeft->palette();
 	}
 	else
 	{
@@ -47,10 +49,10 @@ void customDisplay::paintEvent(QPaintEvent *)
 	while(this->mainLabel->geometry().width() < QFontMetrics(this->mainLabel->font()).width(this->mainLabel->text()))
 	{
 		/* Change the font size to make it fit... */
-		QFont font = this->mainLabel->font();
-		int fontSize = font.pixelSize();
-		font.setPixelSize(fontSize - 1);
-		this->mainLabel->setFont(font);
+		QFont tmpfont = this->mainLabel->font();
+		int fontSize = tmpfont.pixelSize();
+		tmpfont.setPixelSize(fontSize - 1);
+		this->mainLabel->setFont(tmpfont);
 		if (fontSize <= 1)
 		{
 			break;
@@ -63,10 +65,27 @@ void customDisplay::paintEvent(QPaintEvent *)
 	border.setColor(QColor(150,150,150));
 
 	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setPen(border);
     painter.setBrush(QColor(0,1,62));
-    //painter.drawRoundRect(QRectF(0.0, 0.0, geometry.width()-1, geometry.height()-1), 8, 8);
-	painter.drawRect(QRect(0.0, 0.0, geometry.width()-1, geometry.height()-1));
+	//painter.drawRoundRect(QRectF(0.0, 0.0, geometry.width()-1, geometry.height()-1), 8, 8);
+	//painter.drawRect(QRect(0.0, 0.0, geometry.width()-1, geometry.height()-1));
+
+
+	/* Draw a custom path. This to have a constant border 
+	   radius independant of the rectangle size. */
+	int radius = 5; // Set the border radius.
+	QPainterPath roundRectPath;
+	roundRectPath.moveTo(geometry.width()-1, radius);
+	roundRectPath.arcTo((geometry.width()-1) - radius*2, 0.0, radius*2, radius*2, 0.0, 90.0);
+	roundRectPath.lineTo(radius, 0.0);
+	roundRectPath.arcTo(0.0, 0.0, radius*2, radius*2, 90.0, 90.0);
+	roundRectPath.lineTo(0.0, (geometry.height()-1) - radius);
+	roundRectPath.arcTo(0.0, (geometry.height()-1) - (radius*2), radius*2, radius*2, 180.0, 90.0);
+	roundRectPath.lineTo((geometry.width()-1) - radius, geometry.height()-1);
+	roundRectPath.arcTo((geometry.width()-1) - (radius*2), (geometry.height()-1) - (radius*2), radius*2, radius*2, 270.0, 90.0);
+	roundRectPath.closeSubpath();
+	painter.drawPath(roundRectPath);
 };
 
 void customDisplay::setLabelPosition(bool invert)
@@ -74,8 +93,10 @@ void customDisplay::setLabelPosition(bool invert)
 	int height = this->geometry.height();
 	int width = this->geometry.width();
 
-	int marginWidth = 4;
-	int marginHeight = 3;
+
+	int mainExtra = 3;
+	int marginWidth = 5;
+	int marginHeight = 2;
 
 	QRect subGeometry, mainGeometry, htmlGeometry;
 	if(invert)
@@ -85,7 +106,7 @@ void customDisplay::setLabelPosition(bool invert)
 	}
 	else
 	{
-		mainGeometry = QRect(marginWidth, marginHeight, width - (marginWidth * 2), (height / 2) - marginHeight);  
+		mainGeometry = QRect(marginWidth, marginHeight, width - (marginWidth * 2), ((height / 2) - marginHeight) + mainExtra);  
 		subGeometry = QRect(marginWidth, marginHeight + (height / 2), width - (marginWidth * 2), (height / 2) - marginHeight);
 	};
 
@@ -134,4 +155,22 @@ void customDisplay::setSubObjectName(QString name)
 {
 	this->subLabelLeft->setObjectName(name);
 	this->subLabelRight->setObjectName(name);
+};
+
+void customDisplay::setAllColor(QColor color)
+{
+	QString red, green, blue;;
+	red = QString::number(color.red(), 10);
+	green = QString::number(color.green(), 10);
+	blue = QString::number(color.blue(), 10);
+	this->mainLabel->setStyleSheet("color: rgb("+ red +","+ green +","+ blue +");");
+	this->subLabelLeft->setStyleSheet("color: rgb("+ red +","+ green +","+ blue +");");
+	this->subLabelRight->setStyleSheet("color: rgb("+ red +","+ green +","+ blue +");");
+};
+
+void customDisplay::resetAllColor()
+{
+	this->mainLabel->setPalette(this->mainPal);
+	this->subLabelLeft->setPalette(this->subPal);
+	this->subLabelRight->setPalette(this->subPal);
 };

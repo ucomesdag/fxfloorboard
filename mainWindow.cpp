@@ -36,6 +36,42 @@ mainWindow::mainWindow(QWidget *parent)
 	: QMainWindow(parent) */
 {
 	fxsBoard = new floorBoard(this);
+
+	/* This set the floorboard default style to the "plastique" style, 
+	   as it comes the nearest what the stylesheet uses. */
+	fxsBoard->setStyle(QStyleFactory::create("plastique"));
+
+	/* Loads the stylesheet for the current platform if present */
+	#ifdef Q_OS_WIN
+		if(QFile(":qss/windows.qss").exists())
+		{
+			QFile file(":qss/windows.qss");
+			file.open(QFile::ReadOnly);
+			QString styleSheet = QLatin1String(file.readAll());
+			fxsBoard->setStyleSheet(styleSheet);
+		}; 
+	#endif
+
+	#ifdef Q_WS_X11
+		if(QFile(":qss/linux.qss").exists())
+		{
+			QFile file(":qss/linux.qss");
+			file.open(QFile::ReadOnly);
+			QString styleSheet = QLatin1String(file.readAll());
+			fxsBoard->setStyleSheet(styleSheet);
+		}; 
+	#endif
+
+	#ifdef Q_WS_MAC
+		if(QFile(":qss/macosx.qss").exists())
+		{
+			QFile file(":qss/macosx.qss");
+			file.open(QFile::ReadOnly);
+			QString styleSheet = QLatin1String(file.readAll());
+			fxsBoard->setStyleSheet(styleSheet);
+		}; 
+	#endif
+	
 	
 	this->setWindowTitle("GT-8 Fx FloorBoard");
 	//this->setCentralWidget(fxsBoard);
@@ -90,6 +126,8 @@ mainWindow::~mainWindow()
 		preferences->setPreferences("Window", "Size", "height", "");
 	};
 	preferences->savePreferences();
+
+	//qDebug() << "SavePrefs" << this << "destructor was called and collapsed is now set to" << preferences->getPreferences("Window", "Collapsed", "bool");
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)

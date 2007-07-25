@@ -37,37 +37,44 @@ customControlKnob::customControlKnob(QWidget *parent,
 
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
-	QString labeltxt = items.customdesc;
-	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
 	
-	this->label->setPixelSize(9);
-	this->label->setStretch(100);
+	this->label->setText(items.customdesc);
 	this->label->setUpperCase(true);
-	this->label->setText(labeltxt);
 	
-	QPoint labelPos, displayPos, knobPos, bgPos;
+	this->knob = new customKnob(this, hex1, hex2, hex3, background);
+
+	this->display->setObjectName("editdisplay");
+	this->display->setFixedWidth(lenght);
+	this->display->setFixedHeight(13);
+	this->display->setAlignment(Qt::AlignRight);
+	this->display->setDisabled(true);
+
 	if(direction == "left")
 	{
 		
 	}
 	else if(direction == "right")
 	{
-		//this->label->setFixedWidth(this->width());
 		this->label->setAlignment(Qt::AlignLeft);
+		this->label->setFixedWidth(lenght);
 		
-		/*bgPos = QPoint(1, 0 + 9);
-		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
-		labelPos = QPoint(knobPos.x()  + ((37 - this->label->width()) / 2), 0);
-		displayPos = QPoint(50, knobPos.y() + ((37 - 13) / 2));
+		QVBoxLayout *displayLayout = new QVBoxLayout;
+		displayLayout->setMargin(0);
+		displayLayout->setSpacing(0);
+		displayLayout->addStretch(0);
+		displayLayout->addWidget(this->label, 0, Qt::AlignLeft);
+		displayLayout->addWidget(this->display, 0, Qt::AlignLeft);
+		displayLayout->addStretch(0);
 
-		this->setFixedSize(50 + lenght, bgPos.y() + 50);*/
+		QHBoxLayout *mainLayout = new QHBoxLayout;
+		mainLayout->setMargin(0);
+		mainLayout->setSpacing(0);
+		mainLayout->addWidget(this->knob, 0, Qt::AlignCenter);
+		mainLayout->addLayout(displayLayout);
 
-		bgPos = QPoint(1, 0);
-		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
-		labelPos = QPoint(50, knobPos.y());
-		displayPos = QPoint(50, knobPos.y() + ((37 - 13) / 2));
 
-		this->setFixedSize(50 + lenght, 50);
+		this->setLayout(mainLayout);
+		this->setFixedHeight(this->knob->height());
 	}
 	else if(direction == "top")
 	{
@@ -75,67 +82,21 @@ customControlKnob::customControlKnob(QWidget *parent,
 	}
 	else if(direction == "bottom")
 	{
-		this->label->setFixedWidth(this->width());
 		this->label->setAlignment(Qt::AlignCenter);
+		//this->label->setFixedWidth(lenght);
 		
-		bgPos = QPoint(1, 0 + 9);
-		knobPos = QPoint(bgPos.x() + 5, bgPos.y() + 6);
-		labelPos = QPoint(knobPos.x()  + ((37 - this->label->width()) / 2), 0);
-		displayPos = QPoint(knobPos.x() + ((37 - lenght) / 2), knobPos.y() + 37 + 7);
+		QVBoxLayout *mainLayout = new QVBoxLayout;
+		mainLayout->setMargin(0);
+		mainLayout->setSpacing(0);
+		mainLayout->addWidget(this->label, 0, Qt::AlignCenter);
+		mainLayout->addWidget(this->knob, 0, Qt::AlignCenter);
+		mainLayout->addWidget(this->display, 0, Qt::AlignCenter);
+		mainLayout->addStretch(0);
 
-		this->setFixedSize(50, displayPos.y() + 13 + 2);
+		this->setLayout(mainLayout);
+		this->setFixedHeight(this->knob->height() + 13 + 12);
 	};
-	this->label->move(labelPos);
 
-	QLabel *newBackGround = new QLabel(this);
-	if (background == "normal")
-	{
-		newBackGround->setPixmap(QPixmap(":/images/knobbgn.png"));
-	}
-	else if (background == "turbo")
-	{
-		newBackGround->setPixmap(QPixmap(":/images/knobbgt.png"));
-	}
-	else
-	{
-		newBackGround->setPixmap(QPixmap(":/images/knobbg.png"));
-	};
-	newBackGround->move(bgPos);
-
-	QString imagePath(":/images/knob.png");
-	unsigned int imageRange = 63;
-	this->knob = new customDial(0, 0, range, 1, 10, knobPos, this, hex1, hex2, hex3, imagePath, imageRange);
-
-	QFont displayFont;
-	/*displayFont.setFamily("Arial");
-	displayFont.setBold(false);
-	displayFont.setPixelSize(10);
-	displayFont.setStretch(110);*/	
-	
-	QPalette displayPal;
-	/*displayPal.setColor(QPalette::Base,QColor(0,1,62));
-    displayPal.setColor(QPalette::Text,QColor(0,255,204));
-	displayPal.setColor(QPalette::Highlight,QColor(0,1,62));
-	displayPal.setColor(QPalette::HighlightedText,QColor(0,255,204));
-
-	displayPal.setColor(QPalette::Window,QColor(0,1,62));
-	displayPal.setColor(QPalette::WindowText,QColor(0,255,204));	//List Border
-	displayPal.setColor(QPalette::Button,QColor(0,1,62));
-	displayPal.setColor(QPalette::ButtonText,QColor(0,255,204));
-
-	displayPal.setColor(QPalette::Light,QColor(0,1,62));			//Lighter than Button color.
-	displayPal.setColor(QPalette::Midlight,QColor(0,1,62));			//Between Button and Light.
-	displayPal.setColor(QPalette::Dark,QColor(0,1,62));				//Darker than Button.
-	displayPal.setColor(QPalette::Mid,QColor(0,1,62));				//Between Button and Dark.
-	displayPal.setColor(QPalette::Shadow,QColor(0,1,62));*/
-
-	this->display->setFont(displayFont);
-	this->display->setPalette(displayPal);
-	this->display->setFixedWidth(lenght);
-	this->display->setFixedHeight(13);
-	this->display->setAlignment(Qt::AlignRight);
-	this->display->setDisabled(true);
-	this->display->move(displayPos);
 
 	QObject::connect(this->parent(), SIGNAL( dialogUpdateSignal() ),
                 this, SLOT( dialogUpdateSignal() ));
@@ -149,6 +110,7 @@ customControlKnob::customControlKnob(QWidget *parent,
 
 void customControlKnob::paintEvent(QPaintEvent *)
 {
+	/*DRAWS RED BACKGROUND FOR DEBUGGING PURPOSE */
 	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
@@ -156,38 +118,6 @@ void customControlKnob::paintEvent(QPaintEvent *)
 
 	QPainter painter(this);
 	painter.drawPixmap(target, image, source);*/
-};
-
-void customControlKnob::valueChanged(int value, QString hex1, QString hex2, QString hex3)
-{
-	MidiTable *midiTable = MidiTable::Instance();
-	
-	QString valueHex = QString::number(value, 16).toUpper();
-	if(valueHex.length() < 2) valueHex.prepend("0");
-
-	SysxIO *sysxIO = SysxIO::Instance(); bool ok;
-	if(midiTable->isData("Structure", hex1, hex2, hex3))
-	{	
-		int maxRange = QString("7F").toInt(&ok, 16) + 1;
-		int value = valueHex.toInt(&ok, 16);
-		int dif = value/maxRange;
-		QString valueHex1 = QString::number(dif, 16).toUpper();
-		if(valueHex1.length() < 2) valueHex1.prepend("0");
-		QString valueHex2 = QString::number(value - (dif * maxRange), 16).toUpper();
-		if(valueHex2.length() < 2) valueHex2.prepend("0");
-		
-		sysxIO->setFileSource(hex1, hex2, hex3, valueHex1, valueHex2);		
-	}
-	else
-	{
-		sysxIO->setFileSource(hex1, hex2, hex3, valueHex);
-	};
-
-	QString valueStr = midiTable->getValue("Structure", hex1, hex2, hex3, valueHex);
-	
-	//this->display->setText(valueStr);
-	emit updateDisplay(valueStr);
-	emit updateSignal();
 };
 
 void customControlKnob::dialogUpdateSignal()

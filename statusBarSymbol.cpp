@@ -30,8 +30,6 @@ statusBarSymbol::statusBarSymbol(QWidget *parent, QString imagePath)
 	this->imagePath = imagePath;
 	QSize imageSize = QPixmap(imagePath).size();
 	this->symbolSize =  QSize(imageSize.width()/4, imageSize.height());
-	
-	//this->setGeometry(0, 0, symbolSize.width(), symbolSize.height());
 	this->setFixedSize(symbolSize);
 
 	setOffset(0);

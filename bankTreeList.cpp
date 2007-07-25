@@ -324,7 +324,7 @@ QTreeWidget* bankTreeList::newTreeList()
 				QTreeWidgetItem* patch = new QTreeWidgetItem(bank);
 				patch->setText(0, QString::QString("Patch ").append(QString::number(c, 10)));
 				patch->setWhatsThis(0, "");
-				//patch->setIcon(...);
+				//patch->setIcon(0, QIcon(":/images/"+ QString::number(c, 10) +".png"));
 			};
 		};
 		userBankRanges << bankRange;

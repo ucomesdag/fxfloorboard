@@ -49,6 +49,7 @@ editPage::editPage(QWidget *parent)
 
 void editPage::paintEvent(QPaintEvent *)
 {
+	/*DRAWS RED BACKGROUND FOR DEBUGGING PURPOSE */
 	/*QPixmap image(":images/dragbar.png");
 	
 	QRectF target(0.0, 0.0, this->width(), this->height());
@@ -184,18 +185,8 @@ void editPage::newGroupBox(QString title, Qt::Alignment alignment)
 	this->groupBoxLayout->setAlignment(alignment);
 	this->groupBoxLayouts.append(this->groupBoxLayout);
 	
-	QFont groupBoxFont;
-	groupBoxFont.setFamily("Arial");
-	groupBoxFont.setBold(true);
-	groupBoxFont.setPixelSize(12);
-	groupBoxFont.setStretch(105);
-
-	QPalette groupBoxPal;
-	groupBoxPal.setColor(this->groupBox->foregroundRole(), Qt::white);
-
-	this->groupBox->setPalette(groupBoxPal);
-	this->groupBox->setFont(groupBoxFont);
 	this->groupBox->setTitle(title);
+	this->groupBox->setObjectName("groupbox");
 	this->groupBoxMode = true;
 };
 

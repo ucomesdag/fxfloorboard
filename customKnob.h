@@ -20,50 +20,41 @@
 **
 ****************************************************************************/
 
-#ifndef CUSTOMCONTROLLABEL_H
-#define CUSTOMCONTROLLABEL_H
+#ifndef CUSTOMKNOB_H
+#define CUSTOMKNOB_H
 
 #include <QWidget>
 #include <QtGui>
+#include "customDial.h"
 
-class customControlLabel : public QWidget
+class customKnob : public QWidget
 {
     Q_OBJECT
 
 public:
-    customControlLabel(QWidget *parent = 0);
-	void setUpperCase(bool active);
-	void setAlignment(Qt::Alignment flag);
-	void setButton(bool button);
-	void setImage(QString imagePath);
-	void setOffset(int imageNr);
-	int getLabelWidth();
+    customKnob(QWidget *parent = 0, 
+		QString hex1 = "void",
+		QString hex2 = "void",
+		QString hex3 = "void",
+		QString background = "normal",
+		int lenght = 63);
+	void setValue(int value);
+
+public slots:
+	void valueChanged(int, QString, QString, QString);
+
+signals:
+	void updateSignal();
+	void updateDisplay(QString text);
 
 protected:
 	void paintEvent(QPaintEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent *event);
-	void enterEvent(QEvent *event);
-	void leaveEvent( QEvent *event);
-
-public slots:
-	void setText(QString text);
-
-signals:
-	void mouseReleased();
-	void mousePressed();
 
 private:
-	void setSize();
-	QLabel* label;
-	QPixmap image;
-	bool isImage;
-	bool uppercase;
-	bool button;
-	int lenght;
-	int offset;
-	int imageHeight;
-	int labelWidth;
+	customDial* knob;
+	QString hex1;
+	QString hex2;
+	QString hex3;
 };
 
-#endif // CUSTOMCONTROLLABEL_H
+#endif // CUSTOMKNOB_H

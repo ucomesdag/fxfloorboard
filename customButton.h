@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QTimer>
 
-class customButton : public QWidget
+class customButton : public QWidget 
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ public:
 	customButton(
 		QString text,
 		bool active = false,
-		QPoint buttonPos = QPoint::QPoint(0, 0),
+		QPoint buttonPos = QPoint::QPoint(0, 0),    
 		QWidget *parent = 0,
 		QString imagePath = ":/images/pushbutton.png");
 	void setValue(bool value);

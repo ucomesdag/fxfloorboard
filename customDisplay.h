@@ -38,6 +38,8 @@ public:
 	void clearAll();
 	void setMainObjectName(QString name);
 	void setSubObjectName(QString name);
+	void setAllColor(QColor color);
+	void resetAllColor();
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -49,6 +51,8 @@ signals:
 private:
 	QRect geometry;
 	QFont font;
+	QPalette mainPal;
+	QPalette subPal;
 	QLabel *mainLabel;
 	QLabel *subLabelLeft;
 	QLabel *subLabelRight;

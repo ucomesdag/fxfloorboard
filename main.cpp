@@ -40,20 +40,19 @@ int main(int argc, char *argv[])
 	/* Splash Screen setup uses subclassed QSplashScreen for message position controle. */
 	QPixmap splashImage(":images/splash.png");
 	QPixmap splashMask(":images/splashmask.png");
-	splashImage.setMask(splashMask);
 
 	customSplashScreen *splash = new customSplashScreen(splashImage);
-	splash->setMessageRect(QRect::QRect(148, 300, 332, 14)); // Setting the message position.
+	splash->setMessageRect(QRect::QRect(7, 253, 415, 14), Qt::AlignCenter); // Setting the message position.
 
 	QFont splashFont;
 	splashFont.setFamily("Arial");
-	//splashFont.setBold(true);
+	splashFont.setBold(true);
 	splashFont.setPixelSize(9);
 	splashFont.setStretch(125);
 
 	splash->setFont(splashFont);
-	splash->setMask(splashImage.mask());
-	splash->setWindowOpacity(0.95);
+	splash->setMask(splashMask);
+	splash->setWindowOpacity(0.90);
 	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
 	
 	Preferences *preferences = Preferences::Instance(); // Load the preferences.
@@ -169,18 +168,7 @@ int main(int argc, char *argv[])
 		window.setGeometry(x, y, window.width(), window.height());
 	};
 	
-	app.processEvents(); 
-
-	if(QFile(":windows.qss").exists())
-	{
-		splash->showStatusMessage(QObject::tr("Loading Stylesheet..."));
-		QFile file(":windows.qss");
-		file.open(QFile::ReadOnly);
-		QString styleSheet = QLatin1String(file.readAll());
-		app.setStyleSheet(styleSheet);
-	}; 
-
-	app.processEvents(); 
+	app.processEvents();
 
 	splash->showStatusMessage(QObject::tr("Finished Initializing..."));
 

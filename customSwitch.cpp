@@ -23,7 +23,7 @@
 #include <QtGui>
 #include "customSwitch.h"
 
-customSwitch::customSwitch(bool active, QPoint switchPos, QWidget *parent, QString hex1, QString hex2, QString hex3,
+customSwitch::customSwitch(bool active, QWidget *parent, QString hex1, QString hex2, QString hex3,
 						   QString imagePath)
     : QWidget(parent)
 {
@@ -36,8 +36,8 @@ customSwitch::customSwitch(bool active, QPoint switchPos, QWidget *parent, QStri
 	this->switchSize = QSize(imageSize.width(), imageSize.height()/2);
 	this->imageRange = 1;
 	this->switchPos = switchPos;
-	setOffset(0);
-    setGeometry(switchPos.x(), switchPos.y(), switchSize.width(), switchSize.height());
+	this->setOffset(0);
+    this->setFixedSize(switchSize);
 
 	QObject::connect(this, SIGNAL( valueChanged(bool, QString, QString, QString) ),
                 this->parent(), SLOT( valueChanged(bool, QString, QString, QString) ));
