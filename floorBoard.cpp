@@ -173,6 +173,8 @@ floorBoard::~floorBoard()
 	};
 	preferences->setPreferences("Window", "Collapsed", "bool", QString(this->colapseState?"true":"false"));
 	preferences->savePreferences();
+	
+	qDebug() << "SavePrefs" << this << "destructor was called and collapsed is now set to" << preferences->getPreferences("Window", "Collapsed", "bool");
 };					
 
 void floorBoard::paintEvent(QPaintEvent *)

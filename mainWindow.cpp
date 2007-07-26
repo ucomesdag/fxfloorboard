@@ -127,7 +127,7 @@ mainWindow::~mainWindow()
 	};
 	preferences->savePreferences();
 
-	//qDebug() << "SavePrefs" << this << "destructor was called and collapsed is now set to" << preferences->getPreferences("Window", "Collapsed", "bool");
+	qDebug() << "SavePrefs" << this << "destructor was called and x is now set to" << preferences->getPreferences("Window", "Position", "x");
 };
 
 void mainWindow::updateSize(QSize floorSize, QSize oldFloorSize)
@@ -410,4 +410,5 @@ void mainWindow::closeEvent(QCloseEvent* ce)
 	preferences->savePreferences();
 	ce->accept();
 	emit closed();
+	qDebug() << "SavePrefs" << this << "Window will be closed and saved preferences will be called";
 };
