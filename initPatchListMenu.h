@@ -48,6 +48,7 @@ private:
 	QComboBox *initPatchComboBox;
 
 	void setInitPatchComboBox(QRect geometry);
+	QDir getInitPatchDir();
 	QList<QString> initPatches;
 
 };

@@ -21,7 +21,6 @@
 ****************************************************************************/
 
 #include "PreferencesDestroyer.h"
-#include <QtDebug>
 
 PreferencesDestroyer::PreferencesDestroyer(Preferences* s) 
 {
@@ -32,8 +31,6 @@ PreferencesDestroyer::~PreferencesDestroyer ()
 {
 	_preferences->savePreferences();
 	delete _preferences;
-	
-	qDebug() << "SavePrefs" << this << "PrefrencesDestoyer has been called";
 };
 
 void PreferencesDestroyer::SetPreferences(Preferences* s)
