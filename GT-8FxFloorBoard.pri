@@ -68,7 +68,8 @@ HEADERS += ./editPage.h \
     ./SysxIO.h \
     ./SysxIODestroyer.h \
     ./sysxWriter.h \
-    ./XMLWriter.h \
+    ./xmlwriter/xmlwriter.h \
+    ./xmlwriter/xmlwriter_p.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
     ./preferencesDialog.h \
@@ -122,7 +123,7 @@ SOURCES += ./editPage.cpp \
     ./SysxIO.cpp \
     ./SysxIODestroyer.cpp \
     ./sysxWriter.cpp \
-    ./XMLWriter.cpp \
+    ./xmlwriter/xmlwriter.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
     ./preferencesDialog.cpp \

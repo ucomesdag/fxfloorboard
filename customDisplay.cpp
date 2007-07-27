@@ -102,7 +102,7 @@ void customDisplay::setLabelPosition(bool invert)
 	if(invert)
 	{
 		subGeometry = QRect(marginWidth, marginHeight, width - (marginWidth * 2), (height / 2) - marginHeight);  
-		mainGeometry = QRect(marginWidth, (height / 2), width - (marginWidth * 2), (height / 2) - marginHeight);
+		mainGeometry = QRect(marginWidth, (height / 2) - mainExtra, width - (marginWidth * 2), (height / 2) - marginHeight);
 	}
 	else
 	{
@@ -174,3 +174,4 @@ void customDisplay::resetAllColor()
 	this->subLabelLeft->setPalette(this->subPal);
 	this->subLabelRight->setPalette(this->subPal);
 };
+

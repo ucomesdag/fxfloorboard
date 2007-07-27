@@ -24,7 +24,9 @@
 #include "PreferencesDestroyer.h"
 #include <QList>
 #include <QFile>
-#include "XMLWriter.h"
+#include <QTextCodec> 
+#include <QHash>
+#include "xmlwriter/xmlwriter.h"
 #include <QMessageBox>
 
 Preferences::Preferences() 
@@ -166,10 +168,12 @@ void Preferences::savePreferences()
 {
 	//Write back to file/create
     QFile file("preferences.xml");
-	file.open(QIODevice::WriteOnly);
-	XMLWriter xout(&file);
+    if (!file.open(QIODevice::WriteOnly)) {
+    // ERROR
+    }
+    XmlWriter xout(&file);
 
-	QMap<QString, QString> attrs;
+    QHash<QString, QString> attrs;
 
 	xout.writeComment("Preferences of the GT-8 Fx FloorBoard application.");
 	xout.writeOpenTag("Preferences");
@@ -205,13 +209,13 @@ void Preferences::savePreferences()
 			a = sortIndexList.at(n + 1).indexNumber.toInt(&ok, 10);
 			if(this->typeNames.at(i) != this->typeNames.at(a))
 			{
-				xout.writeAtomTag(this->typeNames.at(i), &attrs);
+				xout.writeAtomTag(this->typeNames.at(i), attrs);
 				attrs.clear();
 			};
 		}
 		else
 		{
-			xout.writeAtomTag(this->typeNames.at(i), &attrs);
+			xout.writeAtomTag(this->typeNames.at(i), attrs);
 			attrs.clear();
 		};
 
@@ -226,5 +230,5 @@ void Preferences::savePreferences()
 	};
 
 	xout.writeCloseTag("Preferences");
-	file.close();
+	//file.close();
 };
