@@ -60,10 +60,10 @@ int main(int argc, char *argv[])
 	{
 		splash->show();
 	};
-	/* To intercept mousclick to hide spalsh screen. Since the 
+	/* To intercept mousclick to hide splash screen. Since the 
 	splash screen is typically displayed before the event loop 
 	has started running, it is necessary to periodically call. */
-	app.processEvents(); 
+	app.processEvents();
 
 	splash->showStatusMessage(QObject::tr("Initializing..."));
 	mainWindow window;// = new mainWindow;
