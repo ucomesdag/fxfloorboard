@@ -56,7 +56,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "07");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "00");
+	editDetails()->addPage("00", "00", "02", "00");
 
 	/* LM */
 	editDetails()->page()->newGroupBox("Effect");
@@ -74,7 +74,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "0D");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "01");
+	editDetails()->addPage("00", "00", "02", "01");
 
 	/* TW */
 	editDetails()->page()->newGroupBox("Effect");
@@ -93,7 +93,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "14");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "13");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "02");
+	editDetails()->addPage("00", "00", "02", "02");
 
 	/* AW */
 	editDetails()->page()->newGroupBox("Effect");
@@ -112,7 +112,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "1B");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "1A");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "03");
+	editDetails()->addPage("00", "00", "02", "03");
 
 	/* TM */
 	editDetails()->page()->newGroupBox("Effect");
@@ -129,7 +129,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "20");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "04");
+	editDetails()->addPage("00", "00", "02", "04");
 
 	/* GS */
 	editDetails()->page()->newGroupBox("Effect");
@@ -146,7 +146,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "25");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "05");
+	editDetails()->addPage("00", "00", "02", "05");
 
 	/* TR */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -160,7 +160,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "27", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 2, 1, 1, "00", "00", "28");
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
-	editDetails()->addPage("09", "00", "02", "06");
+	editDetails()->addPage("00", "00", "02", "06");
 
 	/* PH */
 	editDetails()->page()->newGroupBox("Effect");
@@ -180,7 +180,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "2F");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "30");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "07");
+	editDetails()->addPage("00", "00", "02", "07");
 
 	/* FL */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -203,7 +203,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "37");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "38");
 	editDetails()->page()->addGroupBox(0, 3, 1, 1);
-	editDetails()->addPage("09", "00", "02", "08");
+	editDetails()->addPage("00", "00", "02", "08");
 
 	/* PN */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -217,7 +217,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "3A", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 2, 1, 1, "00", "00", "3B");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "09");
+	editDetails()->addPage("00", "00", "02", "09");
 
 	/* VB */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -230,7 +230,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 2, 1, 1, "00", "00", "3E");
 	editDetails()->page()->addKnob(0, 3, 1, 1, "00", "00", "3F");
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
-	editDetails()->addPage("09", "00", "02", "0A");
+	editDetails()->addPage("00", "00", "02", "0A");
 
 	/* UV */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -245,7 +245,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "42");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "0B");
+	editDetails()->addPage("00", "00", "02", "0B");
 
 	/* RM */
 	editDetails()->page()->newGroupBox("Effect");
@@ -261,7 +261,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "45");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "46");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "0C");
+	editDetails()->addPage("00", "00", "02", "0C");
 
 	/* SG */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -272,7 +272,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "47");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "48");
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
-	editDetails()->addPage("09", "00", "02", "0D");
+	editDetails()->addPage("00", "00", "02", "0D");
 
 	/* DF */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -291,7 +291,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "4E");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "4F");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "0E");
+	editDetails()->addPage("00", "00", "02", "0E");
 
 	/* STR */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -310,7 +310,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "55");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "56");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "0F");
+	editDetails()->addPage("00", "00", "02", "0F");
 
 	/* FB */
 	editDetails()->page()->newGroupBox("Effect");
@@ -344,7 +344,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addGroupBox(0, 0, 1, 1);
 	editDetails()->page()->addStackField();
 
-	editDetails()->addPage("09", "00", "02", "10");
+	editDetails()->addPage("00", "00", "02", "10");
 
 	/* AFB */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -369,7 +369,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
 
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
-	editDetails()->addPage("09", "00", "02", "11");
+	editDetails()->addPage("00", "00", "02", "11");
 
 	/* HU */
 	editDetails()->page()->newGroupBox("Effect");
@@ -389,7 +389,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->newGroupBox("Level");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "6B");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "12");
+	editDetails()->addPage("00", "00", "02", "12");
 
 	/* SL */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
@@ -401,7 +401,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "6D", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 2, 1, 1, "00", "00", "6E");
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
-	editDetails()->addPage("09", "00", "02", "13");
+	editDetails()->addPage("00", "00", "02", "13");
 
 	/* WSY */
 	editDetails()->page()->newGroupBox("Effect");
@@ -421,7 +421,7 @@ void stompbox_fx1::setEditPages()
 	editDetails()->page()->addKnob(0, 0, 1, 1, "00", "00", "75");
 	editDetails()->page()->addKnob(0, 1, 1, 1, "00", "00", "76");
 	editDetails()->page()->addGroupBox(0, 2, 1, 1);
-	editDetails()->addPage("09", "00", "02", "14");
+	editDetails()->addPage("00", "00", "02", "14");
 
 	/* SEQ */
 	editDetails()->page()->newGroupBox("Effect", Qt::AlignTop | Qt::AlignHCenter);
