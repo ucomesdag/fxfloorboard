@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
 	splash->setFont(splashFont);
 	splash->setMask(splashMask);
-	splash->setWindowOpacity(0.90);
+	//splash->setWindowOpacity(0.90);
 	splash->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::SplashScreen);
 	
 	Preferences *preferences = Preferences::Instance(); // Load the preferences.
