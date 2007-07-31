@@ -37,11 +37,9 @@ mainWindow::mainWindow(QWidget *parent)
 {
 	fxsBoard = new floorBoard(this);
 
-	/* This set the floorboard default style to the "cleanlooks" style, 
-	   as it comes the nearest what the stylesheet uses. 
-	   Note: replaced plastique by cleanlooks due to a bug that 
-			 made comboboxes have checkboxes */
-	fxsBoard->setStyle(QStyleFactory::create("cleanlooks"));
+	/* This set the floorboard default style to the "plastique" style, 
+	   as it comes the nearest what the stylesheet uses. */
+	fxsBoard->setStyle(QStyleFactory::create("plastique"));
 
 	/* Loads the stylesheet for the current platform if present */
 	#ifdef Q_OS_WIN
