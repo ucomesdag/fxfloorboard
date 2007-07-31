@@ -193,19 +193,22 @@ void editWindow::addPage(QString hex1, QString hex2, QString hex3, QString hex4)
 
 void editWindow::valueChanged(int index)
 {
-	QString valueHex = QString::number(index, 16).toUpper();
-	if(valueHex.length() < 2) valueHex.prepend("0");
+	if(hex1 != "void" && hex2 != "void")
+	{
+		QString valueHex = QString::number(index, 16).toUpper();
+		if(valueHex.length() < 2) valueHex.prepend("0");
 
-	SysxIO *sysxIO = SysxIO::Instance();
-	sysxIO->setFileSource(this->hex1, this->hex2, this->hex3, valueHex);
+		SysxIO *sysxIO = SysxIO::Instance();
+		sysxIO->setFileSource(this->hex1, this->hex2, this->hex3, valueHex);
 
-	//emit updateDisplay(valueStr);
-	emit updateSignal();
+		//emit updateDisplay(valueStr);
+		emit updateSignal();
+	};
 };
 
 void editWindow::pageUpdateSignal()
 {
-	if(this->pages > 1)
+	if(this->pages > 1 && hex1 != "void" && hex2 != "void")
 	{
 		SysxIO *sysxIO = SysxIO::Instance();
 		int index = sysxIO->getSourceValue(this->hex1, this->hex2, this->hex3);
