@@ -46,6 +46,7 @@ signals:
 
 private:
 	QComboBox *initPatchComboBox;
+	bool available;
 
 	void setInitPatchComboBox(QRect geometry);
 	QDir getInitPatchDir();

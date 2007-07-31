@@ -33,6 +33,7 @@ initPatchListMenu::initPatchListMenu(QRect geometry, QWidget *parent)
     : QWidget(parent)
 {
 	setInitPatchComboBox(geometry);
+	this->available = false;
 };
 
 QDir initPatchListMenu::getInitPatchDir()
@@ -87,6 +88,7 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 			this->initPatchComboBox = new QComboBox(this);
 			this->initPatchComboBox->setObjectName("smallcombo");
 			initPatchComboBox->addItem(tr("[ INIT Patches ]")); 
+			this->available = true;
 		
 			int itemsCount;
 			int maxLenght = 0;
@@ -127,7 +129,10 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 
 void initPatchListMenu::setIndex(int index)
 {
-	this->initPatchComboBox->setCurrentIndex(index);
+	if(this->available)
+	{
+		this->initPatchComboBox->setCurrentIndex(index);
+	};
 };
 
 void initPatchListMenu::loadInitPatch(int index)
