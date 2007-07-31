@@ -235,9 +235,9 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->stompComboBox->setMaxVisibleItems(itemsCount);
 	//this->stompComboBox->view()->setMinimumWidth( maxLenght + 10 ); // Used to be 35 (scrollbar correction).
 	QListView *view = new QListView;
+	view->setAutoScroll(false);
 	view->setMinimumWidth( maxLenght + 10 );
 	this->stompComboBox->setView(view);
-
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
