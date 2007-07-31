@@ -227,7 +227,11 @@ void stompbox_fx2::setEditPages()
 	editDetails()->page()->newGroupBox("Vibrato");
 	editDetails()->page()->addKnob(0, 0, 1, 1, "09", "00", "3C", "normal","right", 105);
 	editDetails()->page()->addKnob(0, 1, 1, 1, "09", "00", "3D");
-	editDetails()->page()->addKnob(0, 2, 1, 1, "09", "00", "3E");
+
+	editDetails()->page()->newGroupBox("Trigger");
+	editDetails()->page()->addSwitch(0, 0, 1, 1, "09", "00", "3E", "middle", Qt::AlignCenter);
+	editDetails()->page()->addGroupBox(0, 2, 1, 1);
+
 	editDetails()->page()->addKnob(0, 3, 1, 1, "09", "00", "3F");
 	editDetails()->page()->addGroupBox(0, 1, 1, 1);
 	editDetails()->addPage("09", "00", "02", "0A");
