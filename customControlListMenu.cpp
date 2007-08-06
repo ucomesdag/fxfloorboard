@@ -109,40 +109,13 @@ void customControlListMenu::setComboBox()
 
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
-
-	for(itemsCount=0;itemsCount<items.level.size();itemsCount++ )
-	{
-		QString item;
-		QString desc = items.level.at(itemsCount).desc;
-		QString customdesc = items.level.at(itemsCount).customdesc;
-		if(!customdesc.isEmpty())
-		{
-			item = customdesc;
-		}
-		else
-		{
-			item = desc;
-		};
-		this->controlListComboBox->addItem(item);
-		int pixelWidth = QFontMetrics(controlListComboBox->font()).width(item);
-		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
-	};
-
-	this->comboWidth = maxLenght + 10;
+	int maxItems = items.level.size() - 1;
 
 	this->controlListComboBox->setMaximumHeight(15);
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
-	this->controlListComboBox->setMaxVisibleItems(itemsCount);
-
-	/* For some reason the simple way doesn't work on Linux (check boxes and odd scroll behaviour)... */ 
-	this->controlListComboBox->view()->setMinimumWidth( this->comboWidth );
-
-	/* So we will do it the hard way!!! 
-	QListView *view = new QListView;
-	view->setAutoScroll(false);
-	view->setMinimumWidth(this->comboWidth);
-	this->controlListComboBox->setView(view);*/
+	this->controlListComboBox->setMaxVisibleItems(maxItems);
+	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));/
 };
 
 void customControlListMenu::valueChanged(int index)

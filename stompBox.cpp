@@ -208,34 +208,15 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
+	int maxItems = items.level.size() - 1;
 
 	this->stompComboBox = new QComboBox(this);
 	this->stompComboBox->setObjectName("smallcombo");
-	
-	for(itemsCount=0;itemsCount<items.level.size();itemsCount++ )
-	{
-		QString item;
-		QString desc = items.level.at(itemsCount).desc;
-		QString customdesc = items.level.at(itemsCount).customdesc;
-		if(!customdesc.isEmpty())
-		{
-			item = customdesc;
-		}
-		else
-		{
-			item = desc;
-		};
-		this->stompComboBox->addItem(item);
-		int pixelWidth = QFontMetrics(this->stompComboBox->font()).width(item);
-		if(maxLenght < pixelWidth) maxLenght = pixelWidth;
-	};
-
 	this->stompComboBox->setGeometry(geometry);
-	this->stompComboBox->setEditable(false);
-	this->stompComboBox->setFrame(false);
-	this->stompComboBox->setMaxVisibleItems(itemsCount);
+	this->controlListComboBox->setEditable(false);
+	this->controlListComboBox->setFrame(false);
+	this->controlListComboBox->setMaxVisibleItems(maxItems);
 	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
