@@ -115,7 +115,7 @@ void customControlListMenu::setComboBox()
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
 	this->controlListComboBox->setMaxVisibleItems(maxItems);
-	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));/
+	this->controlListComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));/
 };
 
 void customControlListMenu::valueChanged(int index)

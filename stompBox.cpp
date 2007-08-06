@@ -213,9 +213,9 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->stompComboBox = new QComboBox(this);
 	this->stompComboBox->setObjectName("smallcombo");
 	this->stompComboBox->setGeometry(geometry);
-	this->controlListComboBox->setEditable(false);
-	this->controlListComboBox->setFrame(false);
-	this->controlListComboBox->setMaxVisibleItems(maxItems);
+	this->stompComboBox->setEditable(false);
+	this->stompComboBox->setFrame(false);
+	this->stompComboBox->setMaxVisibleItems(maxItems);
 	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
