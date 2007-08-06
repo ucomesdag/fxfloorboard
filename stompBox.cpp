@@ -211,6 +211,10 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->stompComboBox = new QComboBox(this);
 	this->stompComboBox->setObjectName("smallcombo");
 	
+	#ifdef Q_OS_WIN
+		int maxLenght = 0;
+	#endif
+
 	int itemcount;
 	for(itemcount=0;itemcount<items.level.size();itemcount++ )
 	{
@@ -226,6 +230,12 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 			item = desc;
 		};
 		this->stompComboBox->addItem(item);
+
+		#ifdef Q_OS_WIN
+			/* For some reason the simple way doesn't work on Windows... */ 
+			int pixelWidth = QFontMetrics(this->stompComboBox->font()).width(item);
+			if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+		#endif
 	};
 
 	this->stompComboBox->setGeometry(geometry);
@@ -233,6 +243,12 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->stompComboBox->setFrame(false);
 	this->stompComboBox->setMaxVisibleItems(itemcount);
 	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+	#ifdef Q_OS_WIN
+		/* For some reason the simple way doesn't work on Windows... */ 
+		this->stompComboBox->view()->setMinimumWidth( maxLenght + 10 ); // Used to be 35 (scrollbar correction). 
+	#endif
+
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
