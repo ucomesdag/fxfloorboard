@@ -203,9 +203,6 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->hex2 = hex2;
 	this->hex3 = hex3;
 
-	int maxLenght = 0;
-	int itemsCount;
-
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 	int maxItems = items.level.size() - 1;
