@@ -104,9 +104,11 @@ void customControlListMenu::setComboBox()
 	this->hex2 = hex2;
 	this->hex3 = hex3;
 
+	
+
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
-	
+
 	int itemcount;
 	for(itemcount=0;itemcount<items.level.size();itemcount++ )
 	{

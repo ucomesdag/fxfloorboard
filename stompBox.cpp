@@ -203,8 +203,13 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->hex2 = hex2;
 	this->hex3 = hex3;
 
+	
+
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
+
+	this->stompComboBox = new QComboBox(this);
+	this->stompComboBox->setObjectName("smallcombo");
 	
 	int itemcount;
 	for(itemcount=0;itemcount<items.level.size();itemcount++ )
@@ -223,8 +228,6 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 		this->stompComboBox->addItem(item);
 	};
 
-	this->stompComboBox = new QComboBox(this);
-	this->stompComboBox->setObjectName("smallcombo");
 	this->stompComboBox->setGeometry(geometry);
 	this->stompComboBox->setEditable(false);
 	this->stompComboBox->setFrame(false);
