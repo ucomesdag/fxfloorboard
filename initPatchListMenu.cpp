@@ -118,8 +118,10 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 				#endif
 			};	
 
-			initPatchComboBox->setMaxVisibleItems(itemcount + 1);
-			this->initPatchComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+			initPatchComboBox->setGeometry(geometry);
+			initPatchComboBox->setEditable(false);
+			initPatchComboBox->setFrame(false);
+			initPatchComboBox->setMaxVisibleItems(itemcount);
 
 			#ifdef Q_OS_WIN
 				/* For some reason the simple way doesn't work on Windows... */ 
@@ -130,10 +132,6 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 					this, SLOT(loadInitPatch(int)));
 			QObject::connect(this, SIGNAL(updateSignal()),
 				this->parent()->parent(), SIGNAL(updateSignal()));
-		
-			initPatchComboBox->setGeometry(geometry);
-			initPatchComboBox->setEditable(false);
-			initPatchComboBox->setFrame(false);
 		};
 	};
 };
