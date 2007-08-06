@@ -205,14 +205,30 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
-	int maxItems = items.level.size() - 1;
+	
+	int itemcount;
+	for(itemcount=0;itemcount<items.level.size();itemcount++ )
+	{
+		QString item;
+		QString desc = items.level.at(itemcount).desc;
+		QString customdesc = items.level.at(itemcount).customdesc;
+		if(!customdesc.isEmpty())
+		{
+			item = customdesc;
+		}
+		else
+		{
+			item = desc;
+		};
+		this->stompComboBox->addItem(item);
+	};
 
 	this->stompComboBox = new QComboBox(this);
 	this->stompComboBox->setObjectName("smallcombo");
 	this->stompComboBox->setGeometry(geometry);
 	this->stompComboBox->setEditable(false);
 	this->stompComboBox->setFrame(false);
-	this->stompComboBox->setMaxVisibleItems(maxItems);
+	this->stompComboBox->setMaxVisibleItems(itemcount);
 	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),

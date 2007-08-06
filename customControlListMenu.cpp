@@ -106,12 +106,28 @@ void customControlListMenu::setComboBox()
 
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
-	int maxItems = items.level.size() - 1;
+	
+	int itemcount;
+	for(itemcount=0;itemcount<items.level.size();itemcount++ )
+	{
+		QString item;
+		QString desc = items.level.at(itemcount).desc;
+		QString customdesc = items.level.at(itemcount).customdesc;
+		if(!customdesc.isEmpty())
+		{
+			item = customdesc;
+		}
+		else
+		{
+			item = desc;
+		};
+		this->controlListComboBox->addItem(item);
+	};
 
 	this->controlListComboBox->setMaximumHeight(15);
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
-	this->controlListComboBox->setMaxVisibleItems(maxItems);
+	this->controlListComboBox->setMaxVisibleItems(itemcount);
 	this->controlListComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 };
 
