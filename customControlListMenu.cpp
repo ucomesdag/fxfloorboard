@@ -107,9 +107,9 @@ void customControlListMenu::setComboBox()
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 
-	#ifdef Q_OS_WIN
-		int maxLenght = 0;
-	#endif
+	//#ifdef Q_OS_WIN
+	//	int maxLenght = 0;
+	//#endif
 
 	int itemcount;
 	for(itemcount=0;itemcount<items.level.size();itemcount++ )
@@ -127,23 +127,23 @@ void customControlListMenu::setComboBox()
 		};
 		this->controlListComboBox->addItem(item);
 
-		#ifdef Q_OS_WIN
-			/* For some reason the simple way doesn't work on Windows... */
-			int pixelWidth = QFontMetrics(controlListComboBox->font()).width(item);
-			if(maxLenght < pixelWidth) maxLenght = pixelWidth;
-		#endif
+		//#ifdef Q_OS_WIN
+		//	/* For some reason the simple way doesn't work on Windows... */
+		//	int pixelWidth = QFontMetrics(controlListComboBox->font()).width(item);
+		//	if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+		//#endif
 	};
 
 	this->controlListComboBox->setMaximumHeight(15);
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
 	this->controlListComboBox->setMaxVisibleItems(itemcount);
-	this->controlListComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+	//this->controlListComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	
-	#ifdef Q_OS_WIN
-		/* For some reason the simple way doesn't work on Windows... */
-		this->controlListComboBox->view()->setMinimumWidth( maxLenght + 10 );
-	#endif
+	//#ifdef Q_OS_WIN
+	//	/* For some reason the simple way doesn't work on Windows... */
+	//	this->controlListComboBox->view()->setMinimumWidth( maxLenght + 10 );
+	//#endif
 };
 
 void customControlListMenu::valueChanged(int index)
