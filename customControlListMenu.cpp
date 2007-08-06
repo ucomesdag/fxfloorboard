@@ -134,7 +134,15 @@ void customControlListMenu::setComboBox()
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
 	this->controlListComboBox->setMaxVisibleItems(itemsCount);
+
+	/* For some reason the simple way doesn't work on Linux (check boxes and odd scroll behaviour)... */ 
 	this->controlListComboBox->view()->setMinimumWidth( this->comboWidth );
+
+	/* So we will do it the hard way!!! 
+	QListView *view = new QListView;
+	view->setAutoScroll(false);
+	view->setMinimumWidth(this->comboWidth);
+	this->controlListComboBox->setView(view);*/
 };
 
 void customControlListMenu::valueChanged(int index)
