@@ -234,17 +234,8 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->stompComboBox->setEditable(false);
 	this->stompComboBox->setFrame(false);
 	this->stompComboBox->setMaxVisibleItems(itemsCount);
-	
-	/* For some reason the simple way doesn't work on Linux (check boxes and odd scroll behaviour)... */ 
-	//this->stompComboBox->view()->setMinimumWidth( maxLenght + 10 ); // Used to be 35 (scrollbar correction).
-	//this->stompComboBox->view()->setAutoScroll(false);
-	//this->stompComboBox->view()->setSizePolicy(QSizePolicy::QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	this->stompComboBox->setSizePolicy(QSizePolicy::QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	/* So we will do it the hard way!!! 
-	QListView *view = new QListView;
-	view->setAutoScroll(false);
-	view->setMinimumWidth( maxLenght + 10 );
-	this->stompComboBox->setView(view);*/
+	this->stompComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));
