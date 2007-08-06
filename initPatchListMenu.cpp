@@ -90,13 +90,16 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 			this->initPatchComboBox->setObjectName("smallcombo");
 			initPatchComboBox->addItem(tr("[ INIT Patches ]")); 
 		
-			int itemsCount;
-			int maxLenght = 0;
-			for(itemsCount=0; itemsCount<initPatchesList.size(); itemsCount++)
+			#ifdef Q_OS_WIN
+				int maxLenght = 0;
+			#endif
+			
+			int itemcount;
+			for(itemcount=0; itemcount<initPatchesList.size(); itemcount++)
 			{
-				QString path = initPatchesDir.absolutePath().append("/").append(initPatchesList.at(itemsCount));
+				QString path = initPatchesDir.absolutePath().append("/").append(initPatchesList.at(itemcount));
 				this->initPatches.append(path);
-				QString item = initPatchesList.at(itemsCount);
+				QString item = initPatchesList.at(itemcount);
 				item.remove(QRegExp("^[0-9_]+"));
 				item.remove(QRegExp(".{1}(syx|syx2)"));
 				if(!item.contains("INIT_"))
@@ -107,12 +110,21 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 				item.replace("_", " ");
 				item.replace("-!-", "/");
 				initPatchComboBox->addItem(item);
-				int pixelWidth = QFontMetrics(initPatchComboBox->font()).width(item);
-				if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+
+				#ifdef Q_OS_WIN
+					/* For some reason the simple way doesn't work on Windows... */ 
+					int pixelWidth = QFontMetrics(initPatchComboBox->font()).width(item);
+					if(maxLenght < pixelWidth) maxLenght = pixelWidth;
+				#endif
 			};	
 
-			initPatchComboBox->setMaxVisibleItems(itemsCount + 1);
-			initPatchComboBox->view()->setMinimumWidth( maxLenght + 35 );	// Used to be 25 (scrollbar correction).	
+			initPatchComboBox->setMaxVisibleItems(itemcount + 1);
+			this->initPatchComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+			#ifdef Q_OS_WIN
+				/* For some reason the simple way doesn't work on Windows... */ 
+				this->initPatchComboBox->view()->setMinimumWidth( maxLenght + 35 ); // Used to be 25 (scrollbar correction). 
+			#endif	
 
 			QObject::connect(initPatchComboBox, SIGNAL(currentIndexChanged(int)),
 					this, SLOT(loadInitPatch(int)));

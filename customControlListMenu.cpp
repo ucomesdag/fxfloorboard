@@ -138,7 +138,7 @@ void customControlListMenu::setComboBox()
 	this->controlListComboBox->setEditable(false);
 	this->controlListComboBox->setFrame(false);
 	this->controlListComboBox->setMaxVisibleItems(itemcount);
-	//this->controlListComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+	this->controlListComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	
 	//#ifdef Q_OS_WIN
 	//	/* For some reason the simple way doesn't work on Windows... */
