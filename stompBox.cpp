@@ -230,6 +230,7 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 		this->stompComboBox->addItem(item);
 		
 		#ifdef Q_OS_WIN
+			/* For some reason the simple way doesn't work on Windows... */ 
 			int pixelWidth = QFontMetrics(this->stompComboBox->font()).width(item);
 			if(maxLenght < pixelWidth) maxLenght = pixelWidth;
 		#endif
@@ -241,6 +242,7 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	this->stompComboBox->setMaxVisibleItems(itemcount);
 	
 	#ifdef Q_OS_WIN
+		/* For some reason the simple way doesn't work on Windows... */ 
 		this->stompComboBox->view()->setMinimumWidth( maxLenght + 10 ); // Used to be 35 (scrollbar correction).
 	#endif
 

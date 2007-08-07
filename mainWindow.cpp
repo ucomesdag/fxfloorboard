@@ -39,7 +39,7 @@ mainWindow::mainWindow(QWidget *parent)
 
 	/* This set the floorboard default style to the "plastique" style, 
 	   as it comes the nearest what the stylesheet uses. */
-	//fxsBoard->setStyle(QStyleFactory::create("plastique"));
+	fxsBoard->setStyle(QStyleFactory::create("plastique"));
 
 	/* Loads the stylesheet for the current platform if present */
 	#ifdef Q_OS_WIN

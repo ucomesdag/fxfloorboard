@@ -51,21 +51,23 @@ QDir initPatchListMenu::getInitPatchDir()
 		symlinkExstention = ".lnk";
 	#endif
 	
-	QDir initPatchesDir;	
-	if ( QFileInfo( preferencesDir, initPatchesDirName + symlinkExstention ).exists() )
-	{
+	QDir initPatchesDir; /* The "Init Pathces" directory. */
+	if ( QFileInfo( preferencesDir, initPatchesDirName + symlinkExstention ).exists() &&
+		 QFileInfo( preferencesDir, initPatchesDirName + symlinkExstention ).canonicalPath() == 
+		 QFileInfo( preferencesDir, initPatchesDirName + symlinkExstention ).symLinkTarget() )
+	{	/* If the "Init Pathces" directory is a symlink and lives in the user sellected patch directory. */
 		initPatchesDir.setPath(QFileInfo( preferencesDir, initPatchesDirName + symlinkExstention ).symLinkTarget());
 	}
 	else if ( QFileInfo( preferencesDir, initPatchesDirName ).exists() )
-	{
+	{	/* If the "Init Pathces" directory lives in the user sellected patch directory. */
 		initPatchesDir.setPath(QFileInfo( preferencesDir, initPatchesDirName ).absoluteFilePath() );
 	}
 	else if ( QFileInfo( initPatchesDirName ).exists() )
-	{
+	{	/* If the "Init Pathces" directory lives in the application directory. */
 		initPatchesDir.setPath(QFileInfo( initPatchesDirName ).absoluteFilePath());
 		if( QFileInfo( preferencesDir, initPatchesDirName ).absolutePath() != initPatchesDir.absolutePath() && 
 			preferencesDir.exists() )
-		{
+		{	/* Add a symlink to the user selected patch directory (if it is set and exists). */
 			QString symlinkPath = QFileInfo( preferencesDir, initPatchesDirName + symlinkExstention ).absoluteFilePath();
 			QFile::link(initPatchesDir.absolutePath(), symlinkPath);
 		};
@@ -78,13 +80,13 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 {
 	QDir initPatchesDir = getInitPatchDir();
 	if(initPatchesDir.exists())
-	{		
+	{	/* If the "Init Pathces" directory exists. */
 		QStringList filters;
 		filters << "*.syx" << "*.syx2";
 		QStringList initPatchesList = initPatchesDir.entryList(filters);
 
 		if (initPatchesList.size() != 0)
-		{
+		{	/* If it has "Init Pathces" in it. */
 			this->initPatchComboBox = new QComboBox(this);
 			this->available = true;
 			this->initPatchComboBox->setObjectName("smallcombo");
@@ -96,10 +98,10 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 			
 			int itemcount;
 			for(itemcount=0; itemcount<initPatchesList.size(); itemcount++)
-			{
+			{	/* Filling the combobox with the patches. */
 				QString path = initPatchesDir.absolutePath().append("/").append(initPatchesList.at(itemcount));
 				this->initPatches.append(path);
-				QString item = initPatchesList.at(itemcount);
+				QString item = initPatchesList.at(itemcount);	// Start formatting the item name.
 				item.remove(QRegExp("^[0-9_]+"));
 				item.remove(QRegExp(".{1}(syx|syx2)"));
 				if(!item.contains("INIT_"))
@@ -109,7 +111,7 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 				item.remove("INIT_");
 				item.replace("_", " ");
 				item.replace("-!-", "/");
-				initPatchComboBox->addItem(item);
+				initPatchComboBox->addItem(item);				// Finished formatting the item name.
 
 				#ifdef Q_OS_WIN
 					/* For some reason the simple way doesn't work on Windows... */ 
