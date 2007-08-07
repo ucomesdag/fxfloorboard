@@ -123,7 +123,7 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 			initPatchComboBox->setGeometry(geometry);
 			initPatchComboBox->setEditable(false);
 			initPatchComboBox->setFrame(false);
-			initPatchComboBox->setMaxVisibleItems(itemcount);
+			initPatchComboBox->setMaxVisibleItems(itemcount + 1); // +1 for "[ INIT Patches ]" entry.
 
 			#ifdef Q_OS_WIN
 				/* For some reason the simple way doesn't work on Windows... */ 
