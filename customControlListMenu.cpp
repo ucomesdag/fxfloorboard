@@ -30,7 +30,7 @@ customControlListMenu::customControlListMenu(QWidget *parent,
 	: QWidget(parent)
 {
 	this->label = new customControlLabel(this);
-	this->controlListComboBox = new QComboBox(this);
+	this->controlListComboBox = new customComboBox(this);
 	this->controlListComboBox->setObjectName("smallcombo");
 	this->hex1 = hex1;
 	this->hex2 = hex2;

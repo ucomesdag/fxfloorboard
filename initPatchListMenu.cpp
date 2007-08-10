@@ -87,14 +87,10 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 
 		if (initPatchesList.size() != 0)
 		{	/* If it has "Init Pathces" in it. */
-			this->initPatchComboBox = new QComboBox(this);
+			this->initPatchComboBox = new customComboBox(this);
 			this->available = true;
 			this->initPatchComboBox->setObjectName("smallcombo");
 			initPatchComboBox->addItem(tr("[ INIT Patches ]")); 
-		
-			#ifdef Q_OS_WIN
-				int maxLenght = 0;
-			#endif
 			
 			int itemcount;
 			for(itemcount=0; itemcount<initPatchesList.size(); itemcount++)
@@ -112,23 +108,12 @@ void initPatchListMenu::setInitPatchComboBox(QRect geometry)
 				item.replace("_", " ");
 				item.replace("-!-", "/");
 				initPatchComboBox->addItem(item);				// Finished formatting the item name.
-
-				#ifdef Q_OS_WIN
-					/* For some reason the simple way doesn't work on Windows... */ 
-					int pixelWidth = QFontMetrics(initPatchComboBox->font()).width(item);
-					if(maxLenght < pixelWidth) maxLenght = pixelWidth;
-				#endif
 			};	
 
 			initPatchComboBox->setGeometry(geometry);
 			initPatchComboBox->setEditable(false);
 			initPatchComboBox->setFrame(false);
 			initPatchComboBox->setMaxVisibleItems(itemcount + 1); // +1 for "[ INIT Patches ]" entry.
-
-			#ifdef Q_OS_WIN
-				/* For some reason the simple way doesn't work on Windows... */ 
-				this->initPatchComboBox->view()->setMinimumWidth( maxLenght + 35 ); // Used to be 25 (scrollbar correction). 
-			#endif	
 
 			QObject::connect(initPatchComboBox, SIGNAL(currentIndexChanged(int)),
 					this, SLOT(loadInitPatch(int)));

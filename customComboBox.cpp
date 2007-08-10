@@ -20,39 +20,28 @@
 **
 ****************************************************************************/
 
-#ifndef INITPATCHLISTMENU_H 
-#define INITPATCHLISTMENU_H
-
-#include <QtGui>
-#include <QWidget>
-#include <QTimer>
-#include "customButton.h"
 #include "customComboBox.h"
 
-class initPatchListMenu : public QWidget
+customComboBox::customComboBox(QWidget *parent) 
+	: QComboBox(parent)
 {
-	Q_OBJECT
-
-public:
-	initPatchListMenu(QRect geometry, QWidget *parent = 0);
-
-public slots:
-	void loadInitPatch(int index);
-	void setIndex(int index);
-
-signals:
-	void currentIndexChanged(int index);
-	void updateSignal();
-
-
-private:
-	customComboBox *initPatchComboBox;
-	bool available;
-
-	void setInitPatchComboBox(QRect geometry);
-	QDir getInitPatchDir();
-	QList<QString> initPatches;
 
 };
 
-#endif // INITPATCHLISTMENU_H
+void customComboBox::showPopup()
+{
+	QString longestItem = "";
+	for(int i=0;i<this->count();i++)
+	{
+		QString item = this->itemText(i);
+		if(longestItem.size() < item.size()) longestItem = item;
+	};
+	int popupWidth = QFontMetrics( this->font() ).width( longestItem + "--" );
+	this->view()->setMinimumWidth(popupWidth);
+
+	/*if( this->verticalScrollBar()->isVisible() )
+	{
+		this->setMaxVisibleItems(this->maxVisibleItems() - 1);
+	};*/
+	QComboBox::showPopup();
+};

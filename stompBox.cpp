@@ -206,14 +206,10 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 	MidiTable *midiTable = MidiTable::Instance();
 	Midi items = midiTable->getMidiMap("Structure", hex1, hex2, hex3);
 
-	this->stompComboBox = new QComboBox(this);
+	this->stompComboBox = new customComboBox(this);
 	this->stompComboBox->setObjectName("smallcombo");
 	
-	#ifdef Q_OS_WIN
-		int maxLenght = 0;
-	#endif
-
-	int itemcount;
+	int itemcount = 0; 
 	for(itemcount=0;itemcount<items.level.size();itemcount++ )
 	{
 		QString item;
@@ -228,23 +224,12 @@ void stompBox::setComboBox(QString hex1, QString hex2, QString hex3, QRect geome
 			item = desc;
 		};
 		this->stompComboBox->addItem(item);
-		
-		#ifdef Q_OS_WIN
-			/* For some reason the simple way doesn't work on Windows... */ 
-			int pixelWidth = QFontMetrics(this->stompComboBox->font()).width(item);
-			if(maxLenght < pixelWidth) maxLenght = pixelWidth;
-		#endif
 	};
 
 	this->stompComboBox->setGeometry(geometry);
 	this->stompComboBox->setEditable(false);
 	this->stompComboBox->setFrame(false);
 	this->stompComboBox->setMaxVisibleItems(itemcount);
-	
-	#ifdef Q_OS_WIN
-		/* For some reason the simple way doesn't work on Windows... */ 
-		this->stompComboBox->view()->setMinimumWidth( maxLenght + 10 ); // Used to be 35 (scrollbar correction).
-	#endif
 
 	QObject::connect(this->stompComboBox, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(valueChanged(int)));

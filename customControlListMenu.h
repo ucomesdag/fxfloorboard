@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QtGui>
 #include "customControlLabel.h"
+#include "customComboBox.h"
 
 class customControlListMenu : public QWidget
 {
@@ -53,7 +54,7 @@ signals:
 private:
 	void setComboBox();
 	customControlLabel* label;
-	QComboBox* controlListComboBox;
+	customComboBox* controlListComboBox;
 	QString hex1;
 	QString hex2;
 	QString hex3;

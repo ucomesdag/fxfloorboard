@@ -73,7 +73,8 @@ HEADERS += ./editPage.h \
     ./Preferences.h \
     ./PreferencesDestroyer.h \
     ./preferencesDialog.h \
-    ./preferencesPages.h
+    ./preferencesPages.h \
+    ./customComboBox.h
 
 #Source files
 SOURCES += ./editPage.cpp \
@@ -127,7 +128,8 @@ SOURCES += ./editPage.cpp \
     ./Preferences.cpp \
     ./PreferencesDestroyer.cpp \
     ./preferencesDialog.cpp \
-    ./preferencesPages.cpp
+    ./preferencesPages.cpp \
+    ./customComboBox.cpp
 
 #Resource file(s)
 RESOURCES += GT-8FxFloorBoard.qrc

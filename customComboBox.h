@@ -20,39 +20,20 @@
 **
 ****************************************************************************/
 
-#ifndef INITPATCHLISTMENU_H 
-#define INITPATCHLISTMENU_H
+#ifndef CUSTOMCOMBOBOX_H
+#define CUSTOMCOMBOBOX_H
 
-#include <QtGui>
-#include <QWidget>
-#include <QTimer>
-#include "customButton.h"
-#include "customComboBox.h"
+#include <QApplication>
+#include <QComboBox>
+#include <QAbstractItemView>
 
-class initPatchListMenu : public QWidget
+class customComboBox : public QComboBox
 {
 	Q_OBJECT
 
 public:
-	initPatchListMenu(QRect geometry, QWidget *parent = 0);
-
-public slots:
-	void loadInitPatch(int index);
-	void setIndex(int index);
-
-signals:
-	void currentIndexChanged(int index);
-	void updateSignal();
-
-
-private:
-	customComboBox *initPatchComboBox;
-	bool available;
-
-	void setInitPatchComboBox(QRect geometry);
-	QDir getInitPatchDir();
-	QList<QString> initPatches;
-
+	customComboBox(QWidget *parent = 0);
+	void showPopup();
 };
 
-#endif // INITPATCHLISTMENU_H
+#endif // CUSTOMCOMBOBOX_H
