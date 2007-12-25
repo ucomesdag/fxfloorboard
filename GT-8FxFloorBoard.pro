@@ -49,20 +49,20 @@ DEPENDPATH += .
 QT += xml
 
 #Platform dependent file(s)
-win32 {
-	exists("c:/Progra~1/Micros~2/Lib/WinMM.Lib") {	# <-- Change the path to WinMM.Lib here!
-		LIBS += c:/Progra~1/Micros~2/Lib/WinMM.Lib	# <-- Change the path here also!
+win32 { 
+	# You can use DIR /X to find the 8.3 DOS name.
+	# If after linking with correct path below with: LIBS += /path/to/your/lib/YourLibrary.lib
+	# you still get a lot of "undefined reference to ..." error's try the following syntax instead:
+	# LIBS += -L/path/to/your/lib -lYourLibrary
+	exists("C:/PROGRA~1/MICROS~4/WINDOWS/V6.0/LIB/WINMM.LIB") {	# <-- Change the path to WinMM.Lib here!
+		LIBS += C:/PROGRA~1/MICROS~4/WINDOWS/V6.0/LIB/WINMM.LIB	# <-- Change the path here also!
     } else { 
-        exists("c:/PROGRA~1/MICROS~3/VC/PLATFO~1/Lib/WinMM.Lib") { # Path vs2005 (Vista)
-        	LIBS += c:/PROGRA~1/MICROS~3/VC/PLATFO~1/Lib/WinMM.Lib
-        } else { 
-            LIBS += .\WinMM.Lib
-            message("WINMM.LIB IS REQUIRED. IF NOT INSTALLED THEN")
-            message("PLEASE DOWNLOAD AND INSTALL THE LATEST PLATFORM SDK")
-            message("FROM MICROSOFT.COM AND AFTER INSTALLATION")
-            message("CHANGE THE CORRECT (DOS) PATH TO WinMM.lib")
-            message("IN THIS (GT-8FxFloorBoard.pro) FILE WHERE INDICATED")
-        }
+        LIBS += .\WinMM.Lib
+        message("WINMM.LIB IS REQUIRED. IF NOT INSTALLED THEN")
+        message("PLEASE DOWNLOAD AND INSTALL THE LATEST PLATFORM SDK")
+        message("FROM MICROSOFT.COM AND AFTER INSTALLATION")
+        message("CHANGE THE CORRECT (DOS) PATH TO WinMM.lib")
+        message("IN THIS (GT-8FxFloorBoard.pro) FILE WHERE INDICATED")
 	}
 	HEADERS += ./windows/midiIO.h
 	SOURCES += ./windows/midiIO.cpp

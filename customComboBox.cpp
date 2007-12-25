@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "customComboBox.h"
+#include <QScrollBar>
 
 customComboBox::customComboBox(QWidget *parent) 
 	: QComboBox(parent)
@@ -37,11 +38,19 @@ void customComboBox::showPopup()
 		if(longestItem.size() < item.size()) longestItem = item;
 	};
 	int popupWidth = QFontMetrics( this->font() ).width( longestItem + "--" );
-	this->view()->setMinimumWidth(popupWidth);
 
-	/*if( this->verticalScrollBar()->isVisible() )
+	if( this->view()->verticalScrollBar()->isVisible() )
 	{
 		this->setMaxVisibleItems(this->maxVisibleItems() - 1);
-	};*/
+		popupWidth = popupWidth + 10;
+	};
+	
+	if( this->view()->verticalScrollBar()->isVisibleTo(this) )
+	{
+		this->setMaxVisibleItems(this->maxVisibleItems() - 1);
+		popupWidth = popupWidth + 10;
+	};
+
+	this->view()->setMinimumWidth(popupWidth);
 	QComboBox::showPopup();
 };
