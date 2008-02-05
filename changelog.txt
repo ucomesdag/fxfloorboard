@@ -1,0 +1,29 @@
+-----------------------------
+GT8 FX FloorBoard - ChangeLog
+-----------------------------
+
+version 0.0a:
+
+	Released 0.0b-build1028:
+	* Added FX-1 and FX-2 edit dialog.
+
+	Released 0.0a-build1027:
+	* Lots of enhancement.
+	* All fx's (except FX-1 and FX-2) now have an edit dialog.
+
+	Released 0.0a-build1026:
+	* Progress bar is now functional.
+        * Live editing is finnaly working.
+        * Changing patch names works 100%.
+
+	Released 0.0a-build1025:
+	* Added progress bar to the status bar (not functioning yet).
+        * Loading/Saving patches is working.
+        * Live editing not yet functional, you need to Sync/Write to upload the changes.
+        * BUGFIX: Changing the temp buffer functions 99% of the time now.
+
+	Released 0.0a-build1024:
+	* Preview 2
+
+	Released 0.0a-build1023:
+	* Initial Preview release
