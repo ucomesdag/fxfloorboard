@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "customSwitch.h"
 
 customSwitch::customSwitch(bool active, QWidget *parent, QString hex1, QString hex2, QString hex3,

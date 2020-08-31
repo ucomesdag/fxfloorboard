@@ -23,7 +23,7 @@
 #ifndef STATUSBARWIDGET_H
 #define STATUSBARWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QLabel>
 #include <QProgressBar>
 #include "statusBarSymbol.h"

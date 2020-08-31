@@ -23,8 +23,8 @@
 #ifndef RENAMEWIDGET_H
 #define RENAMEWIDGET_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 
 class renameWidget : public QWidget
 {

@@ -163,7 +163,7 @@ void stompBox::setPos(QPoint newPos)
 void stompBox::updatePos(signed int offsetDif)
 {
 	this->stompPos = this->pos();
-	QPoint newPos = stompPos + QPoint::QPoint(offsetDif, 0);
+    QPoint newPos = stompPos + QPoint(offsetDif, 0);
 	this->move(newPos);
 	this->stompPos = newPos;
 };
@@ -244,55 +244,55 @@ void stompBox::setKnob1(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	knob1 = new customDial(0, 0, range, 1, 10, QPoint::QPoint(6, 9), this, hex1, hex2, hex3);
+    knob1 = new customDial(0, 0, range, 1, 10, QPoint(6, 9), this, hex1, hex2, hex3);
 };
 
 void stompBox::setKnob2(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	knob2 = new customDial(0, 0, range, 1, 10, QPoint::QPoint(53, 9), this, hex1, hex2, hex3);
+    knob2 = new customDial(0, 0, range, 1, 10, QPoint(53, 9), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider1(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	slider1 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(8, 17), this, hex1, hex2, hex3);
+    slider1 = new customSlider(0, 0, range, 1, 10, QPoint(8, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider2(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	slider2 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(24, 17), this, hex1, hex2, hex3);
+    slider2 = new customSlider(0, 0, range, 1, 10, QPoint(24, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider3(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	slider3 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(40, 17), this, hex1, hex2, hex3);
+    slider3 = new customSlider(0, 0, range, 1, 10, QPoint(40, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider4(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	slider4 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(56, 17), this, hex1, hex2, hex3);
+    slider4 = new customSlider(0, 0, range, 1, 10, QPoint(56, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setSlider5(QString hex1, QString hex2, QString hex3)
 {	
 	MidiTable *midiTable = MidiTable::Instance();
 	int range = midiTable->getRange("Structure", hex1, hex2, hex3);
-	slider5 = new customSlider(0, 0, range, 1, 10, QPoint::QPoint(79, 17), this, hex1, hex2, hex3);
+    slider5 = new customSlider(0, 0, range, 1, 10, QPoint(79, 17), this, hex1, hex2, hex3);
 };
 
 void stompBox::setButton(QString hex1, QString hex2, QString hex3)
 {
-	button = new customButton(false, QPoint::QPoint(4, 110), this, hex1, hex2, hex3);
-	led = new customLed(false, QPoint::QPoint(41, 4), this);
+    button = new customButton(false, QPoint(4, 110), this, hex1, hex2, hex3);
+    led = new customLed(false, QPoint(41, 4), this);
 
 	QObject::connect(button, SIGNAL(valueChanged(bool, QString, QString, QString)),
 				led, SLOT(changeValue(bool)));	
@@ -301,7 +301,7 @@ void stompBox::setButton(QString hex1, QString hex2, QString hex3)
 void stompBox::setButton(QString hex1, QString hex2, QString hex3, QPoint pos, QString imagePath)
 {
 	button = new customButton(false, pos, this, hex1, hex2, hex3, imagePath);
-	led = new customLed(false, QPoint::QPoint(41, 4), this);
+    led = new customLed(false, QPoint(41, 4), this);
 
 	QObject::connect(button, SIGNAL(valueChanged(bool, QString, QString, QString)),
 				led, SLOT(changeValue(bool)));	
@@ -310,7 +310,7 @@ void stompBox::setButton(QString hex1, QString hex2, QString hex3, QPoint pos, Q
 void stompBox::setSwitch(QString hex1, QString hex2, QString hex3)
 {
 	switchbutton = new customSwitch(false, this, hex1, hex2, hex3);	
-	switchbutton->move(QPoint::QPoint(5, 41));
+    switchbutton->move(QPoint(5, 41));
 };
 
 void stompBox::updateComboBox(QString hex1, QString hex2, QString hex3)

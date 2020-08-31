@@ -23,8 +23,8 @@
 #ifndef CUSTOMCONTROLKNOB_H
 #define CUSTOMCONTROLKNOB_H
 
-#include <QWidget>
-#include <QtGui>
+#include <QtWidgets/QWidget>
+#include <QtWidgets>
 #include "customKnob.h"
 #include "customControlLabel.h"
 

@@ -23,8 +23,8 @@
 #ifndef INITPATCHLISTMENU_H 
 #define INITPATCHLISTMENU_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 #include <QTimer>
 #include "customButton.h"
 #include "customComboBox.h"

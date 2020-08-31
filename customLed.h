@@ -23,7 +23,7 @@
 #ifndef CUSTOMLED_H
 #define CUSTOMLED_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class customLed : public QWidget
 {
@@ -32,7 +32,7 @@ class customLed : public QWidget
 public:
     customLed(
 		bool active = false,
-		QPoint ledPos = QPoint::QPoint(0, 0), 
+        QPoint ledPos = QPoint(0, 0),
 		QWidget *parent = 0,
 		QString imagePath = ":/images/led.png");
 	void setValue(bool value);

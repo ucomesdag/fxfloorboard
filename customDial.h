@@ -23,7 +23,7 @@
 #ifndef CUSTOMDIAL_H
 #define CUSTOMDIAL_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class customDial : public QWidget
 {
@@ -36,7 +36,7 @@ public:
 		double max = 100, 
 		double single = 1, 
 		double page = 10,
-		QPoint dialPos = QPoint::QPoint(0, 0), 
+        QPoint dialPos = QPoint(0, 0),
 		QWidget *parent = 0,
 		QString hex1 = "void",
 		QString hex2 = "void",

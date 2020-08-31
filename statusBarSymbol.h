@@ -23,7 +23,7 @@
 #ifndef STATUSBARSYMBOL_H
 #define STATUSBARSYMBOL_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class statusBarSymbol : public QWidget
 {

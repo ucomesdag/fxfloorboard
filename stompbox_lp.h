@@ -23,8 +23,8 @@
 #ifndef STOMPBOX_LP_H
 #define STOMPBOX_LP_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 #include "stompBox.h"
 
 class stompbox_lp : public stompBox

@@ -23,7 +23,7 @@
 #ifndef STOMPBOX_H
 #define STOMPBOX_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include "MidiTable.h"
 #include "editWindow.h"
 #include "customButton.h"
@@ -43,14 +43,14 @@ public:
 		QWidget *parent = 0,
 		unsigned int id = 0,
 		QString imagePath = ":/images/od.png",
-		QPoint stompPos = QPoint::QPoint(0, 0));
+        QPoint stompPos = QPoint(0, 0));
 	void setPos(QPoint newPos);
 	void setImage(QString imagePath);
 	void setSize(QSize newSize);
 	void setId(unsigned int id);
 
 	void setComboBox(QString hex1, QString hex2, QString hex3, 
-		QRect geometry = QRect::QRect(7, 79, 80, 13));
+        QRect geometry = QRect(7, 79, 80, 13));
 	void setKnob1(QString hex1, QString hex2, QString hex3);
 	void setKnob2(QString hex1, QString hex2, QString hex3);
 	void setSlider1(QString hex1, QString hex2, QString hex3);

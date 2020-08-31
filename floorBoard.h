@@ -23,7 +23,7 @@
 #ifndef FLOORBOARD_H
 #define FLOORBOARD_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QPixmap>
 #include "stompBox.h"
 #include "editWindow.h"
@@ -43,7 +43,7 @@ public:
 		unsigned int marginStompBoxesWidth = 25,
 		unsigned int panelBarOffset = 10,
 		unsigned int borderWidth = 3,
-		QPoint pos = QPoint::QPoint(0, 0));
+        QPoint pos = QPoint(0, 0));
 	~floorBoard();
 	QPoint getStompPos(int id);
 

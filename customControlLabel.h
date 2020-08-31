@@ -23,8 +23,8 @@
 #ifndef CUSTOMCONTROLLABEL_H
 #define CUSTOMCONTROLLABEL_H
 
-#include <QWidget>
-#include <QtGui>
+#include <QtWidgets/QWidget>
+#include <QtWidgets>
 
 class customControlLabel : public QWidget
 {

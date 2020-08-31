@@ -23,8 +23,8 @@
 #ifndef STOMPBOX_PRE_H
 #define STOMPBOX_PRE_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 #include "stompBox.h"
 
 class stompbox_pre : public stompBox

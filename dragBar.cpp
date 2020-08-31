@@ -33,7 +33,7 @@ dragBar::dragBar(QWidget *parent, QString imagePath)
                 this, SLOT( hideDragBar() ) );
 
 	this->imagePath = imagePath;
-	this->image = QPixmap::QPixmap(imagePath);
+    this->image = QPixmap(imagePath);
 	this->hide();
 };
 
@@ -50,15 +50,15 @@ void dragBar::showDragBar(QPoint newpos)
 {
 	if(newpos.x() < offsetMin)
 	{
-		this->barPos = QPoint::QPoint(offsetMin - (barSize.width()/2), newpos.y());
+        this->barPos = QPoint(offsetMin - (barSize.width()/2), newpos.y());
 	}
 	else if(newpos.x() > offsetMax)
 	{
-		this->barPos = QPoint::QPoint(offsetMax - (barSize.width()/2), newpos.y());
+        this->barPos = QPoint(offsetMax - (barSize.width()/2), newpos.y());
 	}
 	else
 	{
-		this->barPos = QPoint::QPoint(newpos.x() - (barSize.width()/2), newpos.y());
+        this->barPos = QPoint(newpos.x() - (barSize.width()/2), newpos.y());
 	};
 	this->setGeometry(barPos.x(), barPos.y(), barSize.width(), barSize.height());
 	this->show();

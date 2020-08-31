@@ -23,9 +23,11 @@
 #ifndef GLOBALVARIABLES_H
 #define GLOBALVARIABLES_H
 
+#include <QString>
+
 /****************************************************************************
-* These are general settings keep in mind that number of fx and fx setting 
-* are per item setting to change them you will need to modify the following 
+* These are general settings keep in mind that number of fx and fx setting
+* are per item setting to change them you will need to modify the following
 * files:
 *     -> floorBoard.cpp
 *     -> stompBox.cpp

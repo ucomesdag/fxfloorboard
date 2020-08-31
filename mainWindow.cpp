@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "mainWindow.h"
 #include "Preferences.h"
 #include "preferencesDialog.h"

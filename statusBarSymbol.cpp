@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "statusBarSymbol.h"
 #include "globalVariables.h"
 
