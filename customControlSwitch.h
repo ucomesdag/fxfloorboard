@@ -23,8 +23,8 @@
 #ifndef CUSTOMCONTROLSWITCH_H
 #define CUSTOMCONTROLSWITCH_H
 
-#include <QWidget>
-#include <QtGui>
+#include <QtWidgets/QWidget>
+#include <QtWidgets>
 #include "customSwitch.h"
 #include "customControlLabel.h"
 

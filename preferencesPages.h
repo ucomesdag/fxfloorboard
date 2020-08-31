@@ -23,8 +23,8 @@
 #ifndef PREFERENCESPAGES_H
 #define PREFERENCESPAGES_H
 
-#include <QWidget>
-#include <QtGui>
+#include <QtWidgets/QWidget>
+#include <QtWidgets>
 
 class GeneralPage : public QWidget
 {

@@ -23,8 +23,8 @@
 #ifndef EDITPAGE_H
 #define EDITPAGE_H
 
-#include <QWidget>
-#include <QtGui>
+#include <QtWidgets/QWidget>
+#include <QtWidgets>
 
 class editPage : public QWidget
 {

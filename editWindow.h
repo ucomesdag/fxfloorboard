@@ -24,7 +24,7 @@
 #define EDITWINDOW_H
 
 #include <QMainWindow>
-#include <QtGui>
+#include <QtWidgets>
 #include <QList>
 #include "editPage.h"
 #include "customControlLabel.h"

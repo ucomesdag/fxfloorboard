@@ -23,8 +23,8 @@
 #ifndef FLOORBOARDDISPLAY_H
 #define FLOORBOARDDISPLAY_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 #include <QTimer>
 #include "customButton.h"
 #include "customDisplay.h"
@@ -35,8 +35,8 @@ class floorBoardDisplay : public QWidget
 	Q_OBJECT
 
 public:
-	floorBoardDisplay(QWidget *parent = 0, 
-		QPoint pos = QPoint::QPoint(0, 0));
+	floorBoardDisplay(QWidget *parent = 0,
+        QPoint pos = QPoint(0, 0));
 	QPoint getPos();
 
 public slots:

@@ -23,7 +23,7 @@
 #ifndef CUSTOMSWITCH_H
 #define CUSTOMSWITCH_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class customSwitch : public QWidget
 {

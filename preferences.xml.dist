@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Preferences of the GT-8 Fx FloorBoard application. -->
 <Preferences>
-	<General>
-		<Application version="0.0a"/>
-		<Donate url="http://sourceforge.net/donate/index.php?group_id=171049"/>
-		<Files dir=""/>
-		<Help url="http://sourceforge.net/forum/forum.php?forum_id=585786"/>
-		<Language code="en"/>
-		<Webpage url="http://fxfloorboard.sourceforge.net/"/>
-	</General>
-	<Midi>
-		<MidiIn device=""/>
-		<MidiOut device=""/>
-	</Midi>
-	<Window>
+  <General>
+    <Application version="0.0a"/>
+    <Donate url="http://sourceforge.net/donate/index.php?group_id=171049"/>
+    <Files dir=""/>
+    <Help url="http://sourceforge.net/forum/forum.php?forum_id=585786"/>
+    <Language code="en"/>
+    <Webpage url="http://fxfloorboard.sourceforge.net/"/>
+  </General>
+  <Midi>
+    <MidiIn device=""/>
+    <MidiOut device=""/>
+  </Midi>
+  <Window>
     <Collapsed bool="false" defaultwidth="975" width=""/>
     <Position x="" y=""/>
     <Restore sidepanel="false" window="false"/>

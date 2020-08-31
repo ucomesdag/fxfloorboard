@@ -1,0 +1,5 @@
+---
+repository:
+  description: Personal fork off my original defunct work on the (Boss GT-8) fx floor board software. I only updated it to compile with the latest Qt 5 version.
+  homepage: https://mesd.ag/
+  topics: c++, qt, gt-8, midi

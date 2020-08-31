@@ -23,8 +23,8 @@
 #ifndef FLOORPANELBAR_H
 #define FLOORPANELBAR_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 #include <QPixmap>
 
 class floorPanelBar : public QWidget
@@ -35,7 +35,7 @@ public:
 	floorPanelBar(
 		QWidget *parent = 0,
 		QString imagePathPanelBar = ":/images/panelbar.png",
-		QSize panelBarSize = QSize::QSize(17, 501));
+        QSize panelBarSize = QSize(17, 501));
 	void setValue(int newValue);
 
 public slots:

@@ -23,8 +23,8 @@
 #ifndef FLOORPANELBARBUTTON_H
 #define FLOORPANELBARBUTTON_H
 
-#include <QtGui>
-#include <QWidget>
+#include <QtWidgets>
+#include <QtWidgets/QWidget>
 #include <QPixmap>
 
 class floorPanelBarButton : public QWidget
@@ -34,10 +34,10 @@ class floorPanelBarButton : public QWidget
 public:
 	floorPanelBarButton(
 		bool collapsed = false,
-		QPoint buttonPos = QPoint::QPoint(0, 0),
+        QPoint buttonPos = QPoint(0, 0),
 		QWidget *parent = 0,
 		QString imagePath = ":/images/panelbarbutton.png",
-		QSize buttonSize = QSize::QSize(17, 36),
+        QSize buttonSize = QSize(17, 36),
 		unsigned int imageRange = 1);
 	void setOffset(signed int imageNr);
 
